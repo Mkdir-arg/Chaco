@@ -1,0 +1,82 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Municipios{% endblock %}
+
+{% block main-content %}
+<div class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-lora font-bold text-gray-900">Municipios</h1>
+            <p class="text-gray-600 mt-2">Gestión de municipios del sistema</p>
+        </div>
+        <a href="{% url 'configuracion:municipio_crear' %}" class="bg-arg-azul text-white px-6 py-3 rounded-xl hover:bg-arg-secundario transition-colors font-medium text-center">
+            <i class="fas fa-plus mr-2"></i>Nuevo Municipio
+        </a>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        {% if municipios %}
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nombre</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Provincia</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for municipio in municipios %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ municipio.nombre }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ municipio.provincia.nombre }}</td>
+                            <td class="px-6 py-4 text-sm">
+                                <div class="flex gap-2">
+                                    <a href="{% url 'configuracion:municipio_editar' municipio.pk %}" class="text-green-600 hover:text-green-800">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'configuracion:municipio_eliminar' municipio.pk %}" class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="md:hidden divide-y divide-gray-200">
+                {% for municipio in municipios %}
+                <div class="p-4 hover:bg-gray-50">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="font-medium text-gray-900">{{ municipio.nombre }}</div>
+                        <div class="flex gap-2">
+                            <a href="{% url 'configuracion:municipio_editar' municipio.pk %}" class="text-green-600 hover:text-green-800 p-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'configuracion:municipio_eliminar' municipio.pk %}" class="text-red-600 hover:text-red-800 p-2">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600">
+                        <span class="font-medium">Provincia:</span> {{ municipio.provincia.nombre }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-12 text-center">
+                <i class="fas fa-city text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">No hay municipios registrados</h3>
+                <p class="text-gray-600 mb-6">Comienza agregando el primer municipio</p>
+                <a href="{% url 'configuracion:municipio_crear' %}" class="bg-arg-azul text-white px-6 py-3 rounded-xl hover:bg-arg-secundario transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Agregar Municipio
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

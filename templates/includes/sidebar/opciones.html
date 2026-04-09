@@ -1,0 +1,265 @@
+{% load static custom_filters %}
+{% with pagina_actual=request.resolver_match.route %}
+    <style>
+        .sidebar-nav .text-\[\#FF0080\] {
+            color: var(--nav-active-color) !important;
+        }
+    </style>
+    <div class="flex flex-1 flex-col">
+        <!-- User info -->
+        <div class="mb-4">
+            <template x-if="!sidebarCollapsed">
+                <div class="p-2 bg-[#F9FAFB] rounded-xl border border-[#E5E7EB] flex items-center gap-2">
+                    <div class="h-8 w-8 rounded-full flex items-center justify-center shadow-sm flex-shrink-0" style="{% if branding.active_profile == 'chaco' %}background: linear-gradient(90deg, {{ branding.colors.color_acento_oscuro }} 0%, {{ branding.colors.color_acento_oscuro }} 100%);{% else %}background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%);{% endif %}">
+                        <span class="text-xs font-semibold text-white">{{ request.user.username|first|upper }}</span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-semibold text-[#252F40] truncate">{{ request.user.get_full_name|default:request.user.username }}</p>
+                        <p class="text-xs text-[#8C8C8C] truncate">
+                            {% if request.user.groups.all %}
+                                {{ request.user.groups.first.name }}
+                            {% else %}
+                                Sin grupo
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </template>
+            
+            <template x-if="sidebarCollapsed">
+                <div class="flex justify-center">
+                    <div class="h-10 w-10 rounded-full flex items-center justify-center shadow-sm" style="{% if branding.active_profile == 'chaco' %}background: linear-gradient(90deg, {{ branding.colors.color_acento_oscuro }} 0%, {{ branding.colors.color_acento_oscuro }} 100%);{% else %}background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%);{% endif %}">
+                        <span class="text-sm font-semibold text-white">{{ request.user.username|first|upper }}</span>
+                    </div>
+                </div>
+            </template>
+        </div>
+        
+        <!-- Navegación principal -->
+        <nav class="space-y-2 sidebar-nav">
+            <!-- Inicio -->
+            <div class="relative">
+                <a href="{% url 'core:inicio' %}" class="{% if 'inicio' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center p-3 text-sm font-semibold transition-all" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3'">
+                    <i class="fas fa-home text-base {% if 'inicio' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                    <template x-if="!sidebarCollapsed">
+                        <span>Inicio</span>
+                    </template>
+                </a>
+            </div>
+            <!-- Dashboard -->
+            <div x-data="{ open: {% if 'dashboard-contactos' in pagina_actual or 'conversaciones/metricas' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
+                <template x-if="!sidebarCollapsed">
+                    <div>
+                        <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
+                            <i class="fas fa-chart-pie text-base"></i>
+                            <span class="flex-1">Dashboard</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" x-transition class="mt-1 ml-6 space-y-1">
+                            <a href="{% url 'legajos:dashboard_contactos' %}" class="{% if 'dashboard-contactos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                <i class="fas fa-phone mr-2 text-xs {% if 'dashboard-contactos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Dashboard Contactos
+                            </a>
+                            <a href="{% url 'conversaciones:metricas' %}" class="{% if 'conversaciones/metricas' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                <i class="fas fa-comments mr-2 text-xs {% if 'conversaciones/metricas' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Dashboard Conversaciones
+                            </a>
+                        </div>
+                    </div>
+                </template>
+                
+                <template x-if="sidebarCollapsed">
+                    <a href="{% url 'legajos:dashboard_contactos' %}" class="{% if 'dashboard-contactos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center justify-center p-3 text-sm font-semibold transition-all">
+                        <i class="fas fa-chart-pie text-base {% if 'dashboard-contactos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                    </a>
+                </template>
+            </div>
+
+            <!-- Legajos -->
+            {% if request.user|has_group:"Ciudadanos" %}
+                <div x-data="{ open: {% if 'legajos/lista' in pagina_actual or 'legajos/ciudadanos' in pagina_actual or 'legajos/admision' in pagina_actual or 'instituciones' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
+                    <template x-if="!sidebarCollapsed">
+                        <div>
+                            <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
+                                <i class="fas fa-folder-open text-base"></i>
+                                <span class="flex-1">Legajos</span>
+                                <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                            </button>
+                            <div x-show="open" x-transition class="mt-1 ml-6 space-y-1">
+                                <a href="{% url 'legajos:lista' %}" class="{% if 'legajos/lista' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-list mr-2 text-xs {% if 'legajos/lista' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Todos los Legajos
+                                </a>
+                                <a href="{% url 'legajos:ciudadanos' %}" class="{% if 'legajos/ciudadanos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-users mr-2 text-xs {% if 'legajos/ciudadanos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Ciudadano
+                                </a>
+                                <a href="{% url 'legajos:admision_paso1' %}" class="{% if 'legajos/admision' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-folder-plus mr-2 text-xs {% if 'legajos/admision' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Acompañamiento
+                                </a>
+                                <a href="{% url 'legajos:instituciones' %}" class="{% if 'instituciones' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-building mr-2 text-xs {% if 'instituciones' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Instituciones
+                                </a>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <template x-if="sidebarCollapsed">
+                        <a href="{% url 'legajos:lista' %}" class="{% if 'legajos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center justify-center p-3 text-sm font-semibold transition-all">
+                            <i class="fas fa-folder-open text-base {% if 'legajos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        </a>
+                    </template>
+                </div>
+            {% endif %}
+
+            <!-- Programas -->
+            <div x-data="{ open: {% if 'programas' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
+                <template x-if="!sidebarCollapsed">
+                    <div>
+                        <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
+                            <i class="fas fa-clipboard-list text-base"></i>
+                            <span class="flex-1">Programas</span>
+                            <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                        </button>
+                        <div x-show="open" x-transition class="mt-1 ml-6 space-y-1">
+                            {% load programas_tags %}
+                            {% programas_activos as programas %}
+                            {% for programa in programas %}
+                            <a href="{% url 'legajos:programa_detalle' programa.id %}" class="{% if 'programas' in pagina_actual and request.resolver_match.kwargs.pk == programa.id %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                <i class="fas fa-folder-open mr-2 text-xs {% if 'programas' in pagina_actual and request.resolver_match.kwargs.pk == programa.id %}text-[#FF0080]{% endif %}"></i>{{ programa.nombre }}
+                            </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </template>
+                
+                <template x-if="sidebarCollapsed">
+                    <a href="{% url 'legajos:programas' %}" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex items-center justify-center rounded-xl p-3 text-sm font-semibold transition-all">
+                        <i class="fas fa-clipboard-list text-base"></i>
+                    </a>
+                </template>
+            </div>
+
+            <!-- Relevamientos -->
+            <div class="relative">
+                <a href="{% url 'core:relevamientos' %}" class="{% if 'relevamientos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center p-3 text-sm font-semibold transition-all" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3'">
+                    <i class="fas fa-clipboard-check text-base {% if 'relevamientos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                    <template x-if="!sidebarCollapsed">
+                        <span>Relevamientos</span>
+                    </template>
+                </a>
+            </div>
+
+            <!-- Trámites -->
+            {% if request.user.is_staff or request.user|has_group:"Administrador" or request.user|has_group:"Supervisor" %}
+                <div class="relative">
+                    <a href="{% url 'tramites:lista_tramites' %}" class="{% if 'tramites' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center p-3 text-sm font-semibold transition-all" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3'">
+                        <i class="fas fa-clipboard-list text-base {% if 'tramites' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        <template x-if="!sidebarCollapsed">
+                            <span>Trámites</span>
+                        </template>
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Conversaciones -->
+            {% if request.user|has_group:"Conversaciones" or request.user|has_group:"OperadorCharla" %}
+                <div class="relative">
+                    <a href="{% url 'conversaciones:lista' %}" class="{% if 'conversaciones' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center p-3 text-sm font-semibold transition-all" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3'">
+                        <i class="fas fa-comments text-base {% if 'conversaciones' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        <template x-if="!sidebarCollapsed">
+                            <span>Conversaciones</span>
+                        </template>
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Reportes -->
+            {% if request.user|has_group:"Ciudadanos" %}
+                <div class="relative">
+                    <a href="{% url 'legajos:reportes' %}" class="{% if 'reportes' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center p-3 text-sm font-semibold transition-all" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3'">
+                        <i class="fas fa-chart-bar text-base {% if 'reportes' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        <template x-if="!sidebarCollapsed">
+                            <span>Reportes</span>
+                        </template>
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- Configuración -->
+            {% if request.user|has_group:"Administrador" %}
+                <div x-data="{ open: {% if 'configuracion' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
+                    <template x-if="!sidebarCollapsed">
+                        <div>
+                            <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
+                                <i class="fas fa-sliders-h text-base"></i>
+                                <span class="flex-1">Configuración</span>
+                                <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                            </button>
+                            <div x-show="open" x-transition class="mt-1 ml-6 space-y-1">
+                                <a href="{% url 'configuracion:provincias' %}" class="{% if 'provincias' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-map mr-2 text-xs {% if 'provincias' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Provincias
+                                </a>
+                                <a href="{% url 'configuracion:municipios' %}" class="{% if 'municipios' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-city mr-2 text-xs {% if 'municipios' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Municipios
+                                </a>
+                                <a href="{% url 'configuracion:localidades' %}" class="{% if 'localidades' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-map-marker-alt mr-2 text-xs {% if 'localidades' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Localidades
+                                </a>
+                                <a href="{% url 'conversaciones:configurar_cola' %}" class="{% if 'conversaciones/configurar-cola' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-users-cog mr-2 text-xs {% if 'conversaciones/configurar-cola' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Cola Conversaciones
+                                </a>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <template x-if="sidebarCollapsed">
+                        <a href="{% url 'configuracion:provincias' %}" class="{% if 'configuracion' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center justify-center p-3 text-sm font-semibold transition-all">
+                            <i class="fas fa-sliders-h text-base {% if 'configuracion' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        </a>
+                    </template>
+                </div>
+            {% endif %}
+
+            <!-- Administración -->
+            {% if request.user|has_group:"Administrador" %}
+                <div x-data="{ open: {% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual or 'chatbot/admin' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
+                    <template x-if="!sidebarCollapsed">
+                        <div>
+                            <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
+                                <i class="fas fa-cog text-base"></i>
+                                <span class="flex-1">Administración</span>
+                                <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
+                            </button>
+                            <div x-show="open" x-transition class="mt-1 ml-6 space-y-1">
+                                <a href="{% url 'users:usuarios' %}" class="{% if 'usuarios' in pagina_actual or 'password' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-users mr-2 text-xs {% if 'usuarios' in pagina_actual or 'password' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Usuarios
+                                </a>
+                                <a href="{% url 'users:grupos' %}" class="{% if 'grupos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-user-tag mr-2 text-xs {% if 'grupos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Grupos
+                                </a>
+                                <a href="{% url 'chatbot:admin_panel' %}" class="{% if 'chatbot/admin' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-robot mr-2 text-xs {% if 'chatbot/admin' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Chatbot
+                                </a>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <template x-if="sidebarCollapsed">
+                        <a href="{% url 'users:usuarios' %}" class="{% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual or 'chatbot/admin' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center justify-center p-3 text-sm font-semibold transition-all">
+                            <i class="fas fa-cog text-base {% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual or 'chatbot/admin' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        </a>
+                    </template>
+                </div>
+            {% endif %}
+
+            <!-- Auditoría -->
+            {% if request.user|has_group:"Administrador" %}
+                <div class="relative">
+                    <a href="{% url 'auditoria:dashboard' %}" class="{% if 'auditoria' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center p-3 text-sm font-semibold transition-all" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3'">
+                        <i class="fas fa-shield-alt text-base {% if 'auditoria' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        <template x-if="!sidebarCollapsed">
+                            <span>Auditoría</span>
+                        </template>
+                    </a>
+                </div>
+            {% endif %}
+        </nav>
+    </div>
+{% endwith %}

@@ -1,0 +1,247 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}{% if object %}Editar{% else %}Nueva{% endif %} Institución{% endblock %}
+
+{% block main-content %}
+<div class="min-h-screen bg-[#F9FAFB] p-4 lg:p-8">
+    <div class="max-w-4xl mx-auto space-y-6">
+        <!-- Header -->
+        <div class="flex items-center gap-4">
+            <a href="{% url 'legajos:instituciones' %}" class="p-2 hover:bg-white rounded-lg transition-colors">
+                <i class="fas fa-chevron-left text-xl text-[#4A5565]"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-[#252F40]">{% if object %}Editar{% else %}Nueva{% endif %} Institución</h1>
+                <p class="text-sm text-[#8C8C8C] mt-1">Complete la información de la institución</p>
+            </div>
+        </div>
+
+        <!-- Formulario -->
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <!-- Información Básica -->
+            <div class="bg-white rounded-xl p-6 border border-[#E5E7EB] shadow-sm">
+                <h3 class="text-lg font-bold text-[#252F40] mb-4 flex items-center gap-2">
+                    <i class="fas fa-info-circle text-[#7928CA]"></i>
+                    Información Básica
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label for="{{ form.nombre.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Nombre *</label>
+                        {{ form.nombre }}
+                        {% if form.nombre.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.nombre.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.tipo.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Tipo *</label>
+                        {{ form.tipo }}
+                        {% if form.tipo.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.tipo.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.estado_registro.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Estado Registro</label>
+                        {{ form.estado_registro }}
+                        {% if form.estado_registro.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.estado_registro.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <label for="{{ form.descripcion.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Descripción</label>
+                        {{ form.descripcion }}
+                        {% if form.descripcion.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.descripcion.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="bg-white rounded-xl p-6 border border-[#E5E7EB] shadow-sm">
+                <h3 class="text-lg font-bold text-[#252F40] mb-4 flex items-center gap-2">
+                    <i class="fas fa-map-marker-alt text-[#7928CA]"></i>
+                    Ubicación
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="{{ form.provincia.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Provincia *</label>
+                        {{ form.provincia }}
+                        {% if form.provincia.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.provincia.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.municipio.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Municipio *</label>
+                        {{ form.municipio }}
+                        {% if form.municipio.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.municipio.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.localidad.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Localidad</label>
+                        {{ form.localidad }}
+                        {% if form.localidad.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.localidad.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="md:col-span-3">
+                        <label for="{{ form.direccion.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Dirección</label>
+                        {{ form.direccion }}
+                        {% if form.direccion.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.direccion.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contacto -->
+            <div class="bg-white rounded-xl p-6 border border-[#E5E7EB] shadow-sm">
+                <h3 class="text-lg font-bold text-[#252F40] mb-4 flex items-center gap-2">
+                    <i class="fas fa-phone text-[#7928CA]"></i>
+                    Información de Contacto
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="{{ form.telefono.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Teléfono</label>
+                        {{ form.telefono }}
+                        {% if form.telefono.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.telefono.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Email</label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Datos Legales -->
+            <div class="bg-white rounded-xl p-6 border border-[#E5E7EB] shadow-sm">
+                <h3 class="text-lg font-bold text-[#252F40] mb-4 flex items-center gap-2">
+                    <i class="fas fa-file-alt text-[#7928CA]"></i>
+                    Datos Legales
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="{{ form.tipo_personeria.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Tipo de Personería</label>
+                        {{ form.tipo_personeria }}
+                        {% if form.tipo_personeria.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.tipo_personeria.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.nro_personeria.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Número de Personería</label>
+                        {{ form.nro_personeria }}
+                        {% if form.nro_personeria.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.nro_personeria.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.cuit.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">CUIT</label>
+                        {{ form.cuit }}
+                        {% if form.cuit.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.cuit.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.nro_sss.id_for_label }}" class="block text-sm font-semibold text-[#374151] mb-2">Número SSS</label>
+                        {{ form.nro_sss }}
+                        {% if form.nro_sss.errors %}
+                            <div class="text-red-600 text-sm mt-1">{{ form.nro_sss.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Servicios -->
+            <div class="bg-white rounded-xl p-6 border border-[#E5E7EB] shadow-sm">
+                <h3 class="text-lg font-bold text-[#252F40] mb-4 flex items-center gap-2">
+                    <i class="fas fa-cogs text-[#7928CA]"></i>
+                    Servicios
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-center">
+                        {{ form.presta_asistencia }}
+                        <label for="{{ form.presta_asistencia.id_for_label }}" class="ml-2 text-sm text-[#4A5565]">Presta servicios de asistencia</label>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        {{ form.convenio_obras_sociales }}
+                        <label for="{{ form.convenio_obras_sociales.id_for_label }}" class="ml-2 text-sm text-[#4A5565]">Tiene convenio con Obras Sociales</label>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        {{ form.activo }}
+                        <label for="{{ form.activo.id_for_label }}" class="ml-2 text-sm text-[#4A5565]">Activo</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nota informativa -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p class="text-xs text-blue-800">
+                    <strong>Nota:</strong> Los campos marcados con * son obligatorios.
+                </p>
+            </div>
+            
+            <!-- Botones -->
+            <div class="flex gap-3 pt-4">
+                <button type="submit" class="flex-1 py-3 bg-[#10B981] hover:bg-[#059669] text-white font-semibold rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                    <i class="fas fa-check-circle"></i>
+                    {% if object %}Actualizar{% else %}Crear{% endif %} Institución
+                </button>
+                <a href="{% url 'legajos:instituciones' %}" class="px-8 py-3 border border-[#E5E7EB] text-[#4A5565] font-medium rounded-xl hover:bg-[#F9FAFB] transition-colors">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], select, textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #E5E7EB;
+        border-radius: 0.75rem;
+        font-size: 0.875rem;
+        color: #101828;
+        background-color: white;
+    }
+    
+    input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+        outline: none;
+        ring: 2px;
+        ring-color: #7928CA;
+        border-color: transparent;
+    }
+    
+    input[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: 0.375rem;
+        border: 1px solid #E5E7EB;
+    }
+    
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+</style>
+{% endblock %}

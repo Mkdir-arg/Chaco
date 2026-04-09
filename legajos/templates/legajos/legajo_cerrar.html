@@ -1,0 +1,66 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Cerrar Legajo {{ legajo.codigo }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-2xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-3xl font-lora font-bold text-gray-900">Cerrar Legajo</h1>
+        <p class="text-gray-600 mt-2">{{ legajo.ciudadano.apellido }}, {{ legajo.ciudadano.nombre }} - {{ legajo.codigo|slice:":8" }}...</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        {% if not puede_cerrar %}
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+            <div class="flex">
+                <i class="fas fa-exclamation-triangle text-yellow-500 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="text-sm font-semibold text-yellow-900">Advertencia</h4>
+                    <p class="text-sm text-yellow-700 mt-1">{{ mensaje }}</p>
+                    <p class="text-sm text-yellow-700 mt-2">Puede proceder proporcionando una justificación.</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="mb-6">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                    {% if puede_cerrar %}Motivo de Cierre (Opcional){% else %}Justificación para Cierre (Requerida){% endif %}
+                </label>
+                {{ form.motivo_cierre }}
+                {% for error in form.motivo_cierre.errors %}
+                <p class="text-sm text-red-600 mt-2">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <div class="flex">
+                    <i class="fas fa-info-circle text-red-500 mt-1 mr-3"></i>
+                    <div>
+                        <h4 class="text-sm font-semibold text-red-900">Importante</h4>
+                        <p class="text-sm text-red-700 mt-1">
+                            Al cerrar el legajo, se marcará como finalizado y no se podrán agregar más seguimientos 
+                            hasta que sea reabierto. Esta acción se registrará en el historial.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-4">
+                <a href="{% url 'legajos:detalle' legajo.pk %}" 
+                   class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                    <i class="fas fa-times-circle mr-2"></i>Cerrar Legajo
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+from django.urls import path
+
+from .views_public import (
+    ConsultarTramiteView,
+    CrearUsuarioInstitucionView,
+    PortalHomeView,
+    RegistroInstitucionView,
+    get_localidades,
+    get_municipios,
+)
+from .views.ciudadano_actividades import (
+    ciudadano_detalle_actividad,
+    ciudadano_inscribirse_actividad,
+    ciudadano_mis_actividades,
+)
+from .views_ciudadano import (
+    CiudadanoLoginView,
+    CiudadanoLogoutView,
+    CiudadanoPasswordResetCompleteView,
+    CiudadanoPasswordResetConfirmView,
+    CiudadanoPasswordResetDoneView,
+    CiudadanoPasswordResetView,
+    ciudadano_cambio_email,
+    ciudadano_cambio_password,
+    ciudadano_cancelar_turno,
+    ciudadano_confirmar_email,
+    ciudadano_confirmar_turno,
+    ciudadano_consulta_detalle,
+    ciudadano_enviar_mensaje,
+    ciudadano_mi_perfil,
+    ciudadano_mis_consultas,
+    ciudadano_mis_datos,
+    ciudadano_mis_programas,
+    ciudadano_mis_turnos,
+    ciudadano_nueva_consulta,
+    ciudadano_programa_detalle,
+    ciudadano_solicitar_turno,
+    ciudadano_turno_calendario,
+    ciudadano_turno_confirmado,
+    ciudadano_turno_slots,
+    RegistroStep1View,
+    RegistroStep2View,
+)
+
+app_name = 'portal'
+
+urlpatterns = [
+    path('', PortalHomeView.as_view(), name='home'),
+    path('crear-usuario/', CrearUsuarioInstitucionView.as_view(), name='crear_usuario'),
+    path('registro-institucion/', RegistroInstitucionView.as_view(), name='registro_institucion'),
+    path('consultar-tramite/', ConsultarTramiteView.as_view(), name='consultar_tramite'),
+    path('api/municipios/', get_municipios, name='get_municipios'),
+    path('api/localidades/', get_localidades, name='get_localidades'),
+    # Portal ciudadano
+    path('mi-perfil/login/', CiudadanoLoginView.as_view(), name='ciudadano_login'),
+    path('mi-perfil/logout/', CiudadanoLogoutView.as_view(), name='ciudadano_logout'),
+    path('mi-perfil/registro/', RegistroStep1View.as_view(), name='ciudadano_registro_step1'),
+    path('mi-perfil/registro/verificar/', RegistroStep2View.as_view(), name='ciudadano_registro_step2'),
+    path('mi-perfil/', ciudadano_mi_perfil, name='ciudadano_mi_perfil'),
+    path('mi-perfil/programas/', ciudadano_mis_programas, name='ciudadano_mis_programas'),
+    path('mi-perfil/programas/<int:pk>/', ciudadano_programa_detalle, name='ciudadano_programa_detalle'),
+    path('mi-perfil/consultas/', ciudadano_mis_consultas, name='ciudadano_mis_consultas'),
+    path('mi-perfil/consultas/nueva/', ciudadano_nueva_consulta, name='ciudadano_nueva_consulta'),
+    path('mi-perfil/consultas/<int:pk>/', ciudadano_consulta_detalle, name='ciudadano_consulta_detalle'),
+    path('mi-perfil/consultas/<int:pk>/enviar/', ciudadano_enviar_mensaje, name='ciudadano_enviar_mensaje'),
+    path('mi-perfil/mis-datos/', ciudadano_mis_datos, name='ciudadano_mis_datos'),
+    path('mi-perfil/mis-datos/cambio-email/', ciudadano_cambio_email, name='ciudadano_cambio_email'),
+    path('mi-perfil/mis-datos/confirmar-email/<uuid:token>/', ciudadano_confirmar_email, name='ciudadano_confirmar_email'),
+    path('mi-perfil/mis-datos/cambio-password/', ciudadano_cambio_password, name='ciudadano_cambio_password'),
+    path('mi-perfil/password/reset/', CiudadanoPasswordResetView.as_view(), name='ciudadano_password_reset'),
+    path('mi-perfil/password/reset/enviado/', CiudadanoPasswordResetDoneView.as_view(), name='ciudadano_password_reset_done'),
+    path('mi-perfil/password/reset/<uidb64>/<token>/', CiudadanoPasswordResetConfirmView.as_view(), name='ciudadano_password_reset_confirm'),
+    path('mi-perfil/password/reset/completado/', CiudadanoPasswordResetCompleteView.as_view(), name='ciudadano_password_reset_complete'),
+    # Sistema de Turnos
+    path('mi-perfil/turnos/', ciudadano_mis_turnos, name='ciudadano_mis_turnos'),
+    path('mi-perfil/turnos/solicitar/', ciudadano_solicitar_turno, name='ciudadano_solicitar_turno'),
+    path('mi-perfil/turnos/solicitar/<int:recurso_id>/calendario/', ciudadano_turno_calendario, name='ciudadano_turno_calendario'),
+    path('mi-perfil/turnos/solicitar/<int:recurso_id>/slots/', ciudadano_turno_slots, name='ciudadano_turno_slots'),
+    path('mi-perfil/turnos/solicitar/<int:recurso_id>/confirmar/', ciudadano_confirmar_turno, name='ciudadano_confirmar_turno'),
+    path('mi-perfil/turnos/<int:pk>/confirmado/', ciudadano_turno_confirmado, name='ciudadano_turno_confirmado'),
+    path('mi-perfil/turnos/<int:pk>/cancelar/', ciudadano_cancelar_turno, name='ciudadano_cancelar_turno'),
+    # Actividades institucionales
+    path('mi-perfil/actividades/', ciudadano_mis_actividades, name='ciudadano_mis_actividades'),
+    path('mi-perfil/actividades/<int:actividad_pk>/inscribir/', ciudadano_inscribirse_actividad, name='ciudadano_inscribirse_actividad'),
+    path('mi-perfil/actividades/<int:actividad_pk>/', ciudadano_detalle_actividad, name='ciudadano_detalle_actividad'),
+]

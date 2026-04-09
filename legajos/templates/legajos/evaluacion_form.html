@@ -1,0 +1,292 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Evaluación Inicial - {{ legajo.codigo }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="flex items-center justify-center w-12 h-12 bg-purple-100 rounded-lg">
+                <i class="fas fa-clipboard-list text-purple-600 text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Evaluación Inicial</h1>
+                <p class="text-gray-600">Legajo {{ legajo.codigo }} - {{ legajo.ciudadano.nombre }} {{ legajo.ciudadano.apellido }}</p>
+            </div>
+        </div>
+        
+        <!-- Breadcrumb -->
+        <nav class="flex" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-4">
+                <li>
+                    <a href="{% url 'legajos:lista' %}" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-folder-open"></i>
+                        <span class="sr-only">Legajos</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                        <a href="{% url 'legajos:detalle' legajo.pk %}" class="text-gray-400 hover:text-gray-500">
+                            {{ legajo.codigo|slice:":8" }}...
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                        <span class="text-gray-500">Evaluación Inicial</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+            <!-- Información del Legajo -->
+            <div class="bg-white shadow rounded-lg p-6 mb-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Información del Legajo</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <span class="font-medium text-gray-500">Código:</span>
+                        <span class="text-gray-900 font-mono">{{ legajo.codigo|slice:":12" }}...</span>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-500">Ciudadano:</span>
+                        <span class="text-gray-900">{{ legajo.ciudadano.nombre }} {{ legajo.ciudadano.apellido }}</span>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-500">DNI:</span>
+                        <span class="text-gray-900">{{ legajo.ciudadano.dni }}</span>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-500">Dispositivo:</span>
+                        <span class="text-gray-900">{{ legajo.dispositivo.nombre }}</span>
+                    </div>
+                    <div>
+                        <span class="font-medium text-gray-500">Nivel de Riesgo:</span>
+                        <span class="px-2 py-1 text-xs rounded-full
+                            {% if legajo.nivel_riesgo == 'ALTO' %}bg-red-100 text-red-800
+                            {% elif legajo.nivel_riesgo == 'MEDIO' %}bg-yellow-100 text-yellow-800
+                            {% else %}bg-green-100 text-green-800{% endif %}">
+                            {{ legajo.get_nivel_riesgo_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Alertas de Riesgo -->
+            {% if form.instance.tiene_riesgos %}
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+                        <h4 class="text-sm font-medium text-red-800">Riesgos Identificados</h4>
+                    </div>
+                    <ul class="text-sm text-red-700 space-y-1">
+                        {% for riesgo in form.instance.riesgos_identificados %}
+                            <li>• {{ riesgo }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <!-- Información sobre Evaluación -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-info-circle text-blue-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-sm font-medium text-blue-800">Evaluación Clínico-Psicosocial</h4>
+                        <div class="mt-2 text-sm text-blue-700">
+                            <p>Complete todos los campos relevantes para la evaluación integral del ciudadano.</p>
+                            <p class="mt-2">Los cambios se guardan automáticamente.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario Principal -->
+        <div class="lg:col-span-3">
+            <form method="post" class="space-y-8" id="evaluacion-form">
+                {% csrf_token %}
+                
+                {% if form.errors %}
+                    <div class="bg-red-50 border border-red-200 rounded-md p-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-circle text-red-400"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="text-sm font-medium text-red-800">Error en el formulario</h3>
+                                <div class="mt-2 text-sm text-red-700">
+                                    {% for field, errors in form.errors.items %}
+                                        {% for error in errors %}
+                                            <p>{{ error }}</p>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Evaluación Clínica -->
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-6">Evaluación Clínica</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Situación de Consumo -->
+                        <div>
+                            <label for="{{ form.situacion_consumo.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ form.situacion_consumo.label }}
+                            </label>
+                            {{ form.situacion_consumo }}
+                        </div>
+
+                        <!-- Antecedentes -->
+                        <div>
+                            <label for="{{ form.antecedentes.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ form.antecedentes.label }}
+                            </label>
+                            {{ form.antecedentes }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evaluación Psicosocial -->
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-6">Evaluación Psicosocial</h3>
+                    
+                    <div class="space-y-6">
+                        <!-- Red de Apoyo -->
+                        <div>
+                            <label for="{{ form.red_apoyo.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ form.red_apoyo.label }}
+                            </label>
+                            {{ form.red_apoyo }}
+                        </div>
+
+                        <!-- Condición Social -->
+                        <div>
+                            <label for="{{ form.condicion_social.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ form.condicion_social.label }}
+                            </label>
+                            {{ form.condicion_social }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tamizajes -->
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-6">Tamizajes</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- ASSIST -->
+                        <div>
+                            <label for="{{ form.assist_puntaje.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ form.assist_puntaje.label }}
+                            </label>
+                            {{ form.assist_puntaje }}
+                            <p class="mt-1 text-sm text-gray-500">Puntaje de 0 a 100</p>
+                        </div>
+
+                        <!-- PHQ-9 -->
+                        <div>
+                            <label for="{{ form.phq9_puntaje.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ form.phq9_puntaje.label }}
+                            </label>
+                            {{ form.phq9_puntaje }}
+                            <p class="mt-1 text-sm text-gray-500">Puntaje de 0 a 27</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Evaluación de Riesgos -->
+                <div class="bg-white shadow rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-6">Evaluación de Riesgos</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Riesgo Suicida -->
+                        <div class="flex items-center">
+                            {{ form.riesgo_suicida }}
+                            <label for="{{ form.riesgo_suicida.id_for_label }}" class="ml-3 text-sm font-medium text-gray-700">
+                                {{ form.riesgo_suicida.label }}
+                            </label>
+                        </div>
+
+                        <!-- Violencia -->
+                        <div class="flex items-center">
+                            {{ form.violencia }}
+                            <label for="{{ form.violencia.id_for_label }}" class="ml-3 text-sm font-medium text-gray-700">
+                                {{ form.violencia.label }}
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                        <div class="flex">
+                            <i class="fas fa-exclamation-triangle text-yellow-400 mt-0.5 mr-2"></i>
+                            <div class="text-sm text-yellow-700">
+                                <p><strong>Importante:</strong> Marque estas opciones solo si se identifica riesgo actual. Esto activará protocolos específicos de atención.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                    <a href="{% url 'legajos:detalle' legajo.pk %}" 
+                       class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Volver al Legajo
+                    </a>
+                    
+                    <button type="submit" 
+                            class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        <i class="fas fa-save mr-2"></i>
+                        Guardar Evaluación
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-save functionality
+    const form = document.getElementById('evaluacion-form');
+    const inputs = form.querySelectorAll('input, textarea, select');
+    
+    let saveTimeout;
+    
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                // Auto-save logic could be implemented here
+                console.log('Auto-saving...');
+            }, 2000);
+        });
+    });
+    
+    // Risk validation
+    const riesgoSuicida = document.getElementById('{{ form.riesgo_suicida.id_for_label }}');
+    const violencia = document.getElementById('{{ form.violencia.id_for_label }}');
+    
+    function updateRiskWarning() {
+        const hasRisk = riesgoSuicida.checked || violencia.checked;
+        // Could add visual indicators here
+    }
+    
+    riesgoSuicida.addEventListener('change', updateRiskWarning);
+    violencia.addEventListener('change', updateRiskWarning);
+});
+</script>
+{% endblock %}

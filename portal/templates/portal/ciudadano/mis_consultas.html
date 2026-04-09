@@ -1,0 +1,104 @@
+{% extends 'portal/ciudadano/base_ciudadano.html' %}
+
+{% block title %}Mis Consultas - Portal Ciudadano{% endblock %}
+
+{% block ciudadano_content %}
+
+<!-- Encabezado -->
+<div class="mb-6 animate-fadeInUp">
+    <div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] px-6 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+         style="background: linear-gradient(135deg, {{ branding.portal.primary_button_gradient_start }}18 0%, {{ branding.portal.primary_button_gradient_end }}10 100%);">
+        <div>
+            <h2 class="text-2xl font-bold text-[#252F40]">Mis Consultas</h2>
+            <p class="text-[#8C8C8C] mt-1 text-sm">Historial de todas tus consultas y reclamos.</p>
+        </div>
+        <a href="{% url 'portal:ciudadano_nueva_consulta' %}"
+           class="inline-flex items-center px-5 py-2.5 rounded-xl text-sm font-semibold text-white shadow-md transition-all flex-shrink-0"
+           style="background: linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%);"
+           onmouseover="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_hover_start }} 0%, {{ branding.portal.primary_button_hover_end }} 100%)'"
+           onmouseout="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%)'">
+            <i class="fas fa-plus mr-2"></i>Nueva consulta
+        </a>
+    </div>
+</div>
+
+<!-- Lista de conversaciones -->
+<div class="animate-fadeInUp">
+    {% if conversaciones %}
+        <div class="space-y-3">
+            {% for conv in conversaciones %}
+            <div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 hover:border-[#D1D5DB] transition-colors">
+
+                <!-- Ícono + Info -->
+                <div class="flex items-start space-x-4">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 bg-[#F3F4F6]">
+                        <i class="fas fa-comment-dots text-[#8C8C8C]"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-[#252F40]">Consulta #{{ conv.id }}</p>
+                        <p class="text-xs text-[#8C8C8C] mt-0.5">
+                            Iniciada el {{ conv.fecha_inicio|date:"d/m/Y" }} a las {{ conv.fecha_inicio|date:"H:i" }}
+                        </p>
+                        {% if conv.fecha_cierre %}
+                        <p class="text-xs text-[#8C8C8C]">
+                            Cerrada el {{ conv.fecha_cierre|date:"d/m/Y" }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Badge + Botón -->
+                <div class="flex items-center gap-3 flex-shrink-0">
+                    {% if conv.estado == 'activa' %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>Activa
+                        </span>
+                    {% elif conv.estado == 'pendiente' %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                            <span class="w-1.5 h-1.5 rounded-full bg-yellow-400 mr-1.5"></span>Pendiente
+                        </span>
+                    {% elif conv.estado == 'cerrada' %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                            <span class="w-1.5 h-1.5 rounded-full bg-gray-400 mr-1.5"></span>Cerrada
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                            {{ conv.estado|capfirst }}
+                        </span>
+                    {% endif %}
+
+                    <a href="{% url 'portal:ciudadano_consulta_detalle' pk=conv.pk %}"
+                       class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium border transition-colors"
+                       style="color: {{ branding.portal.secondary_button_text }}; border-color: {{ branding.portal.secondary_button_border }}; background: {{ branding.portal.secondary_button_bg }};"
+                       onmouseover="this.style.background='{{ branding.portal.secondary_button_hover_bg }}'"
+                       onmouseout="this.style.background='{{ branding.portal.secondary_button_bg }}'">
+                        <i class="fas fa-eye mr-1.5"></i>Ver conversación
+                    </a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+
+    {% else %}
+        <!-- Estado vacío -->
+        <div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-12 text-center animate-fadeInUp">
+            <div class="w-16 h-16 rounded-full bg-[#F3F4F6] flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-headset text-2xl text-[#C0C0C0]"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-[#252F40] mb-2">Sin consultas aún</h3>
+            <p class="text-sm text-[#8C8C8C] mb-6 max-w-sm mx-auto">
+                Todavía no realizaste ninguna consulta. Podés iniciar una ahora y nuestro equipo te atenderá a la brevedad.
+            </p>
+            <a href="{% url 'portal:ciudadano_nueva_consulta' %}"
+               class="inline-flex items-center px-6 py-3 rounded-xl text-sm font-semibold text-white shadow-md transition-all"
+               style="background: linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%);"
+               onmouseover="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_hover_start }} 0%, {{ branding.portal.primary_button_hover_end }} 100%)'"
+               onmouseout="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%)'">
+                <i class="fas fa-comments mr-2"></i>Iniciar tu primera consulta
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

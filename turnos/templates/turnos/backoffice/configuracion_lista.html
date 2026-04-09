@@ -1,0 +1,95 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Configuraciones de Turnos{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8">
+
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Configuraciones de Turnos</h1>
+      <p class="text-gray-500 mt-1">Cada configuración puede asociarse a un Programa, Institución o Actividad.</p>
+    </div>
+    <a href="{% url 'turnos:configuracion_crear' %}"
+       class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+      <i class="fas fa-plus"></i> Nueva configuración
+    </a>
+  </div>
+
+  {% if configs %}
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-100">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Nombre</th>
+          <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">Modo</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Aprobación</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Franjas activas</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Turnos pendientes</th>
+          <th class="px-4 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide">Estado</th>
+          <th class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        {% for config in configs %}
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="px-4 py-3 font-medium text-gray-900">{{ config.nombre }}</td>
+          <td class="px-4 py-3 text-sm text-gray-600">{{ config.get_modo_turno_display }}</td>
+          <td class="px-4 py-3 text-center">
+            {% if config.requiere_aprobacion %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Manual</span>
+            {% else %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">Auto</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-center text-sm text-gray-600">{{ config.total_disponibilidades }}</td>
+          <td class="px-4 py-3 text-center">
+            {% if config.total_turnos_pendientes %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">
+              {{ config.total_turnos_pendientes }}
+            </span>
+            {% else %}
+            <span class="text-gray-400 text-sm">—</span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-center">
+            {% if config.activo %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+              <span class="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>Activa
+            </span>
+            {% else %}
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+              <span class="w-1.5 h-1.5 bg-gray-400 rounded-full mr-1.5"></span>Inactiva
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-4 py-3 text-right">
+            <div class="flex items-center justify-end gap-2">
+              <a href="{% url 'turnos:disponibilidad_grilla' pk=config.pk %}"
+                 class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">Disponibilidad</a>
+              <a href="{% url 'turnos:configuracion_editar' pk=config.pk %}"
+                 class="text-xs text-gray-600 hover:text-gray-800 font-medium">Editar</a>
+              <a href="{% url 'turnos:agenda' %}?config={{ config.pk }}"
+                 class="text-xs text-gray-400 hover:text-gray-600 font-medium">Agenda</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% else %}
+  <div class="bg-white rounded-xl border border-dashed border-gray-200 p-12 text-center">
+    <i class="fas fa-calendar-plus text-gray-300 text-4xl mb-4"></i>
+    <h3 class="text-gray-500 font-medium mb-2">No hay configuraciones creadas</h3>
+    <p class="text-gray-400 text-sm mb-4">Creá una configuración para empezar a ofrecer turnos.</p>
+    <a href="{% url 'turnos:configuracion_crear' %}"
+       class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+      <i class="fas fa-plus"></i> Crear primera configuración
+    </a>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

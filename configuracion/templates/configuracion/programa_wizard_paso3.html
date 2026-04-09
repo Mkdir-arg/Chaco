@@ -1,0 +1,89 @@
+{% extends "includes/main.html" %}
+
+{% block title %}{% if es_edicion %}Editar{% else %}Nuevo{% endif %} Programa — Paso 3{% endblock %}
+
+{% block content %}
+<div class="p-6 max-w-2xl">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if es_edicion %}Editar programa{% else %}Nuevo programa{% endif %}
+        </h1>
+    </div>
+
+    <!-- Barra de progreso -->
+    <div class="mb-8">
+        <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+            <span class="font-medium text-indigo-600">Paso {{ paso_actual }} de {{ total_pasos }}</span>
+            — Capacidades y cupo
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-indigo-600 h-2 rounded-full" style="width: {% widthratio paso_actual total_pasos 100 %}%"></div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <form method="post" x-data="{ tieneCupo: {{ form.cupo_maximo.value|default:'false' }} !== '' && {{ form.cupo_maximo.value|default:'false' }} !== false }">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="mb-4 text-red-600 text-sm">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="space-y-5">
+                <!-- Turnos -->
+                <div class="flex items-start gap-3 p-4 rounded-lg border border-gray-200">
+                    <div class="pt-0.5">{{ form.tiene_turnos }}</div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">{{ form.tiene_turnos.label }}</p>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            Habilita la gestión de agenda para este programa. La configuración de horarios y disponibilidad se realiza en el módulo de Turnos.
+                        </p>
+                    </div>
+                </div>
+                {% if form.tiene_turnos.errors %}
+                <p class="text-red-600 text-sm">{{ form.tiene_turnos.errors.0 }}</p>
+                {% endif %}
+
+                <!-- Cupo máximo -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.cupo_maximo.label }}
+                    </label>
+                    <div class="flex items-center gap-3">
+                        {{ form.cupo_maximo }}
+                        <span class="text-xs text-gray-400">Si se deja vacío, el programa no tiene límite de inscripciones.</span>
+                    </div>
+                    {% if form.cupo_maximo.errors %}
+                    <p class="text-red-600 text-sm mt-1">{{ form.cupo_maximo.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Lista de espera -->
+                <div class="flex items-start gap-3 p-4 rounded-lg border border-gray-200">
+                    <div class="pt-0.5">{{ form.tiene_lista_espera }}</div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">{{ form.tiene_lista_espera.label }}</p>
+                        <p class="text-xs text-gray-500 mt-0.5">
+                            Solo disponible si se configuró un cupo máximo.
+                        </p>
+                    </div>
+                </div>
+                {% if form.tiene_lista_espera.errors %}
+                <p class="text-red-600 text-sm">{{ form.tiene_lista_espera.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <a href="{% if es_edicion %}{% url 'configuracion:programa_editar_paso2' programa.pk %}{% else %}{% url 'configuracion:programa_wizard_paso2' %}{% endif %}"
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Anterior
+                </a>
+                <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg text-sm font-medium">
+                    Siguiente <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

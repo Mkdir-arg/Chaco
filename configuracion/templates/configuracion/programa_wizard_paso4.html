@@ -1,0 +1,94 @@
+{% extends "includes/main.html" %}
+
+{% block title %}{% if es_edicion %}Editar{% else %}Nuevo{% endif %} Programa — Paso 4{% endblock %}
+
+{% block content %}
+<div class="p-6 max-w-2xl">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if es_edicion %}Editar programa{% else %}Nuevo programa{% endif %}
+        </h1>
+    </div>
+
+    <!-- Barra de progreso -->
+    <div class="mb-8">
+        <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+            <span class="font-medium text-indigo-600">Paso {{ paso_actual }} de {{ total_pasos }}</span>
+            — Visual y confirmación
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-indigo-600 h-2 rounded-full" style="width: 100%"></div>
+        </div>
+    </div>
+
+    <!-- Resumen -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 mb-6">
+        <h2 class="text-sm font-semibold text-blue-900 mb-3">Resumen del programa</h2>
+        <dl class="space-y-1 text-sm text-blue-800">
+            <div class="flex gap-2"><dt class="font-medium w-32">Nombre:</dt><dd>{{ resumen.nombre }}</dd></div>
+            <div class="flex gap-2"><dt class="font-medium w-32">Código:</dt><dd class="font-mono">{{ resumen.codigo }}</dd></div>
+            {% if resumen.descripcion %}
+            <div class="flex gap-2"><dt class="font-medium w-32">Descripción:</dt><dd>{{ resumen.descripcion }}</dd></div>
+            {% endif %}
+            <div class="flex gap-2">
+                <dt class="font-medium w-32">Jerarquía:</dt>
+                <dd>
+                    {% if resumen.subsecretaria %}
+                        {{ resumen.subsecretaria.secretaria.nombre }} → {{ resumen.subsecretaria.nombre }}
+                    {% else %}—{% endif %}
+                </dd>
+            </div>
+            <div class="flex gap-2"><dt class="font-medium w-32">Naturaleza:</dt><dd>{{ resumen.naturaleza }}</dd></div>
+            <div class="flex gap-2"><dt class="font-medium w-32">Turnos:</dt><dd>{% if resumen.tiene_turnos %}Sí{% else %}No{% endif %}</dd></div>
+            <div class="flex gap-2">
+                <dt class="font-medium w-32">Cupo:</dt>
+                <dd>{% if resumen.cupo_maximo %}{{ resumen.cupo_maximo }} inscripciones{% else %}Sin límite{% endif %}</dd>
+            </div>
+            {% if resumen.cupo_maximo %}
+            <div class="flex gap-2"><dt class="font-medium w-32">Lista de espera:</dt><dd>{% if resumen.tiene_lista_espera %}Sí{% else %}No{% endif %}</dd></div>
+            {% endif %}
+        </dl>
+        <p class="text-xs text-blue-600 mt-3">
+            {% if es_edicion %}Los cambios se guardarán al confirmar.{% else %}El programa se creará en estado <strong>Borrador</strong>.{% endif %}
+        </p>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <h2 class="text-sm font-semibold text-gray-700 mb-4">Apariencia en solapas</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Ícono</label>
+                    {{ form.icono }}
+                    <p class="text-xs text-gray-400 mt-1">Nombre del ícono Material Icons (ej: people, school)</p>
+                    {% if form.icono.errors %}<p class="text-red-600 text-sm mt-1">{{ form.icono.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+                    {{ form.color }}
+                    {% if form.color.errors %}<p class="text-red-600 text-sm mt-1">{{ form.color.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Orden</label>
+                    {{ form.orden }}
+                    <p class="text-xs text-gray-400 mt-1">Menor número = aparece primero.</p>
+                    {% if form.orden.errors %}<p class="text-red-600 text-sm mt-1">{{ form.orden.errors.0 }}</p>{% endif %}
+                </div>
+            </div>
+
+            <div class="flex justify-between mt-8">
+                <a href="{% if es_edicion %}{% url 'configuracion:programa_editar_paso3' programa.pk %}{% else %}{% url 'configuracion:programa_wizard_paso3' %}{% endif %}"
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Anterior
+                </a>
+                <button type="submit"
+                        class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg text-sm font-medium">
+                    <i class="fas fa-check mr-1"></i>
+                    {% if es_edicion %}Guardar cambios{% else %}Crear programa{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

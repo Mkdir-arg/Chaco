@@ -1,0 +1,186 @@
+{% extends 'includes/base.html' %}
+{% load custom_filters %}
+
+{% block title %}Evaluación - {{ legajo.ciudadano.nombre }} {{ legajo.ciudadano.apellido }}{% endblock %}
+
+{% block main-content %}
+<div class="container mx-auto px-4 py-6">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-6" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{% url 'legajos:lista' %}" class="text-gray-700 hover:text-blue-600">Legajos</a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <a href="{% url 'legajos:detalle' legajo.pk %}" class="ml-1 text-gray-700 hover:text-blue-600">{{ legajo.codigo }}</a>
+                </div>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="ml-1 text-gray-500">Evaluación</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Evaluación Inicial</h1>
+                    <p class="text-gray-600 mt-1">
+                        Legajo: <span class="font-medium">{{ legajo.codigo }}</span> - 
+                        {{ legajo.ciudadano.nombre }} {{ legajo.ciudadano.apellido }}
+                    </p>
+                </div>
+                <div class="flex space-x-3">
+                    {% if legajo.estado != 'CERRADO' %}
+                        {% if not evaluacion %}
+                            <a href="{% url 'legajos:evaluacion' legajo.pk %}" 
+                               class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-plus mr-2"></i>Crear Evaluación
+                            </a>
+                        {% else %}
+                            <a href="{% url 'legajos:evaluacion' legajo.pk %}" 
+                               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-edit mr-2"></i>Editar Evaluación
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        {% if evaluacion %}
+            <div class="px-6 py-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Información General -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-900 border-b pb-2">Información General</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Fecha de Evaluación</label>
+                                <p class="text-gray-900">{{ evaluacion.creado|date:"d/m/Y H:i" }}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Estado</label>
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                    Completada
+                                </span>
+                            </div>
+                        </div>
+
+                        {% if evaluacion.situacion_consumo %}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Situación de Consumo</label>
+                            <div class="text-gray-900 bg-gray-50 p-3 rounded-lg">{{ evaluacion.situacion_consumo|linebreaks }}</div>
+                        </div>
+                        {% endif %}
+
+                        {% if evaluacion.antecedentes %}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Antecedentes</label>
+                            <div class="text-gray-900 bg-gray-50 p-3 rounded-lg">{{ evaluacion.antecedentes|linebreaks }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Evaluación Clínica -->
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-900 border-b pb-2">Evaluación Clínica</h3>
+                        
+                        {% if evaluacion.red_apoyo %}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Red de Apoyo</label>
+                            <div class="text-gray-900 bg-gray-50 p-3 rounded-lg">{{ evaluacion.red_apoyo|linebreaks }}</div>
+                        </div>
+                        {% endif %}
+
+                        {% if evaluacion.condicion_social %}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Condición Social</label>
+                            <div class="text-gray-900 bg-gray-50 p-3 rounded-lg">{{ evaluacion.condicion_social|linebreaks }}</div>
+                        </div>
+                        {% endif %}
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Riesgos Detectados</label>
+                            <div class="bg-gray-50 p-3 rounded-lg space-y-2">
+                                {% if evaluacion.riesgo_suicida %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                    Riesgo suicida
+                                </span>
+                                {% endif %}
+                                {% if evaluacion.violencia %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-orange-100 text-orange-800">
+                                    Situación de violencia
+                                </span>
+                                {% endif %}
+                                {% if not evaluacion.riesgo_suicida and not evaluacion.violencia %}
+                                <span class="text-gray-500">Sin riesgos críticos marcados</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        {% if evaluacion.tamizajes %}
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Tamizajes</label>
+                            <div class="bg-gray-50 p-3 rounded-lg space-y-2">
+                                {% for nombre, resultado in evaluacion.tamizajes.items %}
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="font-medium text-gray-900">{{ nombre }}</span>
+                                    <span class="text-gray-600">Puntaje: {{ resultado.puntaje }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Acciones -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm text-gray-500">
+                            Última actualización: {{ evaluacion.modificado|date:"d/m/Y H:i" }}
+                        </p>
+                        <div class="flex space-x-3">
+                            <a href="{% url 'legajos:detalle' legajo.pk %}" 
+                               class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>Volver al Legajo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <!-- Estado vacío -->
+            <div class="px-6 py-12 text-center">
+                <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-clipboard-list text-3xl text-gray-400"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No hay evaluación inicial</h3>
+                <p class="text-gray-500 mb-6">Este legajo aún no tiene una evaluación inicial registrada.</p>
+                {% if legajo.estado != 'CERRADO' %}
+                <a href="{% url 'legajos:evaluacion' legajo.pk %}" 
+                   class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Crear Evaluación Inicial
+                </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

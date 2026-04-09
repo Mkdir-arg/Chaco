@@ -1,0 +1,112 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Registro ciudadano - Paso 1{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-8 animate-fadeInUp">
+        <!-- Encabezado -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4" style="background: linear-gradient(135deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%);">
+                <i class="fas fa-user-plus text-white text-2xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-[#252F40]">Crear cuenta</h2>
+            <p class="text-[#8C8C8C] mt-2 text-sm">Paso 1 de 2 — Verificación de identidad</p>
+        </div>
+
+        <!-- Indicador de pasos -->
+        <div class="flex items-center justify-center space-x-2 mb-8">
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold" style="background: {{ branding.portal.primary_button_gradient_start }};">1</div>
+            <div class="flex-1 h-1 rounded bg-[#E5E7EB]"></div>
+            <div class="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-[#E5E7EB] text-[#8C8C8C]">2</div>
+        </div>
+
+        <p class="text-sm text-[#8C8C8C] mb-6 text-center">
+            Ingresá tu DNI y género para verificar tu identidad en el registro civil.
+        </p>
+
+        <!-- Formulario -->
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
+                    {% for error in form.non_field_errors %}
+                        <p><i class="fas fa-exclamation-circle mr-1"></i>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="space-y-4">
+                <!-- DNI -->
+                <div>
+                    <label for="{{ form.dni.id_for_label }}" class="block text-sm font-medium text-[#252F40] mb-1">
+                        {{ form.dni.label }}
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-[#8C8C8C]">
+                            <i class="fas fa-id-card"></i>
+                        </span>
+                        <input
+                            type="text"
+                            name="{{ form.dni.html_name }}"
+                            id="{{ form.dni.id_for_label }}"
+                            placeholder="Sin puntos ni guiones"
+                            autofocus
+                            class="w-full pl-10 pr-4 py-3 border rounded-xl text-[#252F40] text-sm focus:outline-none focus:ring-2 {% if form.dni.errors %}border-red-400 focus:ring-red-300{% else %}border-[#E5E7EB] focus:ring-blue-300{% endif %}"
+                            value="{{ form.dni.value|default:'' }}"
+                        >
+                    </div>
+                    {% for error in form.dni.errors %}
+                        <p class="text-red-600 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Género -->
+                <div>
+                    <label for="{{ form.genero.id_for_label }}" class="block text-sm font-medium text-[#252F40] mb-1">
+                        {{ form.genero.label }}
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-3 flex items-center text-[#8C8C8C]">
+                            <i class="fas fa-user-circle"></i>
+                        </span>
+                        <select
+                            name="{{ form.genero.html_name }}"
+                            id="{{ form.genero.id_for_label }}"
+                            class="w-full pl-10 pr-4 py-3 border rounded-xl text-[#252F40] text-sm focus:outline-none focus:ring-2 appearance-none {% if form.genero.errors %}border-red-400 focus:ring-red-300{% else %}border-[#E5E7EB] focus:ring-blue-300{% endif %}"
+                        >
+                            {% for value, label in form.genero.field.choices %}
+                                <option value="{{ value }}" {% if form.genero.value == value %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% for error in form.genero.errors %}
+                        <p class="text-red-600 text-xs mt-1"><i class="fas fa-exclamation-circle mr-1"></i>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Botón -->
+            <button
+                type="submit"
+                class="w-full mt-6 py-3 text-white font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-xl"
+                style="background: linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%);"
+                onmouseover="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_hover_start }} 0%, {{ branding.portal.primary_button_hover_end }} 100%)'"
+                onmouseout="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%)'">
+                <i class="fas fa-arrow-right mr-2"></i>Verificar y continuar
+            </button>
+        </form>
+
+        <!-- Link a login -->
+        <div class="mt-6 pt-6 border-t border-[#E5E7EB] text-center">
+            <p class="text-sm text-[#8C8C8C]">
+                ¿Ya tenés cuenta?
+                <a href="{% url 'portal:ciudadano_login' %}" class="font-medium hover:underline" style="color: {{ branding.portal.primary_button_gradient_start }};">
+                    Iniciá sesión
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

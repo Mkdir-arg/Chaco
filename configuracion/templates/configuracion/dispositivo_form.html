@@ -1,0 +1,98 @@
+{% extends "includes/main.html" %}
+{% load static %}
+
+{% block title %}{% if object %}Editar{% else %}Nuevo{% endif %} Dispositivo{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">{% if object %}Editar{% else %}Nuevo{% endif %} Dispositivo</h1>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <form method="post">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.nombre.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
+                    {{ form.nombre }}
+                    {% if form.nombre.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.nombre.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.tipo.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
+                    {{ form.tipo }}
+                    {% if form.tipo.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.tipo.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.provincia.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Provincia</label>
+                    {{ form.provincia }}
+                    {% if form.provincia.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.provincia.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.municipio.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Municipio</label>
+                    {{ form.municipio }}
+                    {% if form.municipio.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.municipio.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.localidad.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Localidad</label>
+                    {{ form.localidad }}
+                    {% if form.localidad.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.localidad.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.telefono.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
+                    {{ form.telefono }}
+                    {% if form.telefono.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.telefono.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="md:col-span-2">
+                    <label for="{{ form.direccion.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
+                    {{ form.direccion }}
+                    {% if form.direccion.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.direccion.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.email.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div>
+                    <label class="flex items-center">
+                        {{ form.activo }}
+                        <span class="ml-2 text-sm text-gray-700">Activo</span>
+                    </label>
+                    {% if form.activo.errors %}
+                        <div class="text-red-600 text-sm mt-1">{{ form.activo.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="flex justify-end space-x-3 mt-6">
+                <a href="{% url 'configuracion:dispositivos' %}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg">Cancelar</a>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

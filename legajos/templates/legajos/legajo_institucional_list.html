@@ -1,0 +1,166 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Legajos Institucionales{% endblock %}
+
+{% block main-content %}
+<div class="min-h-screen bg-white p-4 lg:p-8">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between animate-fade-in">
+            <div>
+                <h1 class="text-3xl font-bold text-[#252F40]">Legajos Institucionales</h1>
+                <p class="text-sm text-[#8C8C8C] mt-1">
+                    Gestión y seguimiento de instituciones de la red
+                </p>
+            </div>
+            <a href="{% url 'legajos:legajo_institucional_crear' %}" class="btn-nodo btn-brand btn-base">
+                <i class="fas fa-plus"></i>
+                Nuevo Legajo Institucional
+            </a>
+        </div>
+
+        <!-- Dashboard de Métricas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+            <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0s">
+                <div class="flex items-center justify-between mb-3">
+                    <i class="fas fa-building text-2xl" style="background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                </div>
+                <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ total_instituciones|default:0 }}</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Total Instituciones</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.1s">
+                <div class="flex items-center justify-between mb-3">
+                    <i class="fas fa-check-circle text-2xl" style="background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                </div>
+                <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ instituciones_activas|default:0 }}</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Activas</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.2s">
+                <div class="flex items-center justify-between mb-3">
+                    <i class="fas fa-clock text-2xl" style="background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                </div>
+                <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ instituciones_pendientes|default:0 }}</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Pendientes</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.3s">
+                <div class="flex items-center justify-between mb-3">
+                    <i class="fas fa-calendar-alt text-2xl" style="background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                </div>
+                <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ total_actividades|default:0 }}</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Actividades</p>
+            </div>
+
+            <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.4s">
+                <div class="flex items-center justify-between mb-3">
+                    <i class="fas fa-exchange-alt text-2xl" style="background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
+                </div>
+                <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ total_derivaciones|default:0 }}</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Derivaciones</p>
+            </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="bg-white rounded-xl border border-[#E5E7EB] overflow-hidden shadow-lg">
+        {% if legajos_institucionales %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-[#F9FAFB] border-b border-[#E5E7EB]">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Código</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Institución</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Tipo</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-[#374151] uppercase tracking-wide">Estado</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Responsable</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Fecha Apertura</th>
+                            <th class="px-6 py-4 text-center text-xs font-bold text-[#374151] uppercase tracking-wide">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#E5E7EB]">
+                        {% for legajo in legajos_institucionales %}
+                        <tr class="hover:bg-[#F9FAFB] transition-colors">
+                            <td class="px-6 py-4 text-sm font-medium text-[#252F40]">{{ legajo.codigo }}</td>
+                            <td class="px-6 py-4">
+                                <div>
+                                    <p class="font-semibold text-[#252F40]">{{ legajo.institucion.nombre }}</p>
+                                    <p class="text-xs text-[#8C8C8C]">{{ legajo.institucion.municipio }}, {{ legajo.institucion.provincia }}</p>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-[#4A5565]">{{ legajo.institucion.get_tipo_display }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="h-5 inline-flex items-center px-2 text-xs font-medium rounded-md
+                                    {% if legajo.estado == 'ACTIVO' %}bg-[#ECFDF5] text-[#006045] border border-[#A4F4CF]
+                                    {% elif legajo.estado == 'OBSERVACION' %}bg-[#FFF8F1] text-[#771D1D] border border-[#FCD9BD]
+                                    {% elif legajo.estado == 'SUSPENDIDO' %}bg-[#FEF0F2] text-[#8B0836] border border-[#FFCCD3]
+                                    {% else %}bg-[#F9FAFB] text-[#101828] border border-[#101828]{% endif %}">
+                                    {{ legajo.get_estado_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-[#4A5565]">
+                                {{ legajo.responsable_NODO.get_full_name|default:legajo.responsable_NODO.username|default:"-" }}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-[#4A5565]">{{ legajo.fecha_apertura|date:"d/m/Y" }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <div class="flex gap-2 justify-center">
+                                    <a href="{% url 'legajos:legajo_institucional_detalle' legajo.pk %}" class="p-2 text-[#3B82F6] hover:bg-blue-50 rounded-lg transition-colors inline-block" title="Ver detalle">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'legajos:legajo_institucional_editar' legajo.pk %}" class="p-2 text-[#10B981] hover:bg-green-50 rounded-lg transition-colors inline-block" title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="p-12 text-center">
+                <i class="fas fa-building text-6xl text-[#8C8C8C] mb-4 opacity-50"></i>
+                <h3 class="text-xl font-semibold text-[#252F40] mb-2">No hay legajos institucionales</h3>
+                <p class="text-[#8C8C8C] mb-6">Comienza creando el primer legajo institucional</p>
+                <a href="{% url 'legajos:legajo_institucional_crear' %}" class="btn-nodo btn-brand btn-base">
+                    <i class="fas fa-plus"></i>Crear Legajo Institucional
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+}
+
+.animate-slide-up {
+    animation: slide-up 0.6s ease-out;
+    animation-fill-mode: both;
+}
+</style>
+{% endblock %}

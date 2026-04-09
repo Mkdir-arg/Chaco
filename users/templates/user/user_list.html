@@ -1,0 +1,124 @@
+{% extends "includes/base.html" %}
+{% load static custom_filters %}
+
+{% block title %}Usuarios{% endblock %}
+
+{% block main-content %}
+<div class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-lora font-bold text-gray-900">Usuarios</h1>
+            <p class="text-gray-600 mt-2">Gestión de usuarios del sistema</p>
+        </div>
+        <a href="{% url 'users:usuario_crear' %}" class="bg-arg-azul text-white px-6 py-3 rounded-xl hover:bg-arg-secundario transition-colors font-medium text-center">
+            <i class="fas fa-plus mr-2"></i>Nuevo Usuario
+        </a>
+    </div>
+
+    <!-- Lista de usuarios -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        {% if users %}
+            <!-- Vista de tabla para desktop -->
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Usuario</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nombre</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Email</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Grupos</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Estado</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for user in users %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ user.username }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ user.get_full_name|default:"-" }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ user.email|default:"-" }}</td>
+                            <td class="px-6 py-4 text-sm">
+                                {% for group in user.groups.all %}
+                                    <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium mr-1">
+                                        {{ group.name }}
+                                    </span>
+                                {% empty %}
+                                    <span class="text-gray-400">Sin grupos</span>
+                                {% endfor %}
+                            </td>
+                            <td class="px-6 py-4 text-sm">
+                                {% if user.is_active %}
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Activo</span>
+                                {% else %}
+                                    <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-sm">
+                                <div class="flex gap-2">
+                                    <a href="{% url 'users:usuario_editar' user.pk %}" 
+                                       class="text-green-600 hover:text-green-800">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'users:usuario_eliminar' user.pk %}" 
+                                       class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Vista de cards para móvil -->
+            <div class="md:hidden divide-y divide-gray-200">
+                {% for user in users %}
+                <div class="p-4 hover:bg-gray-50">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="font-medium text-gray-900">{{ user.get_full_name|default:user.username }}</div>
+                        <div class="flex gap-2">
+                            <a href="{% url 'users:usuario_editar' user.pk %}" 
+                               class="text-green-600 hover:text-green-800 p-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'users:usuario_eliminar' user.pk %}" 
+                               class="text-red-600 hover:text-red-800 p-2">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <div><span class="font-medium">Usuario:</span> {{ user.username }}</div>
+                        {% if user.email %}
+                        <div><span class="font-medium">Email:</span> {{ user.email }}</div>
+                        {% endif %}
+                        <div class="flex items-center gap-2 mt-2">
+                            {% if user.is_active %}
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Activo</span>
+                            {% else %}
+                                <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Inactivo</span>
+                            {% endif %}
+                            {% for group in user.groups.all %}
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                                    {{ group.name }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-12 text-center">
+                <i class="fas fa-users text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">No hay usuarios registrados</h3>
+                <p class="text-gray-600 mb-6">Comienza agregando el primer usuario al sistema</p>
+                <a href="{% url 'users:usuario_crear' %}" class="bg-arg-azul text-white px-6 py-3 rounded-xl hover:bg-arg-secundario transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Agregar Usuario
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

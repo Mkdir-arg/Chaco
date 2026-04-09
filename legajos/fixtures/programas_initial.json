@@ -1,0 +1,42 @@
+[
+    {
+        "model": "legajos.programa",
+        "pk": 1,
+        "fields": {
+            "codigo": "SEDRONAR",
+            "nombre": "Acompañamiento SEDRONAR",
+            "tipo": "ACOMPANAMIENTO_SEDRONAR",
+            "descripcion": "Programa de acompañamiento para consumos problemáticos",
+            "color": "#6366f1",
+            "icono": "medical_services",
+            "activo": true,
+            "orden": 1,
+            "requiere_evaluacion": true,
+            "requiere_plan": true,
+            "requiere_seguimientos": true,
+            "modelo_legajo": "LegajoAtencion",
+            "creado": "2026-02-16T00:00:00Z",
+            "modificado": "2026-02-16T00:00:00Z"
+        }
+    },
+    {
+        "model": "legajos.programa",
+        "pk": 2,
+        "fields": {
+            "codigo": "NACHEC",
+            "nombre": "ÑACHEC",
+            "tipo": "NACHEC",
+            "descripcion": "Programa ÑACHEC",
+            "color": "#10b981",
+            "icono": "groups",
+            "activo": true,
+            "orden": 2,
+            "requiere_evaluacion": true,
+            "requiere_plan": false,
+            "requiere_seguimientos": true,
+            "modelo_legajo": "LegajoNachec",
+            "creado": "2026-02-16T00:00:00Z",
+            "modificado": "2026-02-16T00:00:00Z"
+        }
+    }
+]

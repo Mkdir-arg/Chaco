@@ -1,0 +1,105 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Derivaciones - {{ dispositivo.nombre }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">{{ dispositivo.nombre }}</h1>
+                <p class="mt-2 text-sm text-gray-600">{{ dispositivo.get_tipo_display }} - Derivaciones recibidas</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <div class="mb-6 bg-white shadow rounded-lg p-4">
+        <form method="get" class="flex gap-4 items-end">
+            <div class="flex-1">
+                <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
+                <select name="estado" id="estado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    <option value="">Todos los estados</option>
+                    {% for value, label in estados %}
+                        <option value="{{ value }}" {% if request.GET.estado == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+                    <i class="fas fa-filter mr-2"></i>Filtrar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabla de derivaciones -->
+    <div class="bg-white shadow overflow-hidden sm:rounded-md">
+        {% if derivaciones %}
+            <ul class="divide-y divide-gray-200">
+                {% for derivacion in derivaciones %}
+                    <li class="px-6 py-4 hover:bg-gray-50">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                            {% if derivacion.estado == 'PENDIENTE' %}bg-yellow-100 text-yellow-800
+                                            {% elif derivacion.estado == 'ACEPTADA' %}bg-green-100 text-green-800
+                                            {% elif derivacion.estado == 'RECHAZADA' %}bg-red-100 text-red-800
+                                            {% endif %}">
+                                            {{ derivacion.get_estado_display }}
+                                        </span>
+                                    </div>
+                                    <div class="ml-4 flex-1">
+                                        <div class="flex items-center">
+                                            <p class="text-sm font-medium text-gray-900">
+                                                <a href="{% url 'legajos:detalle' derivacion.legajo.pk %}" class="hover:text-indigo-600">
+                                                    {{ derivacion.legajo.ciudadano.apellido }}, {{ derivacion.legajo.ciudadano.nombre }}
+                                                </a>
+                                            </p>
+                                            <p class="ml-2 text-sm text-gray-500">DNI: {{ derivacion.legajo.ciudadano.dni }}</p>
+                                        </div>
+                                        <div class="mt-1">
+                                            <p class="text-sm text-gray-600">{{ derivacion.motivo|truncatewords:15 }}</p>
+                                        </div>
+                                        <div class="mt-2 flex items-center text-sm text-gray-500">
+                                            <i class="fas fa-building mr-1"></i>
+                                            <span>Desde: {{ derivacion.legajo.dispositivo.nombre|default:"Sin dispositivo" }}</span>
+                                            <span class="mx-2">•</span>
+                                            <i class="fas fa-calendar mr-1"></i>
+                                            <span>{{ derivacion.creado|date:"d/m/Y H:i" }}</span>
+                                            <span class="mx-2">•</span>
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium
+                                                {% if derivacion.urgencia == 'ALTA' %}bg-red-100 text-red-800
+                                                {% elif derivacion.urgencia == 'MEDIA' %}bg-yellow-100 text-yellow-800
+                                                {% else %}bg-green-100 text-green-800
+                                                {% endif %}">
+                                                {{ derivacion.get_urgencia_display }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <a href="{% url 'legajos:detalle' derivacion.legajo.pk %}" 
+                                   class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                    Ver Legajo
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <div class="text-center py-12">
+                <i class="fas fa-inbox text-gray-400 text-4xl mb-4"></i>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No hay derivaciones</h3>
+                <p class="text-gray-500">Este dispositivo no ha recibido derivaciones aún.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

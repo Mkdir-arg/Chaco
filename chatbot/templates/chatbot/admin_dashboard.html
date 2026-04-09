@@ -1,0 +1,414 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+
+{% block title %}Dashboard Chatbot{% endblock %}
+
+{% block main-content %}
+<div
+    id="chatbot-admin-app"
+    class="space-y-6"
+    x-data="chatbotAdmin()"
+    data-admin-data-url="{{ chatbot_admin_urls.admin_data }}"
+    data-chat-logs-url="{{ chatbot_admin_urls.chat_logs }}"
+    data-update-api-key-url="{{ chatbot_admin_urls.update_api_key }}"
+    data-test-api-key-url="{{ chatbot_admin_urls.test_api_key }}"
+    data-add-knowledge-url="{{ chatbot_admin_urls.add_knowledge }}"
+    data-delete-knowledge-url-template="{{ chatbot_admin_urls.delete_knowledge_template }}"
+>
+    <!-- Header -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">🤖 Panel de Administración Chatbot</h1>
+                <p class="text-gray-600">Monitoreo y configuración del asistente virtual</p>
+            </div>
+            <div class="flex space-x-3">
+                <button @click="refreshStatus()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-sync-alt mr-2"></i>Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado del Sistema -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full" :class="systemStatus.api_status ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'">
+                    <i class="fas fa-robot text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Estado API</p>
+                    <p class="text-lg font-semibold" :class="systemStatus.api_status ? 'text-green-600' : 'text-red-600'" x-text="systemStatus.api_status ? 'Conectado' : 'Desconectado'"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-comments text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Conversaciones Hoy</p>
+                    <p class="text-lg font-semibold text-gray-900" x-text="stats.conversations_today"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                    <i class="fas fa-message text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Mensajes Hoy</p>
+                    <p class="text-lg font-semibold text-gray-900" x-text="stats.messages_today"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                    <i class="fas fa-coins text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Tokens Usados</p>
+                    <p class="text-lg font-semibold text-gray-900" x-text="stats.tokens_used"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Configuración API Key -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">🔑 Configuración API Key</h2>
+        <div class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">OpenAI API Key</label>
+                <div class="flex space-x-3">
+                    <input 
+                        type="password" 
+                        x-model="apiKey"
+                        class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="sk-..."
+                    >
+                    <button @click="updateApiKey()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        Actualizar
+                    </button>
+                    <button @click="testApiKey()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Probar
+                    </button>
+                </div>
+                <p class="text-sm text-gray-500 mt-1">Estado actual: <span :class="systemStatus.api_status ? 'text-green-600' : 'text-red-600'" x-text="systemStatus.api_message"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs en Tiempo Real -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">📋 Logs en Tiempo Real</h2>
+            <div class="flex space-x-2">
+                <button @click="clearLogs()" class="text-red-600 hover:text-red-800 text-sm">
+                    <i class="fas fa-trash mr-1"></i>Limpiar
+                </button>
+                <button @click="toggleAutoRefresh()" class="text-blue-600 hover:text-blue-800 text-sm">
+                    <i class="fas" :class="autoRefresh ? 'fa-pause' : 'fa-play'" class="mr-1"></i>
+                    <span x-text="autoRefresh ? 'Pausar' : 'Iniciar'"></span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-gray-900 text-green-400 p-4 rounded-lg h-64 overflow-y-auto font-mono text-sm" id="logs-container">
+            <template x-for="log in logs" :key="log.id">
+                <div class="mb-1">
+                    <span class="text-gray-500" x-text="log.timestamp"></span>
+                    <span :class="getLogColor(log.level)" x-text="log.level"></span>
+                    <span x-text="log.message"></span>
+                </div>
+            </template>
+            <div x-show="logs.length === 0" class="text-gray-500 text-center py-8">
+                No hay logs disponibles
+            </div>
+        </div>
+    </div>
+
+    <!-- Conversaciones Recientes -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">💬 Conversaciones Recientes</h2>
+        <div class="space-y-3">
+            <template x-for="conversation in recentConversations" :key="conversation.id">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600 text-sm"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-900" x-text="conversation.user"></p>
+                                <p class="text-sm text-gray-500" x-text="conversation.timestamp"></p>
+                            </div>
+                        </div>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full" x-text="conversation.messages_count + ' mensajes'"></span>
+                    </div>
+                    <p class="text-sm text-gray-600" x-text="conversation.last_message"></p>
+                </div>
+            </template>
+        </div>
+    </div>
+
+    <!-- Base de Conocimiento -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-semibold text-gray-900">🧠 Base de Conocimiento</h2>
+            <button @click="showAddKnowledge = true" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                <i class="fas fa-plus mr-2"></i>Agregar
+            </button>
+        </div>
+        
+        <div class="space-y-3">
+            <template x-for="item in knowledge" :key="item.id">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="font-medium text-gray-900" x-text="item.title"></h3>
+                            <p class="text-sm text-gray-600 mt-1" x-text="item.content.substring(0, 100) + '...'"></p>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <span class="text-xs text-gray-500" x-text="item.category"></span>
+                                <span :class="item.is_active ? 'text-green-600' : 'text-red-600'" class="text-xs" x-text="item.is_active ? 'Activo' : 'Inactivo'"></span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button @click="editKnowledge(item)" class="text-blue-600 hover:text-blue-800">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button @click="deleteKnowledge(item.id)" class="text-red-600 hover:text-red-800">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Agregar Conocimiento -->
+<div x-show="showAddKnowledge" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h3 class="text-lg font-semibold mb-4">Agregar Conocimiento</h3>
+        <form @submit.prevent="addKnowledge()">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                    <input type="text" x-model="newKnowledge.title" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                    <input type="text" x-model="newKnowledge.category" class="w-full border border-gray-300 rounded-lg px-3 py-2" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contenido</label>
+                    <textarea x-model="newKnowledge.content" class="w-full border border-gray-300 rounded-lg px-3 py-2 h-24" required></textarea>
+                </div>
+            </div>
+            <div class="flex justify-end space-x-3 mt-6">
+                <button type="button" @click="showAddKnowledge = false" class="px-4 py-2 text-gray-600 hover:text-gray-800">Cancelar</button>
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">Guardar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function chatbotAdmin() {
+    return {
+        systemStatus: {
+            api_status: false,
+            api_message: 'Verificando...'
+        },
+        stats: {
+            conversations_today: 0,
+            messages_today: 0,
+            tokens_used: 0
+        },
+        logs: [],
+        recentConversations: [],
+        knowledge: [],
+        apiKey: '',
+        autoRefresh: false,
+        urls: {
+            adminData: document.getElementById('chatbot-admin-app').dataset.adminDataUrl,
+            chatLogs: document.getElementById('chatbot-admin-app').dataset.chatLogsUrl,
+            updateApiKey: document.getElementById('chatbot-admin-app').dataset.updateApiKeyUrl,
+            testApiKey: document.getElementById('chatbot-admin-app').dataset.testApiKeyUrl,
+            addKnowledge: document.getElementById('chatbot-admin-app').dataset.addKnowledgeUrl,
+            deleteKnowledgeTemplate: document.getElementById('chatbot-admin-app').dataset.deleteKnowledgeUrlTemplate,
+        },
+        showAddKnowledge: false,
+        newKnowledge: {
+            title: '',
+            category: '',
+            content: ''
+        },
+        
+        init() {
+            this.loadData();
+            this.startAutoRefresh();
+        },
+        
+        async loadData() {
+            try {
+                const response = await fetch(this.urls.adminData);
+                const data = await response.json();
+                
+                this.systemStatus = data.system_status;
+                this.stats = data.stats;
+                this.recentConversations = data.recent_conversations;
+                this.knowledge = data.knowledge;
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        },
+        
+        async refreshStatus() {
+            await this.loadData();
+            this.loadLogs();
+        },
+        
+        async loadLogs() {
+            try {
+                const response = await fetch(this.urls.chatLogs);
+                const data = await response.json();
+                this.logs = data.logs;
+                
+                // Auto scroll to bottom
+                setTimeout(() => {
+                    const container = document.getElementById('logs-container');
+                    container.scrollTop = container.scrollHeight;
+                }, 100);
+            } catch (error) {
+                console.error('Error loading logs:', error);
+            }
+        },
+        
+        startAutoRefresh() {
+            setInterval(() => {
+                if (this.autoRefresh) {
+                    this.loadLogs();
+                }
+            }, 3000);
+        },
+        
+        toggleAutoRefresh() {
+            this.autoRefresh = !this.autoRefresh;
+            if (this.autoRefresh) {
+                this.loadLogs();
+            }
+        },
+        
+        clearLogs() {
+            this.logs = [];
+        },
+        
+        getLogColor(level) {
+            const colors = {
+                'INFO': 'text-blue-400',
+                'WARNING': 'text-yellow-400',
+                'ERROR': 'text-red-400',
+                'DEBUG': 'text-gray-400'
+            };
+            return colors[level] || 'text-green-400';
+        },
+        
+        async updateApiKey() {
+            try {
+                const response = await fetch(this.urls.updateApiKey, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify({ api_key: this.apiKey })
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('API Key actualizada correctamente');
+                    this.refreshStatus();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error al actualizar API Key');
+            }
+        },
+        
+        async testApiKey() {
+            try {
+                const response = await fetch(this.urls.testApiKey, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                });
+                
+                const data = await response.json();
+                alert(data.message);
+                this.refreshStatus();
+            } catch (error) {
+                alert('Error al probar API Key');
+            }
+        },
+        
+        async addKnowledge() {
+            try {
+                const response = await fetch(this.urls.addKnowledge, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    },
+                    body: JSON.stringify(this.newKnowledge)
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    this.showAddKnowledge = false;
+                    this.newKnowledge = { title: '', category: '', content: '' };
+                    this.loadData();
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error al agregar conocimiento');
+            }
+        },
+        
+        async deleteKnowledge(id) {
+            if (confirm('¿Estás seguro de eliminar este conocimiento?')) {
+                try {
+                    const response = await fetch(this.urls.deleteKnowledgeTemplate.replace('__ID__', id), {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    });
+                    
+                    const data = await response.json();
+                    if (data.success) {
+                        this.loadData();
+                    } else {
+                        alert('Error: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Error al eliminar conocimiento');
+                }
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

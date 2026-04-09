@@ -1,0 +1,167 @@
+{% load static %}
+<style>
+    .navbar-accent {
+        color: var(--nav-active-color) !important;
+    }
+
+    .navbar-accent-hover:hover {
+        color: var(--nav-active-hover-color) !important;
+    }
+
+    .navbar-accent-bg {
+        background-color: var(--nav-active-color) !important;
+    }
+
+    .navbar-accent-bg:hover {
+        background-color: var(--nav-active-hover-color) !important;
+    }
+</style>
+<div class="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+    <!-- Mobile menu button -->
+    <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" @click="sidebarOpen = true">
+        <span class="sr-only">Abrir sidebar</span>
+        <i class="fas fa-bars h-6 w-6"></i>
+    </button>
+
+    <!-- Separator -->
+    <div class="h-6 w-px bg-gray-900/10 lg:hidden" aria-hidden="true"></div>
+
+    <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
+        <div class="relative flex flex-1 items-center"
+             x-data="{
+                 query: '',
+                 resultados: [],
+                 cargando: false,
+                 mostrar: false,
+                 buscarUrl: '{% url 'legajos:ciudadano_buscar_api' %}',
+                 timer: null,
+                 buscar() {
+                     clearTimeout(this.timer);
+                     if (this.query.length === 0) { this.resultados = []; this.mostrar = false; return; }
+                     this.timer = setTimeout(() => {
+                         this.cargando = true;
+                         fetch(this.buscarUrl + '?q=' + encodeURIComponent(this.query), {
+                             headers: {'X-Requested-With': 'XMLHttpRequest'}
+                         })
+                         .then(r => r.json())
+                         .then(data => {
+                             this.resultados = data.resultados;
+                             this.mostrar = true;
+                             this.cargando = false;
+                         })
+                         .catch(() => { this.cargando = false; });
+                     }, 300);
+                 },
+                 inicialDe(nombre) { return nombre ? nombre.charAt(0).toUpperCase() : '?'; }
+             }"
+             @click.away="mostrar = false">
+            <div class="relative w-full max-w-sm">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i class="fas fa-search text-gray-400 text-sm" x-show="!cargando"></i>
+                    <i class="fas fa-spinner fa-spin text-gray-400 text-sm" x-show="cargando"></i>
+                </div>
+                <input type="text"
+                       x-model="query"
+                       @input="buscar()"
+                       @focus="if(resultados.length) mostrar = true"
+                       placeholder="Buscar ciudadano..."
+                       class="block w-full rounded-md border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <div x-show="mostrar"
+                     x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="opacity-0 scale-95"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     class="absolute top-full left-0 z-50 mt-1 w-80 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                    <template x-if="resultados.length === 0">
+                        <div class="px-4 py-3 text-sm text-gray-500">
+                            Sin resultados para "<span x-text="query"></span>"
+                        </div>
+                    </template>
+                    <template x-for="c in resultados" :key="c.id">
+                        <a :href="'/legajos/ciudadanos/' + c.id + '/'"
+                           class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 first:rounded-t-lg last:rounded-b-lg">
+                            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 text-sm font-semibold"
+                                 x-text="inicialDe(c.apellido)"></div>
+                            <div class="min-w-0">
+                                <p class="truncate text-sm font-medium text-gray-900"
+                                   x-text="c.apellido + ', ' + c.nombre"></p>
+                                <p class="text-xs text-gray-500">
+                                    DNI <span x-text="c.dni"></span>
+                                    <template x-if="c.edad !== null">
+                                        <span> · <span x-text="c.edad"></span> años</span>
+                                    </template>
+                                </p>
+                            </div>
+                        </a>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center gap-x-4 lg:gap-x-6">
+            <!-- Indicador de alertas -->
+            <div class="relative" x-data="{ showDropdown: false }">
+                <button @click="showDropdown = !showDropdown" class="text-gray-700 navbar-accent-hover transition-colors relative">
+                    <i class="fas fa-bell text-lg"></i>
+                    <span id="alertas-counter" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-1 min-w-[16px] h-4 flex items-center justify-center hidden">0</span>
+                </button>
+                
+                <!-- Dropdown de alertas -->
+                <div x-show="showDropdown" @click.away="showDropdown = false" 
+                     x-transition:enter="transition ease-out duration-100"
+                     x-transition:enter-start="transform opacity-0 scale-95"
+                     x-transition:enter-end="transform opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-75"
+                     x-transition:leave-start="transform opacity-100 scale-100"
+                     x-transition:leave-end="transform opacity-0 scale-95"
+                     class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 z-50">
+                    
+                    <div class="p-4 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-medium text-gray-900">Alertas Activas</h3>
+                            <a href="{% url 'legajos:alertas_dashboard' %}" class="navbar-accent navbar-accent-hover text-sm">
+                                Ver todas
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div id="alertas-preview" class="max-h-64 overflow-y-auto">
+                        <div class="p-4 text-center text-gray-500">
+                            <i class="fas fa-spinner fa-spin mb-2"></i>
+                            <p>Cargando alertas...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-3 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+                        <a href="{% url 'legajos:alertas_dashboard' %}" class="block w-full text-center navbar-accent-bg text-white py-2 px-4 rounded transition-colors">
+                            <i class="fas fa-external-link-alt mr-2"></i>Dashboard de Alertas
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Estado WebSocket -->
+            <div class="flex items-center">
+                <span id="websocket-status" class="w-2 h-2 rounded-full bg-gray-400" title="Estado de conexión"></span>
+            </div>
+            <!-- Profile dropdown -->
+            <div class="relative" x-data="{ open: false }">
+                <button type="button" class="-m-1.5 flex items-center p-1.5" @click="open = !open">
+                    <span class="sr-only">Abrir menú de usuario</span>
+                    <div class="h-8 w-8 rounded-full flex items-center justify-center" style="{% if branding.active_profile == 'chaco' %}background: linear-gradient(90deg, {{ branding.colors.color_acento_oscuro }} 0%, {{ branding.colors.color_acento_oscuro }} 100%);{% else %}background: linear-gradient(90deg, #7928CA 0%, #FF0080 100%);{% endif %}">
+                        <span class="text-sm font-medium text-white">{{ user.username|first|upper }}</span>
+                    </div>
+                    <span class="hidden lg:flex lg:items-center">
+                        <span class="ml-4 text-sm font-semibold leading-6 text-gray-900">{{ user.get_full_name|default:user.username }}</span>
+                        <i class="ml-2 h-5 w-5 text-gray-500 fas fa-chevron-down"></i>
+                    </span>
+                </button>
+
+                <!-- Dropdown menu -->
+                <div x-show="open" @click.away="open = false" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5">
+                    <a href="{% url 'users:logout' %}" class="block px-3 py-1 text-sm leading-6 text-gray-900 hover:bg-gray-50">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Cerrar sesión
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

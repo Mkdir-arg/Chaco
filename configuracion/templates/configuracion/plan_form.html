@@ -1,0 +1,177 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Crear Actividad{% endblock %}
+
+{% block main-content %}
+<div class="mb-8">
+    <div class="mb-6">
+        <div class="flex items-center mb-4">
+            <a href="{% url 'configuracion:institucion_detalle' view.kwargs.institucion_pk %}" class="text-gray-500 hover:text-gray-700 mr-4">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </a>
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-lora font-bold text-gray-900">Crear Actividad</h1>
+                <p class="text-gray-600 mt-2">Nueva actividad institucional</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            <div>
+                <label for="{{ form.nombre.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Nombre de la Actividad
+                </label>
+                {{ form.nombre }}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="{{ form.tipo.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Tipo de Actividad
+                    </label>
+                    {{ form.tipo }}
+                </div>
+                
+                <div>
+                    <label for="{{ form.subtipo.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Subtipo
+                    </label>
+                    {{ form.subtipo }}
+                </div>
+            </div>
+            
+            <div>
+                <label for="{{ form.descripcion.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Descripción
+                </label>
+                {{ form.descripcion }}
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label for="{{ form.cupo_ciudadanos.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-users text-green-600 mr-1"></i>Cupo de Ciudadanos
+                    </label>
+                    <div class="relative">
+                        {{ form.cupo_ciudadanos }}
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 text-sm">personas</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="{{ form.fecha_inicio.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Fecha de Inicio
+                    </label>
+                    {{ form.fecha_inicio }}
+                </div>
+                
+                <div>
+                    <label for="{{ form.fecha_fin.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Fecha de Finalización
+                    </label>
+                    {{ form.fecha_fin }}
+                    <p class="text-xs text-gray-500 mt-1">Opcional - dejar vacío si no tiene fecha límite</p>
+                </div>
+            </div>
+            
+            <div>
+                <label for="{{ form.estado.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Estado
+                </label>
+                {{ form.estado }}
+            </div>
+
+            <!-- Control de acceso -->
+            <div x-data="{ tipoAcceso: '{{ form.tipo_acceso.value|default:'LIBRE' }}' }" class="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-4">
+                <h3 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                    <i class="fas fa-lock text-indigo-500"></i>Control de acceso
+                </h3>
+                <div>
+                    <label for="{{ form.tipo_acceso.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Tipo de acceso
+                    </label>
+                    {{ form.tipo_acceso }}
+                    {% if form.tipo_acceso.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.tipo_acceso.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div x-show="tipoAcceso === 'REQUIERE_PROGRAMA'" x-cloak>
+                    <label for="{{ form.programa_requerido.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Programa requerido <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.programa_requerido }}
+                    <p class="text-xs text-gray-500 mt-1">Solo ciudadanos con inscripción activa en este programa podrán inscribirse.</p>
+                    {% if form.programa_requerido.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.programa_requerido.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="flex gap-3 pt-4">
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl transition-colors font-medium">
+                    <i class="fas fa-save mr-2"></i>Crear Actividad
+                </button>
+                <a href="{% url 'configuracion:institucion_detalle' view.kwargs.institucion_pk %}" 
+                   class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-xl transition-colors font-medium">
+                    <i class="fas fa-times mr-2"></i>Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    input[type="text"], input[type="date"], input[type="number"], select, textarea {
+        width: 100%;
+        padding: 0.75rem 2.5rem 0.75rem 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        transition: all 0.15s ease-in-out;
+        background-color: #ffffff;
+    }
+    
+    input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        transform: translateY(-1px);
+    }
+    
+    input[type="number"] {
+        padding-right: 4rem;
+    }
+    
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+        padding: 0.75rem;
+    }
+    
+    .relative input[type="date"] {
+        padding-right: 2.5rem;
+    }
+    
+    label {
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+    }
+    
+    input:hover {
+        border-color: #9ca3af;
+    }
+    
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        cursor: pointer;
+    }
+</style>
+
+
+{% endblock %}

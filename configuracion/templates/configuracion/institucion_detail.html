@@ -1,0 +1,842 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}{{ institucion.nombre }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-full mx-4 lg:mx-8">
+
+    <!-- Header Institucional -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mr-4">
+                    <span class="text-2xl font-bold text-white">{{ institucion.nombre.0 }}</span>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        {{ institucion.nombre }}
+                    </h1>
+                    <p class="text-gray-500 mt-1">{{ institucion.get_tipo_display }} - {{ institucion.provincia.nombre }}</p>
+                    <div class="mt-2">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
+                            {% if legajo.estado_global == 'ACTIVO' %}bg-green-100 text-green-800
+                            {% elif legajo.estado_global == 'OBSERVACION' %}bg-yellow-100 text-yellow-800
+                            {% elif legajo.estado_global == 'SUSPENDIDO' %}bg-orange-100 text-orange-800
+                            {% else %}bg-red-100 text-red-800{% endif %}">
+                            {{ legajo.get_estado_global_display }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <a href="{% url 'legajos:instituciones' %}" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Volver
+                </a>
+            </div>
+        </div>
+        
+        <!-- Información detallada en grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-folder text-blue-600"></i>
+                    <span class="text-gray-600 text-sm font-medium">Código Legajo</span>
+                </div>
+                <p class="text-gray-900 font-semibold">{{ legajo.codigo }}</p>
+            </div>
+            
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-layer-group text-green-600"></i>
+                    <span class="text-gray-600 text-sm font-medium">Programas Activos</span>
+                </div>
+                <p class="text-gray-900 font-semibold text-xl">{{ total_programas_activos }}</p>
+            </div>
+            
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-inbox text-orange-600"></i>
+                    <span class="text-gray-600 text-sm font-medium">Derivaciones Pendientes</span>
+                </div>
+                <p class="text-gray-900 font-semibold text-xl">{{ total_derivaciones_pendientes }}</p>
+            </div>
+            
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-users text-purple-600"></i>
+                    <span class="text-gray-600 text-sm font-medium">Casos Activos</span>
+                </div>
+                <p class="text-gray-900 font-semibold text-xl">{{ total_casos_activos }}</p>
+            </div>
+            
+            {% if institucion.telefono %}
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-phone text-green-600"></i>
+                    <span class="text-gray-600 text-sm font-medium">Teléfono</span>
+                </div>
+                <p class="text-gray-900 font-semibold">{{ institucion.telefono }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <div class="flex items-center gap-2 mb-2">
+                    <i class="fas fa-user-tie text-pink-600"></i>
+                    <span class="text-gray-600 text-sm font-medium">Personal</span>
+                </div>
+                <p class="text-gray-900 font-semibold text-xl">{{ personal.count }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs de Navegación Dinámicos -->
+    <div class="bg-white rounded-xl shadow-lg mb-8">
+        <div class="border-b border-gray-200">
+            <nav class="flex -mb-px overflow-x-auto">
+                {% for solapa in solapas %}
+                <button 
+                    onclick="cambiarTab('{{ solapa.id }}')"
+                    data-tab="{{ solapa.id }}" 
+                    class="tab-button {% if forloop.first %}border-b-2 border-blue-500 text-blue-600{% else %}border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} py-4 px-6 font-medium whitespace-nowrap flex items-center"
+                    {% if not solapa.estatica and solapa.color %}style="border-bottom-color: {{ solapa.color }};"{% endif %}
+                >
+                    <i class="fas fa-{{ solapa.icono }} mr-2"></i>{{ solapa.nombre }}
+                    {% if not solapa.estatica %}
+                        {% if solapa.badge_derivaciones > 0 %}
+                        <span class="ml-2 bg-yellow-100 text-yellow-800 text-xs font-medium px-2 py-0.5 rounded-full">
+                            {{ solapa.badge_derivaciones }}
+                        </span>
+                        {% endif %}
+                        {% if solapa.badge_casos > 0 %}
+                        <span class="ml-2 bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full">
+                            {{ solapa.badge_casos }}
+                        </span>
+                        {% endif %}
+                    {% endif %}
+                </button>
+                {% endfor %}
+            </nav>
+        </div>
+    </div>
+
+    <!-- Tab: Resumen -->
+    <div id="tab-resumen" class="tab-content">
+        <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8 mb-8">
+            <h3 class="text-2xl font-bold text-[#252F40] mb-6 flex items-center">
+                <div class="bg-[#3B82F6] rounded-lg p-2 mr-3">
+                    <i class="fas fa-chart-bar text-white text-lg"></i>
+                </div>
+                Dashboard Ejecutivo
+            </h3>
+            
+            <!-- Métricas principales -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#8C8C8C] text-sm font-medium mb-1">Programas Activos</p>
+                            <p class="text-3xl font-bold text-[#252F40]">{{ total_programas_activos }}</p>
+                        </div>
+                        <div class="bg-[#3B82F6] bg-opacity-10 rounded-full p-4">
+                            <i class="fas fa-layer-group text-2xl text-[#3B82F6]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#8C8C8C] text-sm font-medium mb-1">Derivaciones Pendientes</p>
+                            <p class="text-3xl font-bold text-[#252F40]">{{ total_derivaciones_pendientes }}</p>
+                            <p class="text-xs text-[#10B981] mt-1">+{{ derivaciones_stats.ultimos_7_dias }} esta semana</p>
+                        </div>
+                        <div class="bg-[#F59E0B] bg-opacity-10 rounded-full p-4">
+                            <i class="fas fa-inbox text-2xl text-[#F59E0B]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#8C8C8C] text-sm font-medium mb-1">Casos Activos</p>
+                            <p class="text-3xl font-bold text-[#252F40]">{{ total_casos_activos }}</p>
+                            <p class="text-xs text-[#8C8C8C] mt-1">{{ casos_stats.total }} totales</p>
+                        </div>
+                        <div class="bg-[#10B981] bg-opacity-10 rounded-full p-4">
+                            <i class="fas fa-users text-2xl text-[#10B981]"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-[#8C8C8C] text-sm font-medium mb-1">Tasa de Aceptación</p>
+                            <p class="text-3xl font-bold text-[#252F40]">{{ tasa_aceptacion }}%</p>
+                            <p class="text-xs text-[#8C8C8C] mt-1">{{ derivaciones_stats.aceptadas }} aceptadas</p>
+                        </div>
+                        <div class="bg-[#8B5CF6] bg-opacity-10 rounded-full p-4">
+                            <i class="fas fa-check-circle text-2xl text-[#8B5CF6]"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Gráfico de Derivaciones por Estado (Dona) -->
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-[#252F40] mb-4 flex items-center">
+                        <i class="fas fa-chart-pie text-[#3B82F6] mr-2"></i>
+                        Derivaciones por Estado
+                    </h4>
+                    <div style="height: 250px;">
+                        <canvas id="derivacionesEstadoChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Casos por Estado (Barras Horizontales) -->
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-[#252F40] mb-4 flex items-center">
+                        <i class="fas fa-chart-bar text-[#10B981] mr-2"></i>
+                        Casos por Estado
+                    </h4>
+                    <div style="height: 250px;">
+                        <canvas id="casosEstadoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Gráfico de Tendencia de Derivaciones (Línea) -->
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-[#252F40] mb-4 flex items-center">
+                        <i class="fas fa-chart-line text-[#F59E0B] mr-2"></i>
+                        Tendencia de Derivaciones (6 meses)
+                    </h4>
+                    <div style="height: 250px;">
+                        <canvas id="tendenciaChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Casos por Programa (Barras) -->
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6">
+                    <h4 class="text-lg font-semibold text-[#252F40] mb-4 flex items-center">
+                        <i class="fas fa-layer-group text-[#8B5CF6] mr-2"></i>
+                        Top 5 Programas con Más Casos
+                    </h4>
+                    <div style="height: 250px;">
+                        <canvas id="casosProgramaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Métricas adicionales -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-6">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-clock text-blue-600 text-xl mr-2"></i>
+                        <h5 class="text-sm font-semibold text-blue-900">Tiempo Promedio de Respuesta</h5>
+                    </div>
+                    <p class="text-3xl font-bold text-blue-900">{{ tiempo_promedio_respuesta }}h</p>
+                    <p class="text-xs text-blue-700 mt-1">Últimas 30 derivaciones</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-green-100 border border-green-200 rounded-xl p-6">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-user-check text-green-600 text-xl mr-2"></i>
+                        <h5 class="text-sm font-semibold text-green-900">Casos Egresados</h5>
+                    </div>
+                    <p class="text-3xl font-bold text-green-900">{{ casos_stats.egresados }}</p>
+                    <p class="text-xs text-green-700 mt-1">Finalizados exitosamente</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-6">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-inbox text-purple-600 text-xl mr-2"></i>
+                        <h5 class="text-sm font-semibold text-purple-900">Derivaciones del Mes</h5>
+                    </div>
+                    <p class="text-3xl font-bold text-purple-900">{{ derivaciones_stats.ultimos_30_dias }}</p>
+                    <p class="text-xs text-purple-700 mt-1">Últimos 30 días</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab: Personal -->
+    <div id="tab-personal" class="tab-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-[#252F40] flex items-center">
+                    <div class="bg-[#8B5CF6] rounded-lg p-2 mr-3">
+                        <i class="fas fa-users text-white text-lg"></i>
+                    </div>
+                    Personal de la Institución
+                </h3>
+                <a href="{% url 'configuracion:personal_crear' institucion.pk %}" class="bg-[#8B5CF6] text-white px-6 py-3 rounded-xl hover:bg-[#7C3AED] transition-all flex items-center space-x-2">
+                    <i class="fas fa-plus"></i>
+                    <span>Agregar Personal</span>
+                </a>
+            </div>
+            
+            {% if personal %}
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-[#F9FAFB] border-b border-[#E5E7EB]">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Nombre</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">DNI</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Tipo</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Título</th>
+                            <th class="px-6 py-4 text-left text-xs font-bold text-[#374151] uppercase tracking-wide">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-[#E5E7EB]">
+                        {% for persona in personal %}
+                        <tr class="hover:bg-[#F9FAFB]">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-[#8B5CF6] rounded-full flex items-center justify-center mr-3">
+                                        <span class="text-white font-semibold text-sm">{{ persona.nombre.0 }}{{ persona.apellido.0 }}</span>
+                                    </div>
+                                    <div class="text-sm font-medium text-[#252F40]">{{ persona.apellido }}, {{ persona.nombre }}</div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-[#252F40]">{{ persona.dni }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-[#252F40]">{{ persona.get_tipo_display }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-[#252F40]">{{ persona.titulo_profesional|default:"-" }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {% if persona.activo %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Activo</span>
+                                {% else %}
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Inactivo</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+                <div class="text-gray-400 text-4xl mb-2">👥</div>
+                <p class="text-gray-500">No hay personal registrado</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tab: Evaluaciones -->
+    <div id="tab-evaluaciones" class="tab-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+            <h3 class="text-2xl font-bold text-[#252F40] mb-6 flex items-center">
+                <div class="bg-[#10B981] rounded-lg p-2 mr-3">
+                    <i class="fas fa-clipboard-check text-white text-lg"></i>
+                </div>
+                Evaluaciones Institucionales
+            </h3>
+            <p class="text-gray-500">Contenido de evaluaciones - Próximamente...</p>
+        </div>
+    </div>
+
+    <!-- Tab: Actividades -->
+    <div id="tab-actividades" class="tab-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-[#252F40] flex items-center">
+                    <div class="bg-[#3B82F6] rounded-lg p-2 mr-3">
+                        <i class="fas fa-calendar-alt text-white text-lg"></i>
+                    </div>
+                    Actividades y Cursos
+                </h3>
+                <a href="{% url 'configuracion:plan_crear' institucion.pk %}" class="bg-[#3B82F6] text-white px-6 py-3 rounded-xl hover:bg-[#2563EB] transition-all flex items-center space-x-2">
+                    <i class="fas fa-plus"></i>
+                    <span>Nueva Actividad</span>
+                </a>
+            </div>
+            
+            {% if planes %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for plan in planes %}
+                <div class="bg-white border border-[#E5E7EB] rounded-xl p-6 hover:shadow-lg transition-all duration-300">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex-1">
+                            <h4 class="text-lg font-semibold text-[#252F40] mb-2">{{ plan.nombre }}</h4>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                {% if plan.estado == 'ACTIVO' %}bg-green-100 text-green-800
+                                {% elif plan.estado == 'PLANIFICADO' %}bg-blue-100 text-blue-800
+                                {% elif plan.estado == 'SUSPENDIDO' %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                {{ plan.get_estado_display }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-2 text-sm text-[#6B7280] mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-tag w-5 text-[#8B5CF6]"></i>
+                            <span>{{ plan.get_tipo_display }}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-calendar w-5 text-[#10B981]"></i>
+                            <span>{{ plan.fecha_inicio|date:"d/m/Y" }} - {{ plan.fecha_fin|date:"d/m/Y" }}</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-users w-5 text-[#F59E0B]"></i>
+                            <span>Cupo: {{ plan.cupo_ciudadanos }} personas</span>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'configuracion:actividad_detalle' plan.pk %}" class="block w-full text-center bg-[#F9FAFB] text-[#3B82F6] px-4 py-2 rounded-lg hover:bg-[#3B82F6] hover:text-white transition-all">
+                        Ver Detalle
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-12">
+                <div class="text-gray-400 text-4xl mb-2">📅</div>
+                <p class="text-gray-500 mb-4">No hay actividades registradas</p>
+                <a href="{% url 'configuracion:plan_crear' institucion.pk %}" class="inline-flex items-center px-6 py-3 bg-[#3B82F6] text-white rounded-xl hover:bg-[#2563EB] transition-all">
+                    <i class="fas fa-plus mr-2"></i>
+                    Crear Primera Actividad
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tab: Documentos -->
+    <div id="tab-documentos" class="tab-content hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-[#252F40] flex items-center">
+                    <div class="bg-[#64748B] rounded-lg p-2 mr-3">
+                        <i class="fas fa-folder text-white text-lg"></i>
+                    </div>
+                    Documentos Institucionales
+                </h3>
+                <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="bg-[#64748B] text-white px-6 py-3 rounded-xl hover:bg-[#475569] transition-all flex items-center space-x-2">
+                    <i class="fas fa-upload"></i>
+                    <span>Subir Documento</span>
+                </button>
+            </div>
+
+            <!-- Categorías de documentos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 cursor-pointer hover:bg-blue-100 transition-all" onclick="filtrarDocumentos('convenios')">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <i class="fas fa-handshake text-blue-600 text-2xl mb-2"></i>
+                            <h4 class="font-semibold text-blue-900">Convenios</h4>
+                            <p class="text-sm text-blue-700">{{ documentos.convenios|length }} archivo(s)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4 cursor-pointer hover:bg-green-100 transition-all" onclick="filtrarDocumentos('habilitaciones')">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <i class="fas fa-certificate text-green-600 text-2xl mb-2"></i>
+                            <h4 class="font-semibold text-green-900">Habilitaciones</h4>
+                            <p class="text-sm text-green-700">{{ documentos.habilitaciones|length }} archivo(s)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 cursor-pointer hover:bg-purple-100 transition-all" onclick="filtrarDocumentos('evaluaciones')">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <i class="fas fa-clipboard-check text-purple-600 text-2xl mb-2"></i>
+                            <h4 class="font-semibold text-purple-900">Evaluaciones</h4>
+                            <p class="text-sm text-purple-700">{{ documentos.evaluaciones|length }} archivo(s)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-orange-50 border border-orange-200 rounded-lg p-4 cursor-pointer hover:bg-orange-100 transition-all" onclick="filtrarDocumentos('otros')">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <i class="fas fa-file-alt text-orange-600 text-2xl mb-2"></i>
+                            <h4 class="font-semibold text-orange-900">Otros</h4>
+                            <p class="text-sm text-orange-700">{{ documentos.otros|length }} archivo(s)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de documentos -->
+            <div class="bg-gray-50 rounded-lg p-6">
+                {% if documentos.todos %}
+                <div class="space-y-3">
+                    {% for doc in documentos.todos %}
+                    <div class="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all documento-item" data-categoria="{{ doc.categoria }}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4 flex-1">
+                                <div class="bg-gray-100 rounded-lg p-3">
+                                    <i class="fas fa-file-pdf text-red-600 text-2xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h5 class="font-semibold text-gray-900">{{ doc.nombre }}</h5>
+                                    <p class="text-sm text-gray-500">{{ doc.descripcion|default:"Sin descripción" }}</p>
+                                    <div class="flex items-center space-x-4 mt-2 text-xs text-gray-500">
+                                        <span><i class="fas fa-calendar mr-1"></i>{{ doc.fecha_subida|date:"d/m/Y" }}</span>
+                                        <span><i class="fas fa-user mr-1"></i>{{ doc.subido_por }}</span>
+                                        <span class="px-2 py-1 bg-gray-100 rounded">{{ doc.get_categoria_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <a href="{{ doc.archivo.url }}" target="_blank" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ doc.archivo.url }}" download class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-all">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-folder-open text-gray-300 text-6xl mb-4"></i>
+                    <p class="text-gray-500 text-lg mb-4">No hay documentos cargados</p>
+                    <button onclick="document.getElementById('uploadModal').classList.remove('hidden')" class="inline-flex items-center px-6 py-3 bg-[#64748B] text-white rounded-xl hover:bg-[#475569] transition-all">
+                        <i class="fas fa-upload mr-2"></i>
+                        Subir Primer Documento
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de subida de documentos -->
+    <div id="uploadModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Subir Documento</h3>
+                    <button onclick="document.getElementById('uploadModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <form method="post" enctype="multipart/form-data" action="{% url 'configuracion:documento_subir' institucion.pk %}">
+                    {% csrf_token %}
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre del documento</label>
+                            <input type="text" name="nombre" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Categoría</label>
+                            <select name="categoria" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <option value="convenios">Convenios</option>
+                                <option value="habilitaciones">Habilitaciones</option>
+                                <option value="evaluaciones">Evaluaciones</option>
+                                <option value="otros">Otros</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Descripción (opcional)</label>
+                            <textarea name="descripcion" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Archivo</label>
+                            <input type="file" name="archivo" required accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">Formatos permitidos: PDF, DOC, DOCX, JPG, PNG</p>
+                        </div>
+                    </div>
+                    <div class="flex justify-end space-x-3 mt-6">
+                        <button type="button" onclick="document.getElementById('uploadModal').classList.add('hidden')" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-[#64748B] text-white rounded-lg hover:bg-[#475569] transition-all">
+                            <i class="fas fa-upload mr-2"></i>Subir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs Dinámicos por Programa -->
+    {% for solapa in solapas %}
+    {% if not solapa.estatica %}
+    <div id="tab-{{ solapa.id }}" class="tab-content hidden">
+        <div class="space-y-6">
+            
+            <!-- 1. Derivaciones Recibidas -->
+            <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="material-icons mr-2">call_received</span>
+                    Derivaciones Recibidas
+                </h3>
+                <p class="text-gray-600">Gestión de derivaciones programáticas - Próximamente...</p>
+            </div>
+            
+            <!-- 2. Ciudadanos en Atención -->
+            <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="material-icons mr-2">people</span>
+                    Ciudadanos en Atención
+                </h3>
+                <p class="text-gray-600">Lista de casos activos - Próximamente...</p>
+            </div>
+            
+            <!-- 3. Actividades del Programa -->
+            <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="material-icons mr-2">event</span>
+                    Actividades del Programa
+                </h3>
+                <p class="text-gray-600">Actividades asociadas - Próximamente...</p>
+            </div>
+            
+            <!-- 4. Indicadores Programáticos -->
+            <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="material-icons mr-2">analytics</span>
+                    Indicadores Programáticos
+                </h3>
+                <p class="text-gray-600">Métricas del período - Próximamente...</p>
+            </div>
+            
+            <!-- 5. Staff Asignado -->
+            <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
+                <h3 class="text-lg font-semibold mb-4 flex items-center">
+                    <span class="material-icons mr-2">badge</span>
+                    Staff Asignado
+                </h3>
+                <p class="text-gray-600">Personal vinculado al programa - Próximamente...</p>
+            </div>
+            
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+// Sistema de Tabs
+function cambiarTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.add('hidden');
+    });
+    
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('border-blue-500', 'text-blue-600');
+        button.classList.add('border-transparent', 'text-gray-500');
+    });
+    
+    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+    
+    const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
+    activeButton.classList.add('border-blue-500', 'text-blue-600');
+    activeButton.classList.remove('border-transparent', 'text-gray-500');
+}
+
+// Filtrar documentos por categoría
+function filtrarDocumentos(categoria) {
+    const items = document.querySelectorAll('.documento-item');
+    items.forEach(item => {
+        if (categoria === 'todos' || item.dataset.categoria === categoria) {
+            item.classList.remove('hidden');
+        } else {
+            item.classList.add('hidden');
+        }
+    });
+}
+
+// Esperar a que Chart.js se cargue
+window.addEventListener('DOMContentLoaded', function() {
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js no se cargó correctamente');
+        return;
+    }
+
+    // Configuración global de Chart.js
+    Chart.defaults.font.family = 'Inter, system-ui, sans-serif';
+    Chart.defaults.color = '#6B7280';
+
+    // Gráfico de Derivaciones por Estado (Dona)
+    const derivacionesCtx = document.getElementById('derivacionesEstadoChart');
+    if (derivacionesCtx) {
+        const pendientes = {{ derivaciones_stats.pendientes|default:0 }};
+        const aceptadas = {{ derivaciones_stats.aceptadas|default:0 }};
+        const rechazadas = {{ derivaciones_stats.rechazadas|default:0 }};
+        const total = pendientes + aceptadas + rechazadas;
+        
+        new Chart(derivacionesCtx, {
+            type: 'doughnut',
+            data: {
+                labels: total > 0 ? ['Pendientes', 'Aceptadas', 'Rechazadas'] : ['Sin datos'],
+                datasets: [{
+                    data: total > 0 ? [pendientes, aceptadas, rechazadas] : [1],
+                    backgroundColor: total > 0 ? ['#F59E0B', '#10B981', '#EF4444'] : ['#E5E7EB'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 15, font: { size: 12 } }
+                    },
+                    tooltip: {
+                        enabled: total > 0,
+                        callbacks: {
+                            label: function(context) {
+                                const dataTotal = context.dataset.data.reduce((a, b) => a + b, 0);
+                                if (dataTotal === 0) return context.label + ': 0';
+                                const percentage = ((context.parsed / dataTotal) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Gráfico de Casos por Estado (Barras Horizontales)
+    const casosCtx = document.getElementById('casosEstadoChart');
+    if (casosCtx) {
+        const activos = {{ casos_stats.activos|default:0 }};
+        const seguimiento = {{ casos_stats.seguimiento|default:0 }};
+        const egresados = {{ casos_stats.egresados|default:0 }};
+        const cerrados = {{ casos_stats.cerrados|default:0 }};
+        const suspendidos = {{ casos_stats.suspendidos|default:0 }};
+        const totalCasos = activos + seguimiento + egresados + cerrados + suspendidos;
+        
+        new Chart(casosCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Activos', 'En Seguimiento', 'Egresados', 'Cerrados', 'Suspendidos'],
+                datasets: [{
+                    label: 'Cantidad de Casos',
+                    data: totalCasos > 0 ? [activos, seguimiento, egresados, cerrados, suspendidos] : [0, 0, 0, 0, 1],
+                    backgroundColor: ['#10B981', '#3B82F6', '#8B5CF6', '#6B7280', '#F59E0B'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 },
+                        grid: { display: true, color: '#F3F4F6' }
+                    },
+                    y: { grid: { display: false } }
+                }
+            }
+        });
+    }
+
+    // Gráfico de Tendencia de Derivaciones (Línea)
+    const tendenciaCtx = document.getElementById('tendenciaChart');
+    if (tendenciaCtx) {
+        try {
+            const rawData = '{{ derivaciones_tendencia|escapejs }}';
+            const tendenciaData = rawData ? JSON.parse(rawData) : [];
+            const hasData = tendenciaData.length > 0 && tendenciaData.some(d => d.cantidad > 0);
+            
+            new Chart(tendenciaCtx, {
+                type: 'line',
+                data: {
+                    labels: hasData ? tendenciaData.map(d => d.mes) : ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Derivaciones',
+                        data: hasData ? tendenciaData.map(d => d.cantidad) : [0, 0, 0, 0, 0, 0],
+                        borderColor: '#F59E0B',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        pointBackgroundColor: '#F59E0B',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            grid: { color: '#F3F4F6' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        } catch (e) {
+            console.error('Error al crear gráfico de tendencia:', e);
+        }
+    }
+
+    // Gráfico de Casos por Programa (Barras)
+    const casosProgramaCtx = document.getElementById('casosProgramaChart');
+    if (casosProgramaCtx) {
+        try {
+            const rawData = '{{ casos_por_programa|escapejs }}';
+            const programasData = rawData ? JSON.parse(rawData) : [];
+            const hasData = programasData.length > 0;
+            
+            new Chart(casosProgramaCtx, {
+                type: 'bar',
+                data: {
+                    labels: hasData ? programasData.map(p => p.institucion_programa__programa__nombre || 'Sin programa') : ['Sin programas'],
+                    datasets: [{
+                        label: 'Casos Activos',
+                        data: hasData ? programasData.map(p => p.cantidad) : [0],
+                        backgroundColor: ['#8B5CF6', '#3B82F6', '#10B981', '#F59E0B', '#EF4444'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    aspectRatio: 2,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 },
+                            grid: { color: '#F3F4F6' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { maxRotation: 45, minRotation: 45 }
+                        }
+                    }
+                }
+            });
+        } catch (e) {
+            console.error('Error al crear gráfico de programas:', e);
+        }
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Alertas de Auditoría{% endblock %}
+
+{% block main-content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Alertas de Auditoría</h1>
+            <p class="text-gray-600">Sistema automático de detección de actividad sospechosa</p>
+        </div>
+        <a href="{% url 'auditoria:dashboard' %}" class="text-blue-600 hover:text-blue-700">
+            <i class="fas fa-arrow-left mr-2"></i>Volver al Dashboard
+        </a>
+    </div>
+
+    <!-- Filtros -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border">
+        <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tipo</label>
+                <select name="tipo" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    <option value="">Todos</option>
+                    {% for value, label in tipos %}
+                    <option value="{{ value }}" {% if filtros.tipo == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Severidad</label>
+                <select name="severidad" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    <option value="">Todas</option>
+                    {% for value, label in severidades %}
+                    <option value="{{ value }}" {% if filtros.severidad == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Estado</label>
+                <select name="revisada" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                    <option value="">Todas</option>
+                    <option value="false" {% if filtros.revisada == "false" %}selected{% endif %}>Pendientes</option>
+                    <option value="true" {% if filtros.revisada == "true" %}selected{% endif %}>Revisadas</option>
+                </select>
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 w-full">
+                    Filtrar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabla -->
+    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Severidad</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Usuario Afectado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Descripción</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for alerta in alertas %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-medium text-gray-900">{{ alerta.get_tipo_display }}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full
+                                {% if alerta.severidad == 'CRITICA' %}bg-red-100 text-red-800
+                                {% elif alerta.severidad == 'ALTA' %}bg-orange-100 text-orange-800
+                                {% elif alerta.severidad == 'MEDIA' %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-blue-100 text-blue-800{% endif %}">
+                                {{ alerta.get_severidad_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            {{ alerta.usuario_afectado.get_full_name|default:alerta.usuario_afectado.username }}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900">
+                            <div class="max-w-xs truncate">{{ alerta.descripcion }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                            {{ alerta.timestamp|date:"d/m/Y H:i:s" }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if alerta.revisada %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                    Revisada
+                                </span>
+                            {% else %}
+                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
+                                    Pendiente
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            {% if not alerta.revisada %}
+                                <button onclick="marcarRevisada({{ alerta.id }})" 
+                                        class="text-blue-600 hover:text-blue-900">
+                                    Marcar como revisada
+                                </button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                            No se encontraron alertas
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        {% if alertas.has_other_pages %}
+        <div class="px-6 py-3 border-t border-gray-200">
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                    Mostrando {{ alertas.start_index }} - {{ alertas.end_index }} de {{ alertas.paginator.count }} registros
+                </div>
+                <div class="flex gap-2">
+                    {% if alertas.has_previous %}
+                    <a href="?page={{ alertas.previous_page_number }}" 
+                       class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">Anterior</a>
+                    {% endif %}
+                    {% if alertas.has_next %}
+                    <a href="?page={{ alertas.next_page_number }}" 
+                       class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">Siguiente</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function marcarRevisada(alertaId) {
+    fetch(`/auditoria/alertas/${alertaId}/revisar/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+</script>
+{% endblock %}
