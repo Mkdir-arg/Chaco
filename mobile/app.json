@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "NODO",
+    "slug": "nodo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/brand/icono.jpeg",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/brand/logo-nodo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFFFF"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/brand/icono.jpeg",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.pablocao.nodo",
+      "permissions": [
+        "CAMERA",
+        "READ_MEDIA_IMAGES",
+        "READ_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "supabaseUrl": "https://mcehplitlaelgtenkypn.supabase.co",
+      "supabaseAnonKey": "sb_publishable_gSJR14roavLgZQBVEk0HdQ_irc66jGw",
+      "eas": {
+        "projectId": "9bd4ef7a-6e9a-4110-91c1-3c07565eef33"
+      }
+    },
+    "plugins": [
+      "expo-web-browser",
+      "expo-image-picker",
+      "expo-screen-orientation",
+      "expo-sqlite"
+    ]
+  }
+}

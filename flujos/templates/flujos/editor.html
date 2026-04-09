@@ -1,0 +1,47 @@
+{% extends "includes/main.html" %}
+{% load static %}
+
+{% block title %}Editor de Flujo — {{ programa.nombre }}{% endblock %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{% static 'flujos/dist/assets/index.css' %}">
+{% endblock %}
+
+{% block titulo-pagina %}Editor de Flujo{% endblock %}
+{% block titulo-pagina-content %}Editor de Flujo — {{ programa.nombre }}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{% url 'configuracion:programas' %}">Programas</a></li>
+<li class="breadcrumb-item active">Editor de Flujo</li>
+{% endblock %}
+
+{% block content %}
+{% if instancias_activas %}
+<div class="alert alert-info alert-dismissible fade show mx-3 mb-0" role="alert">
+    <i class="fas fa-info-circle me-2"></i>
+    Este programa tiene <strong>{{ instancias_activas }} instancia{{ instancias_activas|pluralize }}</strong> activa{{ instancias_activas|pluralize }} en la versión publicada actual. Podés editar y publicar una nueva versión — las instancias existentes continuarán con la versión anterior.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
+{% endif %}
+
+<div id="flow-editor-root"
+     data-programa-id="{{ programa.pk }}"
+     data-programa-nombre="{{ programa.nombre|escapejs }}"
+     data-api-definicion-url="{{ api_definicion_url }}"
+     data-api-publicar-url="{{ api_publicar_url }}"
+     style="height: calc(100vh - 180px); width: 100%;">
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.flowEditorConfig = {
+    programaId: {{ programa.pk }},
+    programaNombre: "{{ programa.nombre|escapejs }}",
+    apiDefinicionUrl: "{{ api_definicion_url }}",
+    apiPublicarUrl: "{{ api_publicar_url }}",
+    csrfCookieName: "csrftoken",
+};
+</script>
+<script type="module" src="{% static 'flujos/dist/assets/index.js' %}"></script>
+{% endblock %}

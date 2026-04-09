@@ -1,0 +1,321 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Editar Ciudadano{% endblock %}
+
+{% block main-content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center gap-4 mb-4">
+            <div class="flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-lg">
+                <i class="fas fa-edit text-yellow-600 text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Editar Ciudadano</h1>
+                <p class="text-gray-600">Modifique los datos del ciudadano {{ object.nombre }} {{ object.apellido }}</p>
+            </div>
+        </div>
+        
+        <!-- Breadcrumb -->
+        <nav class="flex" aria-label="Breadcrumb">
+            <ol class="flex items-center space-x-4">
+                <li>
+                    <a href="{% url 'legajos:ciudadanos' %}" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-users"></i>
+                        <span class="sr-only">Ciudadanos</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                        <a href="{% url 'legajos:ciudadano_detalle' object.pk %}" class="text-gray-400 hover:text-gray-500">
+                            {{ object.apellido }}, {{ object.nombre }}
+                        </a>
+                    </div>
+                </li>
+                <li>
+                    <div class="flex items-center">
+                        <i class="fas fa-chevron-right text-gray-400 mx-2"></i>
+                        <span class="text-gray-500">Editar</span>
+                    </div>
+                </li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Formulario -->
+    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+            <h2 class="text-lg font-medium text-gray-900">Datos del Ciudadano</h2>
+            <p class="text-sm text-gray-600 mt-1">Modifique los campos necesarios</p>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div class="bg-red-50 border border-red-200 rounded-md p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-circle text-red-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">Error en el formulario</h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                {% for field, errors in form.errors.items %}
+                                    {% for error in errors %}
+                                        <p>{{ error }}</p>
+                                    {% endfor %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Datos básicos -->
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <!-- DNI -->
+                <div>
+                    <label for="{{ form.dni.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.dni.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.dni }}
+                    <p class="mt-1 text-xs text-gray-500">Este campo no se puede modificar</p>
+                </div>
+
+                <!-- Género -->
+                <div>
+                    <label for="{{ form.genero.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.genero.label }}
+                    </label>
+                    {{ form.genero }}
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <!-- Nombre -->
+                <div>
+                    <label for="{{ form.nombre.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.nombre.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.nombre }}
+                </div>
+
+                <!-- Apellido -->
+                <div>
+                    <label for="{{ form.apellido.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.apellido.label }}
+                        <span class="text-red-500">*</span>
+                    </label>
+                    {{ form.apellido }}
+                </div>
+            </div>
+
+            <!-- Fecha de Nacimiento -->
+            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div>
+                    <label for="{{ form.fecha_nacimiento.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.fecha_nacimiento.label }}
+                    </label>
+                    {{ form.fecha_nacimiento }}
+                </div>
+            </div>
+
+            <!-- Información de contacto -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Información de Contacto</h3>
+                
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <!-- Teléfono -->
+                    <div>
+                        <label for="{{ form.telefono.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            {{ form.telefono.label }}
+                        </label>
+                        {{ form.telefono }}
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            {{ form.email.label }}
+                        </label>
+                        {{ form.email }}
+                    </div>
+                </div>
+
+                <!-- Domicilio -->
+                <div class="mt-6">
+                    <label for="{{ form.domicilio.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.domicilio.label }}
+                    </label>
+                    {{ form.domicilio }}
+                </div>
+                
+                <!-- Datos Territoriales -->
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-3 mt-6">
+                    <div>
+                        <label for="{{ form.provincia.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            {{ form.provincia.label }}
+                        </label>
+                        {{ form.provincia }}
+                    </div>
+                    <div>
+                        <label for="{{ form.municipio.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            {{ form.municipio.label }}
+                        </label>
+                        {{ form.municipio }}
+                    </div>
+                    <div>
+                        <label for="{{ form.localidad.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            {{ form.localidad.label }}
+                        </label>
+                        {{ form.localidad }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Foto de perfil -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Foto de perfil</h3>
+                <div class="flex items-center gap-6">
+                    {% if object.foto %}
+                    <img src="{{ object.foto.url }}" alt="Foto actual" class="w-20 h-20 rounded-full object-cover border-2 border-gray-200">
+                    {% else %}
+                    <div class="w-20 h-20 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                        <span class="text-2xl font-bold text-white">{{ object.nombre.0 }}{{ object.apellido.0 }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="flex-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.foto.label }}</label>
+                        {{ form.foto }}
+                        <p class="mt-1 text-xs text-gray-500">JPG, PNG o GIF. Máximo 5 MB.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Situación habitacional -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    <i class="fas fa-home text-orange-500 mr-2"></i>Situación habitacional
+                </h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.tipo_vivienda.label }}</label>
+                        {{ form.tipo_vivienda }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.tenencia_vivienda.label }}</label>
+                        {{ form.tenencia_vivienda }}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.condiciones_vivienda.label }}</label>
+                    {{ form.condiciones_vivienda }}
+                </div>
+            </div>
+
+            <!-- Situación laboral -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    <i class="fas fa-briefcase text-blue-500 mr-2"></i>Situación laboral
+                </h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.situacion_laboral.label }}</label>
+                        {{ form.situacion_laboral }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.ingreso_estimado.label }}</label>
+                        {{ form.ingreso_estimado }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.obra_social.label }}</label>
+                        {{ form.obra_social }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Situación educativa -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    <i class="fas fa-graduation-cap text-green-500 mr-2"></i>Situación educativa
+                </h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.nivel_educativo.label }}</label>
+                        {{ form.nivel_educativo }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documentación -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    <i class="fas fa-id-card text-purple-500 mr-2"></i>Documentación
+                </h3>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.dni_fisico.label }}</label>
+                        {{ form.dni_fisico }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.estado_renaper.label }}</label>
+                        {{ form.estado_renaper }}
+                    </div>
+                </div>
+            </div>
+
+            {% if puede_ver_sensible %}
+            <!-- Datos sensibles -->
+            <div class="border-t border-gray-200 pt-6 bg-gray-50 -mx-6 px-6 rounded-b-lg">
+                <h3 class="text-lg font-medium text-gray-700 mb-1 flex items-center">
+                    <i class="fas fa-lock text-gray-500 mr-2"></i>Datos sensibles
+                </h3>
+                <p class="text-xs text-gray-500 mb-4">Solo visible para usuarios con permiso <code>ciudadanoSensible</code>.</p>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.cobertura_medica.label }}</label>
+                        {{ form.cobertura_medica }}
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.estado_migratorio.label }}</label>
+                        {{ form.estado_migratorio }}
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ form.medicacion_habitual.label }}</label>
+                    {{ form.medicacion_habitual }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Observaciones -->
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    <i class="fas fa-sticky-note text-yellow-500 mr-2"></i>Observaciones
+                </h3>
+                {{ form.observaciones }}
+            </div>
+
+            <!-- Botones -->
+            <div class="flex items-center justify-between pt-6 border-t border-gray-200">
+                <a href="{% url 'legajos:ciudadano_detalle' object.pk %}" 
+                   class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Cancelar
+                </a>
+                
+                <button type="submit" 
+                        class="inline-flex items-center px-6 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    <i class="fas fa-save mr-2"></i>
+                    Guardar Cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

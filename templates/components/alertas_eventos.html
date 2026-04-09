@@ -1,0 +1,125 @@
+{% load static %}
+
+<style>
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Renombramos para evitar conflicto con Tailwind 'pulse' y quitamos cambios de opacidad */
+@keyframes alertPulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: none;
+    }
+    50% {
+        transform: scale(1.02);
+        filter: brightness(1.03);
+    }
+}
+
+#alertas-eventos .alerta-critica {
+    opacity: 1 !important;
+    background: #dc2626 !important;
+    animation: slideInRight 0.5s ease-out, alertPulse 2s infinite !important;
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3) !important;
+}
+
+#alertas-eventos .alerta-critica:hover {
+    animation-play-state: paused !important;
+    transform: scale(1.02) !important;
+}
+</style>
+
+<!-- Alertas de Eventos Críticos -->
+<div id="alertas-eventos" class="fixed top-20 right-4 z-[60] space-y-2">
+    {% for evento in eventos_criticos_pendientes %}
+        <div id="alerta-{{ evento.id }}" 
+             class="alerta-critica text-white p-4 rounded-lg shadow-lg max-w-sm border-l-4 border-red-800 transition-all duration-300 transform"
+             style="background: #dc2626 !important; opacity: 1 !important;">
+            <div class="flex items-start justify-between">
+                <div class="flex-1">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-exclamation-triangle text-yellow-300 mr-2"></i>
+                        <h4 class="font-bold text-sm">EVENTO CRÍTICO</h4>
+                    </div>
+                    <p class="text-sm mb-1">
+                        <strong>{{ evento.get_tipo_display }}</strong>
+                    </p>
+                    <p class="text-xs mb-2">
+                        Legajo: {{ evento.legajo.codigo|truncatechars:12 }}<br>
+                        Ciudadano: {{ evento.legajo.ciudadano.apellido }}, {{ evento.legajo.ciudadano.nombre }}
+                    </p>
+                    <p class="text-xs text-red-200">
+                        {{ evento.creado|date:"d/m/Y H:i" }}
+                    </p>
+                </div>
+                <button onclick="cerrarAlerta({{ evento.id }})" 
+                        class="ml-2 text-red-200 hover:text-white focus:outline-none">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+function cerrarAlerta(eventoId) {
+    // Obtener CSRF token
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                     document.querySelector('meta[name=csrf-token]')?.getAttribute('content') ||
+                     getCookie('csrftoken');
+    
+    if (!csrfToken) {
+        console.error('CSRF token no encontrado');
+        return;
+    }
+    
+    fetch('{% url "legajos:cerrar_alerta_evento" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': csrfToken
+        },
+        body: 'evento_id=' + eventoId
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const alertElement = document.getElementById('alerta-' + eventoId);
+            if (alertElement) {
+                alertElement.style.opacity = '0';
+                alertElement.style.transform = 'translateX(100%)';
+                setTimeout(() => alertElement.remove(), 300);
+            }
+        } else {
+            console.error('Error al cerrar alerta:', data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+// Función auxiliar para obtener cookie CSRF
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>

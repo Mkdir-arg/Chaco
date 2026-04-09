@@ -1,0 +1,10 @@
+<!-- Botón de ayuda flotante en todas las páginas del portal -->
+<div class="fixed bottom-20 right-4 z-40">
+    <button onclick="document.getElementById('chat-button').click()" 
+            class="p-3 rounded-full shadow-lg transition-all duration-300 animate-pulse"
+            style="background: {{ branding.portal.floating_help_bg }}; color: {{ branding.portal.floating_help_icon_color }};"
+            onmouseover="this.style.background='{{ branding.portal.floating_help_hover_bg }}'"
+            onmouseout="this.style.background='{{ branding.portal.floating_help_bg }}'">
+        <i class="fas fa-question-circle text-lg"></i>
+    </button>
+</div>

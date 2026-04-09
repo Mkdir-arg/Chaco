@@ -1,0 +1,66 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Inscribir a Actividad - {{ legajo.codigo }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <div class="mb-6">
+        <a href="{% url 'legajos:detalle' legajo.pk %}" class="text-arg-azul hover:text-arg-secundario">
+            <i class="fas fa-arrow-left mr-2"></i>Volver al legajo
+        </a>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">Inscribir a Actividad</h1>
+        
+        <div class="mb-6 p-4 bg-blue-50 rounded-lg">
+            <p class="text-sm text-gray-700">
+                <strong>Ciudadano:</strong> {{ legajo.ciudadano.nombre_completo }}<br>
+                <strong>DNI:</strong> {{ legajo.ciudadano.dni }}<br>
+                <strong>Dispositivo actual:</strong> {{ legajo.dispositivo.nombre }}
+            </p>
+        </div>
+
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div>
+                <label for="{{ form.actividad.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Actividad *
+                </label>
+                {{ form.actividad }}
+                {% if form.actividad.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.actividad.errors.0 }}</p>
+                {% endif %}
+                <p class="mt-1 text-sm text-gray-500">Seleccione la actividad del centro a la que desea inscribir al ciudadano</p>
+            </div>
+
+            <div>
+                <label for="{{ form.observaciones.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                    Observaciones
+                </label>
+                {{ form.observaciones }}
+                {% if form.observaciones.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.observaciones.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4">
+                <a href="{% url 'legajos:detalle' legajo.pk %}" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                    Cancelar
+                </a>
+                <button type="submit" class="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700">
+                    <i class="fas fa-check mr-2"></i>Inscribir
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

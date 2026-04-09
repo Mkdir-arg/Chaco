@@ -1,0 +1,139 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Clases — {{ actividad.nombre }}{% endblock %}
+
+{% block main-content %}
+<div class="mb-8">
+
+    <!-- Header -->
+    <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="{% url 'configuracion:actividad_detalle' actividad.pk %}" class="text-gray-600 hover:text-gray-900 mr-4">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Clases — {{ actividad.nombre }}</h1>
+                    <p class="text-gray-500 text-sm mt-1">{{ actividad.legajo_institucional.institucion.nombre }}</p>
+                </div>
+            </div>
+            <a href="{% url 'configuracion:clase_crear' actividad.pk %}"
+               class="inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Nueva Clase
+            </a>
+        </div>
+    </div>
+
+    <!-- Listado de clases -->
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        {% if clases %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Presentes</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nómina</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    {% for clase in clases %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="text-sm font-medium text-gray-900">{{ clase.fecha|date:"d/m/Y" }}</span>
+                            {% if clase.es_futura %}
+                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">Futura</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            {{ clase.hora_inicio|time:"H:i" }}
+                            {% if clase.duracion_minutos %}
+                            <span class="text-gray-400 ml-1">({{ clase.duracion_minutos }} min)</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">
+                            {{ clase.titulo|default:"—" }}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            {% if clase.total_nomina > 0 %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                {{ clase.total_presentes }} / {{ clase.total_nomina }}
+                            </span>
+                            {% else %}
+                            <span class="text-gray-400 text-sm">—</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-center text-sm text-gray-600">
+                            {{ clase.total_nomina }}
+                        </td>
+                        <td class="px-6 py-4 text-right whitespace-nowrap">
+                            <div class="flex items-center justify-end gap-2">
+                                {% if not clase.es_futura %}
+                                <a href="{% url 'configuracion:clase_asistencia' clase.pk %}"
+                                   class="inline-flex items-center px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                                    <i class="fas fa-clipboard-list mr-1"></i>Asistencia
+                                </a>
+                                {% endif %}
+                                <a href="{% url 'configuracion:clase_editar' clase.pk %}"
+                                   class="inline-flex items-center px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors">
+                                    <i class="fas fa-edit mr-1"></i>Editar
+                                </a>
+                                <button type="button"
+                                        onclick="confirmarEliminar('{{ clase.pk }}', '{{ clase.fecha|date:'d/m/Y' }} {{ clase.hora_inicio|time:'H:i' }}')"
+                                        class="inline-flex items-center px-3 py-1 bg-red-600 text-white text-sm rounded hover:bg-red-700 transition-colors">
+                                    <i class="fas fa-trash mr-1"></i>Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-16">
+            <i class="fas fa-calendar-alt text-5xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500 text-lg">No hay clases registradas para esta actividad.</p>
+            <a href="{% url 'configuracion:clase_crear' actividad.pk %}"
+               class="mt-4 inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                <i class="fas fa-plus mr-2"></i>Crear primera clase
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- Formularios ocultos para eliminar (SweetAlert2) -->
+{% for clase in clases %}
+<form id="form-eliminar-{{ clase.pk }}" method="post" action="{% url 'configuracion:clase_eliminar' clase.pk %}" style="display:none;">
+    {% csrf_token %}
+</form>
+{% endfor %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmarEliminar(claseId, label) {
+    Swal.fire({
+        title: '¿Eliminar clase?',
+        text: `Clase del ${label}. Esta acción no se puede deshacer.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form-eliminar-' + claseId).submit();
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "includes/main.html" %}
+
+{% block title %}{% if es_edicion %}Editar{% else %}Nuevo{% endif %} Programa — Paso 2{% endblock %}
+
+{% block content %}
+<div class="p-6 max-w-2xl">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">
+            {% if es_edicion %}Editar programa{% else %}Nuevo programa{% endif %}
+        </h1>
+    </div>
+
+    <!-- Barra de progreso -->
+    <div class="mb-8">
+        <div class="flex items-center gap-2 text-sm text-gray-500 mb-2">
+            <span class="font-medium text-indigo-600">Paso {{ paso_actual }} de {{ total_pasos }}</span>
+            — Naturaleza del programa
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+            <div class="bg-indigo-600 h-2 rounded-full" style="width: {% widthratio paso_actual total_pasos 100 %}%"></div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <p class="text-sm text-gray-600 mb-6">
+            La naturaleza define cómo el ciudadano interactúa con el programa a lo largo del tiempo.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="mb-4 text-red-600 text-sm">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {% for radio in form.naturaleza %}
+                <label class="relative flex cursor-pointer rounded-lg border p-5 shadow-sm {% if radio.data.selected %}border-indigo-500 bg-indigo-50{% else %}border-gray-300 bg-white{% endif %} hover:border-indigo-400 transition-colors">
+                    {{ radio.tag }}
+                    <span class="ml-3">
+                        <span class="block text-sm font-semibold text-gray-900">{{ radio.choice_label }}</span>
+                        {% if radio.choice_value == 'UN_SOLO_ACTO' %}
+                        <span class="block text-xs text-gray-500 mt-1">
+                            El ciudadano accede una vez y el proceso se cierra. Ej: entrega de subsidio, asistencia puntual.
+                        </span>
+                        {% else %}
+                        <span class="block text-xs text-gray-500 mt-1">
+                            El ciudadano tiene seguimiento continuo. Ej: acompañamiento social, tratamiento.
+                        </span>
+                        {% endif %}
+                    </span>
+                </label>
+                {% endfor %}
+            </div>
+
+            {% if form.naturaleza.errors %}
+            <p class="text-red-600 text-sm mt-2">{{ form.naturaleza.errors.0 }}</p>
+            {% endif %}
+
+            <div class="flex justify-between mt-8">
+                <a href="{% if es_edicion %}{% url 'configuracion:programa_editar_paso1' programa.pk %}{% else %}{% url 'configuracion:programa_wizard_paso1' %}{% endif %}"
+                   class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-arrow-left mr-1"></i> Anterior
+                </a>
+                <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg text-sm font-medium">
+                    Siguiente <i class="fas fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

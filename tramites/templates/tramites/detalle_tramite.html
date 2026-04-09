@@ -1,0 +1,256 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Detalle del Trámite - {{ tramite.nombre }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-4xl mx-auto px-4 lg:px-8">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold mb-2">
+                    <i class="fas fa-file-alt mr-3"></i>
+                    Detalle del Trámite
+                </h1>
+                <p class="text-blue-100">{{ tramite.nombre }}</p>
+            </div>
+            <div class="bg-white bg-opacity-20 px-4 py-2 rounded-xl">
+                {% if tramite.estado_registro == 'ENVIADO' %}
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        <i class="fas fa-clock mr-1"></i>Enviado
+                    </span>
+                {% elif tramite.estado_registro == 'REVISION' %}
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <i class="fas fa-search mr-1"></i>En Revisión
+                    </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <!-- Información Básica -->
+        <div class="border-b border-gray-200 pb-6 mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Información Básica</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Institución</label>
+                    <p class="text-gray-900">{{ tramite.get_tipo_display }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                    <p class="text-gray-900">{{ tramite.nombre }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ubicación -->
+        <div class="border-b border-gray-200 pb-6 mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Ubicación</h3>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Provincia</label>
+                    <p class="text-gray-900">{{ tramite.provincia.nombre }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Municipio</label>
+                    <p class="text-gray-900">{{ tramite.municipio.nombre }}</p>
+                </div>
+                {% if tramite.localidad %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Localidad</label>
+                    <p class="text-gray-900">{{ tramite.localidad.nombre }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% if tramite.direccion %}
+            <div class="mt-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Dirección</label>
+                <p class="text-gray-900">{{ tramite.direccion }}</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Contacto -->
+        <div class="border-b border-gray-200 pb-6 mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Información de Contacto</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                {% if tramite.telefono %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                    <p class="text-gray-900">{{ tramite.telefono }}</p>
+                </div>
+                {% endif %}
+                {% if tramite.email %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <p class="text-gray-900">{{ tramite.email }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Información Legal -->
+        {% if tramite.tipo_personeria or tramite.nro_personeria or tramite.cuit %}
+        <div class="border-b border-gray-200 pb-6 mb-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">Información Legal</h3>
+            <div class="grid md:grid-cols-2 gap-6">
+                {% if tramite.tipo_personeria %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Personería</label>
+                    <p class="text-gray-900">{{ tramite.get_tipo_personeria_display }}</p>
+                </div>
+                {% endif %}
+                {% if tramite.nro_personeria %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Número de Personería</label>
+                    <p class="text-gray-900">{{ tramite.nro_personeria }}</p>
+                </div>
+                {% endif %}
+                {% if tramite.fecha_personeria %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Personería</label>
+                    <p class="text-gray-900">{{ tramite.fecha_personeria|date:"d/m/Y" }}</p>
+                </div>
+                {% endif %}
+                {% if tramite.cuit %}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">CUIT</label>
+                    <p class="text-gray-900">{{ tramite.cuit }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Descripción -->
+        {% if tramite.descripcion %}
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+            <p class="text-gray-900">{{ tramite.descripcion }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Fechas -->
+        <div class="bg-gray-50 rounded-lg p-4">
+            <h4 class="font-medium text-gray-800 mb-2">Información del Trámite</h4>
+            <div class="grid md:grid-cols-2 gap-4 text-sm">
+                <div>
+                    <span class="text-gray-600">Fecha de Solicitud:</span>
+                    <span class="text-gray-900 ml-2">{{ tramite.creado|date:"d/m/Y H:i" }}</span>
+                </div>
+                <div>
+                    <span class="text-gray-600">Estado:</span>
+                    <span class="text-gray-900 ml-2">{{ tramite.get_estado_registro_display }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones -->
+    {% if tramite.puede_aprobar %}
+    <div class="bg-white rounded-xl shadow-lg p-8">
+        <h3 class="text-xl font-bold text-gray-800 mb-6">Acciones</h3>
+        <div class="flex space-x-4">
+            <button type="button" 
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+                    onclick="document.getElementById('aprobarModal').style.display='block'">
+                <i class="fas fa-check mr-2"></i>
+                Aprobar Trámite
+            </button>
+            <button type="button" 
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors"
+                    onclick="document.getElementById('rechazarModal').style.display='block'">
+                <i class="fas fa-times mr-2"></i>
+                Rechazar Trámite
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Botón Volver -->
+    <div class="mt-8 text-center">
+        <a href="{% url 'tramites:lista_tramites' %}" 
+           class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Volver a la Lista
+        </a>
+    </div>
+</div>
+
+<!-- Modal Aprobar -->
+<div id="aprobarModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" style="display: none;">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <form method="post" action="{% url 'tramites:aprobar_tramite' tramite.id %}">
+            {% csrf_token %}
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Aprobar Trámite</h3>
+                    <button type="button" onclick="document.getElementById('aprobarModal').style.display='none'" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm text-gray-600"><strong>Institución:</strong> {{ tramite.nombre }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Número de Registro *</label>
+                    <input type="text" name="nro_registro" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Resolución</label>
+                    <input type="text" name="resolucion" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                </div>
+                <div class="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
+                    <p class="text-sm text-blue-800">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Al aprobar se creará el legajo institucional y se habilitarán las credenciales de acceso.
+                    </p>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="document.getElementById('aprobarModal').style.display='none'" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
+                        <i class="fas fa-check mr-1"></i>Aprobar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Rechazar -->
+<div id="rechazarModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" style="display: none;">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+        <form method="post" action="{% url 'tramites:rechazar_tramite' tramite.id %}">
+            {% csrf_token %}
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Rechazar Trámite</h3>
+                    <button type="button" onclick="document.getElementById('rechazarModal').style.display='none'" class="text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm text-gray-600"><strong>Institución:</strong> {{ tramite.nombre }}</p>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Motivo del Rechazo *</label>
+                    <textarea name="motivo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500" rows="4" required></textarea>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="document.getElementById('rechazarModal').style.display='none'" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors">
+                        <i class="fas fa-times mr-1"></i>Rechazar
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

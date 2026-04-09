@@ -1,0 +1,201 @@
+/* correccion de el fondo claro de los inputs cuando esta en modo oscuro */
+.dark-mode input:-webkit-autofill,
+.dark-mode input:-webkit-autofill:hover,
+.dark-mode input:-webkit-autofill:focus,
+.dark-mode input:-webkit-autofill:active,
+.dark-mode input:-internal-autofill-selected,
+.dark-mode input:-internal-autofill-previewed {
+  background-color: None !important;
+  -webkit-box-shadow: 0 0 0 30px #343a40 inset !important;
+}
+
+input:-internal-autofill-selected {
+  box-shadow: none !important;
+}
+
+.dark-mode .form-control:focus {
+  background-color: #343a40 !important;
+}
+
+.dark-mode .dropdown-item {
+  color: black
+}
+
+.popovers/
+.popover,
+.popover-arrow,
+.popover-content,
+.popover-title {
+  background: #454d55;
+}
+
+.carousel-image {
+  /* Ajusta el tamaño de las imagenes del carousel para mostrarlas cuadradas */
+  width: 300px;
+  height: 300px;
+  object-fit: cover;
+}
+
+
+.callout.callout-danger {
+  color: var(--color-error);
+}
+.dark-mode .callout.callout-danger {
+border-left-color: var(--color-error) !important;
+}
+
+.badge-alertas {
+  color: var(--color-blanco);
+  background-color: var(--color-error);
+}
+
+.badge-Critica {
+  color: var(--color-blanco);
+  background-color: var(--color-error);
+}
+.badge-Importante {
+  color: var(--color-blanco);
+  background-color: var(--color-advertencia);
+}
+.badge-Precaución {
+  color: var(--color-gris-900);
+  background-color: var(--color-advertencia-claro);
+}
+
+.callout.callout-Importante {
+  color: #eca20f;
+  border-left-color: #eca20f;
+}
+.callout.callout-Precaución {
+  border-left-color: #eee246;
+  color: #eee246;
+}
+
+.badge-Critica {
+  color: #fff;
+  background-color: #fb4733;
+}
+.badge-Importante {
+  color: #000000;
+  background-color: #eca20f;
+}
+.badge-Precaución {
+  color: #000000;
+  background-color: #eee246;
+}
+.callout.callout-Critica {
+  color: #fb4733;
+  border-left-color: #fb4733;
+}
+.callout.callout-Importante {
+  color: #eca20f;
+  border-left-color: #eca20f;
+}
+.callout.callout-Precaución {
+  border-left-color: #eee246;
+  color: #eee246;
+}
+
+
+/* PARA PROYECTO SISTEMA SOCIAL */
+
+.dark-mode {
+  background-color: var(--color-gris-800) !important;
+  color: var(--color-blanco);
+}
+
+.login-page, .register-page {
+  background-color: var(--color-primario) !important;
+}
+
+.navbar-dark {
+  background-color: var(--color-primario) !important;
+  border-color: var(--color-primario-oscuro) !important;
+}
+
+[class*="sidebar-dark-"] {
+  background: var(--fondo-sidebar) !important;
+}
+
+.layout-navbar-fixed .wrapper .sidebar-dark-primary .brand-link:not([class*="navbar"]) {
+  background: var(--fondo-sidebar) !important;
+}
+.dark-mode .content-wrapper {
+  background-color: var(--color-gris-800) !important;
+}
+
+
+/* Custom para grupofamiliar_form */
+.table-responsive #tabla th{
+  max-width: 120px !important;
+}
+
+
+/* Celiaquia cupo tables */
+.card-header.bg-dark {
+  color: #fff;
+}
+
+.filter-input {
+  max-width: 280px;
+}
+
+.filter-input-sm {
+  max-width: 220px;
+}
+
+.col-dni {
+  width: 80px;
+}
+
+.col-dni-sm {
+  width: 90px;
+}
+
+.col-actions {
+  width: 180px;
+}
+
+.col-fecha {
+  width: 120px;
+}
+
+.col-motivo {
+  max-width: 280px;
+}
+
+/* Mejoras para títulos de tarjetas en ambos modos */
+.card-header .card-title {
+  color: var(--texto-primario) !important;
+  text-shadow: var(--sombra-sm);
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+[data-bs-theme="dark"] .card-header .card-title {
+  color: var(--color-blanco) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Mejorar contraste de headers en modo claro */
+.card-header {
+  background: linear-gradient(135deg, var(--color-gris-50) 0%, var(--color-gris-100) 100%) !important;
+  border-bottom: 2px solid var(--color-primario);
+}
+
+[data-bs-theme="dark"] .card-header {
+  background: linear-gradient(135deg, var(--color-gris-700) 0%, var(--color-gris-800) 100%) !important;
+  border-bottom: 2px solid var(--color-acento);
+}
+
+/* Mejoras adicionales para el contenido de las tarjetas */
+.comment-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+[data-bs-theme="dark"] .comment-text {
+  color: #e9ecef !important;
+}
+
+

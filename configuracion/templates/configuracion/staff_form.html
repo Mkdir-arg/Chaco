@@ -1,0 +1,268 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Asignar Staff{% endblock %}
+
+{% block main-content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Asignar Staff a Actividad</h1>
+        <p class="text-gray-600">Selecciona el personal para asignar a esta actividad</p>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <form method="post" class="space-y-6" id="staffForm">
+            {% csrf_token %}
+            
+            {% if form.errors or personal_form.errors %}
+                <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                    <h3 class="text-red-800 font-medium mb-2">Errores en el formulario:</h3>
+                    {% for field, errors in form.errors.items %}
+                        <p class="text-red-600 text-sm">{{ field }}: {{ errors.0 }}</p>
+                    {% endfor %}
+                    {% for field, errors in personal_form.errors.items %}
+                        <p class="text-red-600 text-sm">{{ field }}: {{ errors.0 }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <!-- Selector de tipo de asignación -->
+            <div class="border-b pb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-3">Tipo de Asignación</label>
+                <div class="space-y-2">
+                    {% for choice in form.tipo_asignacion %}
+                        <div class="flex items-center">
+                            {{ choice.tag }}
+                            <label for="{{ choice.id_for_label }}" class="ml-2 text-sm text-gray-700">
+                                {{ choice.choice_label }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Sección para personal existente -->
+            <div id="personal-existente" class="space-y-4">
+                <h3 class="text-lg font-medium text-gray-900">Seleccionar Personal Existente</h3>
+                
+                <div>
+                    <label for="{{ form.personal.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                        Personal *
+                    </label>
+                    <select name="personal" id="id_personal" class="w-full">
+                        <option value="">Buscar personal...</option>
+                    </select>
+                    {% if form.personal.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.personal.errors.0 }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Sección para crear nuevo personal -->
+            <div id="personal-nuevo" class="space-y-4" style="display: none;">
+                <h3 class="text-lg font-medium text-gray-900">Crear Nuevo Personal</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="{{ personal_form.nombre.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Nombre *
+                        </label>
+                        {{ personal_form.nombre }}
+                        {% if personal_form.nombre.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ personal_form.nombre.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ personal_form.apellido.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Apellido *
+                        </label>
+                        {{ personal_form.apellido }}
+                        {% if personal_form.apellido.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ personal_form.apellido.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ personal_form.dni.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            DNI *
+                        </label>
+                        {{ personal_form.dni }}
+                        {% if personal_form.dni.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ personal_form.dni.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ personal_form.tipo.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Tipo *
+                        </label>
+                        {{ personal_form.tipo }}
+                        {% if personal_form.tipo.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ personal_form.tipo.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ personal_form.titulo_profesional.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Título Profesional
+                        </label>
+                        {{ personal_form.titulo_profesional }}
+                        {% if personal_form.titulo_profesional.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ personal_form.titulo_profesional.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ personal_form.matricula.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-2">
+                            Matrícula
+                        </label>
+                        {{ personal_form.matricula }}
+                        {% if personal_form.matricula.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ personal_form.matricula.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campos comunes -->
+            <div class="border-t pt-4 space-y-4">
+                <div>
+                    <label for="id_rol_en_actividad" class="block text-sm font-medium text-gray-700 mb-2">
+                        Rol en la Actividad *
+                    </label>
+                    <select name="rol_en_actividad" id="id_rol_en_actividad" class="w-full">
+                    </select>
+                    {% if form.rol_en_actividad.errors %}
+                        <p class="mt-1 text-sm text-red-600">{{ form.rol_en_actividad.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="flex items-center">
+                    {{ form.activo }}
+                    <label for="{{ form.activo.id_for_label }}" class="ml-2 text-sm text-gray-700">
+                        Activo
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-6">
+                <a href="{% url 'configuracion:actividad_detalle' view.kwargs.actividad_pk %}" 
+                   class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                    Cancelar
+                </a>
+                <button type="submit" 
+                        class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700">
+                    Asignar Staff
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tipoRadios = document.querySelectorAll('input[name="tipo_asignacion"]');
+    const personalExistente = document.getElementById('personal-existente');
+    const personalNuevo = document.getElementById('personal-nuevo');
+    const personalSelect = $('#id_personal');
+    const pathParts = window.location.pathname.split('/');
+    const actividadId = pathParts[3];
+    
+    function toggleSections() {
+        const selectedValue = document.querySelector('input[name="tipo_asignacion"]:checked').value;
+        
+        if (selectedValue === 'existente') {
+            personalExistente.style.display = 'block';
+            personalNuevo.style.display = 'none';
+            // Deshabilitar campos de nuevo personal
+            personalNuevo.querySelectorAll('input, select').forEach(el => el.disabled = true);
+            personalExistente.querySelectorAll('input, select').forEach(el => el.disabled = false);
+        } else {
+            personalExistente.style.display = 'none';
+            personalNuevo.style.display = 'block';
+            // Deshabilitar campos de personal existente
+            personalExistente.querySelectorAll('input, select').forEach(el => el.disabled = true);
+            personalNuevo.querySelectorAll('input, select').forEach(el => el.disabled = false);
+        }
+    }
+    
+    tipoRadios.forEach(radio => {
+        radio.addEventListener('change', toggleSections);
+    });
+    
+    // Inicializar Select2 con búsqueda AJAX para personal
+    personalSelect.select2({
+        ajax: {
+            url: `/configuracion/actividades/${actividadId}/buscar-personal/`,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                return { q: params.term };
+            },
+            processResults: function (data) {
+                return { results: data.results };
+            },
+            cache: true
+        },
+        placeholder: 'Buscar por nombre, apellido o DNI...',
+        minimumInputLength: 0,
+        width: '100%'
+    });
+    
+    // Inicializar Select2 para roles con tags
+    $('#id_rol_en_actividad').select2({
+        tags: true,
+        placeholder: 'Selecciona o escribe un rol',
+        width: '100%',
+        data: [
+            {id: 'Coordinador', text: 'Coordinador'},
+            {id: 'Terapeuta', text: 'Terapeuta'},
+            {id: 'Operador', text: 'Operador'},
+            {id: 'Psicólogo', text: 'Psicólogo'},
+            {id: 'Trabajador Social', text: 'Trabajador Social'},
+            {id: 'Médico', text: 'Médico'},
+            {id: 'Enfermero', text: 'Enfermero'},
+            {id: 'Asistente', text: 'Asistente'}
+        ]
+    });
+    
+    toggleSections();
+});
+</script>
+
+<style>
+input[type="text"], input[type="number"], textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+    outline: none;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+.form-radio {
+    color: #8b5cf6;
+}
+.select2-container--default .select2-selection--single {
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    height: 42px;
+    padding: 0.5rem;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 26px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 40px;
+}
+
+</style>
+{% endblock %}

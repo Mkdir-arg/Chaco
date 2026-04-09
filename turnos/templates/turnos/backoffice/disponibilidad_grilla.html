@@ -1,0 +1,122 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Disponibilidad — {{ config.nombre }}{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto px-4 py-8" x-data="disponibilidadGrilla()">
+
+  <!-- Encabezado -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <div class="flex items-center gap-2 text-sm text-gray-500 mb-1">
+        <a href="{% url 'turnos:configuracion_lista' %}" class="hover:text-gray-700">Configuraciones</a>
+        <i class="fas fa-chevron-right text-xs"></i>
+        <span>{{ config.nombre }}</span>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-900">Disponibilidad semanal</h1>
+      <p class="text-gray-500 mt-1">{{ config.nombre }}</p>
+    </div>
+    <a href="{% url 'turnos:configuracion_editar' pk=config.pk %}"
+       class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+      <i class="fas fa-cog"></i> Editar configuración
+    </a>
+  </div>
+
+  <!-- Info de la configuración -->
+  <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-6 grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+    <div>
+      <span class="text-blue-600 font-medium">Modo</span>
+      <p class="text-gray-700">{{ config.get_modo_turno_display }}</p>
+    </div>
+    <div>
+      <span class="text-blue-600 font-medium">Aprobación</span>
+      <p class="text-gray-700">{% if config.requiere_aprobacion %}Manual{% else %}Automática{% endif %}</p>
+    </div>
+    <div>
+      <span class="text-blue-600 font-medium">Anticipación mín.</span>
+      <p class="text-gray-700">{{ config.anticipacion_minima_hs }} hs</p>
+    </div>
+    <div>
+      <span class="text-blue-600 font-medium">Anticipación máx.</span>
+      <p class="text-gray-700">{{ config.anticipacion_maxima_dias }} días</p>
+    </div>
+  </div>
+
+  <!-- Grilla semanal -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="grid grid-cols-7 divide-x divide-gray-100">
+
+      {% for dia_num, dia_nombre in dias %}
+      <div class="flex flex-col">
+
+        <!-- Encabezado del día -->
+        <div class="bg-gray-50 px-3 py-3 text-center border-b border-gray-100">
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ dia_nombre|slice:":3" }}</p>
+        </div>
+
+        <!-- Franjas del día -->
+        <div class="p-2 flex flex-col gap-2 min-h-[200px]">
+
+          {% for disp in por_dia|dict_key:dia_num %}
+          <div class="bg-indigo-50 border border-indigo-100 rounded-lg p-2 text-xs group relative">
+            <p class="font-semibold text-indigo-700">{{ disp.hora_inicio|time:"H:i" }}–{{ disp.hora_fin|time:"H:i" }}</p>
+            <p class="text-indigo-500 mt-0.5">{{ disp.duracion_turno_min }} min · c/{{ disp.cupo_maximo }}</p>
+            <p class="text-indigo-400 mt-0.5">{{ disp.slots_preview }} slots</p>
+            {% if not disp.activo %}
+            <span class="absolute top-1 right-1 text-xs text-gray-400"><i class="fas fa-pause-circle"></i></span>
+            {% endif %}
+            <!-- Acciones -->
+            <div class="mt-2 flex gap-1">
+              <a href="{% url 'turnos:disponibilidad_editar' pk=config.pk disp_pk=disp.pk %}"
+                 class="flex-1 text-center bg-white border border-indigo-200 text-indigo-600 rounded px-1 py-0.5 hover:bg-indigo-50 transition-colors">
+                <i class="fas fa-pen text-xs"></i>
+              </a>
+              <form method="post" action="{% url 'turnos:disponibilidad_eliminar' pk=config.pk disp_pk=disp.pk %}"
+                    onsubmit="return confirmEliminar(this)">
+                {% csrf_token %}
+                <button type="submit"
+                        class="bg-white border border-red-200 text-red-500 rounded px-1 py-0.5 hover:bg-red-50 transition-colors">
+                  <i class="fas fa-trash text-xs"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+          {% empty %}
+          <div class="text-center text-gray-300 text-xs mt-4">sin franjas</div>
+          {% endfor %}
+
+          <!-- Botón agregar -->
+          <a href="{% url 'turnos:disponibilidad_agregar' pk=config.pk %}?dia={{ dia_num }}"
+             class="mt-auto flex items-center justify-center gap-1 text-xs text-gray-400 hover:text-indigo-600 border border-dashed border-gray-200 hover:border-indigo-300 rounded-lg py-2 transition-colors">
+            <i class="fas fa-plus"></i> Agregar
+          </a>
+
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function confirmEliminar(form) {
+  return Swal.fire({
+    title: '¿Eliminar franja?',
+    text: 'Los turnos ya solicitados en ese horario no se cancelarán automáticamente.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: 'Eliminar',
+    cancelButtonText: 'Cancelar',
+  }).then(result => {
+    if (result.isConfirmed) form.submit();
+  });
+}
+function disponibilidadGrilla() { return {}; }
+</script>
+{% endblock %}

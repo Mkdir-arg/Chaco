@@ -1,0 +1,157 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Métricas de Conversaciones{% endblock %}
+
+{% block main-content %}
+<div class="max-w-full mx-4 lg:mx-8">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">📊 Métricas de Conversaciones</h1>
+        <p class="text-gray-600 mt-2">Panel de control y estadísticas del sistema de chat</p>
+    </div>
+
+    <!-- Métricas Globales -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-blue-100 text-sm font-medium">Total Conversaciones</p>
+                    <p class="text-3xl font-bold">{{ metricas_globales.total_conversaciones }}</p>
+                </div>
+                <i class="fas fa-comments text-2xl text-blue-200"></i>
+            </div>
+            <div class="mt-4 text-sm text-blue-100">
+                Hoy: {{ metricas_globales.conversaciones_hoy }}
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-green-100 text-sm font-medium">Tiempo Respuesta</p>
+                    <p class="text-3xl font-bold">{{ metricas_globales.tiempo_respuesta_promedio_min }}m</p>
+                </div>
+                <i class="fas fa-clock text-2xl text-green-200"></i>
+            </div>
+            <div class="mt-4 text-sm text-green-100">
+                Promedio general
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-yellow-100 text-sm font-medium">Pendientes</p>
+                    <p class="text-3xl font-bold">{{ metricas_globales.pendientes }}</p>
+                </div>
+                <i class="fas fa-hourglass-half text-2xl text-yellow-200"></i>
+            </div>
+            <div class="mt-4 text-sm text-yellow-100">
+                Sin asignar
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-purple-100 text-sm font-medium">Satisfacción</p>
+                    <p class="text-3xl font-bold">{{ metricas_globales.satisfaccion_promedio|floatformat:1 }}/5</p>
+                </div>
+                <i class="fas fa-star text-2xl text-purple-200"></i>
+            </div>
+            <div class="mt-4 text-sm text-purple-100">
+                Promedio general
+            </div>
+        </div>
+    </div>
+
+    <!-- Estado de Operadores -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Estado de Operadores</h2>
+            <div class="space-y-4">
+                {% for cola in colas %}
+                <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-semibold mr-3">
+                            {{ cola.operador.first_name|first }}{{ cola.operador.last_name|first }}
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-900">{{ cola.operador.get_full_name }}</p>
+                            <p class="text-sm text-gray-500">{{ cola.conversaciones_actuales }}/{{ cola.max_conversaciones }} conversaciones</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        {% if cola.activo %}
+                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Activo</span>
+                        {% else %}
+                            <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Inactivo</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-gray-500 text-center py-4">No hay operadores configurados</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Métricas por Operador</h2>
+            <div class="space-y-4">
+                {% for metrica in metricas_operadores %}
+                <div class="p-4 border border-gray-200 rounded-lg">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-medium text-gray-900">{{ metrica.operador.get_full_name }}</h3>
+                        <span class="text-sm text-gray-500">{{ metrica.conversaciones_atendidas }} atendidas</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <span class="text-gray-500">Tiempo respuesta:</span>
+                            <span class="font-medium">{{ metrica.tiempo_respuesta_promedio|floatformat:1 }}m</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Satisfacción:</span>
+                            <span class="font-medium">{{ metrica.satisfaccion_promedio|floatformat:1 }}/5</span>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-gray-500 text-center py-4">No hay métricas disponibles</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Acciones</h2>
+        <div class="flex flex-wrap gap-4">
+            <a href="{% url 'conversaciones:configurar_cola' %}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                <i class="fas fa-cog mr-2"></i>Configurar Cola
+            </a>
+            <a href="{% url 'conversaciones:asignacion_automatica' %}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                <i class="fas fa-robot mr-2"></i>Asignación Automática
+            </a>
+            <button onclick="actualizarMetricas()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                <i class="fas fa-sync mr-2"></i>Actualizar Métricas
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function actualizarMetricas() {
+    fetch('{% url "conversaciones:api_metricas" %}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+// Auto-actualizar cada 30 segundos
+setInterval(actualizarMetricas, 30000);
+</script>
+{% endblock %}

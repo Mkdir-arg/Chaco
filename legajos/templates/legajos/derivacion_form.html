@@ -1,0 +1,101 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Nueva Derivación - {{ legajo.codigo }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-3xl font-lora font-bold text-gray-900">Nueva Derivación</h1>
+        <p class="text-gray-600 mt-2">{{ legajo.ciudadano.apellido }}, {{ legajo.ciudadano.nombre }} - Legajo {{ legajo.codigo|slice:":8" }}...</p>
+    </div>
+
+    <form method="post" class="space-y-8">
+        {% csrf_token %}
+        
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Información de la Derivación</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dispositivo Destino</label>
+                    {{ form.destino }}
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Actividad Específica</label>
+                    {{ form.actividad_destino }}
+                    <p class="text-xs text-gray-500 mt-1">Opcional: Selecciona una actividad específica dentro de la institución</p>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Urgencia</label>
+                {{ form.urgencia }}
+            </div>
+            
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Motivo de la Derivación</label>
+                {{ form.motivo }}
+            </div>
+        </div>
+
+        <div class="flex justify-end space-x-4">
+            <a href="{% url 'legajos:detalle' legajo.pk %}" 
+               class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                Cancelar
+            </a>
+            <button type="submit" 
+                    class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+                Crear Derivación
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const destinoSelect = document.getElementById('id_destino');
+    const actividadSelect = document.getElementById('id_actividad_destino');
+    
+    function cargarActividades(institucionId, actividadSeleccionada = null) {
+        if (institucionId) {
+            fetch(`/legajos/actividades-por-institucion/${institucionId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    actividadSelect.innerHTML = '<option value="">---------</option>';
+                    data.actividades.forEach(actividad => {
+                        const option = document.createElement('option');
+                        option.value = actividad.id;
+                        option.textContent = `${actividad.nombre} (${actividad.tipo_display})`;
+                        if (actividadSeleccionada && actividad.id == actividadSeleccionada) {
+                            option.selected = true;
+                        }
+                        actividadSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    actividadSelect.innerHTML = '<option value="">Error cargando actividades</option>';
+                });
+        } else {
+            actividadSelect.innerHTML = '<option value="">---------</option>';
+        }
+    }
+    
+    if (destinoSelect && actividadSelect) {
+        // Cargar actividades al inicio si hay institución seleccionada
+        const institucionInicial = destinoSelect.value;
+        const actividadInicial = actividadSelect.value;
+        if (institucionInicial) {
+            cargarActividades(institucionInicial, actividadInicial);
+        }
+        
+        // Cargar actividades cuando cambia la institución
+        destinoSelect.addEventListener('change', function() {
+            cargarActividades(this.value);
+        });
+    }
+});
+</script>
+{% endblock %}

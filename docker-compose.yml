@@ -1,0 +1,77 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DATABASE_NAME:-sedronar}
+      MYSQL_USER: ${DATABASE_USER:-sedronar}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD:-sedronar123}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root123}
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h 127.0.0.1 -u$${MYSQL_USER} -p$${MYSQL_PASSWORD} --silent",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    entrypoint: ["/usr/local/bin/sistemso-entrypoint"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-dev-only-change-me}
+      DJANGO_DEBUG: ${DJANGO_DEBUG:-True}
+      ENVIRONMENT: ${ENVIRONMENT:-dev}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,0.0.0.0,app}
+      DJANGO_CSRF_TRUSTED_ORIGINS: ${DJANGO_CSRF_TRUSTED_ORIGINS:-http://localhost:8000,http://127.0.0.1:8000}
+      DATABASE_NAME: ${DATABASE_NAME:-sedronar}
+      DATABASE_USER: ${DATABASE_USER:-sedronar}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-sedronar123}
+      DATABASE_HOST: mysql
+      DATABASE_PORT: 3306
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_SSL: "False"
+      DOMINIO: ${DOMINIO:-localhost:8000}
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      LOCAL_BOOTSTRAP_COMMANDS: ${LOCAL_BOOTSTRAP_COMMANDS:-crear_superadmin setup_grupos crear_programas}
+      LOCAL_OPTIONAL_BOOTSTRAP_COMMANDS: ${LOCAL_OPTIONAL_BOOTSTRAP_COMMANDS:-}
+      APP_BIND: 0.0.0.0
+      APP_PORT: 8000
+      APP_RUNTIME: ${APP_RUNTIME:-runserver}
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health/"]
+      interval: 10s
+      timeout: 10s
+      retries: 12
+      start_period: 25s
+
+volumes:
+  mysql_data:
+  redis_data:

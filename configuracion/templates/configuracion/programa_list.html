@@ -1,0 +1,176 @@
+{% extends "includes/main.html" %}
+{% load static %}
+
+{% block title %}Programas{% endblock %}
+
+{% block content %}
+<div class="p-6">
+    <div class="mb-6 flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-gray-900">Programas</h1>
+        {% if puede_editar %}
+        <a href="{% url 'configuracion:programa_wizard_paso1' %}"
+           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+            <i class="fas fa-plus mr-2"></i>Nuevo programa
+        </a>
+        {% endif %}
+    </div>
+
+    {% if messages %}
+    <div class="mb-4 space-y-2">
+        {% for message in messages %}
+        <div class="rounded-lg p-3 text-sm {% if message.tags == 'error' %}bg-red-50 text-red-700{% else %}bg-green-50 text-green-700{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="get" class="mb-4 flex flex-wrap gap-2">
+        <input type="text" name="q" value="{{ search }}" placeholder="Buscar por nombre o código..."
+               class="block rounded-md border border-gray-300 py-2 px-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+        <select name="estado"
+                class="block rounded-md border border-gray-300 py-2 px-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+            <option value="">Todos los estados</option>
+            {% for valor, etiqueta in estados %}
+            <option value="{{ valor }}" {% if estado_filtro == valor %}selected{% endif %}>{{ etiqueta }}</option>
+            {% endfor %}
+        </select>
+        <select name="subsecretaria"
+                class="block rounded-md border border-gray-300 py-2 px-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+            <option value="">Todas las subsecretarías</option>
+            {% for ss in subsecretarias %}
+            <option value="{{ ss.pk }}" {% if subsecretaria_filtro == ss.pk|stringformat:"s" %}selected{% endif %}>{{ ss.nombre }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm">
+            Filtrar
+        </button>
+    </form>
+
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Programa</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Código</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Subsecretaría</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Naturaleza</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                    {% if puede_editar %}
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                {% for programa in programas %}
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900">
+                        <span class="inline-flex items-center gap-2">
+                            <i class="fas fa-{{ programa.icono }} text-xs" style="color: {{ programa.color }}"></i>
+                            {{ programa.nombre }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500 font-mono">{{ programa.codigo }}</td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        {% if programa.subsecretaria %}
+                            {{ programa.subsecretaria.nombre }}<br>
+                            <span class="text-xs text-gray-400">{{ programa.subsecretaria.secretaria.nombre }}</span>
+                        {% else %}
+                            <span class="text-gray-400">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                        {% if programa.naturaleza %}
+                            {{ programa.get_naturaleza_display }}
+                        {% else %}
+                            <span class="text-gray-400">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4">
+                        {% if programa.estado == 'ACTIVO' %}
+                        <span class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">Activo</span>
+                        {% elif programa.estado == 'BORRADOR' %}
+                        <span class="inline-flex items-center rounded-full bg-yellow-100 px-2 py-0.5 text-xs font-medium text-yellow-800">Borrador</span>
+                        {% elif programa.estado == 'SUSPENDIDO' %}
+                        <span class="inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-800">Suspendido</span>
+                        {% else %}
+                        <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">Inactivo</span>
+                        {% endif %}
+                    </td>
+                    {% if puede_editar %}
+                    <td class="px-6 py-4 text-right text-sm space-x-2">
+                        <a href="{% url 'configuracion:programa_editar_paso1' programa.pk %}"
+                           class="text-indigo-600 hover:text-indigo-900" title="Editar datos"><i class="fas fa-edit"></i></a>
+                        <a href="{% url 'flujos_editor:editor_flujo' programa.pk %}"
+                           class="text-purple-600 hover:text-purple-900 ml-1" title="Editar flujo"><i class="fas fa-project-diagram"></i></a>
+                        {% if programa.estado == 'BORRADOR' %}
+                        <button type="button"
+                                onclick="cambiarEstado({{ programa.pk }}, 'ACTIVO', '{{ programa.nombre|escapejs }}')"
+                                class="text-green-600 hover:text-green-900 ml-1" title="Activar">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        {% elif programa.estado == 'ACTIVO' %}
+                        <button type="button"
+                                onclick="cambiarEstado({{ programa.pk }}, 'SUSPENDIDO', '{{ programa.nombre|escapejs }}')"
+                                class="text-orange-600 hover:text-orange-900 ml-1" title="Suspender">
+                            <i class="fas fa-pause"></i>
+                        </button>
+                        {% elif programa.estado == 'SUSPENDIDO' %}
+                        <button type="button"
+                                onclick="cambiarEstado({{ programa.pk }}, 'ACTIVO', '{{ programa.nombre|escapejs }}')"
+                                class="text-green-600 hover:text-green-900 ml-1" title="Reactivar">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="{% if puede_editar %}6{% else %}5{% endif %}" class="px-6 py-8 text-center text-sm text-gray-500">
+                        No hay programas registrados.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form id="form-cambiar-estado" method="post"
+      data-url-template="{% url 'configuracion:programa_cambiar_estado' 0 %}"
+      style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="estado" id="input-nuevo-estado">
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function cambiarEstado(pk, nuevoEstado, nombre) {
+    const labels = {
+        'ACTIVO': 'Activar',
+        'SUSPENDIDO': 'Suspender',
+        'INACTIVO': 'Desactivar',
+    };
+    Swal.fire({
+        title: `¿${labels[nuevoEstado]} el programa?`,
+        text: `"${nombre}" pasará a estado ${nuevoEstado.toLowerCase()}.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#2563eb',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Confirmar',
+        cancelButtonText: 'Cancelar',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.getElementById('form-cambiar-estado');
+            const urlTemplate = form.dataset.urlTemplate;
+            form.action = urlTemplate.replace('/0/', `/${pk}/`);
+            document.getElementById('input-nuevo-estado').value = nuevoEstado;
+            form.submit();
+        }
+    });
+}
+</script>
+{% endblock %}

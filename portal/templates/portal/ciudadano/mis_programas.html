@@ -1,0 +1,168 @@
+{% extends 'portal/ciudadano/base_ciudadano.html' %}
+
+{% block title %}Mis Programas - Portal Ciudadano{% endblock %}
+
+{% block ciudadano_content %}
+
+<!-- Encabezado -->
+<div class="mb-8 animate-fadeInUp">
+    <div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] px-6 py-5"
+         style="background: linear-gradient(135deg, {{ branding.portal.primary_button_gradient_start }}18 0%, {{ branding.portal.primary_button_gradient_end }}10 100%);">
+        <h2 class="text-2xl font-bold text-[#252F40]">Mis Programas</h2>
+        <p class="text-[#8C8C8C] mt-1 text-sm">
+            Consultá el estado de todos los programas en los que estás participando.
+        </p>
+    </div>
+</div>
+
+<!-- ── Programas activos ─────────────────────────────────────────────────── -->
+<div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-6 mb-6 animate-fadeInUp">
+    <div class="flex items-center space-x-3 mb-5">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+             style="background: linear-gradient(135deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%);">
+            <i class="fas fa-clipboard-list text-white"></i>
+        </div>
+        <h3 class="text-lg font-semibold text-[#252F40]">Programas activos</h3>
+    </div>
+
+    {% if inscripciones_activas %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-[#F3F4F6]">
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3 pr-4">Programa</th>
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3 pr-4">Estado</th>
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3 pr-4">Desde</th>
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3"></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#F3F4F6]">
+                    {% for insc in inscripciones_activas %}
+                    <tr class="hover:bg-[#F9FAFB] transition-colors">
+                        <td class="py-4 pr-4">
+                            <p class="font-medium text-[#252F40]">{{ insc.programa.nombre }}</p>
+                            <p class="text-xs text-[#8C8C8C] mt-0.5">{{ insc.programa.get_tipo_display }}</p>
+                        </td>
+                        <td class="py-4 pr-4">
+                            {% if insc.estado == 'ACTIVO' %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1.5"></span>Activo
+                                </span>
+                            {% elif insc.estado == 'EN_SEGUIMIENTO' %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>En seguimiento
+                                </span>
+                            {% elif insc.estado == 'PENDIENTE' %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-yellow-400 mr-1.5"></span>En espera
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="py-4 pr-4 text-[#8C8C8C]">
+                            {{ insc.fecha_inscripcion|date:"d/m/Y" }}
+                        </td>
+                        <td class="py-4 text-right">
+                            <a href="{% url 'portal:ciudadano_programa_detalle' insc.pk %}"
+                               class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-white transition-colors"
+                               style="background: linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%);"
+                               onmouseover="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_hover_start }} 0%, {{ branding.portal.primary_button_hover_end }} 100%)'"
+                               onmouseout="this.style.background='linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%)'">
+                                Ver detalle <i class="fas fa-chevron-right ml-1.5 text-xs"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-10 text-[#8C8C8C]">
+            <i class="fas fa-folder-open text-4xl mb-4 opacity-30"></i>
+            <p class="text-sm font-medium">No tenés programas activos actualmente.</p>
+            <p class="text-xs mt-1 opacity-70">Si creés que debería aparecer alguno, consultá con la oficina correspondiente.</p>
+        </div>
+    {% endif %}
+</div>
+
+<!-- ── Historial ─────────────────────────────────────────────────────────── -->
+{% if inscripciones_historial %}
+<div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] p-6 animate-fadeInUp">
+
+    <!-- Encabezado colapsable -->
+    <button type="button"
+            id="btn-historial"
+            onclick="toggleHistorial()"
+            class="w-full flex items-center justify-between text-left focus:outline-none">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F3F4F6]">
+                <i class="fas fa-history text-[#8C8C8C]"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold text-[#252F40]">Historial de programas</h3>
+                <p class="text-xs text-[#8C8C8C]">Programas finalizados o suspendidos</p>
+            </div>
+        </div>
+        <i id="icono-historial" class="fas fa-chevron-down text-[#8C8C8C] transition-transform duration-200"></i>
+    </button>
+
+    <!-- Contenido colapsable -->
+    <div id="contenido-historial" class="hidden mt-5">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-[#F3F4F6]">
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3 pr-4">Programa</th>
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3 pr-4">Estado</th>
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3 pr-4">Desde</th>
+                        <th class="text-left text-xs font-semibold text-[#8C8C8C] uppercase tracking-wide pb-3"></th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[#F3F4F6]">
+                    {% for insc in inscripciones_historial %}
+                    <tr class="hover:bg-[#F9FAFB] transition-colors">
+                        <td class="py-4 pr-4">
+                            <p class="font-medium text-[#252F40]">{{ insc.programa.nombre }}</p>
+                            <p class="text-xs text-[#8C8C8C] mt-0.5">{{ insc.programa.get_tipo_display }}</p>
+                        </td>
+                        <td class="py-4 pr-4">
+                            {% if insc.estado == 'CERRADO' %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-gray-400 mr-1.5"></span>Finalizado
+                                </span>
+                            {% elif insc.estado == 'SUSPENDIDO' %}
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-orange-400 mr-1.5"></span>Suspendido
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="py-4 pr-4 text-[#8C8C8C]">
+                            {{ insc.fecha_inscripcion|date:"d/m/Y" }}
+                        </td>
+                        <td class="py-4 text-right">
+                            <a href="{% url 'portal:ciudadano_programa_detalle' insc.pk %}"
+                               class="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium text-[#8C8C8C] border border-[#E5E7EB] hover:bg-[#F3F4F6] transition-colors">
+                                Ver detalle <i class="fas fa-chevron-right ml-1.5 text-xs"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+function toggleHistorial() {
+    const contenido = document.getElementById('contenido-historial');
+    const icono = document.getElementById('icono-historial');
+    contenido.classList.toggle('hidden');
+    icono.classList.toggle('rotate-180');
+}
+</script>
+{% endblock %}
+
+{% endif %}
+
+{% endblock %}

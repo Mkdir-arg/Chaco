@@ -1,0 +1,62 @@
+[
+  {
+    "model": "chatbot.chatbotknowledge",
+    "pk": 1,
+    "fields": {
+      "title": "¿Qué es SEDRONAR?",
+      "content": "SEDRONAR es la Secretaría Nacional de Políticas Integrales sobre Drogas. Es el organismo encargado de diseñar, coordinar y ejecutar las políticas públicas en materia de prevención del consumo de drogas, asistencia y reinserción social de personas con consumos problemáticos.",
+      "category": "Información General",
+      "is_active": true,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "chatbot.chatbotknowledge",
+    "pk": 2,
+    "fields": {
+      "title": "Gestión de Instituciones",
+      "content": "El módulo de Instituciones permite registrar y gestionar organizaciones que forman parte de la red SEDRONAR. Incluye el proceso completo de registro con documentación requerida y estados de aprobación.",
+      "category": "Funcionalidades",
+      "is_active": true,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "chatbot.chatbotknowledge",
+    "pk": 3,
+    "fields": {
+      "title": "Acompañamiento",
+      "content": "Los acompañamientos contienen el historial completo de atención de cada ciudadano, incluyendo evaluaciones, planes de intervención, seguimientos y derivaciones a instituciones especializadas.",
+      "category": "Funcionalidades",
+      "is_active": true,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "chatbot.chatbotknowledge",
+    "pk": 4,
+    "fields": {
+      "title": "Registro de Instituciones",
+      "content": "Las instituciones pueden registrarse online cargando toda la documentación requerida por SEDRONAR: personería jurídica, estatutos, habilitaciones, seguros, etc. El proceso incluye revisión y aprobación oficial.",
+      "category": "Registro",
+      "is_active": true,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "chatbot.chatbotknowledge",
+    "pk": 5,
+    "fields": {
+      "title": "Tipos de Instituciones",
+      "content": "SEDRONAR trabaja con diferentes tipos de instituciones: DTC (Dispositivos Territoriales Comunitarios), CAAC (Casas de Atención y Acompañamiento), CAI (Centros de Asistencia Inmediata), CCC (Casas Comunitarias Convivenciales) y CT (Comunidades Terapéuticas).",
+      "category": "Información General",
+      "is_active": true,
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:00:00Z"
+    }
+  }
+]

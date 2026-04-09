@@ -1,0 +1,165 @@
+/* Mobile Table Optimizations for NODO */
+
+@media (max-width: 640px) {
+    /* Hide table headers on mobile */
+    .table-mobile-responsive thead {
+        display: none;
+    }
+    
+    /* Convert table rows to cards */
+    .table-mobile-responsive tbody,
+    .table-mobile-responsive tr {
+        display: block;
+        width: 100%;
+    }
+    
+    .table-mobile-responsive tr {
+        margin-bottom: 1rem;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .table-mobile-responsive td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border: none;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .table-mobile-responsive td:last-child {
+        border-bottom: none;
+    }
+    
+    /* Add labels before content */
+    .table-mobile-responsive td:before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #374151;
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+    
+    /* Actions column */
+    .table-mobile-responsive td.project-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .table-mobile-responsive td.project-actions:before {
+        margin-bottom: 0.5rem;
+    }
+    
+    .table-mobile-responsive .btn-group {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+    
+    .table-mobile-responsive .btn-group .btn {
+        width: 100%;
+        margin: 0;
+    }
+    
+    /* Scroll wrapper for tables that can't be converted */
+    .table-scroll-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+    }
+    
+    .table-scroll-wrapper:after {
+        content: '→ Desliza';
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 1rem;
+        font-size: 0.75rem;
+        pointer-events: none;
+        opacity: 1;
+        transition: opacity 0.3s;
+    }
+    
+    .table-scroll-wrapper.scrolled:after {
+        opacity: 0;
+    }
+    
+    .table-scroll-wrapper table {
+        min-width: 600px;
+    }
+    
+    /* Striped tables */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9fafb;
+    }
+    
+    /* Hover effects */
+    .table-mobile-responsive tr:active {
+        background-color: #f3f4f6;
+    }
+}
+
+/* Tablet tables */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Reduce padding on tablet */
+    .table td,
+    .table th {
+        padding: 0.5rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Compact action buttons */
+    .table .btn-group .btn {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Desktop tables */
+@media (min-width: 1025px) {
+    .table-mobile-responsive {
+        display: table;
+    }
+    
+    .table-mobile-responsive thead {
+        display: table-header-group;
+    }
+    
+    .table-mobile-responsive tbody {
+        display: table-row-group;
+    }
+    
+    .table-mobile-responsive tr {
+        display: table-row;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border-radius: 0;
+    }
+    
+    .table-mobile-responsive td {
+        display: table-cell;
+        padding: 0.75rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .table-mobile-responsive td:before {
+        content: none;
+    }
+}

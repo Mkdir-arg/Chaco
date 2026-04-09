@@ -1,0 +1,194 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}{{ legajo_institucional.codigo }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-full mx-4 lg:mx-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-700 rounded-2xl shadow-2xl overflow-hidden">
+            <div class="relative p-8">
+                <div class="absolute inset-0 bg-black bg-opacity-10">
+                    <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%);"></div>
+                </div>
+                
+                <div class="relative z-10">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-6">
+                            <div class="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center backdrop-blur-sm border border-white border-opacity-30">
+                                <i class="fas fa-building text-3xl text-white"></i>
+                            </div>
+                            
+                            <div class="text-white">
+                                <h2 class="text-3xl font-bold mb-1">{{ legajo_institucional.institucion.nombre }}</h2>
+                                <p class="text-blue-100 text-lg">Código: {{ legajo_institucional.codigo }}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <a href="{% url 'legajos:legajo_institucional_editar' legajo_institucional.pk %}" class="bg-white bg-opacity-20 backdrop-blur-sm text-white px-6 py-3 rounded-xl hover:bg-opacity-30 transition-all duration-300 border border-white border-opacity-30 flex items-center space-x-2">
+                                <i class="fas fa-edit"></i>
+                                <span>Editar</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Información básica -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-flag text-green-300"></i>
+                                <span class="text-blue-100 text-sm font-medium">Estado</span>
+                            </div>
+                            <p class="text-white font-semibold">{{ legajo_institucional.get_estado_display }}</p>
+                        </div>
+                        
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-calendar text-yellow-300"></i>
+                                <span class="text-blue-100 text-sm font-medium">Apertura</span>
+                            </div>
+                            <p class="text-white font-semibold">{{ legajo_institucional.fecha_apertura|date:"d/m/Y" }}</p>
+                        </div>
+                        
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-user-tie text-pink-300"></i>
+                                <span class="text-blue-100 text-sm font-medium">Responsable</span>
+                            </div>
+                            <p class="text-white font-semibold text-sm">{{ legajo_institucional.responsable_NODO.get_full_name|default:"Sin asignar" }}</p>
+                        </div>
+                        
+                        <div class="bg-white bg-opacity-10 backdrop-blur-sm rounded-xl p-4 border border-white border-opacity-20">
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i class="fas fa-map-marker-alt text-red-300"></i>
+                                <span class="text-blue-100 text-sm font-medium">Ubicación</span>
+                            </div>
+                            <p class="text-white font-semibold text-sm">{{ legajo_institucional.institucion.municipio }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl shadow-lg border border-blue-100 p-8 mb-8">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg p-2 mr-3">
+                <i class="fas fa-chart-bar text-white text-lg"></i>
+            </div>
+            Dashboard Institucional
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-green-100 text-sm font-medium mb-1">Personal</p>
+                        <p class="text-3xl font-bold">{{ legajo_institucional.personal.count }}</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl p-6 text-white shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-purple-100 text-sm font-medium mb-1">Evaluaciones</p>
+                        <p class="text-3xl font-bold">{{ legajo_institucional.evaluaciones.count }}</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-4">
+                        <i class="fas fa-clipboard-check text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl p-6 text-white shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-blue-100 text-sm font-medium mb-1">Planes</p>
+                        <p class="text-3xl font-bold">{{ legajo_institucional.planes_fortalecimiento.count }}</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-4">
+                        <i class="fas fa-tasks text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-orange-500 to-red-600 rounded-xl p-6 text-white shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-orange-100 text-sm font-medium mb-1">Indicadores</p>
+                        <p class="text-3xl font-bold">{{ legajo_institucional.indicadores.count }}</p>
+                    </div>
+                    <div class="bg-white bg-opacity-20 rounded-full p-4">
+                        <i class="fas fa-chart-line text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gestión del Legajo -->
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-6">Gestión del Legajo Institucional</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                <div class="text-center mb-3">
+                    <i class="fas fa-users text-2xl text-green-500 mb-2"></i>
+                    <h4 class="font-semibold text-gray-900">Personal</h4>
+                    <p class="text-xs text-gray-600">{{ legajo_institucional.personal.count }} registrado{{ legajo_institucional.personal.count|pluralize }}</p>
+                </div>
+                <div class="space-y-2">
+                    <button class="block bg-green-600 text-white px-3 py-2 rounded text-sm hover:bg-green-700 transition-colors text-center w-full">
+                        Gestionar Personal
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                <div class="text-center mb-3">
+                    <i class="fas fa-clipboard-check text-2xl text-purple-500 mb-2"></i>
+                    <h4 class="font-semibold text-gray-900">Evaluaciones</h4>
+                    <p class="text-xs text-gray-600">{{ legajo_institucional.evaluaciones.count }} realizada{{ legajo_institucional.evaluaciones.count|pluralize }}</p>
+                </div>
+                <div class="space-y-2">
+                    <button class="block bg-purple-600 text-white px-3 py-2 rounded text-sm hover:bg-purple-700 transition-colors text-center w-full">
+                        Nueva Evaluación
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <div class="text-center mb-3">
+                    <i class="fas fa-tasks text-2xl text-blue-500 mb-2"></i>
+                    <h4 class="font-semibold text-gray-900">Planes</h4>
+                    <p class="text-xs text-gray-600">{{ legajo_institucional.planes_fortalecimiento.count }} plan{{ legajo_institucional.planes_fortalecimiento.count|pluralize:"es" }}</p>
+                </div>
+                <div class="space-y-2">
+                    <button class="block bg-blue-600 text-white px-3 py-2 rounded text-sm hover:bg-blue-700 transition-colors text-center w-full">
+                        Nuevo Plan
+                    </button>
+                </div>
+            </div>
+            
+            <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <div class="text-center mb-3">
+                    <i class="fas fa-chart-line text-2xl text-orange-500 mb-2"></i>
+                    <h4 class="font-semibold text-gray-900">Indicadores</h4>
+                    <p class="text-xs text-gray-600">{{ legajo_institucional.indicadores.count }} período{{ legajo_institucional.indicadores.count|pluralize }}</p>
+                </div>
+                <div class="space-y-2">
+                    <button class="block bg-orange-600 text-white px-3 py-2 rounded text-sm hover:bg-orange-700 transition-colors text-center w-full">
+                        Cargar Indicadores
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Dispositivos{% endblock %}
+
+{% block main-content %}
+<div class="mb-8">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-lora font-bold text-gray-900">Dispositivos de Red</h1>
+            <p class="text-gray-600 mt-2">Gestión de dispositivos de la red NODO</p>
+        </div>
+        {% if user.is_superuser %}
+        <a href="{% url 'configuracion:dispositivo_crear' %}" class="bg-arg-azul text-white px-6 py-3 rounded-xl hover:bg-arg-secundario transition-colors font-medium text-center">
+            <i class="fas fa-plus mr-2"></i>Nuevo Dispositivo
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        {% if dispositivos %}
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Nombre</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Tipo</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Ubicación</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Estado</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for dispositivo in dispositivos %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ dispositivo.nombre }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-900">{{ dispositivo.get_tipo_display }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ dispositivo.municipio }}, {{ dispositivo.provincia }}</td>
+                            <td class="px-6 py-4 text-sm">
+                                {% if dispositivo.activo %}
+                                    <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Activo</span>
+                                {% else %}
+                                    <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-sm">
+                                {% if user.is_superuser %}
+                                <div class="flex gap-2">
+                                    <a href="{% url 'configuracion:dispositivo_editar' dispositivo.pk %}" class="text-green-600 hover:text-green-800">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'configuracion:dispositivo_eliminar' dispositivo.pk %}" class="text-red-600 hover:text-red-800">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                                {% else %}
+                                    <span class="text-gray-400">Solo lectura</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="md:hidden divide-y divide-gray-200">
+                {% for dispositivo in dispositivos %}
+                <div class="p-4 hover:bg-gray-50">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="font-medium text-gray-900">{{ dispositivo.nombre }}</div>
+                        {% if user.is_superuser %}
+                        <div class="flex gap-2">
+                            <a href="{% url 'configuracion:dispositivo_editar' dispositivo.pk %}" class="text-green-600 hover:text-green-800 p-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="{% url 'configuracion:dispositivo_eliminar' dispositivo.pk %}" class="text-red-600 hover:text-red-800 p-2">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="text-sm text-gray-600 space-y-1">
+                        <div><span class="font-medium">Tipo:</span> {{ dispositivo.get_tipo_display }}</div>
+                        <div><span class="font-medium">Ubicación:</span> {{ dispositivo.municipio }}, {{ dispositivo.provincia }}</div>
+                        <div class="flex items-center gap-2 mt-2">
+                            {% if dispositivo.activo %}
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">Activo</span>
+                            {% else %}
+                                <span class="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">Inactivo</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-12 text-center">
+                <i class="fas fa-network-wired text-6xl text-gray-300 mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-900 mb-2">
+                    {% if user.is_superuser %}
+                        No hay dispositivos registrados en el sistema
+                    {% else %}
+                        No tiene dispositivos asignados como encargado
+                    {% endif %}
+                </h3>
+                {% if user.is_superuser %}
+                <p class="text-gray-600 mb-6">Comienza agregando el primer dispositivo</p>
+                <a href="{% url 'configuracion:dispositivo_crear' %}" class="bg-arg-azul text-white px-6 py-3 rounded-xl hover:bg-arg-secundario transition-colors">
+                    <i class="fas fa-plus mr-2"></i>Agregar Dispositivo
+                </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

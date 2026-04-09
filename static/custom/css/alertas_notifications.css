@@ -1,0 +1,95 @@
+/* Notificaciones de Alertas */
+.alert-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    min-width: 300px;
+    max-width: 400px;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.alert-toast.alert-critica {
+    animation: slideInRight 0.3s ease-out, pulse 1s infinite;
+}
+
+.alert-critica .flex {
+    @apply bg-red-50 border-red-300 text-red-800;
+}
+
+.alert-alta .flex {
+    @apply bg-orange-50 border-orange-300 text-orange-800;
+}
+
+.alert-media .flex {
+    @apply bg-yellow-50 border-yellow-300 text-yellow-800;
+}
+
+.alert-baja .flex {
+    @apply bg-blue-50 border-blue-300 text-blue-800;
+}
+
+/* Animaciones */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+/* Indicador de conexión WebSocket */
+#websocket-status {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 8px;
+}
+
+/* Contador de alertas */
+#alertas-counter {
+    @apply inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-600 rounded-full;
+    min-width: 20px;
+    height: 20px;
+}
+
+/* Modal crítico */
+.critical-modal {
+    backdrop-filter: blur(4px);
+}
+
+.critical-modal .animate-pulse {
+    animation: criticalPulse 1s ease-in-out infinite;
+}
+
+@keyframes criticalPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .alert-toast {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
+}
