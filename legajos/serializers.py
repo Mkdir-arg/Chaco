@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import (
-    Ciudadano, LegajoAtencion, EvaluacionInicial, 
-    PlanIntervencion, SeguimientoContacto, Derivacion, 
+    Ciudadano, EvaluacionInicial,
+    PlanIntervencion, SeguimientoContacto, Derivacion,
     EventoCritico, Profesional, AlertaCiudadano
 )
 from core.models import DispositivoRed
@@ -22,7 +22,7 @@ class CiudadanoSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'creado', 'modificado']
     
     def get_legajos_count(self, obj):
-        return getattr(obj, 'legajos_count', obj.legajos.count())
+        return getattr(obj, 'legajos_count', obj.inscripciones_programas.count())
 
 
 class DispositivoRedSerializer(serializers.ModelSerializer):
@@ -48,31 +48,6 @@ class ProfesionalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profesional
         fields = ['id', 'usuario', 'matricula', 'rol']
-
-
-class LegajoAtencionSerializer(serializers.ModelSerializer):
-    """Serializer para LegajoAtencion"""
-    ciudadano = CiudadanoSerializer(read_only=True)
-    dispositivo = DispositivoRedSerializer(read_only=True)
-    responsable = UserSerializer(read_only=True)
-    seguimientos_count = serializers.SerializerMethodField()
-    eventos_count = serializers.SerializerMethodField()
-    
-    class Meta:
-        model = LegajoAtencion
-        fields = [
-            'id', 'codigo', 'ciudadano', 'dispositivo', 'responsable',
-            'via_ingreso', 'fecha_admision', 'estado', 'plan_vigente',
-            'nivel_riesgo', 'notas', 'fecha_cierre', 'seguimientos_count',
-            'eventos_count', 'creado', 'modificado'
-        ]
-        read_only_fields = ['id', 'codigo', 'creado', 'modificado']
-    
-    def get_seguimientos_count(self, obj):
-        return getattr(obj, 'seguimientos_count', obj.seguimientos.count())
-    
-    def get_eventos_count(self, obj):
-        return getattr(obj, 'eventos_count', obj.eventos.count())
 
 
 class EvaluacionInicialSerializer(serializers.ModelSerializer):

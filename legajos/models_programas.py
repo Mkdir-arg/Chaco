@@ -15,7 +15,8 @@ class Programa(TimeStamped):
 
     class TipoPrograma(models.TextChoices):
         """Mantenido para compatibilidad con fixtures y tests existentes."""
-        ACOMPANAMIENTO_SEDRONAR = "ACOMPANAMIENTO_SEDRONAR", "Acompañamiento SEDRONAR"
+        ACOMPANAMIENTO_SEDRONAR = "ACOMPANAMIENTO_SEDRONAR", "Acompañamiento Social (legacy)"
+        ACOMPANAMIENTO_SOCIAL = "ACOMPANAMIENTO_SOCIAL", "Acompañamiento Social"
         NACHEC = "NACHEC", "ÑACHEC"
         ECONOMICO = "ECONOMICO", "Acompañamiento Económico"
         FAMILIAR = "FAMILIAR", "Acompañamiento Familiar"

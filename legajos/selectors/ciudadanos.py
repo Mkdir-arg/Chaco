@@ -2,7 +2,8 @@ from datetime import date
 
 from django.db.models import Q
 
-from ..models import Ciudadano, EventoCritico, LegajoAtencion, SeguimientoContacto
+from ..models import AlertaCiudadano, Ciudadano, EventoCritico, LegajoAtencion, SeguimientoContacto
+from ..models_programas import DerivacionPrograma, InscripcionPrograma, Programa
 from ..models_nachec import (
     CasoNachec,
     EvaluacionVulnerabilidad,
@@ -66,28 +67,27 @@ def get_ciudadanos_queryset(search=""):
 
 
 def get_ciudadanos_dashboard_metrics():
-    total_seguimientos = SeguimientoContacto.objects.count()
-    seguimientos_adecuados = SeguimientoContacto.objects.filter(
-        adherencia="ADECUADA"
+    total_inscripciones_activas = InscripcionPrograma.objects.filter(
+        estado__in=[InscripcionPrograma.Estado.ACTIVO, InscripcionPrograma.Estado.EN_SEGUIMIENTO]
     ).count()
+    total_inscripciones = InscripcionPrograma.objects.count()
     tasa_adherencia = round(
-        (seguimientos_adecuados / total_seguimientos * 100)
-        if total_seguimientos > 0
+        (total_inscripciones_activas / total_inscripciones * 100)
+        if total_inscripciones > 0
         else 0
     )
 
     return {
         "total_ciudadanos": Ciudadano.objects.filter(activo=True).count(),
-        "legajos_activos": LegajoAtencion.objects.filter(
-            estado__in=["ABIERTO", "EN_SEGUIMIENTO"]
-        ).count(),
-        "alertas_criticas": EventoCritico.objects.count(),
-        "seguimientos_hoy": SeguimientoContacto.objects.filter(
-            creado__date=date.today()
+        "legajos_activos": total_inscripciones_activas,
+        "alertas_criticas": AlertaCiudadano.objects.filter(activa=True).count(),
+        "seguimientos_hoy": InscripcionPrograma.objects.filter(
+            fecha_inscripcion=date.today()
         ).count(),
         "tasa_adherencia": tasa_adherencia,
-        "casos_alto_riesgo": LegajoAtencion.objects.filter(
-            nivel_riesgo="ALTO"
+        "casos_alto_riesgo": DerivacionPrograma.objects.filter(
+            estado=DerivacionPrograma.Estado.PENDIENTE,
+            urgencia=DerivacionPrograma.Urgencia.ALTA,
         ).count(),
     }
 
@@ -108,10 +108,25 @@ def build_ciudadano_detail_context(ciudadano, user=None):
     except Exception:
         pass
 
+    acompanamientos = InscripcionPrograma.objects.filter(
+        ciudadano=ciudadano,
+        programa__tipo__in=[
+            Programa.TipoPrograma.ACOMPANAMIENTO_SOCIAL,
+            Programa.TipoPrograma.ACOMPANAMIENTO_SEDRONAR,
+        ],
+        estado__in=[InscripcionPrograma.Estado.ACTIVO, InscripcionPrograma.Estado.EN_SEGUIMIENTO],
+    ).select_related('programa', 'responsable').order_by('-fecha_inscripcion')
+
     context = {
         'puede_ver_sensible': puede_ver_sensible,
-        'legajos': ciudadano.legajos.select_related('dispositivo', 'responsable').order_by('-fecha_admision'),
-        'solapas': SolapasService.obtener_solapas_ciudadano(ciudadano),
+        'legajos': LegajoAtencion.objects.none(),
+        'acompanamientos': acompanamientos,
+        'acompanamientos_activos_count': acompanamientos.count(),
+        'solapas': [
+            solapa
+            for solapa in SolapasService.obtener_solapas_ciudadano(ciudadano)
+            if solapa['id'] != 'legajos' and 'ACOMPANAMIENTO' not in solapa['id']
+        ],
         'programas_activos': SolapasService.obtener_programas_activos(ciudadano),
     }
 
@@ -127,14 +142,7 @@ def build_ciudadano_detail_context(ciudadano, user=None):
         context['turnos_ciudadano'] = []
 
     # --- Instituciones vinculadas (vía legajos) ---
-    from core.models import Institucion
-    institucion_ids = (
-        ciudadano.legajos
-        .exclude(dispositivo=None)
-        .values_list('dispositivo_id', flat=True)
-        .distinct()
-    )
-    context['instituciones_ciudadano'] = Institucion.objects.filter(pk__in=institucion_ids)
+    context['instituciones_ciudadano'] = []
 
     # --- Conversaciones ---
     try:
@@ -162,7 +170,6 @@ def build_ciudadano_detail_context(ciudadano, user=None):
     )
 
     # --- Línea de tiempo ---
-    from ..models_programas import InscripcionPrograma
     linea = []
 
     for ins in InscripcionPrograma.objects.filter(ciudadano=ciudadano).select_related('programa').order_by('-fecha_inscripcion')[:20]:
@@ -172,15 +179,6 @@ def build_ciudadano_detail_context(ciudadano, user=None):
             'color_hex': ins.programa.color or '#3B82F6',
             'titulo': f'Inscripción a {ins.programa.nombre}',
             'descripcion': ins.get_estado_display(),
-        })
-
-    for legajo in ciudadano.legajos.select_related('dispositivo').order_by('-fecha_admision')[:10]:
-        linea.append({
-            'fecha': legajo.fecha_admision,
-            'icono': 'folder-open',
-            'color_hex': '#6366F1',
-            'titulo': f'Legajo {legajo.codigo}',
-            'descripcion': legajo.dispositivo.nombre if legajo.dispositivo else '',
         })
 
     for deriv in ciudadano.derivaciones_programas.select_related('programa_destino').order_by('-creado')[:10]:

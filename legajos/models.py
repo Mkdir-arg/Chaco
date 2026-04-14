@@ -287,7 +287,7 @@ class LegajoAtencion(LegajoBase):
     
     def get_absolute_url(self):
         from django.urls import reverse
-        return reverse('legajos:detalle', kwargs={'pk': self.pk})
+        return reverse('legajos:ciudadano_detalle', kwargs={'pk': self.ciudadano_id})
     
     def puede_cerrar(self):
         """Verifica si el legajo puede cerrarse"""
@@ -841,12 +841,13 @@ class LegajoInstitucional(TimeStamped):
         help_text="Si es CERRADO, bloquea todos los programas de la institución"
     )
     
-    responsable_sedronar = models.ForeignKey(
+    responsable_asignado = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="legajos_institucionales_responsable"
+        related_name="legajos_institucionales_responsable",
+        verbose_name="Responsable asignado"
     )
     fecha_apertura = models.DateField(auto_now_add=True)
     fecha_cierre = models.DateField(null=True, blank=True)

@@ -1,6 +1,5 @@
 """Views agrupadas de la app de legajos."""
 
-from .acompanamiento import crear_legajo_acompanamiento  # noqa: F401
 from .alertas import (  # noqa: F401
     alertas_count_ajax,
     alertas_dashboard,
@@ -10,42 +9,13 @@ from .alertas import (  # noqa: F401
     test_alertas_page,
 )
 from .api_derivaciones import derivaciones_programa_api  # noqa: F401
-from .clinico import (  # noqa: F401
-    CambiarResponsableView,
-    CerrarAlertaEventoView,
-    DerivacionCreateView,
-    DerivacionListView,
-    DerivacionUpdateView,
-    DispositivoDerivacionesView,
-    EvaluacionInicialView,
-    EvaluacionListView,
-    EventoCriticoCreateView,
-    EventoListView,
-    EventoUpdateView,
-    ExportarCSVView,
-    LegajoCerrarView,
-    LegajoDetailView,
-    LegajoListView,
-    LegajoReabrirView,
-    PlanIntervencionView,
-    PlanListView,
-    PlanUpdateView,
-    ReportesView,
-    SeguimientoCreateView,
-    SeguimientoListView,
-    SeguimientoUpdateView,
-)
 from .ciudadanos import (  # noqa: F401
-    AdmisionPaso1View,
-    AdmisionPaso2View,
-    AdmisionPaso3View,
     CiudadanoConfirmarView,
     CiudadanoCreateView,
     CiudadanoDetailView,
     CiudadanoListView,
     CiudadanoManualView,
     CiudadanoUpdateView,
-    LegajoCreateView,
 )
 from .contactos_api import (  # noqa: F401
     actividades_ciudadano_api,
@@ -124,10 +94,6 @@ from .operativa import (  # noqa: F401
     InstitucionDeleteView,
     InstitucionListView,
     InstitucionUpdateView,
-    LegajoInstitucionalCreateView,
-    LegajoInstitucionalDetailView,
-    LegajoInstitucionalListView,
-    LegajoInstitucionalUpdateView,
     actividades_por_institucion,
     marcar_etapa_plan,
 )

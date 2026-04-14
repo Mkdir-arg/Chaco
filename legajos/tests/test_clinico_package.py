@@ -1,15 +1,10 @@
 from django.test import SimpleTestCase
 
-from legajos.views import LegajoDetailView, LegajoListView, ReportesView
-from legajos.views.clinico import (
-    LegajoDetailView as LegajoDetailViewModule,
-    LegajoListView as LegajoListViewModule,
-    ReportesView as ReportesViewModule,
-)
+import legajos.views as legajos_views
 
 
 class LegajosClinicoPackageTests(SimpleTestCase):
-    def test_package_expone_views_clinicas(self):
-        self.assertIs(LegajoListView, LegajoListViewModule)
-        self.assertIs(LegajoDetailView, LegajoDetailViewModule)
-        self.assertIs(ReportesView, ReportesViewModule)
+    def test_package_no_expone_views_clinicas_retiradas(self):
+        self.assertFalse(hasattr(legajos_views, "LegajoListView"))
+        self.assertFalse(hasattr(legajos_views, "LegajoDetailView"))
+        self.assertFalse(hasattr(legajos_views, "ReportesView"))

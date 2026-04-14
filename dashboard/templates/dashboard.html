@@ -192,9 +192,9 @@
                                 <i class="fas fa-users"></i>
                                 Gestionar Ciudadanos
                             </a>
-                            <a href="{% url 'legajos:lista' %}" class="btn-nodo btn-secondary btn-base">
-                                <i class="fas fa-folder"></i>
-                                Ver Legajos
+                            <a href="{% url 'legajos:programas' %}" class="btn-nodo btn-secondary btn-base">
+                                <i class="fas fa-clipboard-list"></i>
+                                Ver Programas
                             </a>
                         </div>
                     </div>
@@ -211,7 +211,7 @@
             <ul class="divide-y divide-gray-200">
                 {% for legajo in legajos_recientes %}
                 <li>
-                    <a href="{% url 'legajos:detalle' legajo.pk %}" class="block hover:bg-gray-50">
+                    <a href="{% url 'legajos:ciudadano_detalle' legajo.ciudadano.pk %}" class="block hover:bg-gray-50">
                         <div class="px-4 py-4 sm:px-6">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
@@ -283,9 +283,9 @@
                 <div class="flex items-center justify-between mb-3">
                     <i class="fas fa-folder-plus text-xl text-[#10B981]"></i>
                 </div>
-                <a href="{% url 'legajos:admision_paso1' %}" class="block">
-                    <p class="text-base font-semibold mb-1 text-[#252F40]">Nuevo Registro</p>
-                    <p class="text-xs text-[#8C8C8C]">Crear legajo rápido</p>
+                <a href="{% url 'legajos:ciudadano_nuevo' %}" class="block">
+                    <p class="text-base font-semibold mb-1 text-[#252F40]">Nuevo Ciudadano</p>
+                    <p class="text-xs text-[#8C8C8C]">Alta rápida por RENAPER</p>
                 </a>
             </div>
 

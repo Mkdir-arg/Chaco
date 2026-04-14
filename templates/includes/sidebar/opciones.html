@@ -73,25 +73,25 @@
                 </template>
             </div>
 
-            <!-- Legajos -->
+            <!-- Ciudadanos -->
             {% if request.user|has_group:"Ciudadanos" %}
                 <div x-data="{ open: {% if 'legajos/lista' in pagina_actual or 'legajos/ciudadanos' in pagina_actual or 'legajos/admision' in pagina_actual or 'instituciones' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
                     <template x-if="!sidebarCollapsed">
                         <div>
                             <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
                                 <i class="fas fa-folder-open text-base"></i>
-                                <span class="flex-1">Legajos</span>
+                                <span class="flex-1">Ciudadanos</span>
                                 <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="{ 'rotate-180': open }"></i>
                             </button>
                             <div x-show="open" x-transition class="mt-1 ml-6 space-y-1">
                                 <a href="{% url 'legajos:lista' %}" class="{% if 'legajos/lista' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
-                                    <i class="fas fa-list mr-2 text-xs {% if 'legajos/lista' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Todos los Legajos
+                                    <i class="fas fa-list mr-2 text-xs {% if 'legajos/lista' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Vista general
                                 </a>
                                 <a href="{% url 'legajos:ciudadanos' %}" class="{% if 'legajos/ciudadanos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
-                                    <i class="fas fa-users mr-2 text-xs {% if 'legajos/ciudadanos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Ciudadano
+                                    <i class="fas fa-users mr-2 text-xs {% if 'legajos/ciudadanos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Ciudadanos
                                 </a>
-                                <a href="{% url 'legajos:admision_paso1' %}" class="{% if 'legajos/admision' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
-                                    <i class="fas fa-folder-plus mr-2 text-xs {% if 'legajos/admision' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Acompañamiento
+                                <a href="{% url 'legajos:ciudadano_nuevo' %}" class="{% if 'legajos/admision' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
+                                    <i class="fas fa-user-plus mr-2 text-xs {% if 'legajos/admision' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Nuevo ciudadano
                                 </a>
                                 <a href="{% url 'legajos:instituciones' %}" class="{% if 'instituciones' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
                                     <i class="fas fa-building mr-2 text-xs {% if 'instituciones' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Instituciones

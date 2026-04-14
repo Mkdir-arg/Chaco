@@ -7,7 +7,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from legajos.models import AlertaCiudadano, Ciudadano, LegajoAtencion, SeguimientoContacto
+from legajos.models import AlertaCiudadano, Ciudadano
+from legajos.models_programas import DerivacionPrograma, InscripcionPrograma
 from users.models import User
 
 import logging
@@ -20,13 +21,13 @@ logger = logging.getLogger(__name__)
 def metricas_dashboard(request):
     """Obtiene metricas principales del dashboard."""
     total_ciudadanos = Ciudadano.objects.count()
-    legajos_activos = LegajoAtencion.objects.filter(estado__in=["ABIERTO", "EN_SEGUIMIENTO"]).count()
+    legajos_activos = InscripcionPrograma.objects.filter(estado__in=["ACTIVO", "EN_SEGUIMIENTO"]).count()
     alertas_activas = AlertaCiudadano.objects.filter(activa=True).count()
 
     hoy = timezone.now().date()
-    seguimientos_hoy = SeguimientoContacto.objects.filter(creado__date=hoy).count()
+    seguimientos_hoy = InscripcionPrograma.objects.filter(fecha_inscripcion=hoy).count()
 
-    estados = LegajoAtencion.objects.values("estado").annotate(count=Count("id"))
+    estados = InscripcionPrograma.objects.values("estado").annotate(count=Count("id"))
     estados_dict = {estado["estado"]: estado["count"] for estado in estados}
 
     hace_24h = timezone.now() - timedelta(hours=24)
@@ -41,9 +42,9 @@ def metricas_dashboard(request):
                 "alertas": alertas_activas,
             },
             "estados_legajos": {
-                "abiertos": estados_dict.get("ABIERTO", 0),
+                "abiertos": estados_dict.get("ACTIVO", 0),
                 "seguimiento": estados_dict.get("EN_SEGUIMIENTO", 0),
-                "derivados": estados_dict.get("DERIVADO", 0),
+                "derivados": estados_dict.get("PENDIENTE", 0),
                 "cerrados": estados_dict.get("CERRADO", 0),
             },
             "usuarios_conectados": usuarios_activos,
@@ -114,42 +115,41 @@ def alertas_criticas(request):
 def actividad_reciente(request):
     """Obtiene actividad reciente del sistema."""
     try:
-        legajos_nuevos = LegajoAtencion.objects.select_related("ciudadano", "responsable").order_by("-creado")[:3]
-        seguimientos = (
-            SeguimientoContacto.objects.select_related("legajo__ciudadano", "profesional__usuario").order_by("-creado")[:3]
-        )
+        inscripciones = InscripcionPrograma.objects.select_related("ciudadano", "programa", "responsable").order_by("-creado")[:4]
+        derivaciones = DerivacionPrograma.objects.select_related(
+            "ciudadano", "programa_origen", "programa_destino", "derivado_por"
+        ).order_by("-creado")[:3]
         alertas = AlertaCiudadano.objects.select_related("ciudadano").filter(activa=True).order_by("-creado")[:2]
 
         actividades = []
 
-        for legajo in legajos_nuevos:
-            apellido = getattr(legajo.ciudadano, "apellido", "") or ""
-            nombre = getattr(legajo.ciudadano, "nombre", "") or ""
+        for inscripcion in inscripciones:
+            apellido = getattr(inscripcion.ciudadano, "apellido", "") or ""
+            nombre = getattr(inscripcion.ciudadano, "nombre", "") or ""
             ciudadano_nombre = f"{apellido}, {nombre}".strip(", ").strip() or "Ciudadano"
-            usuario = legajo.responsable.get_full_name() if legajo.responsable else "Sistema"
+            usuario = inscripcion.responsable.get_full_name() if inscripcion.responsable else "Sistema"
 
             actividades.append(
                 {
-                    "descripcion": f"Nuevo legajo para {ciudadano_nombre}",
+                    "descripcion": f"Nueva inscripción en {inscripcion.programa.nombre} para {ciudadano_nombre}",
                     "usuario": usuario,
-                    "tiempo": _tiempo_relativo(legajo.creado),
-                    "timestamp": legajo.creado.isoformat(),
+                    "tiempo": _tiempo_relativo(inscripcion.creado),
+                    "timestamp": inscripcion.creado.isoformat(),
                     "tipo": "create",
                     "icono": "fas fa-plus",
                 }
             )
 
-        for seguimiento in seguimientos:
-            usuario = "Sistema"
-            if seguimiento.profesional and seguimiento.profesional.usuario:
-                usuario = seguimiento.profesional.usuario.get_full_name() or seguimiento.profesional.usuario.username
+        for derivacion in derivaciones:
+            usuario = derivacion.derivado_por.get_full_name() if derivacion.derivado_por else "Sistema"
+            destino = derivacion.programa_destino.nombre if derivacion.programa_destino else "Programa"
 
             actividades.append(
                 {
-                    "descripcion": f"Seguimiento: {seguimiento.get_tipo_display()}",
+                    "descripcion": f"Derivación a {destino}",
                     "usuario": usuario,
-                    "tiempo": _tiempo_relativo(seguimiento.creado),
-                    "timestamp": seguimiento.creado.isoformat(),
+                    "tiempo": _tiempo_relativo(derivacion.creado),
+                    "timestamp": derivacion.creado.isoformat(),
                     "tipo": "update",
                     "icono": "fas fa-check",
                 }
@@ -191,8 +191,8 @@ def tendencias_datos(request):
         from django.db.models.functions import TruncDate
 
         legajos_por_fecha = (
-            LegajoAtencion.objects.filter(fecha_apertura__gte=fecha_inicio)
-            .annotate(fecha=TruncDate("fecha_apertura"))
+            InscripcionPrograma.objects.filter(fecha_inscripcion__gte=fecha_inicio)
+            .annotate(fecha=TruncDate("fecha_inscripcion"))
             .values("fecha")
             .annotate(count=Count("id"))
             .order_by("fecha")

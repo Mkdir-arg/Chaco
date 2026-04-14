@@ -101,7 +101,7 @@
                                 <i class="fas fa-folder text-[#3B82F6]"></i>
                                 <span class="text-[#8C8C8C] text-sm font-medium">Acompañamiento</span>
                             </div>
-                            <p class="text-[#252F40] font-semibold text-xl">{{ legajos.count }}</p>
+                            <p class="text-[#252F40] font-semibold text-xl">{{ acompanamientos_activos_count }}</p>
                         </div>
                     </div>
                 </div>
@@ -269,7 +269,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-[#8C8C8C] text-sm font-medium mb-1">Total Acompañamiento</p>
-                        <p class="text-3xl font-bold text-[#252F40]" id="total-legajos">{{ legajos.count }}</p>
+                        <p class="text-3xl font-bold text-[#252F40]" id="total-legajos">{{ acompanamientos_activos_count }}</p>
                     </div>
                     <div class="bg-[#3B82F6] bg-opacity-10 rounded-full p-4">
                         <i class="fas fa-folder text-2xl text-[#3B82F6]"></i>
@@ -469,7 +469,7 @@
 
     <!-- Tab: Acompañamiento (solo si tiene programas activos) -->
     {% for solapa in solapas %}
-    {% if not solapa.estatica and 'ACOMPANAMIENTO_SEDRONAR' in solapa.id %}
+    {% if not solapa.estatica and 'ACOMPANAMIENTO' in solapa.id %}
     <div id="tab-{{ solapa.id }}" class="tab-content hidden">
     <div class="grid grid-cols-1 gap-8">
 
@@ -560,9 +560,9 @@
                                             <p class="text-sm text-gray-500">{{ legajo.dispositivo.nombre }}</p>
                                         </div>
                                     </div>
-                                    <a href="{% url 'legajos:detalle' legajo.pk %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                                    <a href="{% url 'legajos:ciudadano_detalle' ciudadano.pk %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
                                         <i class="fas fa-eye"></i>
-                                        <span>Ver Detalle</span>
+                                        <span>Ver Ciudadano</span>
                                     </a>
                                 </div>
 
@@ -694,12 +694,8 @@
                             <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center">
                                 <i class="fas fa-folder-open text-4xl text-gray-400"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-[#252F40] mb-2">Sin legajos registrados</h3>
-                            <p class="text-[#8C8C8C] mb-6 max-w-md mx-auto">Este ciudadano no tiene legajos de atención. Crea el primer legajo para comenzar el seguimiento.</p>
-                            <a href="{% url 'legajos:admision_paso1' %}?ciudadano={{ ciudadano.pk }}" class="inline-flex items-center bg-[#3B82F6] text-white px-6 py-3 rounded-lg hover:bg-[#2563EB] transition-all duration-300 shadow-sm hover:shadow-md">
-                                <i class="fas fa-plus mr-2"></i>
-                                Crear Primer Acompañamiento
-                            </a>
+                            <h3 class="text-xl font-semibold text-[#252F40] mb-2">Sin acompañamientos clínicos activos</h3>
+                            <p class="text-[#8C8C8C] max-w-md mx-auto">La ficha del ciudadano se mantiene activa con programas, turnos, conversaciones e historial general.</p>
                         </div>
                     {% endif %}
             </div>
@@ -834,7 +830,7 @@
             {% else %}
             <div class="text-center py-16">
                 <i class="fas fa-building text-4xl text-gray-200 mb-3"></i>
-                <p class="text-[#8C8C8C] text-sm">No hay instituciones vinculadas a través de legajos de atención.</p>
+                <p class="text-[#8C8C8C] text-sm">No hay instituciones vinculadas con datos activos del ciudadano.</p>
             </div>
             {% endif %}
         </div>
@@ -1287,7 +1283,7 @@ function cambiarTab(tabName) {
     }
     
     // Cargar datos de legajos si se abre la pestaña de acompañamiento
-    if (tabName.startsWith('programa_ACOMPANAMIENTO_SEDRONAR')) {
+    if (tabName.startsWith('programa_ACOMPANAMIENTO')) {
         cargarDatosLegajos();
     }
 }

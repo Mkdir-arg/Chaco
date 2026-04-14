@@ -14,6 +14,22 @@
 
 ---
 
+## 2026-04-14 — Retiro funcional de legajos clínicos e institucionales
+
+**User Story:** Como equipo de desarrollo quiero retirar del flujo activo los legajos de atención e institucionales para concentrar la operación en la ficha del ciudadano y en programas, sin perder compatibilidad con datos históricos.
+
+**Archivos modificados:**
+- `legajos/urls.py`, `legajos/views/deprecated.py` — rutas legacy redirigidas fuera de los legajos clínicos e institucionales
+- `legajos/selectors/ciudadanos.py`, `legajos/services/solapas.py`, `legajos/templates/legajos/ciudadano_detail.html` — hub del ciudadano sin tab de legajos y con resumen basado en programas
+- `dashboard/views/home.py`, `dashboard/api_views/__init__.py`, `dashboard/utils.py` — métricas reemplazadas por inscripciones y derivaciones activas
+- `legajos/api_urls.py`, `legajos/admin.py` — sin exposición directa de `LegajoAtencion` en API REST ni admin principal
+- `legajos/views/institucional.py`, `configuracion/templates/configuracion/institucion_detail.html` — detalle institucional sin alta automática de `LegajoInstitucional`
+- `legajos/tests/test_ciudadanos_admision.py`, `legajos/tests/test_legajo_workflow.py` — pruebas adaptadas al retiro funcional
+
+**Descripción:** Se retiró el acceso activo a `LegajoAtencion` y `LegajoInstitucional` sin borrar tablas históricas. Las rutas legacy ahora redirigen a la ficha del ciudadano o al detalle programático de institución, el dashboard y el hub del ciudadano trabajan con programas e inscripciones activas, y se eliminó la exposición directa de estos legajos en la API REST y en el admin principal.
+
+---
+
 ## 2026-04-03 — DX-059 Stack local Docker simplificado
 
 **User Story:** Como equipo de desarrollo quiero levantar el entorno local con `docker compose up` y con el menor bootstrap posible para reducir el tiempo hasta entorno usable.

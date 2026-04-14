@@ -7,7 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from core.cache_decorators import cache_view
-from legajos.models import AlertaCiudadano, Ciudadano, LegajoAtencion, SeguimientoContacto
+from legajos.models import AlertaCiudadano, Ciudadano
+from legajos.models_programas import InscripcionPrograma
 from users.models import User
 
 from dashboard.utils import contar_ciudadanos, contar_usuarios
@@ -43,8 +44,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         hoy = timezone.now().date()
         inicio_mes = hoy.replace(day=1)
-        context["registros_mes"] = LegajoAtencion.objects.filter(
-            fecha_apertura__gte=inicio_mes
+        context["registros_mes"] = InscripcionPrograma.objects.filter(
+            fecha_inscripcion__gte=inicio_mes
         ).count()
 
         return context

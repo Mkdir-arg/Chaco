@@ -9,14 +9,14 @@
         <!-- Header -->
         <div class="flex items-center justify-between animate-fade-in">
             <div>
-                <h1 class="text-3xl font-bold text-[#252F40]">Ciudadanos en Tratamiento</h1>
+                <h1 class="text-3xl font-bold text-[#252F40]">Ciudadanos registrados</h1>
                 <p class="text-sm text-[#8C8C8C] mt-1">
-                    {{ metricas.legajos_activos }} legajos activos
+                    {{ metricas.legajos_activos }} programas activos
                 </p>
             </div>
             <a href="{% url 'legajos:ciudadano_nuevo' %}" class="btn-nodo btn-brand btn-base">
                 <i class="fas fa-plus"></i>
-                Nueva Admisión
+                Nuevo Ciudadano
             </a>
         </div>
 
@@ -36,7 +36,7 @@
                     <i class="fas fa-folder-open text-2xl" style="background: linear-gradient(180deg, {{ branding.dashboard.metric_cards.icon_gradient_start }} 0%, {{ branding.dashboard.metric_cards.icon_gradient_end }} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
                 </div>
                 <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ metricas.legajos_activos }}</p>
-                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Legajos Activos</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Programas Activos</p>
             </div>
 
             <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.2s">
@@ -45,7 +45,7 @@
                     <span class="w-2 h-2 bg-red-500 rounded-full"></span>
                 </div>
                 <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ metricas.alertas_criticas }}</p>
-                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Alertas Críticas</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Alertas Activas</p>
             </div>
 
             <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.3s">
@@ -53,7 +53,7 @@
                     <i class="fas fa-calendar-check text-2xl" style="background: linear-gradient(180deg, {{ branding.dashboard.metric_cards.icon_gradient_start }} 0%, {{ branding.dashboard.metric_cards.icon_gradient_end }} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
                 </div>
                 <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ metricas.seguimientos_hoy }}</p>
-                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Seguimientos Hoy</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Altas Hoy</p>
             </div>
 
             <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.4s">
@@ -61,7 +61,7 @@
                     <i class="fas fa-chart-line text-2xl" style="background: linear-gradient(180deg, {{ branding.dashboard.metric_cards.icon_gradient_start }} 0%, {{ branding.dashboard.metric_cards.icon_gradient_end }} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
                 </div>
                 <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ metricas.tasa_adherencia }}%</p>
-                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Tasa Adherencia</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Participación Activa</p>
             </div>
 
             <div class="bg-white rounded-xl p-5 border border-[#E5E7EB] shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style="animation-delay: 0.5s">
@@ -70,7 +70,7 @@
                     <span class="w-2 h-2 bg-red-500 rounded-full"></span>
                 </div>
                 <p class="text-3xl font-bold mb-1 text-[#252F40]">{{ metricas.casos_alto_riesgo }}</p>
-                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Casos Alto Riesgo</p>
+                <p class="text-xs text-[#8C8C8C] uppercase tracking-wide">Derivaciones Altas</p>
             </div>
         </div>
 

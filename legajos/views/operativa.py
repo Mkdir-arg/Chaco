@@ -14,48 +14,7 @@ from configuracion.forms import InstitucionForm
 from core.models import Institucion
 
 from ..forms import InscribirActividadForm
-from ..models import InscriptoActividad, LegajoAtencion, LegajoInstitucional, PlanFortalecimiento, PlanIntervencion
-
-
-class LegajoInstitucionalListView(LoginRequiredMixin, ListView):
-    model = LegajoInstitucional
-    template_name = 'legajos/legajo_institucional_list.html'
-    context_object_name = 'legajos_institucionales'
-    paginate_by = 20
-
-    def get_queryset(self):
-        return LegajoInstitucional.objects.select_related('institucion', 'responsable_sedronar').order_by('-fecha_apertura')
-
-
-class LegajoInstitucionalDetailView(LoginRequiredMixin, DetailView):
-    model = LegajoInstitucional
-    template_name = 'legajos/legajo_institucional_detail.html'
-    context_object_name = 'legajo_institucional'
-
-
-class LegajoInstitucionalCreateView(LoginRequiredMixin, CreateView):
-    model = LegajoInstitucional
-    template_name = 'legajos/legajo_institucional_form.html'
-    fields = ['institucion', 'responsable_sedronar', 'observaciones']
-
-    def get_initial(self):
-        initial = super().get_initial()
-        institucion_id = self.request.GET.get('institucion')
-        if institucion_id:
-            initial['institucion'] = institucion_id
-        return initial
-
-    def get_success_url(self):
-        return reverse_lazy('legajos:legajo_institucional_detalle', kwargs={'pk': self.object.pk})
-
-
-class LegajoInstitucionalUpdateView(LoginRequiredMixin, UpdateView):
-    model = LegajoInstitucional
-    template_name = 'legajos/legajo_institucional_form.html'
-    fields = ['estado', 'responsable_sedronar', 'observaciones']
-
-    def get_success_url(self):
-        return reverse_lazy('legajos:legajo_institucional_detalle', kwargs={'pk': self.object.pk})
+from ..models import InscriptoActividad, LegajoAtencion, PlanFortalecimiento, PlanIntervencion
 
 
 class InstitucionListView(LoginRequiredMixin, ListView):

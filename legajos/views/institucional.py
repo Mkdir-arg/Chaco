@@ -13,7 +13,6 @@ from datetime import timedelta
 import json
 
 from core.models import Institucion
-from ..models import LegajoInstitucional
 from ..models_institucional import (
     InstitucionPrograma,
     DerivacionCiudadano,
@@ -46,12 +45,17 @@ def institucion_detalle_programatico(request, pk):
     Genera solapas estáticas + dinámicas según programas activos.
     """
     institucion = get_object_or_404(Institucion, pk=pk)
-    
-    # Obtener o crear legajo institucional
-    legajo, created = LegajoInstitucional.objects.get_or_create(
-        institucion=institucion,
-        defaults={'responsable_sedronar': request.user}
-    )
+
+    estado_badge_class = {
+        'APROBADO': 'bg-green-100 text-green-800',
+        'REVISION': 'bg-yellow-100 text-yellow-800',
+        'OBSERVADO': 'bg-yellow-100 text-yellow-800',
+        'ENVIADO': 'bg-blue-100 text-blue-800',
+        'BORRADOR': 'bg-gray-100 text-gray-800',
+    }.get(institucion.estado_registro, 'bg-red-100 text-red-800')
+    estado_institucional = institucion.get_estado_registro_display()
+    codigo_institucional = f'INST-{institucion.id:04d}'
+    personal = []
     
     # Solapas estáticas
     solapas = [
@@ -193,7 +197,10 @@ def institucion_detalle_programatico(request, pk):
     
     context = {
         'institucion': institucion,
-        'legajo': legajo,
+        'estado_badge_class': estado_badge_class,
+        'estado_institucional': estado_institucional,
+        'codigo_institucional': codigo_institucional,
+        'personal': personal,
         'solapas': solapas,
         'total_derivaciones_pendientes': total_derivaciones_pendientes,
         'total_casos_activos': total_casos_activos,

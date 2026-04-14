@@ -1,14 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .api_views import (
-    CiudadanoViewSet, LegajoAtencionViewSet, EvaluacionInicialViewSet,
+    CiudadanoViewSet, EvaluacionInicialViewSet,
     PlanIntervencionViewSet, SeguimientoContactoViewSet, 
     DerivacionViewSet, EventoCriticoViewSet, AlertasViewSet
 )
 
 router = DefaultRouter()
 router.register(r'ciudadanos', CiudadanoViewSet)
-router.register(r'legajos', LegajoAtencionViewSet)
 router.register(r'evaluaciones', EvaluacionInicialViewSet)
 router.register(r'planes', PlanIntervencionViewSet)
 router.register(r'seguimientos', SeguimientoContactoViewSet)

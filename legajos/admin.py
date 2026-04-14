@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Ciudadano, Profesional, LegajoAtencion, Consentimiento, EvaluacionInicial, Objetivo, PlanIntervencion, SeguimientoContacto, Derivacion, EventoCritico, Adjunto, AlertaEventoCritico
+from .models import Ciudadano, Profesional, Consentimiento, EvaluacionInicial, Objetivo, PlanIntervencion, SeguimientoContacto, Derivacion, EventoCritico, Adjunto, AlertaEventoCritico
 from .models_programas import Programa, InscripcionPrograma, DerivacionPrograma
 from .models_institucional import (
     InstitucionPrograma,
@@ -46,41 +46,6 @@ class ProfesionalAdmin(admin.ModelAdmin):
     
     def get_queryset(self, request):
         return super().get_queryset(request).select_related('usuario')
-
-
-@admin.register(LegajoAtencion)
-class LegajoAtencionAdmin(admin.ModelAdmin):
-    list_display = ("codigo_corto", "ciudadano", "dispositivo", "estado", "nivel_riesgo", "plan_vigente", "fecha_apertura")
-    list_filter = ("estado", "nivel_riesgo", "dispositivo__provincia", "dispositivo__tipo", "via_ingreso", "plan_vigente")
-    search_fields = ("codigo", "ciudadano__dni", "ciudadano__apellido", "ciudadano__nombre")
-    readonly_fields = ("id", "codigo", "creado", "modificado", "fecha_apertura", "dias_desde_admision")
-    
-    def get_queryset(self, request):
-        return super().get_queryset(request).select_related('ciudadano', 'dispositivo', 'responsable')
-    
-    def codigo_corto(self, obj):
-        return f"{obj.codigo[:8]}..."
-    codigo_corto.short_description = 'Código'
-    
-    fieldsets = (
-        ("Información Básica", {
-            "fields": ("codigo", "ciudadano", "dispositivo", "responsable")
-        }),
-        ("Admisión", {
-            "fields": ("via_ingreso", "fecha_admision", "nivel_riesgo")
-        }),
-        ("Estado", {
-            "fields": ("estado", "fecha_cierre", "plan_vigente", "confidencialidad")
-        }),
-        ("Observaciones", {
-            "fields": ("notas",)
-        }),
-        ("Auditoría", {
-            "fields": ("id", "creado", "modificado"),
-            "classes": ("collapse",)
-        }),
-    )
-
 
 @admin.register(Consentimiento)
 class ConsentimientoAdmin(admin.ModelAdmin):

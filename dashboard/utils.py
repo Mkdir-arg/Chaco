@@ -8,6 +8,7 @@ from django.db import connection
 from django.db.utils import OperationalError, ProgrammingError
 from django.contrib.auth.models import User
 from legajos.models import Ciudadano
+from legajos.models_programas import DerivacionPrograma, InscripcionPrograma
 
 logger = logging.getLogger(__name__)
 
@@ -50,30 +51,28 @@ def contar_ciudadanos():
     return cached_value
 
 def contar_legajos():
-    """Contar legajos con caché."""
-    from legajos.models import LegajoAtencion
+    """Contar inscripciones activas para mantener compatibilidad con el dashboard."""
     from django.db.models import Count, Q
     
     cache_key = "stats_legajos"
     cached_value = cache.get(cache_key)
     if cached_value is None:
-        cached_value = LegajoAtencion.objects.aggregate(
+        cached_value = InscripcionPrograma.objects.aggregate(
             total=Count('id'),
-            activos=Count('id', filter=Q(estado__in=['ABIERTO', 'EN_SEGUIMIENTO']))
+            activos=Count('id', filter=Q(estado__in=['ACTIVO', 'EN_SEGUIMIENTO']))
         )
         cache.set(cache_key, cached_value, timeout=CACHE_TIMEOUT)
     return cached_value
 
 def contar_seguimientos_hoy():
-    """Contar seguimientos de hoy con caché."""
-    from legajos.models import SeguimientoContacto
+    """Contar nuevas inscripciones del día con caché."""
     from django.utils import timezone
     
     cache_key = f"seguimientos_hoy_{timezone.now().date()}"
     cached_value = cache.get(cache_key)
     if cached_value is None:
-        cached_value = SeguimientoContacto.objects.filter(
-            creado__date=timezone.now().date()
+        cached_value = InscripcionPrograma.objects.filter(
+            fecha_inscripcion=timezone.now().date()
         ).count()
         cache.set(cache_key, cached_value, timeout=300)  # 5 min
     return cached_value

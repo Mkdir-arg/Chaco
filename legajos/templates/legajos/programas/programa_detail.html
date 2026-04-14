@@ -288,8 +288,8 @@
                                     </form>
                                     <a href="{% url 'legajos:derivacion_ciudadano_rechazar' derivacion.pk %}" class="text-red-600 hover:underline">Rechazar</a>
                                     {% elif derivacion.inscripcion_creada and derivacion.inscripcion_creada.legajo_id %}
-                                    <a href="{% url 'legajos:detalle' derivacion.inscripcion_creada.legajo_id %}" class="text-blue-600 hover:underline">
-                                        <i class="fas fa-folder-open mr-1"></i>Ver Legajo
+                                    <a href="{% url 'legajos:ciudadano_detalle' derivacion.ciudadano.id %}" class="text-blue-600 hover:underline">
+                                        <i class="fas fa-user mr-1"></i>Ver Ciudadano
                                     </a>
                                     {% else %}
                                     -
@@ -396,15 +396,9 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-[#8C8C8C]">{{ acomp.fecha_inscripcion|date:"d/m/Y" }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
                                 <div class="flex items-center gap-3">
-                                    {% if acomp.legajo_id %}
-                                    <a href="{% url 'legajos:detalle' acomp.legajo_id %}" class="text-blue-600 hover:underline">
-                                        <i class="fas fa-folder-open mr-1"></i>Ver Detalle
+                                    <a href="{% url 'legajos:ciudadano_detalle' acomp.ciudadano.id %}" class="text-blue-600 hover:underline">
+                                        <i class="fas fa-user mr-1"></i>Ver Ciudadano
                                     </a>
-                                    {% else %}
-                                    <a href="{% url 'legajos:crear_legajo_acompanamiento' acomp.id %}" class="text-green-600 hover:underline">
-                                        <i class="fas fa-plus mr-1"></i>Crear Acompañamiento
-                                    </a>
-                                    {% endif %}
                                     {% if acomp.estado == 'ACTIVO' or acomp.estado == 'EN_SEGUIMIENTO' or acomp.estado == 'PENDIENTE' %}
                                     <button type="button"
                                         onclick="confirmarBaja({{ acomp.id }}, '{{ acomp.ciudadano.nombre_completo|escapejs }}')"

@@ -22,4 +22,3 @@ from .historial import (  # noqa: F401
     guardar_estado_anterior_inscripto,
 )
 from .nachec import crear_caso_nachec_desde_derivacion  # noqa: F401
-from .programas import crear_inscripcion_programa_sedronar  # noqa: F401

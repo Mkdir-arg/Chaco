@@ -1,10 +1,8 @@
 from django.urls import include, path
 
-from .views import acompanamiento as views_acompanamiento
 from .views import alertas as views_alertas
 from .views import api_derivaciones as views_api_derivaciones
 from .views import ciudadanos as views_ciudadanos
-from .views import clinico as views_clinico
 from .views import contactos_api as views_contactos_api
 from .views import contactos_panel as views_contactos_panel
 from .views import cursos as views_cursos
@@ -24,8 +22,8 @@ from .views import programas as views_programas
 app_name = "legajos"
 
 urlpatterns = [
-    path("", views_clinico.LegajoListView.as_view(), name="lista"),
-    path("nuevo/", views_ciudadanos.LegajoCreateView.as_view(), name="nuevo"),
+    path("", views_ciudadanos.CiudadanoListView.as_view(), name="lista"),
+    path("nuevo/", views_ciudadanos.CiudadanoCreateView.as_view(), name="nuevo"),
     path("ciudadanos/", views_ciudadanos.CiudadanoListView.as_view(), name="ciudadanos"),
     path("ciudadanos/nuevo/", views_ciudadanos.CiudadanoCreateView.as_view(), name="ciudadano_nuevo"),
     path("ciudadanos/confirmar/", views_ciudadanos.CiudadanoConfirmarView.as_view(), name="ciudadano_confirmar"),
@@ -34,11 +32,6 @@ urlpatterns = [
     path("ciudadanos/<int:pk>/editar/", views_ciudadanos.CiudadanoUpdateView.as_view(), name="ciudadano_editar"),
     path("programas/", views_programas.ProgramaListView.as_view(), name="programas"),
     path("programas/<int:pk>/", views_programas.ProgramaDetailView.as_view(), name="programa_detalle"),
-    path(
-        "acompanamiento/<int:inscripcion_id>/crear-legajo/",
-        views_acompanamiento.crear_legajo_acompanamiento,
-        name="crear_legajo_acompanamiento",
-    ),
     path("nachec/", include("legajos.urls_nachec")),
     path(
         "instituciones/<int:pk>/detalle-programatico/",
@@ -86,55 +79,12 @@ urlpatterns = [
         views_api_derivaciones.derivaciones_programa_api,
         name="derivaciones_programa_api",
     ),
-    path("admision/paso1/", views_ciudadanos.AdmisionPaso1View.as_view(), name="admision_paso1"),
-    path("admision/paso2/", views_ciudadanos.AdmisionPaso2View.as_view(), name="admision_paso2"),
-    path("admision/paso3/", views_ciudadanos.AdmisionPaso3View.as_view(), name="admision_paso3"),
-    path("<uuid:legajo_id>/evaluaciones/", views_clinico.EvaluacionListView.as_view(), name="evaluaciones"),
-    path("<uuid:legajo_id>/evaluacion/", views_clinico.EvaluacionInicialView.as_view(), name="evaluacion"),
-    path("<uuid:legajo_id>/planes/", views_clinico.PlanListView.as_view(), name="planes"),
-    path("<uuid:legajo_id>/plan/", views_clinico.PlanIntervencionView.as_view(), name="plan"),
-    path("plan/<int:pk>/editar/", views_clinico.PlanUpdateView.as_view(), name="plan_editar"),
     path("plan/<int:pk>/marcar-etapa/", views_operativa.marcar_etapa_plan, name="marcar_etapa_plan"),
-    path("<uuid:legajo_id>/seguimientos/", views_clinico.SeguimientoListView.as_view(), name="seguimientos"),
-    path("<uuid:legajo_id>/seguimiento/", views_clinico.SeguimientoCreateView.as_view(), name="seguimiento_nuevo"),
-    path("seguimiento/<int:pk>/editar/", views_clinico.SeguimientoUpdateView.as_view(), name="seguimiento_editar"),
-    path("<uuid:legajo_id>/derivaciones/", views_clinico.DerivacionListView.as_view(), name="derivaciones"),
-    path("<uuid:legajo_id>/derivacion/", views_clinico.DerivacionCreateView.as_view(), name="derivacion_nueva"),
-    path("derivacion/<int:pk>/editar/", views_clinico.DerivacionUpdateView.as_view(), name="derivacion_editar"),
     path(
         "actividades-por-institucion/<int:institucion_id>/",
         views_operativa.actividades_por_institucion,
         name="actividades_por_institucion",
     ),
-    path("<uuid:legajo_id>/eventos/", views_clinico.EventoListView.as_view(), name="eventos"),
-    path("<uuid:legajo_id>/evento/", views_clinico.EventoCriticoCreateView.as_view(), name="evento_nuevo"),
-    path("evento/<int:pk>/editar/", views_clinico.EventoUpdateView.as_view(), name="evento_editar"),
-    path(
-        "<uuid:legajo_id>/inscribir-actividad/",
-        views_operativa.InscribirActividadView.as_view(),
-        name="inscribir_actividad",
-    ),
-    path(
-        "<uuid:legajo_id>/actividades-inscrito/",
-        views_operativa.ActividadesInscritoListView.as_view(),
-        name="actividades_inscrito",
-    ),
-    path("<uuid:pk>/", views_clinico.LegajoDetailView.as_view(), name="detalle"),
-    path("<uuid:pk>/cerrar/", views_clinico.LegajoCerrarView.as_view(), name="cerrar"),
-    path("<uuid:pk>/reabrir/", views_clinico.LegajoReabrirView.as_view(), name="reabrir"),
-    path(
-        "<uuid:pk>/cambiar-responsable/",
-        views_clinico.CambiarResponsableView.as_view(),
-        name="cambiar_responsable",
-    ),
-    path("reportes/", views_clinico.ReportesView.as_view(), name="reportes"),
-    path("exportar-csv/", views_clinico.ExportarCSVView.as_view(), name="exportar_csv"),
-    path(
-        "dispositivo/<int:dispositivo_id>/derivaciones/",
-        views_clinico.DispositivoDerivacionesView.as_view(),
-        name="dispositivo_derivaciones",
-    ),
-    path("cerrar-alerta/", views_clinico.CerrarAlertaEventoView.as_view(), name="cerrar_alerta_evento"),
     path("dashboard-contactos/", views_contactos_panel.dashboard_contactos_simple, name="dashboard_contactos"),
     path("dashboard-contactos/completo/", view_dashboard_contactos_completo, name="dashboard_contactos_completo"),
     path("dashboard-contactos/api/metricas/", view_metricas_contactos_api, name="metricas_contactos_api"),
@@ -200,24 +150,4 @@ urlpatterns = [
     path("instituciones/crear/", views_operativa.InstitucionCreateView.as_view(), name="institucion_crear"),
     path("instituciones/<int:pk>/editar/", views_operativa.InstitucionUpdateView.as_view(), name="institucion_editar"),
     path("instituciones/<int:pk>/eliminar/", views_operativa.InstitucionDeleteView.as_view(), name="institucion_eliminar"),
-    path(
-        "legajos-institucionales/",
-        views_operativa.LegajoInstitucionalListView.as_view(),
-        name="legajos_institucionales",
-    ),
-    path(
-        "legajos-institucionales/crear/",
-        views_operativa.LegajoInstitucionalCreateView.as_view(),
-        name="legajo_institucional_crear",
-    ),
-    path(
-        "legajos-institucionales/<int:pk>/",
-        views_operativa.LegajoInstitucionalDetailView.as_view(),
-        name="legajo_institucional_detalle",
-    ),
-    path(
-        "legajos-institucionales/<int:pk>/editar/",
-        views_operativa.LegajoInstitucionalUpdateView.as_view(),
-        name="legajo_institucional_editar",
-    ),
 ]

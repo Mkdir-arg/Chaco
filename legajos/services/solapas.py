@@ -14,7 +14,6 @@ class SolapasService:
     # Solapas estáticas (siempre visibles)
     SOLAPAS_ESTATICAS = [
         {'id': 'resumen',          'nombre': 'Resumen',           'icono': 'tachometer-alt', 'orden': 0,   'estatica': True},
-        {'id': 'legajos',          'nombre': 'Legajos',            'icono': 'folder-open',    'orden': 50,  'estatica': True},
         {'id': 'turnos',           'nombre': 'Turnos',             'icono': 'calendar-alt',   'orden': 800, 'estatica': True},
         {'id': 'instituciones',    'nombre': 'Instituciones',      'icono': 'building',       'orden': 850, 'estatica': True},
         {'id': 'conversaciones',   'nombre': 'Conversaciones',     'icono': 'comments',       'orden': 860, 'estatica': True},
@@ -216,10 +215,6 @@ class SolapasService:
         except Exception:
             pass
 
-        # Legajos — punto gris si existe al menos 1
-        if ciudadano.legajos.exists():
-            badges['legajos'] = {'tipo': 'punto', 'color_hex': '#9CA3AF'}
-
         return badges
 
     @classmethod
@@ -234,7 +229,8 @@ class SolapasService:
             str: URL name
         """
         url_map = {
-            'ACOMPANAMIENTO_SEDRONAR': 'legajos:detalle',
+            'ACOMPANAMIENTO_SEDRONAR': 'legajos:programa_detalle',
+            'ACOMPANAMIENTO_SOCIAL': 'legajos:programa_detalle',
             'NACHEC': 'nachec:detalle_caso_ciudadano',
             'ECONOMICO': 'programas:economico_detalle',
             'FAMILIAR': 'programas:familiar_detalle',

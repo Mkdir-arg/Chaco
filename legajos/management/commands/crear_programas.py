@@ -10,10 +10,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         programas_data = [
             {
-                'codigo': 'ACOMP-SEDRONAR',
-                'nombre': 'Acompañamiento SEDRONAR',
-                'tipo': 'ACOMPANAMIENTO_SEDRONAR',
-                'descripcion': 'Programa de acompañamiento terapéutico SEDRONAR',
+                'codigo': 'ACOMP-SOCIAL',
+                'nombre': 'Acompañamiento Social',
+                'tipo': 'ACOMPANAMIENTO_SOCIAL',
+                'descripcion': 'Programa de acompañamiento social integral',
                 'icono': 'heart',
                 'color': '#EF4444',
                 'orden': 1
