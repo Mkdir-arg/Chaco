@@ -20,7 +20,6 @@
 | Contactos y Red de Vínculos | `contactos-red/` | v1.0 | 2026-03-09 |
 | Usuarios y Permisos | `usuarios-permisos/` | v1.1 | 2026-03-15 |
 | Dashboard | `dashboard/` | v1.0 | 2026-03-09 |
-| Auditoría | `auditoria/` | v1.0 | 2026-03-09 |
 | Configuración del Sistema | `configuracion-sistema/` | v1.1 | 2026-03-15 |
 | Búsqueda Rápida Ciudadano | `busqueda-rapida-ciudadano/` | v1.0 | 2026-03-15 |
 | Refactor DX Interno | `refactor-dx/` | v1.58 | 2026-04-03 |
@@ -49,7 +48,7 @@ El archivo mas reciente es el estado actual.
 | App | Descripcion |
 |-----|------------|
 | `legajos` | Ciudadanos, legajos de atencion, programas, NACHEC, contactos, institucional |
-| `core` | Modelos base, institucion, auditoria, configuracion geografica |
+| `core` | Modelos base, institucion, configuracion geografica |
 | `portal` | Portal ciudadano, registro instituciones |
 | `conversaciones` | Sistema de chat ciudadano-operador |
 | `configuracion` | Vistas de configuracion del sistema (geografía, instituciones) |

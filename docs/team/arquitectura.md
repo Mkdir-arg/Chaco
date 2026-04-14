@@ -28,7 +28,7 @@
 ```
 SistemSo/
 ├── config/           → settings, urls, wsgi, asgi, middlewares
-├── core/             → Institucion, modelos geográficos, auditoría, utilidades base
+├── core/             → Institucion, modelos geográficos, utilidades base
 ├── legajos/          → Ciudadanos, legajos, programas, ÑACHEC, contactos, institucional
 ├── portal/           → Portal ciudadano (auth, registro instituciones)
 ├── conversaciones/   → Chat ciudadano-operador, WebSocket
