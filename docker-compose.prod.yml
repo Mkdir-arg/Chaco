@@ -38,6 +38,9 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_SSL=False
+      - APP_BIND=0.0.0.0
+      - APP_PORT=8001
+      - APP_RUNTIME=daphne
     command: ["/app/docker-entrypoint.sh"]
     restart: unless-stopped
     networks:
@@ -70,6 +73,8 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - REDIS_SSL=False
+      - APP_BIND=0.0.0.0
+      - APP_PORT=8001
     command: daphne -b 0.0.0.0 -p 8001 config.asgi:application
     restart: unless-stopped
     networks:

@@ -2,6 +2,9 @@ import copy
 import os
 
 
+PRIMARY_BRANDING_PROFILE = "chaco"
+
+
 DEFAULT_BRANDING = {
     "key": "default",
     "application_name": "NODO",
@@ -776,8 +779,8 @@ def _build_css_variables(branding):
 
 
 def get_branding_profile():
-    profile_key = os.environ.get("APP_PRESENTATION", "default").strip().lower() or "default"
-    active_key = profile_key if profile_key in BRANDING_PROFILES else "default"
+    profile_key = os.environ.get("APP_PRESENTATION", PRIMARY_BRANDING_PROFILE).strip().lower() or PRIMARY_BRANDING_PROFILE
+    active_key = profile_key if profile_key in BRANDING_PROFILES else PRIMARY_BRANDING_PROFILE
     profile_overrides = BRANDING_PROFILES[active_key]
     branding = _deep_merge(DEFAULT_BRANDING, profile_overrides)
     branding["active_profile"] = active_key
