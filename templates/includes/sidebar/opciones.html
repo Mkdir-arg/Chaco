@@ -219,7 +219,7 @@
 
             <!-- Administración -->
             {% if request.user|has_group:"Administrador" %}
-                <div x-data="{ open: {% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual or 'chatbot/admin' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
+                <div x-data="{ open: {% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
                     <template x-if="!sidebarCollapsed">
                         <div>
                             <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
@@ -234,16 +234,13 @@
                                 <a href="{% url 'users:grupos' %}" class="{% if 'grupos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
                                     <i class="fas fa-user-tag mr-2 text-xs {% if 'grupos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Grupos
                                 </a>
-                                <a href="{% url 'chatbot:admin_panel' %}" class="{% if 'chatbot/admin' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
-                                    <i class="fas fa-robot mr-2 text-xs {% if 'chatbot/admin' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Chatbot
-                                </a>
                             </div>
                         </div>
                     </template>
                     
                     <template x-if="sidebarCollapsed">
-                        <a href="{% url 'users:usuarios' %}" class="{% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual or 'chatbot/admin' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center justify-center p-3 text-sm font-semibold transition-all">
-                            <i class="fas fa-cog text-base {% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual or 'chatbot/admin' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
+                        <a href="{% url 'users:usuarios' %}" class="{% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center justify-center p-3 text-sm font-semibold transition-all">
+                            <i class="fas fa-cog text-base {% if 'usuarios' in pagina_actual or 'grupos' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
                         </a>
                     </template>
                 </div>

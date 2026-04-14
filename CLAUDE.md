@@ -4,7 +4,7 @@
 **SistemSo** es un sistema de gestión estatal. Permite a organismos de gobierno gestionar ciudadanos, programas sociales e instituciones.
 - Stack: Python 3.12, Django 4.2.7, MySQL 8.0, Tailwind CSS + Alpine.js
 - Entorno: Docker Compose (`docker-compose up --build`)
-- Apps Django: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `chatbot`, `conversaciones`, `portal`, `tramites`
+- Apps Django: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `conversaciones`, `portal`, `tramites`
 - Dos superficies: **backoffice** (operadores/profesionales) y **portal ciudadano** (público)
 - Tres dominios centrales: **Ciudadanos**, **Programas**, **Instituciones**
 

@@ -18,7 +18,6 @@ urlpatterns = [
     # Specific paths first
     path("legajos/", include("legajos.urls")),
     path("configuracion/", include("configuracion.urls")),
-    path("chatbot/", include("chatbot.urls")),
     path("conversaciones/", include("conversaciones.urls")),
     path("portal/", include("portal.urls")),
     path("turnos/", include("turnos.urls")),
@@ -35,7 +34,6 @@ urlpatterns = [
     # API Routes
     path("api/legajos/", include("legajos.api_urls")),
     path("api/core/", include("core.api_urls")),
-    path("api/chatbot/", include("chatbot.api_urls")),
     path("api/users/", include("users.api_urls")),
     
     # API Documentation

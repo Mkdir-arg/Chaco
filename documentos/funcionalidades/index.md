@@ -50,9 +50,6 @@ Sistema de mensajería en tiempo real
 ### 📊 Dashboard
 Panel de control y métricas
 
-### 🤖 Chatbot
-Bot de conversación automática
-
 ### 📄 Tramites
 Gestión de trámites
 

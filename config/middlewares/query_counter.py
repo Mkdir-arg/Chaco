@@ -44,7 +44,6 @@ class QueryCountMiddleware:
             '/conversaciones/': 6,   # Phase 5 optimized (services improved)
             '/legajos/': 6,          # Phase 4 optimized
             '/dashboard/': 4,        # Phase 4 optimized
-            '/chatbot/': 2,          # Phase 5 optimized (AI service improved)
             '/core/': 2,             # Phase 5 optimized (audit service improved)
             '/users/': 5,            # Phase 2 optimized
             '/configuracion/': 6,    # Phase 3 optimized
@@ -89,7 +88,6 @@ class QueryCountMiddleware:
             '/legajos/': 8,
             '/conversaciones/': 6,
             '/dashboard/': 4,
-            '/chatbot/': 3,
             '/admin/': 5,
             '/performance-dashboard/': 2,
         }

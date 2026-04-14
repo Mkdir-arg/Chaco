@@ -18,7 +18,6 @@
 | Alertas | `alertas/` | v1.0 | 2026-03-09 |
 | Sistema de Turnos — Backoffice | `turnos-backoffice/` | v1.0 | 2026-03-09 |
 | Conversaciones — Chat Interno | `conversaciones-chat/` | v1.0 | 2026-03-09 |
-| Chatbot IA | `chatbot-ia/` | v1.0 | 2026-03-09 |
 | Contactos y Red de Vínculos | `contactos-red/` | v1.0 | 2026-03-09 |
 | Usuarios y Permisos | `usuarios-permisos/` | v1.1 | 2026-03-15 |
 | Dashboard | `dashboard/` | v1.0 | 2026-03-09 |

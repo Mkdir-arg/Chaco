@@ -12,21 +12,6 @@ DEFAULT_BRANDING = {
     "login_illustration_path": "custom/branding/default/login-illustration.svg",
     "login_background_image_path": "custom/branding/default/login-background.png",
     "footer_logo_path": "custom/branding/default/footer-logo.png",
-    "chatbot_bubble": {
-        "size": "56px",
-        "background": "var(--nodo-gradient)",
-        "hover_background": "var(--nodo-purple)",
-        "icon_size": "1.25rem",
-        "icon_color": "#FFFFFF",
-    },
-    "chatbot_window": {
-        "header_background": "var(--nodo-gradient)",
-        "submit_background": "var(--nodo-gradient)",
-        "submit_hover_background": "var(--nodo-purple)",
-        "input_focus_ring": "var(--color-primario)",
-        "title": "Asistente Virtual",
-        "welcome_message": "¡Hola! Soy tu asistente virtual. ¿En que puedo ayudarte?",
-    },
     "citizen_list": {
         "action_view_color": "#3B82F6",
         "action_view_hover_bg": "#EFF6FF",
@@ -408,21 +393,6 @@ BRANDING_PROFILES = {
         "login_illustration_path": "custom/branding/chaco/login-illustration.svg",
         "login_background_image_path": "custom/branding/chaco/login-background.png",
         "footer_logo_path": "custom/branding/chaco/footer-logo.png",
-        "chatbot_bubble": {
-            "size": "56px",
-            "background": "linear-gradient(180deg, #5059BC 0%, #F26DF9 100%)",
-            "hover_background": "linear-gradient(180deg, #5059BC 0%, #F26DF9 100%)",
-            "icon_size": "1.25rem",
-            "icon_color": "#FFFFFF",
-        },
-        "chatbot_window": {
-            "header_background": "linear-gradient(180deg, #5059BC 0%, #F26DF9 100%)",
-            "submit_background": "linear-gradient(180deg, #5059BC 0%, #F26DF9 100%)",
-            "submit_hover_background": "linear-gradient(180deg, #5059BC 0%, #F26DF9 100%)",
-            "input_focus_ring": "#5059BC",
-            "title": "Asistente Virtual",
-            "welcome_message": "¡Hola! Soy tu asistente virtual. ¿En que puedo ayudarte?",
-        },
         "citizen_list": {
             "action_view_color": "#F26DF9",
             "action_view_hover_bg": "#FDF4FF",

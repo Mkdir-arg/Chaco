@@ -17,8 +17,7 @@ class UrlNamespacesTests(SimpleTestCase):
     def test_healthcheck_namespace_es_el_contrato_estable(self):
         self.assertEqual(reverse('healthcheck:health_check'), '/health/')
 
-    def test_chatbot_y_conversaciones_tienen_namespaces_estables(self):
-        self.assertEqual(reverse('chatbot:send_message'), '/chatbot/api/send-message/')
+    def test_conversaciones_tiene_namespace_estable(self):
         self.assertEqual(reverse('conversaciones:detalle', kwargs={'conversacion_id': 7}), '/conversaciones/7/')
 
     def test_legajos_alertas_tienen_names_unicos(self):
