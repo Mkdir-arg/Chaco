@@ -141,3 +141,17 @@
     border: 1px solid var(--button-tertiary-disabled-border, #C7A0B4);
     color: var(--button-tertiary-disabled-text, #D4006A);
 }
+
+@media (max-width: 640px) {
+    .btn-nodo {
+        max-width: 100%;
+    }
+
+    .btn-xs,
+    .btn-sm,
+    .btn-base,
+    .btn-lg,
+    .btn-xl {
+        min-width: 0;
+    }
+}

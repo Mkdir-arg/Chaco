@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es" class="h-full bg-gray-50">
+<html lang="es" class="h-full overflow-x-hidden bg-gray-50">
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -88,14 +88,14 @@
         
         <title>{{ branding.application_name }} - {% block title %}{% endblock %}</title>
     </head>
-    <body class="min-h-screen bg-white font-montserrat" x-data="{ sidebarOpen: false, sidebarCollapsed: false }" style="background: var(--fondo-principal);">
-        <div class="min-h-full">
+    <body class="min-h-[100dvh] overflow-x-hidden bg-white font-montserrat" x-data="{ sidebarOpen: false, sidebarCollapsed: false }" style="background: var(--fondo-principal);">
+        <div class="min-h-[100dvh] overflow-x-hidden">
             {% include 'includes/navbar.html' %}
             {% include 'includes/sidebar/base.html' %}
             
-            <div class="transition-all duration-300" :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'">
-                <main class="py-10">
-                    <div class="px-4 sm:px-6 lg:px-8">
+            <div class="min-w-0 transition-all duration-300" :class="sidebarCollapsed ? 'lg:pl-20' : 'lg:pl-72'">
+                <main class="min-w-0 py-4 sm:py-6 lg:py-10">
+                    <div class="min-w-0 px-4 sm:px-6 lg:px-8">
                         {% if messages %}
                             {% for message in messages %}
                                 <div class="mb-4 rounded-md p-4 {{ message.tags }}" x-data="{ show: true }" x-show="show">
@@ -128,11 +128,11 @@
         {% include 'components/alertas_eventos.html' %}
         
         <!-- Sistema de Modales Modernos -->
-        <div id="modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
-            <div class="flex items-center justify-center min-h-screen p-4">
-                <div id="modal-content" class="bg-white rounded-xl shadow-2xl max-w-md w-full transform transition-all duration-300 scale-95 opacity-0">
+        <div id="modal-overlay" class="modal-responsive fixed inset-0 z-50 hidden bg-black bg-opacity-50 backdrop-blur-sm transition-opacity duration-300">
+            <div class="flex min-h-[100dvh] items-end justify-center p-0 sm:min-h-screen sm:items-center sm:p-4">
+                <div id="modal-content" class="modal-responsive-content w-full transform bg-white shadow-2xl transition-all duration-300 scale-95 opacity-0 sm:max-w-md sm:rounded-xl">
                     <!-- Modal Header -->
-                    <div id="modal-header" class="p-6 border-b border-gray-200">
+                    <div id="modal-header" class="modal-header border-b border-gray-200 p-4 sm:p-6">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-3">
                                 <div id="modal-icon" class="w-10 h-10 rounded-lg flex items-center justify-center">
@@ -140,21 +140,21 @@
                                 </div>
                                 <h3 id="modal-title" class="text-lg font-semibold text-gray-900">Información</h3>
                             </div>
-                            <button id="modal-close" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <button id="modal-close" class="touch-target text-gray-400 transition-colors hover:text-gray-600">
                                 <i class="fas fa-times text-xl"></i>
                             </button>
                         </div>
                     </div>
                     <!-- Modal Body -->
-                    <div id="modal-body" class="p-6">
+                    <div id="modal-body" class="modal-body p-4 sm:p-6">
                         <p id="modal-message" class="text-gray-600 leading-relaxed"></p>
                     </div>
                     <!-- Modal Footer -->
-                    <div id="modal-footer" class="p-6 border-t border-gray-200 flex justify-end space-x-3">
-                        <button id="modal-cancel" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors hidden">
+                    <div id="modal-footer" class="modal-footer flex flex-col-reverse gap-3 border-t border-gray-200 p-4 sm:flex-row sm:justify-end sm:gap-0 sm:space-x-3 sm:p-6">
+                        <button id="modal-cancel" class="hidden w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-600 transition-colors hover:bg-gray-50 sm:w-auto">
                             Cancelar
                         </button>
-                        <button id="modal-confirm" class="px-6 py-2 bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] text-white rounded-lg hover:from-[#2563EB] hover:to-[#7C3AED] transition-colors">
+                        <button id="modal-confirm" class="w-full rounded-lg bg-gradient-to-r from-[#3B82F6] to-[#8B5CF6] px-6 py-2 text-white transition-colors hover:from-[#2563EB] hover:to-[#7C3AED] sm:w-auto">
                             Aceptar
                         </button>
                     </div>

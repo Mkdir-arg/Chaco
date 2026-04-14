@@ -8,13 +8,13 @@
 
     <!-- Header Institucional -->
     <div class="bg-white shadow rounded-lg p-6 mb-6">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center">
-                <div class="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mr-4">
+        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div class="mr-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-600 to-pink-600">
                     <span class="text-2xl font-bold text-white">{{ institucion.nombre.0 }}</span>
                 </div>
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900">
+                <div class="min-w-0">
+                    <h1 class="break-words text-2xl font-bold text-gray-900 sm:text-3xl">
                         {{ institucion.nombre }}
                     </h1>
                     <p class="text-gray-500 mt-1">{{ institucion.get_tipo_display }} - {{ institucion.provincia.nombre }}</p>
@@ -25,15 +25,15 @@
                     </div>
                 </div>
             </div>
-            <div class="flex gap-3">
-                <a href="{% url 'legajos:instituciones' %}" class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+            <div class="flex w-full gap-3 lg:w-auto">
+                <a href="{% url 'legajos:instituciones' %}" class="inline-flex w-full items-center justify-center rounded-lg bg-gray-100 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-200 lg:w-auto">
                     <i class="fas fa-arrow-left mr-2"></i>Volver
                 </a>
             </div>
         </div>
         
         <!-- Información detallada en grid -->
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
+        <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
             <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                 <div class="flex items-center gap-2 mb-2">
                     <i class="fas fa-folder text-blue-600"></i>

@@ -14,12 +14,12 @@
     <div class="mb-8">
         <div class="bg-[#F9FAFB] rounded-xl overflow-hidden" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1); border-radius: 12px;">
             <div class="relative p-8">
-                <div class="flex items-center justify-between mb-6">
+                <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                             <h2 class="mb-1" style="font-family: Inter, sans-serif; font-size: 30px; font-weight: 700; color: #101828;">{{ programa.nombre }}</h2>
                             <p style="font-family: Inter, sans-serif; font-size: 20px; font-weight: 400; color: #101828;">Gestión Operativa del Programa</p>
                     </div>
-                    <a href="{% url 'legajos:programas' %}" class="bg-white text-[#4A5565] px-6 py-3 rounded-xl hover:bg-[#F9FAFB] transition-all border border-[#E5E7EB] flex items-center space-x-2">
+                    <a href="{% url 'legajos:programas' %}" class="flex w-full items-center justify-center space-x-2 rounded-xl border border-[#E5E7EB] bg-white px-6 py-3 text-[#4A5565] transition-all hover:bg-[#F9FAFB] sm:w-auto">
                         <i class="fas fa-arrow-left"></i>
                         <span>Volver</span>
                     </a>
@@ -63,7 +63,7 @@
     <!-- Tab: Dashboard -->
     <div id="tab-dashboard" class="tab-content">
         <!-- Hero Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="mb-8 grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
             <div class="{% if branding.program_detail_nachec.hero_stats.card_mode == 'flat' %}bg-white rounded-xl p-6{% else %}bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl p-6 text-white shadow-xl{% endif %}" {% if branding.program_detail_nachec.hero_stats.card_mode == 'flat' %}style="border: 1px solid {{ branding.program_detail_nachec.hero_stats.card_border }}; box-shadow: {{ branding.program_detail_nachec.hero_stats.card_shadow }};"{% endif %}>
                 <div class="flex items-center justify-between mb-4">
                     {% if branding.program_detail_nachec.hero_stats.icon_mode == 'gradient_text' %}
@@ -146,7 +146,7 @@
             <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
                 Flujo del Ciclo de Atención
             </h3>
-            <div class="grid grid-cols-6 gap-4">
+            <div class="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
                 <div class="text-center">
                     {% if branding.program_detail_nachec.flow_cycle.icon_mode == 'gradient_badge' %}
                         <div class="mx-auto rounded-full flex items-center justify-center mb-3" style="width: {{ branding.program_detail_nachec.flow_cycle.icon_container_size }}; height: {{ branding.program_detail_nachec.flow_cycle.icon_container_size }}; background: {{ branding.program_detail_nachec.flow_cycle.icon_container_bg }};">
@@ -331,9 +331,9 @@
             
             <!-- Derivaciones de Ciudadanos -->
             <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
-                <div class="flex justify-between items-center mb-6">
+                <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <h3 class="text-2xl font-bold text-[#252F40]">Derivaciones de Ciudadanos</h3>
-                    <div class="flex gap-2">
+                    <div class="flex flex-wrap gap-2">
                         <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">
                             {{ stats_ciudadanos.pendientes }} Pendientes
                         </span>
@@ -349,7 +349,7 @@
                 
                 <!-- Filtros -->
                 <form method="get" class="mb-6 p-4 bg-[#F9FAFB] rounded-lg">
-                    <div class="grid grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
                         <div>
                             <label class="block text-sm font-medium text-[#252F40] mb-2">Estado</label>
                             <select name="estado" class="w-full px-4 py-2 border border-[#E5E7EB] rounded-lg" onchange="this.form.submit()">
@@ -368,9 +368,9 @@
                                 <option value="ALTA" {% if filtros_activos.urgencia == 'ALTA' %}selected{% endif %}>Alta</option>
                             </select>
                         </div>
-                        <div class="col-span-2">
+                        <div class="md:col-span-2 xl:col-span-2">
                             <label class="block text-sm font-medium text-[#252F40] mb-2">Buscar (Nombre/DNI)</label>
-                            <div class="flex gap-2">
+                            <div class="flex flex-col gap-2 sm:flex-row">
                                 <input type="text" name="q" value="{{ filtros_activos.busqueda|default:'' }}" placeholder="Buscar por nombre o DNI..." class="flex-1 px-4 py-2 border border-[#E5E7EB] rounded-lg">
                                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                                     <i class="fas fa-search"></i>
@@ -386,7 +386,7 @@
                 </form>
                 
                 {% if derivaciones_ciudadanos %}
-                <div class="overflow-x-auto">
+                <div class="table-scroll-wrapper">
                     <table class="w-full">
                         <thead class="bg-[#F9FAFB] border-b border-[#E5E7EB]">
                             <tr>
@@ -473,9 +473,9 @@
     <div id="tab-asignacion" class="tab-content hidden">
         <div class="space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
-                <div class="flex justify-between items-center mb-6">
+                <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <h3 class="text-2xl font-bold text-[#252F40]">Casos para Asignar Territorial</h3>
-                    <div class="flex gap-2">
+                    <div class="flex flex-wrap gap-2">
                         <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                             {{ stats_nachec.en_revision }} En Revisión
                         </span>
@@ -485,7 +485,7 @@
                     </div>
                 </div>
                 
-                <div class="overflow-x-auto">
+                <div class="table-scroll-wrapper">
                     <table class="w-full">
                         <thead class="bg-[#F9FAFB] border-b border-[#E5E7EB]">
                             <tr>
@@ -540,9 +540,9 @@
     <div id="tab-casos" class="tab-content hidden">
         <div class="space-y-6">
             <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8">
-                <div class="flex justify-between items-center mb-6">
+                <div class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                     <h3 class="text-2xl font-bold text-[#252F40]">Mis Casos Asignados</h3>
-                    <div class="flex gap-2">
+                    <div class="flex flex-wrap gap-2">
                         <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
                             {{ stats_nachec.asignados }} Asignados
                         </span>
@@ -555,7 +555,7 @@
                     </div>
                 </div>
                 
-                <div class="overflow-x-auto">
+                <div class="table-scroll-wrapper">
                     <table class="w-full">
                         <thead class="bg-[#F9FAFB] border-b border-[#E5E7EB]">
                             <tr>

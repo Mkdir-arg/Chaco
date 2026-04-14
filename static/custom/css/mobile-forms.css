@@ -88,7 +88,9 @@
     
     /* Form buttons */
     .form-group .btn,
-    form .btn {
+    .form-group .btn-nodo,
+    form .btn,
+    form .btn-nodo {
         width: 100%;
         margin-bottom: 0.5rem;
     }
@@ -103,7 +105,9 @@
     }
     
     .form-actions .btn,
-    .form-buttons .btn {
+    .form-actions .btn-nodo,
+    .form-buttons .btn,
+    .form-buttons .btn-nodo {
         width: 100%;
     }
     
@@ -177,7 +181,9 @@
     }
     
     .form-actions .btn,
-    .form-buttons .btn {
+    .form-actions .btn-nodo,
+    .form-buttons .btn,
+    .form-buttons .btn-nodo {
         width: auto;
         min-width: 120px;
     }

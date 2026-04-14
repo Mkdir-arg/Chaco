@@ -36,26 +36,24 @@ def alerta_mensaje_ciudadano(sender, instance, created, **kwargs):
 @receiver(post_save, sender=LegajoAtencion)
 def verificar_alertas_legajo(sender, instance, created, **kwargs):
     """Genera alertas automáticas al crear o modificar legajo."""
-    if created:
-        AlertasService.generar_alertas_ciudadano(instance.ciudadano.id)
-    elif hasattr(instance, "_state") and instance._state.adding is False:
-        AlertasService.generar_alertas_ciudadano(instance.ciudadano.id)
+    AlertasService.generar_alertas_ciudadano(instance.ciudadano_id)
 
 
 @receiver(pre_save, sender=LegajoAtencion)
 def detectar_cambio_riesgo(sender, instance, **kwargs):
     """Detecta cambios en el nivel de riesgo."""
-    if instance.pk:
-        try:
-            legajo_anterior = LegajoAtencion.objects.get(pk=instance.pk)
-            if legajo_anterior.nivel_riesgo != instance.nivel_riesgo and instance.nivel_riesgo == "ALTO":
-                AlertasService.generar_alerta_evento_critico(
-                    instance,
-                    "CAMBIO_RIESGO",
-                    (
-                        f"Nivel de riesgo cambiado de {legajo_anterior.nivel_riesgo} "
-                        f"a {instance.nivel_riesgo}"
-                    ),
-                )
-        except LegajoAtencion.DoesNotExist:
-            pass
+    if not instance.pk:
+        return
+    nivel_anterior = (
+        LegajoAtencion.objects.filter(pk=instance.pk)
+        .values_list("nivel_riesgo", flat=True)
+        .first()
+    )
+    if nivel_anterior is None:
+        return
+    if nivel_anterior != instance.nivel_riesgo and instance.nivel_riesgo == "ALTO":
+        AlertasService.generar_alerta_evento_critico(
+            instance,
+            "CAMBIO_RIESGO",
+            f"Nivel de riesgo cambiado de {nivel_anterior} a {instance.nivel_riesgo}",
+        )

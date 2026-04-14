@@ -5,28 +5,28 @@
 
 {% block main-content %}
 <div class="max-w-full mx-4 lg:mx-8">
-    <div class="flex justify-between items-center mb-6">
+    <div class="mb-6 flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <a href="{% url 'legajos:ciudadano_detalle' legajo.ciudadano.pk %}" 
-           class="px-4 py-2.5 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg hover:from-gray-700 hover:to-gray-800 transition-all shadow-md hover:shadow-lg text-sm font-medium flex items-center gap-2">
+           class="flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-gray-600 to-gray-700 px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:from-gray-700 hover:to-gray-800 hover:shadow-lg sm:w-auto">
             <i class="fas fa-arrow-left"></i>
             <span>Volver a la Historia Clínica</span>
         </a>
-        <div class="flex gap-2">
+        <div class="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
         {% if legajo.estado != 'CERRADO' %}
         <button onclick="abrirModalCambiarResponsable()" 
-                class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all shadow-md hover:shadow-lg text-sm font-medium flex items-center gap-2">
+                class="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:from-blue-700 hover:to-blue-800 hover:shadow-lg">
             <i class="fas fa-user-edit"></i>
             <span>Cambiar Responsable</span>
         </button>
         
         <a href="{% url 'legajos:cerrar' legajo.pk %}" 
-           class="px-4 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all shadow-md hover:shadow-lg text-sm font-medium flex items-center gap-2">
+           class="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-red-600 to-red-700 px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:from-red-700 hover:to-red-800 hover:shadow-lg">
             <i class="fas fa-times-circle"></i>
             <span>Cerrar Acompañamiento</span>
         </a>
         {% else %}
         <a href="{% url 'legajos:reabrir' legajo.pk %}" 
-           class="px-4 py-2.5 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg hover:from-green-700 hover:to-green-800 transition-all shadow-md hover:shadow-lg text-sm font-medium flex items-center gap-2">
+           class="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-green-700 px-4 py-2.5 text-sm font-medium text-white shadow-md transition-all hover:from-green-700 hover:to-green-800 hover:shadow-lg">
             <i class="fas fa-folder-open"></i>
             <span>Reabrir Acompañamiento</span>
         </a>
@@ -42,7 +42,7 @@
             </div>
             <h2 class="text-xl font-bold text-gray-900">Información del Legajo</h2>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-7">
             <div class="bg-white rounded-lg p-3 border border-gray-200">
                 <label class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Código</label>
                 <p class="text-gray-900 font-mono text-sm mt-1">{{ legajo.codigo|slice:":8" }}</p>

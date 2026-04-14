@@ -13,32 +13,44 @@ def alerta_nueva_conversacion(sender, instance, created, **kwargs):
     if created and instance.estado == 'pendiente':
         try:
             from django.contrib.auth.models import User
-            from ..models import NuevaConversacionAlerta
-            
-            # Notificar a todos los operadores activos
-            operadores = User.objects.filter(
-                groups__name__in=['Conversaciones', 'OperadorCharla'],
-                is_active=True
-            ).distinct()
-            
-            for operador in operadores:
-                NuevaConversacionAlerta.objects.get_or_create(
-                    conversacion=instance,
-                    operador=operador,
-                    defaults={'vista': False}
-                )
-                
-                # Crear historial
-                from ..models import HistorialAlertaConversacion
-                HistorialAlertaConversacion.objects.create(
-                    conversacion=instance,
-                    operador=operador,
-                    tipo='NUEVA_CONVERSACION',
-                    mensaje=f'Nueva conversación #{instance.id} disponible'
-                )
-            
-            print(f"Nueva conversación #{instance.id} notificada a {operadores.count()} operadores")
-            
+            from ..models import NuevaConversacionAlerta, HistorialAlertaConversacion
+
+            operador_ids = list(
+                User.objects.filter(
+                    groups__name__in=['Conversaciones', 'OperadorCharla'],
+                    is_active=True,
+                ).distinct().values_list('id', flat=True)
+            )
+
+            if not operador_ids:
+                return
+
+            NuevaConversacionAlerta.objects.bulk_create(
+                [
+                    NuevaConversacionAlerta(
+                        conversacion=instance,
+                        operador_id=operador_id,
+                        vista=False,
+                    )
+                    for operador_id in operador_ids
+                ],
+                ignore_conflicts=True,
+            )
+
+            HistorialAlertaConversacion.objects.bulk_create(
+                [
+                    HistorialAlertaConversacion(
+                        conversacion=instance,
+                        operador_id=operador_id,
+                        tipo='NUEVA_CONVERSACION',
+                        mensaje=f'Nueva conversación #{instance.id} disponible',
+                    )
+                    for operador_id in operador_ids
+                ]
+            )
+
+            print(f"Nueva conversación #{instance.id} notificada a {len(operador_ids)} operadores")
+
         except Exception as e:
             print(f"Error generando alerta de nueva conversación: {e}")
 

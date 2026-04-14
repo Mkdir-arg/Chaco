@@ -1,7 +1,125 @@
 /* Responsive Utilities for NODO */
 
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    overflow-x: hidden;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+    max-width: 100%;
+}
+
+img,
+video,
+canvas {
+    height: auto;
+}
+
+main,
+section,
+article,
+.overflow-x-auto,
+.overflow-x-scroll,
+.table-responsive,
+.table-scroll-wrapper {
+    min-width: 0;
+}
+
+main .grid > *,
+main .flex > * {
+    min-width: 0;
+}
+
+pre,
+code,
+.break-safe {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.overflow-x-auto,
+.overflow-x-scroll,
+.table-responsive,
+.table-scroll-wrapper {
+    max-width: 100%;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+.overflow-x-auto > table,
+.overflow-x-scroll > table,
+.table-responsive > table,
+.table-scroll-wrapper > table {
+    width: max-content;
+    min-width: 100%;
+}
+
+.filter-input,
+.filter-input-sm {
+    width: 100%;
+    max-width: 100%;
+}
+
 /* Mobile-first approach */
 @media (max-width: 640px) {
+    .grid.grid-cols-3,
+    .grid.grid-cols-4,
+    .grid.grid-cols-5,
+    .grid.grid-cols-6,
+    .grid.grid-cols-7 {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .col-dni,
+    .col-dni-sm,
+    .col-actions,
+    .col-fecha,
+    .col-motivo {
+        width: auto !important;
+        max-width: 100% !important;
+    }
+
+    .btn-group,
+    .form-actions,
+    .form-buttons,
+    .action-buttons,
+    .card-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        width: 100%;
+    }
+
+    .btn-group > *,
+    .form-actions > *,
+    .form-buttons > *,
+    .action-buttons > *,
+    .card-actions > * {
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .table-responsive table,
+    .table-scroll-wrapper table,
+    .overflow-x-auto table,
+    .overflow-x-scroll table {
+        min-width: max(32rem, 100%);
+    }
+
     /* Hide desktop-only elements */
     .desktop-only {
         display: none !important;
@@ -90,6 +208,16 @@
 
 /* Tablet adjustments */
 @media (min-width: 641px) and (max-width: 1024px) {
+    .grid.grid-cols-5,
+    .grid.grid-cols-6,
+    .grid.grid-cols-7 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .grid.grid-cols-4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
     .tablet-grid-2 {
         grid-template-columns: repeat(2, 1fr);
     }
