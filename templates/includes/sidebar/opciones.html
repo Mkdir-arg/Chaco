@@ -75,7 +75,7 @@
 
             <!-- Ciudadanos -->
             {% if request.user|has_group:"Ciudadanos" %}
-                <div x-data="{ open: {% if 'legajos/lista' in pagina_actual or 'legajos/ciudadanos' in pagina_actual or 'legajos/admision' in pagina_actual or 'instituciones' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
+                <div x-data="{ open: {% if 'legajos/lista' in pagina_actual or 'legajos/ciudadanos' in pagina_actual or 'legajos/admision' in pagina_actual %}true{% else %}false{% endif %} }" class="relative">
                     <template x-if="!sidebarCollapsed">
                         <div>
                             <button @click="open = !open" class="text-[#4A5565] hover:bg-[#F9FAFB] group flex w-full items-center gap-x-3 rounded-xl p-3 text-left text-sm font-semibold transition-all">
@@ -89,9 +89,6 @@
                                 </a>
                                 <a href="{% url 'legajos:ciudadano_nuevo' %}" class="{% if 'legajos/admision' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
                                     <i class="fas fa-user-plus mr-2 text-xs {% if 'legajos/admision' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Nuevo ciudadano
-                                </a>
-                                <a href="{% url 'legajos:instituciones' %}" class="{% if 'instituciones' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] font-semibold{% else %}text-[#8C8C8C] hover:bg-[#F9FAFB] hover:text-[#4A5565]{% endif %} block rounded-xl py-2 px-3 text-sm transition-colors">
-                                    <i class="fas fa-building mr-2 text-xs {% if 'instituciones' in pagina_actual %}text-[#FF0080]{% endif %}"></i>Instituciones
                                 </a>
                             </div>
                         </div>
