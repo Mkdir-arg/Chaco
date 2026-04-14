@@ -15,7 +15,7 @@ Antes de diseñar cualquier schema o migration, leer:
 ## Project Context
 - Database: MySQL 8.0
 - ORM: Django 4.2 migrations system
-- Apps with models: `core`, `legajos`, `turnos`, `users`, `portal`, `conversaciones`, `chatbot`
+- Apps with models: `core`, `legajos`, `turnos`, `users`, `portal`, `conversaciones`
 - Apps sin modelos propios: `dashboard`, `configuracion`, `tramites` (stub)
 
 ## Responsibilities

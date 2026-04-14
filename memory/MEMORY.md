@@ -4,7 +4,7 @@
 ## Identidad real del repo
 
 - El repositorio activo es `SistemSo`, no `akuna_calc`.
-- Apps principales: `core`, `legajos`, `portal`, `turnos`, `conversaciones`, `chatbot`, `configuracion`, `users`, `dashboard`, `tramites`, `healthcheck`.
+- Apps principales: `core`, `legajos`, `portal`, `turnos`, `conversaciones`, `configuracion`, `users`, `dashboard`, `tramites`, `healthcheck`.
 
 ## Estado relevante 2026-03-13
 

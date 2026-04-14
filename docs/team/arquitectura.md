@@ -33,7 +33,6 @@ SistemSo/
 ├── portal/           → Portal ciudadano (auth, turnos legacy, registro instituciones)
 ├── turnos/           → Backoffice de turnos configurables (NEW — app separada)
 ├── conversaciones/   → Chat ciudadano-operador, WebSocket
-├── chatbot/          → Bot IA integrado al chat
 ├── users/            → Usuarios del backoffice, permisos, SolicitudCambioEmail
 ├── configuracion/    → UI de configuración (sin modelos propios)
 ├── dashboard/        → Panel principal
@@ -280,10 +279,6 @@ SistemSo/
      ┌────▼──────────┐
      │ conversaciones │
      └───────────────┘
-          │
-     ┌────▼────┐
-     │ chatbot │
-     └─────────┘
 ```
 
 ---

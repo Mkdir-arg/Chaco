@@ -16,7 +16,7 @@ Antes de proponer cualquier diseño, leer en este orden:
 
 ## Contexto del proyecto
 - Stack: Python 3.12, Django 4.2.7, MySQL 8.0, Tailwind CSS + Alpine.js, Docker Compose
-- Apps: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `chatbot`, `conversaciones`, `portal`, `tramites`
+- Apps: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `conversaciones`, `portal`, `tramites`
 - Dos superficies: backoffice (operadores) y portal ciudadano (público)
 - Principio central: nueva funcionalidad → nueva app Django. No agregar más modelos a `legajos/`
 

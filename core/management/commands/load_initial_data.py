@@ -40,7 +40,6 @@ class Command(BaseCommand):
             "core/fixtures/mes.json",
             "core/fixtures/sexo.json",
             "core/fixtures/localidad_municipio_provincia.json",
-            "chatbot/fixtures/initial_knowledge.json",
             "legajos/fixtures/contactos_initial_data.json",
         ]
         for fixture in fixtures:

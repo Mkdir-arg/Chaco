@@ -54,7 +54,6 @@ El archivo mas reciente es el estado actual.
 | `portal` | Portal ciudadano, turnos (modelo), registro instituciones |
 | `turnos` | Backoffice de turnos configurables |
 | `conversaciones` | Sistema de chat ciudadano-operador |
-| `chatbot` | Bot de asistencia con IA |
 | `configuracion` | Vistas de configuracion del sistema (geografía, instituciones) |
 | `users` | Usuarios del backoffice y permisos |
 | `dashboard` | Panel principal |

@@ -15,7 +15,7 @@ Antes de diagnosticar, leer:
 
 ## Project Context
 - Stack: Python 3.12, Django 4.2.7, MySQL 8.0, Docker Compose
-- Apps: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `chatbot`, `conversaciones`, `portal`, `tramites`
+- Apps: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `conversaciones`, `portal`, `tramites`
 - Entry: `docker-compose up --build`
 
 ## Diagnosis approach

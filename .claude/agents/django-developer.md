@@ -15,7 +15,7 @@ Antes de escribir cualquier linea de codigo, leer:
 
 ## Project Context
 - Stack: Python 3.12, Django 4.2.7, MySQL 8.0, Tailwind CSS + Alpine.js, Docker Compose
-- Apps: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `chatbot`, `conversaciones`, `portal`, `tramites`
+- Apps: `core`, `legajos`, `turnos`, `users`, `dashboard`, `configuracion`, `conversaciones`, `portal`, `tramites`
 - Dos superficies: **backoffice** (operadores) y **portal ciudadano** (público)
 - Base template backoffice: `includes/base.html`
 - Base template portal: `portal/base.html`
