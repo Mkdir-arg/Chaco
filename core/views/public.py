@@ -2,11 +2,20 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.dateparse import parse_datetime
 from django.utils.timezone import localtime
 from django.views.decorators.http import require_GET
+
+from dashboard.utils import (
+    contar_alertas_activas,
+    contar_ciudadanos,
+    contar_legajos,
+    contar_seguimientos_hoy,
+    contar_usuarios,
+)
 
 from ..selectors import get_localidades_values, get_municipios_values
 from core.services.relevamientos_supabase import (
@@ -52,27 +61,27 @@ def load_subsecretarias(request):
 @login_required
 def inicio_view(request):
     """Vista para la página de inicio del sistema"""
-    from django.contrib.auth.models import User
-    from legajos.models import Ciudadano
-    from datetime import datetime, timedelta
-    
-    # Estadísticas básicas
-    total_ciudadanos = Ciudadano.objects.count()
-    usuarios_activos = User.objects.filter(is_active=True).count()
-    
-    # Registros del mes actual
-    inicio_mes = datetime.now().replace(day=1)
-    registros_mes = Ciudadano.objects.filter(creado__gte=inicio_mes).count()
-    
-    # Actividad de hoy
-    hoy = datetime.now().date()
-    actividad_hoy = Ciudadano.objects.filter(creado__date=hoy).count()
-    
+    from datetime import timedelta
+
+    from django.utils import timezone
+    from legajos.models_programas import InscripcionPrograma
+
+    User = get_user_model()
+    ahora = timezone.now()
+    hace_24h = ahora - timedelta(hours=24)
+    inicio_mes = ahora.date().replace(day=1)
+    legajo_stats = contar_legajos()
+
     context = {
-        'total_ciudadanos': total_ciudadanos,
-        'usuarios_activos': usuarios_activos,
-        'registros_mes': registros_mes,
-        'actividad_hoy': actividad_hoy,
+        'total_ciudadanos': contar_ciudadanos(),
+        'usuarios_activos': User.objects.filter(last_login__gte=hace_24h).count(),
+        'registros_mes': InscripcionPrograma.objects.filter(fecha_inscripcion__gte=inicio_mes).count(),
+        'actividad_hoy': contar_seguimientos_hoy(),
+        'total_usuarios': contar_usuarios(),
+        'total_legajos': legajo_stats['total'],
+        'legajos_activos': legajo_stats['activos'],
+        'seguimientos_hoy': contar_seguimientos_hoy(),
+        'alertas_activas': contar_alertas_activas(),
     }
     
     return render(request, "inicio.html", context)

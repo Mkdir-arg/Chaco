@@ -22,6 +22,12 @@ elif (BASE_DIR / ".env.production").exists() and os.environ.get("ENVIRONMENT") =
 DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 ENVIRONMENT = os.environ.get("ENVIRONMENT", "dev")  # dev|qa|prd
 
+websockets_enabled_env = os.environ.get("WEBSOCKETS_ENABLED")
+if websockets_enabled_env is None:
+    WEBSOCKETS_ENABLED = os.environ.get("APP_RUNTIME", "runserver") == "daphne"
+else:
+    WEBSOCKETS_ENABLED = websockets_enabled_env == "True"
+
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 if not SECRET_KEY:
     raise ValueError("DJANGO_SECRET_KEY debe estar configurada en variables de entorno")

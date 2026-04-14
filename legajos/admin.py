@@ -211,7 +211,11 @@ class DerivacionInstitucionalAdmin(admin.ModelAdmin):
     list_filter = ('estado', 'urgencia', 'programa', 'creado')
     search_fields = ('ciudadano__dni', 'ciudadano__nombre', 'ciudadano__apellido', 'institucion__nombre')
     raw_id_fields = ('ciudadano', 'derivado_por', 'respondido_por', 'caso_creado')
-    readonly_fields = ('creado', 'modificado', 'fecha_respuesta')
+    readonly_fields = (
+        'ciudadano', 'institucion_programa', 'institucion', 'programa', 'motivo', 'urgencia',
+        'estado', 'respuesta', 'fecha_respuesta', 'respondido_por', 'caso_creado',
+        'derivado_por', 'creado', 'modificado'
+    )
     date_hierarchy = 'creado'
     
     fieldsets = (
@@ -233,6 +237,12 @@ class DerivacionInstitucionalAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 @admin.register(DerivacionCiudadano)

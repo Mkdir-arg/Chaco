@@ -16,19 +16,16 @@ from core.models import Institucion
 from ..models_institucional import (
     InstitucionPrograma,
     DerivacionCiudadano,
-    DerivacionInstitucional,
     CasoInstitucional,
     EstadoDerivacionCiudadano,
-    EstadoDerivacion,
     EstadoCaso,
     EstadoPrograma,
 )
 from ..forms import (
-    DerivacionInstitucionalForm,
     RechazarDerivacionForm,
     CambiarEstadoCasoForm,
 )
-from ..services import CasoService, DerivacionCiudadanoService, DerivacionService
+from ..services import CasoService, DerivacionCiudadanoService
 from core.decorators import group_required
 from ..permissions_institucional import (
     puede_ver_programa,
@@ -73,7 +70,7 @@ def institucion_detalle_programatico(request, pk):
     ).select_related('programa').annotate(
         derivaciones_pendientes=Count(
             'derivaciones',
-            filter=Q(derivaciones__estado=EstadoDerivacion.PENDIENTE)
+            filter=Q(derivaciones__estado=EstadoDerivacionCiudadano.PENDIENTE)
         ),
         casos_activos=Count(
             'casos',

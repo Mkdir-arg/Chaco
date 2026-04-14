@@ -5,19 +5,10 @@ from legajos.models_programas import Programa
 
 
 class Command(BaseCommand):
-    help = 'Crea programas de ejemplo para el sistema NODO'
+    help = 'Garantiza el programa base ÑACHEC para el entorno local'
 
     def handle(self, *args, **options):
         programas_data = [
-            {
-                'codigo': 'ACOMP-SOCIAL',
-                'nombre': 'Acompañamiento Social',
-                'tipo': 'ACOMPANAMIENTO_SOCIAL',
-                'descripcion': 'Programa de acompañamiento social integral',
-                'icono': 'heart',
-                'color': '#EF4444',
-                'orden': 1
-            },
             {
                 'codigo': 'ÑACHEC',
                 'nombre': 'ÑACHEC',
@@ -25,34 +16,7 @@ class Command(BaseCommand):
                 'descripcion': 'Programa de ÑACHEC',
                 'icono': 'shield-alt',
                 'color': '#10B981',
-                'orden': 2
-            },
-            {
-                'codigo': 'RED-DANOS',
-                'nombre': 'Reducción de Daños',
-                'tipo': 'REDUCCION_DANOS',
-                'descripcion': 'Programa de reducción de daños y riesgos',
-                'icono': 'hand-holding-medical',
-                'color': '#F59E0B',
-                'orden': 3
-            },
-            {
-                'codigo': 'REINS-SOCIAL',
-                'nombre': 'Reinserción Social',
-                'tipo': 'REINSERCION_SOCIAL',
-                'descripcion': 'Programa de reinserción social y laboral',
-                'icono': 'users',
-                'color': '#8B5CF6',
-                'orden': 4
-            },
-            {
-                'codigo': 'CAPAC-COMUNITARIA',
-                'nombre': 'Capacitación Comunitaria',
-                'tipo': 'CAPACITACION_COMUNITARIA',
-                'descripcion': 'Programa de capacitación a referentes comunitarios',
-                'icono': 'graduation-cap',
-                'color': '#3B82F6',
-                'orden': 5
+                'orden': 1
             },
         ]
 

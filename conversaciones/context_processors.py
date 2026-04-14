@@ -1,4 +1,4 @@
-from asgiref.sync import sync_to_async
+from django.conf import settings
 from django.utils.asyncio import async_unsafe
 
 @async_unsafe
@@ -11,9 +11,13 @@ def user_groups(request):
             groups = []
         return {
             'user_groups_list': groups,
-            'user_groups_json': str(groups).replace("'", '"')
+            'user_groups_json': str(groups).replace("'", '"'),
+            'user_is_superuser': request.user.is_superuser,
+            'websockets_enabled': getattr(settings, 'WEBSOCKETS_ENABLED', False),
         }
     return {
         'user_groups_list': [],
-        'user_groups_json': '[]'
+        'user_groups_json': '[]',
+        'user_is_superuser': False,
+        'websockets_enabled': getattr(settings, 'WEBSOCKETS_ENABLED', False),
     }

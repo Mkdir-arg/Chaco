@@ -6,22 +6,19 @@ from django.core.exceptions import ValidationError
 
 from ..models_institucional import (
     DerivacionCiudadano,
-    DerivacionInstitucional,
     CasoInstitucional,
     InstitucionPrograma,
-    EstadoDerivacion,
     EstadoCaso,
+    TipoInicioDerivacion,
     UrgenciaDerivacion,
 )
-from ..models import Ciudadano
-from legajos.models_programas import Programa
 
 
 class DerivacionInstitucionalForm(forms.ModelForm):
-    """Formulario para crear derivación institucional programática"""
+    """Compatibilidad para el nombre legacy usando el modelo unificado."""
     
     class Meta:
-        model = DerivacionInstitucional
+        model = DerivacionCiudadano
         fields = ['ciudadano', 'institucion_programa', 'motivo', 'urgencia', 'observaciones']
         widgets = {
             'ciudadano': forms.Select(attrs={
@@ -62,6 +59,13 @@ class DerivacionInstitucionalForm(forms.ModelForm):
         if ciudadano:
             self.fields['ciudadano'].initial = ciudadano
             self.fields['ciudadano'].widget = forms.HiddenInput()
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.tipo_inicio = TipoInicioDerivacion.DERIVACION
+        if commit:
+            instance.save()
+        return instance
 
 
 class DerivacionCiudadanoForm(forms.ModelForm):

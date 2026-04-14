@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 from django.contrib.auth.models import Group, User
-from django.test import Client, TestCase
+from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 
 from conversaciones.forms_chat import IniciarConversacionForm, MensajeConversacionForm
@@ -212,6 +212,7 @@ class ConversacionesViewsContractTests(TestCase):
         self.assertEqual(payload['mensaje']['contenido'], 'hola')
         self.assertEqual(conversacion.operador_asignado, self.operador)
 
+    @override_settings(WEBSOCKETS_ENABLED=True)
     def test_lista_renderiza_urls_para_websocket_runtime(self):
         group = Group.objects.create(name='Conversaciones')
         operador = User.objects.create_user(username='operador-lista', password='secret')
@@ -227,6 +228,7 @@ class ConversacionesViewsContractTests(TestCase):
         self.assertIn('data-close-url-template="/conversaciones/0/cerrar/"', html)
         self.assertIn('data-list-ws-path="/ws/conversaciones/"', html)
 
+    @override_settings(WEBSOCKETS_ENABLED=True)
     def test_detalle_renderiza_path_websocket_desde_template(self):
         group = Group.objects.create(name='Conversaciones')
         operador = User.objects.create_user(username='operador-detalle', password='secret')
@@ -243,3 +245,22 @@ class ConversacionesViewsContractTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn('data-ws-path-template="/ws/conversaciones/0/"', response.content.decode())
+
+    def test_lista_no_expone_path_websocket_si_runtime_no_lo_soporta(self):
+        group = Group.objects.create(name='Conversaciones')
+        operador = User.objects.create_user(username='operador-lista-local', password='secret')
+        operador.groups.add(group)
+
+        self.client.force_login(operador)
+        response = self.client.get(reverse('conversaciones:lista'))
+
+        self.assertEqual(response.status_code, 200)
+        html = response.content.decode()
+        self.assertIn('websocket_disable.js', html)
+        self.assertIn('data-list-ws-path=""', html)
+
+    def test_http_a_endpoint_websocket_devuelve_upgrade_required(self):
+        response = self.client.get('/ws/conversaciones/')
+
+        self.assertEqual(response.status_code, 426)
+        self.assertIn('requires an ASGI server', response.content.decode())

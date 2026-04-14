@@ -9,7 +9,7 @@
     class="space-y-6"
     x-data="chatOperador()"
     data-reply-url="{% url 'conversaciones:enviar_mensaje_operador' conversacion.id %}"
-    data-ws-path-template="/ws/conversaciones/0/"
+    data-ws-path-template="{% if websockets_enabled %}/ws/conversaciones/0/{% endif %}"
 >
     <!-- Header -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
@@ -112,7 +112,9 @@
             init() {
                 this.$nextTick(() => {
                     this.scrollToBottom();
-                    this.conectarWebSocket();
+                    if (window.websocketsEnabled) {
+                        this.conectarWebSocket();
+                    }
                 });
             },
             

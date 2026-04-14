@@ -13,7 +13,6 @@ from legajos.models import (
 from legajos.models_institucional import (
     CasoInstitucional,
     DerivacionCiudadano,
-    DerivacionInstitucional,
     InstitucionPrograma,
 )
 

@@ -267,6 +267,8 @@
             <script>
                 // Pasar grupos del usuario al JavaScript
                 window.userGroups = {{ user_groups_json|safe }};
+                window.isSuperuser = {{ user_is_superuser|yesno:"true,false" }};
+                window.websocketsEnabled = {{ websockets_enabled|yesno:"true,false" }};
                 window.conversacionesConfig = {
                     listUrl: "{% url 'conversaciones:lista' %}",
                     statsUrl: "{% url 'conversaciones:api_estadisticas' %}",
@@ -275,13 +277,18 @@
                     detailUrlTemplate: "{% url 'conversaciones:detalle' 0 %}",
                 };
             </script>
+            {% if not websockets_enabled %}
+                <script src="{% static 'custom/js/websocket_disable.js' %}"></script>
+            {% endif %}
             <script src="{% static 'custom/js/notification_sound.js' %}"></script>
-            <script src="{% static 'custom/js/alertas_websocket.js' %}"></script>
-            <script src="{% static 'custom/js/alertas_conversaciones_rt.js' %}"></script>
             <script src="{% static 'custom/js/alertas_conversaciones_fallback.js' %}"></script>
+            {% if websockets_enabled %}
+                <script src="{% static 'custom/js/alertas_websocket.js' %}"></script>
+                <script src="{% static 'custom/js/alertas_conversaciones_rt.js' %}"></script>
+            {% endif %}
             
             <!-- Sistema de tiempo real para conversaciones -->
-            {% if 'Conversaciones' in user_groups_list or 'OperadorCharla' in user_groups_list or user.is_superuser %}
+            {% if websockets_enabled and 'Conversaciones' in user_groups_list or websockets_enabled and 'OperadorCharla' in user_groups_list or websockets_enabled and user.is_superuser %}
                 <script src="{% static 'custom/js/conversaciones_tiempo_real_global.js' %}"></script>
                 <script src="{% static 'custom/js/conversaciones_lista_ws.js' %}"></script>
             {% endif %}

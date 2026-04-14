@@ -6,9 +6,7 @@ from django.utils import timezone
 from ..models_institucional import (
     CasoInstitucional,
     DerivacionCiudadano,
-    DerivacionInstitucional,
     EstadoCaso,
-    EstadoDerivacion,
     EstadoDerivacionCiudadano,
     EstadoGlobal,
     EstadoPrograma,
@@ -16,104 +14,23 @@ from ..models_institucional import (
 
 
 class DerivacionService:
-    """Servicio para gestión de derivaciones institucionales."""
+    """Compatibilidad para el nombre legacy del servicio institucional."""
 
     @staticmethod
-    @transaction.atomic
     def aceptar_derivacion(derivacion_id, usuario, responsable_caso=None):
-        derivacion = DerivacionInstitucional.objects.select_for_update().get(id=derivacion_id)
-
-        if derivacion.estado != EstadoDerivacion.PENDIENTE:
-            raise ValidationError(
-                f"La derivación ya fue procesada (estado: {derivacion.get_estado_display()})"
-            )
-
-        if hasattr(derivacion.institucion, "legajo_institucional"):
-            estado_global = derivacion.institucion.legajo_institucional.estado_global
-            if estado_global == EstadoGlobal.CERRADO:
-                raise ValidationError(
-                    "La institución está cerrada globalmente y no puede aceptar derivaciones"
-                )
-
-        if derivacion.institucion_programa.estado_programa != EstadoPrograma.ACTIVO:
-            raise ValidationError(
-                f"El programa está en estado "
-                f"{derivacion.institucion_programa.get_estado_programa_display()} "
-                "y no puede aceptar derivaciones"
-            )
-
-        if not derivacion.institucion_programa.activo:
-            raise ValidationError("El programa no está activo en esta institución")
-
-        if derivacion.institucion_programa.controlar_cupo:
-            casos_activos = CasoInstitucional.objects.filter(
-                institucion_programa=derivacion.institucion_programa,
-                estado__in=[EstadoCaso.ACTIVO, EstadoCaso.EN_SEGUIMIENTO],
-            ).count()
-
-            cupo_maximo = derivacion.institucion_programa.cupo_maximo
-
-            if (
-                casos_activos >= cupo_maximo
-                and not derivacion.institucion_programa.permite_sobrecupo
-            ):
-                raise ValidationError(
-                    f"Cupo lleno ({casos_activos}/{cupo_maximo}). "
-                    "No se permite sobrecupo en este programa."
-                )
-
-        caso_existente = CasoInstitucional.objects.filter(
-            ciudadano=derivacion.ciudadano,
-            institucion_programa=derivacion.institucion_programa,
-            estado__in=[EstadoCaso.ACTIVO, EstadoCaso.EN_SEGUIMIENTO],
-        ).first()
-
-        if caso_existente:
-            derivacion.estado = EstadoDerivacion.ACEPTADA_UNIFICADA
-            derivacion.caso_creado = caso_existente
-            derivacion.respondido_por = usuario
-            derivacion.fecha_respuesta = timezone.now()
-            derivacion.respuesta = f"Unificada con caso existente {caso_existente.codigo}"
-            derivacion.save()
-            return caso_existente, False
-
-        ultima_version = CasoInstitucional.objects.filter(
-            ciudadano=derivacion.ciudadano,
-            institucion_programa=derivacion.institucion_programa,
-        ).aggregate(Max("version"))["version__max"] or 0
-
-        caso = CasoInstitucional.objects.create(
-            ciudadano=derivacion.ciudadano,
-            institucion_programa=derivacion.institucion_programa,
-            version=ultima_version + 1,
-            estado=EstadoCaso.ACTIVO,
-            responsable=responsable_caso or usuario,
+        return DerivacionCiudadanoService.aceptar_derivacion(
+            derivacion_id=derivacion_id,
+            usuario=usuario,
+            responsable_caso=responsable_caso,
         )
 
-        derivacion.estado = EstadoDerivacion.ACEPTADA
-        derivacion.caso_creado = caso
-        derivacion.respondido_por = usuario
-        derivacion.fecha_respuesta = timezone.now()
-        derivacion.respuesta = f"Caso creado: {caso.codigo}"
-        derivacion.save()
-
-        return caso, True
-
     @staticmethod
-    @transaction.atomic
     def rechazar_derivacion(derivacion_id, usuario, motivo_rechazo):
-        derivacion = DerivacionInstitucional.objects.select_for_update().get(id=derivacion_id)
-
-        if derivacion.estado != EstadoDerivacion.PENDIENTE:
-            raise ValidationError(
-                f"La derivación ya fue procesada (estado: {derivacion.get_estado_display()})"
-            )
-
-        derivacion.estado = EstadoDerivacion.RECHAZADA
-        derivacion.respuesta = motivo_rechazo
-        derivacion.respondido_por = usuario
-        derivacion.fecha_respuesta = timezone.now()
-        derivacion.save()
+        return DerivacionCiudadanoService.rechazar_derivacion(
+            derivacion_id=derivacion_id,
+            usuario=usuario,
+            motivo_rechazo=motivo_rechazo,
+        )
 
 
 class DerivacionCiudadanoService:

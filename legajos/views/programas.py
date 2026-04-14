@@ -16,10 +16,8 @@ from ..models_institucional import (
     InstitucionPrograma,
     CoordinadorPrograma,
     DerivacionCiudadano,
-    DerivacionInstitucional,
     CasoInstitucional,
     EstadoDerivacionCiudadano,
-    EstadoDerivacion,
     EstadoCaso,
 )
 

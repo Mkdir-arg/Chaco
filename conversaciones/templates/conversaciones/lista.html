@@ -12,7 +12,7 @@
     data-detail-api-url-template="{% url 'conversaciones:api_conversacion_detalle' 0 %}"
     data-detail-url-template="{% url 'conversaciones:detalle' 0 %}"
     data-close-url-template="{% url 'conversaciones:cerrar' 0 %}"
-    data-list-ws-path="/ws/conversaciones/"
+    data-list-ws-path="{% if websockets_enabled %}/ws/conversaciones/{% endif %}"
 >
     <!-- Header -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">

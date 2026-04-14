@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from ..models import AlertaCiudadano
+from ..models import AlertaCiudadano, AlertaEventoCritico, EventoCritico
 from ..services import AlertasService, FiltrosUsuarioService
 
 
@@ -53,6 +53,25 @@ def cerrar_alerta_ajax(request, alerta_id):
         return JsonResponse({'success': success})
     
     return JsonResponse({'success': False})
+
+
+@login_required
+def cerrar_alerta_evento(request):
+    """Marca una alerta de evento crítico como vista por el responsable actual."""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Metodo no permitido'}, status=405)
+
+    evento_id = request.POST.get('evento_id')
+    if not evento_id:
+        return JsonResponse({'success': False, 'error': 'evento_id requerido'}, status=400)
+
+    evento = get_object_or_404(
+        EventoCritico.objects.select_related('legajo'),
+        pk=evento_id,
+        legajo__responsable=request.user,
+    )
+    AlertaEventoCritico.objects.get_or_create(evento=evento, responsable=request.user)
+    return JsonResponse({'success': True})
 
 
 @login_required

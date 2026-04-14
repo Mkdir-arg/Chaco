@@ -18,6 +18,7 @@ from .views import derivacion_programa as views_derivacion_programa
 from .views import institucional as views_institucional
 from .views import operativa as views_operativa
 from .views import programas as views_programas
+from . import views_ciudadanos_api
 
 app_name = "legajos"
 
@@ -25,6 +26,7 @@ urlpatterns = [
     path("", views_ciudadanos.CiudadanoListView.as_view(), name="lista"),
     path("nuevo/", views_ciudadanos.CiudadanoCreateView.as_view(), name="nuevo"),
     path("ciudadanos/", views_ciudadanos.CiudadanoListView.as_view(), name="ciudadanos"),
+    path("ciudadanos/buscar/", views_ciudadanos_api.ciudadano_buscar_api, name="ciudadano_buscar_api"),
     path("ciudadanos/nuevo/", views_ciudadanos.CiudadanoCreateView.as_view(), name="ciudadano_nuevo"),
     path("ciudadanos/confirmar/", views_ciudadanos.CiudadanoConfirmarView.as_view(), name="ciudadano_confirmar"),
     path("ciudadanos/manual/", views_ciudadanos.CiudadanoManualView.as_view(), name="ciudadano_manual"),
@@ -90,6 +92,8 @@ urlpatterns = [
     path("dashboard-contactos/api/metricas/", view_metricas_contactos_api, name="metricas_contactos_api"),
     path("dashboard-contactos/api/metricas-red/", view_metricas_red_contactos_api, name="metricas_red_contactos_api"),
     path("dashboard-contactos/exportar/", view_exportar_reporte_contactos, name="exportar_reporte_contactos"),
+    path("reportes/", views_simple.reportes_view, name="reportes"),
+    path("reportes/exportar-csv/", views_simple.exportar_reportes_csv, name="exportar_csv"),
     path("derivaciones-ciudadano/<int:derivacion_id>/aceptar/", views_derivacion_programa.aceptar_derivacion_ciudadano, name="derivacion_ciudadano_aceptar"),
     path("derivaciones-ciudadano/<int:derivacion_id>/rechazar/", views_derivacion_programa.rechazar_derivacion_ciudadano, name="derivacion_ciudadano_rechazar"),
     path("test-contactos/", views_simple.dashboard_contactos_simple, name="test_contactos"),
@@ -141,6 +145,7 @@ urlpatterns = [
     ),
     path("<uuid:legajo_id>/evolucion/", views_contactos_api.evolucion_legajo_api, name="evolucion_legajo"),
     path("alertas/", views_alertas.alertas_dashboard, name="alertas_dashboard"),
+    path("alertas/eventos/cerrar/", views_alertas.cerrar_alerta_evento, name="cerrar_alerta_evento"),
     path("alertas/<int:alerta_id>/cerrar-ajax/", views_alertas.cerrar_alerta_ajax, name="cerrar_alerta_ajax"),
     path("alertas/count/", views_alertas.alertas_count_ajax, name="alertas_count_ajax"),
     path("alertas/preview/", views_alertas.alertas_preview_ajax, name="alertas_preview_ajax"),
