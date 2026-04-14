@@ -8,7 +8,3 @@ class LegajosConfig(AppConfig):
     
     def ready(self):
         import legajos.signals  # noqa: F401
-        import legajos.signals.alerts  # noqa: F401
-        import legajos.signals.historial  # noqa: F401
-        import legajos.signals.programas  # noqa: F401
-        import legajos.signals.nachec  # noqa: F401

@@ -31,7 +31,7 @@ wait_for_database
 
 if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
   echo "Aplicando migraciones..."
-  python manage.py migrate --noinput
+  python manage.py migrate --run-syncdb --noinput
 fi
 
 if [ "${LOCAL_BOOTSTRAP_COMMANDS:-crear_superadmin setup_grupos crear_programas}" != "false" ]; then

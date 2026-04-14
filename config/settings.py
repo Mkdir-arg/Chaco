@@ -88,6 +88,17 @@ INSTALLED_APPS = [
     "healthcheck",
 ]
 
+if os.environ.get("DJANGO_SYNCDB_PROJECT_APPS", "False") == "True":
+    MIGRATION_MODULES = {
+        "users": None,
+        "core": None,
+        "dashboard": None,
+        "legajos": None,
+        "configuracion": None,
+        "conversaciones": None,
+        "portal": None,
+    }
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.gzip.GZipMiddleware",
