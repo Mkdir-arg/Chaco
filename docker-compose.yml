@@ -75,3 +75,10 @@ services:
 volumes:
   mysql_data:
   redis_data:
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${CHACO_DOCKER_SUBNET:-172.30.100.0/24}

@@ -114,6 +114,9 @@ services:
 networks:
   nodo-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: ${CHACO_PROD_DOCKER_SUBNET:-172.30.101.0/24}
 
 volumes:
   redis_data:
