@@ -29,12 +29,6 @@ class AdvancedPartitionManager:
             'partition_type': 'monthly',
             'retention_months': 12,
             'archive_after_months': 6
-        },
-        'auditoria_evento': {
-            'partition_field': 'timestamp',
-            'partition_type': 'monthly',
-            'retention_months': 60,
-            'archive_after_months': 24
         }
     }
     

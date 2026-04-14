@@ -427,9 +427,9 @@ El portal es la superficie pública para el ciudadano. Está completamente separ
 - Estados: activa → cerrada
 
 ### Trazabilidad y auditoría
-- **Todo el sistema es trazable** — cada acción queda registrada: quién configuró, quién cambió estado, quién aceptó una derivación, quién dio de baja, qué hizo el ciudadano en el portal
-- La auditoría clínica (`AuditoriaEvaluacion`, `AuditoriaCiudadano`) existe y funciona para el módulo SEDRONAR
-- La trazabilidad general del sistema (inscripciones, cambios de estado de programas, turnos, derivaciones) debe extenderse al resto de los módulos como parte del diseño de cada feature
+- El módulo transversal de auditoría fue retirado del proyecto activo el 2026-04-14
+- Si en documentación histórica aparecen referencias a `Auditoria*`, `LogAccion`, `SesionUsuario` o al dashboard de auditoría, deben leerse como contexto legacy y no como funcionalidad vigente
+- La trazabilidad futura, si vuelve a implementarse, debe rediseñarse como una feature nueva y no reactivando el código anterior
 
 #### Baja manual de un ciudadano en un programa persistente
 - Se ejecuta mediante un botón explícito desde la vista del ciudadano en el programa
