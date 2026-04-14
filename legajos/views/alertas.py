@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import login_required
+from django.core.cache import cache
 from django.http import JsonResponse
+from ..context_processors import alertas_criticas_cache_key
 from ..models import AlertaCiudadano, AlertaEventoCritico, EventoCritico
 from ..services import AlertasService, FiltrosUsuarioService
 
@@ -71,6 +73,7 @@ def cerrar_alerta_evento(request):
         legajo__responsable=request.user,
     )
     AlertaEventoCritico.objects.get_or_create(evento=evento, responsable=request.user)
+    cache.delete(alertas_criticas_cache_key(request.user.id))
     return JsonResponse({'success': True})
 
 

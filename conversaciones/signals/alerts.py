@@ -1,10 +1,14 @@
+import logging
+from datetime import timedelta
+
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
-from datetime import timedelta
 
 from ..models import Conversacion, Mensaje
 from legajos.services import AlertasService
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Conversacion)
@@ -49,10 +53,14 @@ def alerta_nueva_conversacion(sender, instance, created, **kwargs):
                 ]
             )
 
-            print(f"Nueva conversación #{instance.id} notificada a {len(operador_ids)} operadores")
+            logger.info(
+                "Nueva conversación #%s notificada a %s operadores",
+                instance.id,
+                len(operador_ids),
+            )
 
-        except Exception as e:
-            print(f"Error generando alerta de nueva conversación: {e}")
+        except Exception:
+            logger.exception("Error generando alerta de nueva conversación")
 
 
 @receiver(pre_save, sender=Conversacion)
@@ -77,8 +85,8 @@ def alerta_conversacion_cerrada(sender, instance, **kwargs):
                     AlertasService._enviar_notificacion_alerta(alerta)
         except Conversacion.DoesNotExist:
             pass
-        except Exception as e:
-            print(f"Error generando alerta de conversación cerrada: {e}")
+        except Exception:
+            logger.exception("Error generando alerta de conversación cerrada")
 
 
 @receiver(post_save, sender=Mensaje)
@@ -119,8 +127,8 @@ def verificar_tiempo_respuesta(sender, instance, created, **kwargs):
                             mensaje=f'Ciudadano respondió muy rápido ({tiempo_respuesta.seconds}s) - posible urgencia'
                         )
                         AlertasService._enviar_notificacion_alerta(alerta)
-        except Exception as e:
-            print(f"Error verificando tiempo de respuesta: {e}")
+        except Exception:
+            logger.exception("Error verificando tiempo de respuesta")
 
 
 def _verificar_palabras_riesgo(conversacion, mensaje):
@@ -143,8 +151,8 @@ def _verificar_palabras_riesgo(conversacion, mensaje):
                     mensaje=f'RIESGO CRÍTICO: Palabras de riesgo detectadas en conversación #{conversacion.id}'
                 )
                 AlertasService._enviar_notificacion_alerta(alerta)
-    except Exception as e:
-        print(f"Error verificando palabras de riesgo: {e}")
+    except Exception:
+        logger.exception("Error verificando palabras de riesgo")
 
 
 def _generar_alerta_mensaje_ciudadano(conversacion, mensaje):
@@ -175,8 +183,8 @@ def _generar_alerta_mensaje_ciudadano(conversacion, mensaje):
             }
         )
         
-    except Exception as e:
-        print(f"Error generando alerta de mensaje ciudadano: {e}")
+    except Exception:
+        logger.exception("Error generando alerta de mensaje ciudadano")
 
 
 def _crear_historial_mensaje(conversacion, mensaje):
@@ -190,5 +198,5 @@ def _crear_historial_mensaje(conversacion, mensaje):
             tipo='NUEVO_MENSAJE',
             mensaje=f'Nuevo mensaje en conversación #{conversacion.id}'
         )
-    except Exception as e:
-        print(f"Error creando historial de mensaje: {e}")
+    except Exception:
+        logger.exception("Error creando historial de mensaje")
