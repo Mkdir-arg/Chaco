@@ -45,11 +45,18 @@ class InstitucionRedirectMiddleware:
     
     def _es_actividad_propia(self, request, institucion):
         """Verifica si la actividad pertenece a la institución del usuario"""
-        from legajos.models import LegajoInstitucional
+        from legajos.models import PlanFortalecimiento
         try:
-            legajo = LegajoInstitucional.objects.filter(institucion=institucion).first()
-            if legajo and '/configuracion/actividades/' in request.path:
-                return True
-        except:
+            if '/configuracion/actividades/' not in request.path:
+                return False
+            partes = [segmento for segmento in request.path.split('/') if segmento]
+            actividad_pk = next((int(segmento) for segmento in partes if segmento.isdigit()), None)
+            if actividad_pk is None:
+                return False
+            return PlanFortalecimiento.objects.filter(
+                pk=actividad_pk,
+                legajo_institucional__institucion=institucion,
+            ).exists()
+        except Exception:
             pass
         return False

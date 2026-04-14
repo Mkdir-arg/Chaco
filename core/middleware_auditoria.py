@@ -38,7 +38,6 @@ class AccesoSensibleMiddleware(MiddlewareMixin):
     
     # Vistas que contienen datos sensibles
     VISTAS_SENSIBLES = [
-        'legajos:detalle',
         'legajos:ciudadano_detalle',
         'legajos:evaluacion_detalle',
         'legajos:evento_critico_detalle',

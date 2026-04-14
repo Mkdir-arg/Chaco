@@ -8,7 +8,6 @@ from legajos.models import (
     HistorialInscripto,
     HistorialStaff,
     InscriptoActividad,
-    LegajoInstitucional,
     PersonalInstitucion,
     StaffActividad,
 )
@@ -20,15 +19,6 @@ class ConfiguracionWorkflowError(Exception):
 
 
 class ConfiguracionInstitucionalService:
-    @staticmethod
-    @transaction.atomic
-    def ensure_legajo_institucional(institucion):
-        legajo, _ = LegajoInstitucional.objects.get_or_create(
-            institucion=institucion,
-            defaults={"estado_global": LegajoInstitucional.Estado.ACTIVO},
-        )
-        return legajo
-
     @staticmethod
     @transaction.atomic
     def assign_staff_to_actividad(

@@ -6,7 +6,6 @@ from legajos.models import (
     EvaluacionInstitucional,
     IndicadorInstitucional,
     InscriptoActividad,
-    LegajoInstitucional,
     PersonalInstitucion,
     PlanFortalecimiento,
     StaffActividad,
@@ -45,11 +44,13 @@ def get_instituciones_queryset_for_user(user, search=""):
 
 
 def build_institucion_detail_context(institucion):
-    legajo = LegajoInstitucional.objects.get(institucion=institucion)
     programas_activos = InstitucionPrograma.objects.filter(
         institucion=institucion,
         activo=True,
     ).select_related("programa").order_by("programa__orden")
+    planes = PlanFortalecimiento.objects.filter(
+        legajo_institucional__institucion=institucion
+    ).prefetch_related("staff__personal").order_by("-fecha_inicio")
 
     solapas = [
         {
@@ -61,37 +62,13 @@ def build_institucion_detail_context(institucion):
             "orden": 0,
         },
         {
-            "id": "personal",
-            "nombre": "Personal",
-            "icono": "people",
-            "color": None,
-            "estatica": True,
-            "orden": 10,
-        },
-        {
-            "id": "evaluaciones",
-            "nombre": "Evaluaciones",
-            "icono": "assessment",
-            "color": None,
-            "estatica": True,
-            "orden": 20,
-        },
-        {
             "id": "actividades",
             "nombre": "Actividades",
             "icono": "event",
             "color": None,
             "estatica": True,
             "orden": 25,
-            "badge": legajo.planes_fortalecimiento.count(),
-        },
-        {
-            "id": "documentos",
-            "nombre": "Documentos",
-            "icono": "folder",
-            "color": None,
-            "estatica": True,
-            "orden": 30,
+            "badge": planes.count(),
         },
     ]
 
@@ -123,19 +100,16 @@ def build_institucion_detail_context(institucion):
     solapas.sort(key=lambda item: item["orden"])
 
     return {
-        "legajo": legajo,
         "solapas": solapas,
         "personal": PersonalInstitucion.objects.filter(
-            legajo_institucional=legajo
+            legajo_institucional__institucion=institucion
         ).select_related("legajo_institucional"),
         "evaluaciones": EvaluacionInstitucional.objects.filter(
-            legajo_institucional=legajo
+            legajo_institucional__institucion=institucion
         ).select_related("evaluador").order_by("-fecha_evaluacion"),
-        "planes": PlanFortalecimiento.objects.filter(
-            legajo_institucional=legajo
-        ).prefetch_related("staff__personal").order_by("-fecha_inicio"),
+        "planes": planes,
         "indicadores": IndicadorInstitucional.objects.filter(
-            legajo_institucional=legajo
+            legajo_institucional__institucion=institucion
         ).select_related("legajo_institucional").order_by("-periodo"),
         "total_programas_activos": programas_activos.count(),
         "total_derivaciones_pendientes": sum(

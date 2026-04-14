@@ -46,15 +46,6 @@ urlpatterns = [
     path('clases/<int:pk>/eliminar/', login_required(views.ClaseEliminarView.as_view()), name='clase_eliminar'),
     path('clases/<int:pk>/asistencia/', login_required(views.ClaseAsistenciaView.as_view()), name='clase_asistencia'),
     
-    # Gestión de legajo institucional
-    path('instituciones/<int:institucion_pk>/personal/crear/', login_required(views.PersonalInstitucionCreateView.as_view()), name='personal_crear'),
-    path('instituciones/<int:institucion_pk>/evaluaciones/crear/', login_required(views.EvaluacionInstitucionCreateView.as_view()), name='evaluacion_crear'),
-    path('instituciones/<int:institucion_pk>/planes/crear/', login_required(views.PlanFortalecimientoCreateView.as_view()), name='plan_crear'),
-    path('instituciones/<int:institucion_pk>/indicadores/crear/', login_required(views.IndicadorInstitucionCreateView.as_view()), name='indicador_crear'),
-    path('instituciones/<int:pk>/documentos/subir/', login_required(views.documento_subir), name='documento_subir'),
-    
-
-    
     # Secretarías y Subsecretarías
     path('secretarias/', login_required(views.SecretariaListView.as_view()), name='secretarias'),
     path('secretarias/crear/', login_required(views.SecretariaCreateView.as_view()), name='secretaria_crear'),
