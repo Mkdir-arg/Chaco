@@ -496,11 +496,34 @@ Observaciones: {observaciones_cierre[:100]}...""",
         return redirect('legajos:programa_detalle', pk=2)
 
 
+def _aplicar_datos_relevamiento(relevamiento, post):
+    """Aplica los datos del POST a la instancia de relevamiento (sin guardar)."""
+    relevamiento.cantidad_convivientes = int(post.get('cantidad_convivientes', 0) or 0)
+    relevamiento.hay_embarazo = post.get('hay_embarazo') == 'on'
+    relevamiento.hay_discapacidad = post.get('hay_discapacidad') == 'on'
+    relevamiento.detalle_discapacidad = post.get('detalle_discapacidad', '')
+    relevamiento.ingreso_mensual_rango = post.get('ingreso_mensual_rango')
+    relevamiento.fuente_ingreso = post.get('fuente_ingreso')
+    relevamiento.situacion_laboral = post.get('situacion_laboral')
+    relevamiento.tipo_vivienda = post.get('tipo_vivienda')
+    relevamiento.material_predominante = post.get('material_predominante')
+    relevamiento.tiene_agua = post.get('tiene_agua') == 'on'
+    relevamiento.tiene_luz = post.get('tiene_luz') == 'on'
+    relevamiento.tiene_gas = post.get('tiene_gas') == 'on'
+    relevamiento.tiene_cloaca = post.get('tiene_cloaca') == 'on'
+    relevamiento.cobertura_salud = post.get('cobertura_salud')
+    relevamiento.menores_escolarizados = post.get('menores_escolarizados') == 'on'
+    relevamiento.acceso_alimentos = post.get('acceso_alimentos')
+    relevamiento.frecuencia_comidas = int(post.get('frecuencia_comidas', 0) or 0)
+    relevamiento.hay_violencia = post.get('hay_violencia') == 'on'
+    relevamiento.urgencia_alimentaria = post.get('urgencia_alimentaria') == 'on'
+    relevamiento.observaciones = post.get('observaciones', '')
+
+
 @login_required
 def formulario_relevamiento(request, caso_id):
     """Formulario de relevamiento sociofamiliar"""
     from django.contrib.contenttypes.models import ContentType
-    from django.utils import timezone
 
     from legajos.models import Adjunto
 
@@ -516,26 +539,7 @@ def formulario_relevamiento(request, caso_id):
             },
         )
 
-        relevamiento.cantidad_convivientes = int(request.POST.get('cantidad_convivientes', 0) or 0)
-        relevamiento.hay_embarazo = request.POST.get('hay_embarazo') == 'on'
-        relevamiento.hay_discapacidad = request.POST.get('hay_discapacidad') == 'on'
-        relevamiento.detalle_discapacidad = request.POST.get('detalle_discapacidad', '')
-        relevamiento.ingreso_mensual_rango = request.POST.get('ingreso_mensual_rango')
-        relevamiento.fuente_ingreso = request.POST.get('fuente_ingreso')
-        relevamiento.situacion_laboral = request.POST.get('situacion_laboral')
-        relevamiento.tipo_vivienda = request.POST.get('tipo_vivienda')
-        relevamiento.material_predominante = request.POST.get('material_predominante')
-        relevamiento.tiene_agua = request.POST.get('tiene_agua') == 'on'
-        relevamiento.tiene_luz = request.POST.get('tiene_luz') == 'on'
-        relevamiento.tiene_gas = request.POST.get('tiene_gas') == 'on'
-        relevamiento.tiene_cloaca = request.POST.get('tiene_cloaca') == 'on'
-        relevamiento.cobertura_salud = request.POST.get('cobertura_salud')
-        relevamiento.menores_escolarizados = request.POST.get('menores_escolarizados') == 'on'
-        relevamiento.acceso_alimentos = request.POST.get('acceso_alimentos')
-        relevamiento.frecuencia_comidas = int(request.POST.get('frecuencia_comidas', 0) or 0)
-        relevamiento.hay_violencia = request.POST.get('hay_violencia') == 'on'
-        relevamiento.urgencia_alimentaria = request.POST.get('urgencia_alimentaria') == 'on'
-        relevamiento.observaciones = request.POST.get('observaciones', '')
+        _aplicar_datos_relevamiento(relevamiento, request.POST)
         relevamiento.save()
 
         content_type = ContentType.objects.get_for_model(RelevamientoNachec)
@@ -566,14 +570,53 @@ def formulario_relevamiento(request, caso_id):
             frecuencia_comidas=0,
         )
 
+    score_total, score_categoria, score_desglose = relevamiento.calcular_scoring()
+
     return render(
         request,
         'legajos/nachec/formulario_relevamiento.html',
         {
             'caso': caso,
             'relevamiento': relevamiento,
+            'score_total': score_total,
+            'score_categoria': score_categoria,
+            'score_desglose': score_desglose,
         },
     )
+
+
+@login_required
+def autosave_relevamiento(request, caso_id):
+    """Autoguardado parcial del relevamiento — devuelve scoring en vivo."""
+    from django.http import JsonResponse
+    from django.utils import timezone
+
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Metodo no permitido'}, status=405)
+
+    caso = get_object_or_404(CasoNachec, id=caso_id)
+
+    relevamiento, _ = RelevamientoNachec.objects.get_or_create(
+        caso=caso,
+        defaults={
+            'territorial': request.user,
+            'cantidad_convivientes': 0,
+            'frecuencia_comidas': 0,
+        },
+    )
+
+    _aplicar_datos_relevamiento(relevamiento, request.POST)
+    relevamiento.save()
+
+    score_total, score_categoria, score_desglose = relevamiento.calcular_scoring()
+
+    return JsonResponse({
+        'success': True,
+        'score_total': score_total,
+        'score_categoria': score_categoria,
+        'score_desglose': score_desglose,
+        'saved_at': timezone.now().strftime('%H:%M:%S'),
+    })
 
 
 @login_required

@@ -72,6 +72,7 @@ from .nachec_decisiones import activar_plan, cerrar_caso, evaluar_caso, pasar_a_
 from .nachec_operacion import (  # noqa: F401
     adjuntar_evidencias,
     asignar_territorial,
+    autosave_relevamiento,
     completar_tarea,
     completar_validacion,
     enviar_a_asignacion,
