@@ -36,7 +36,6 @@
 
 **Archivos modificados:**
 - `docker-compose.yml` — nuevo stack local por defecto con `app`, `mysql`, `redis`
-- `docker-compose.hybrid.yml` — alineado al mismo contrato local simple
 - `docker-entrypoint.sh` — espera DB, corre migraciones y bootstrap idempotente mínimo antes de levantar Daphne
 - `Dockerfile` — instala un entrypoint estable fuera del bind mount local
 - `legajos/management/commands/crear_programas.py` — reemplaza campo legacy `activo` por `estado` + `naturaleza`

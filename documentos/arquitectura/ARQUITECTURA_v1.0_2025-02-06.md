@@ -1,5 +1,8 @@
 # Arquitectura del Sistema SistemSo
 
+> Documento histórico. Conserva decisiones y diagramas del stack 2025-02-06, pero no describe el entorno operativo actual.
+> Para arquitectura vigente usar `docs/team/arquitectura.md` y para desarrollo local usar `docs/team/entorno-local.md`.
+
 ## 1. Stack Tecnológico
 
 ### Backend
@@ -457,33 +460,32 @@ DOMINIO=tu-dominio.com
 ### Desarrollo
 ```bash
 # Levantar servicios
-docker-compose -f docker-compose.hybrid.yml up -d
+docker compose up -d --build
 
 # Ver logs
-docker-compose logs -f sedronar-http
-docker-compose logs -f sedronar-ws
+docker compose logs -f app
 
 # Ejecutar migraciones
-docker-compose exec sedronar-ws python manage.py migrate
+docker compose exec app python manage.py migrate
 
 # Crear superusuario
-docker-compose exec sedronar-ws python manage.py createsuperuser
+docker compose exec app python manage.py createsuperuser
 
-# Collectstatic
-docker-compose exec sedronar-http python manage.py collectstatic --noinput
+# Arranque alternativo con Daphne
+APP_RUNTIME=daphne docker compose up -d --build
 ```
 
 ### Producción
 ```bash
 # Build y deploy
-docker-compose -f docker-compose.hybrid.yml build
-docker-compose -f docker-compose.hybrid.yml up -d
+docker compose -f docker-compose.prod.yml build
+docker compose -f docker-compose.prod.yml up -d
 
-# Backup BD
-docker-compose exec sedronar-mysql mysqldump -u sedronar -p sedronar > backup.sql
+# Ver estado del stack
+docker compose -f docker-compose.prod.yml ps
 
-# Restore BD
-docker-compose exec -T sedronar-mysql mysql -u sedronar -p sedronar < backup.sql
+# Nota: la base de datos productiva actual vive fuera de Compose (RDS).
+# Los backups y restores deben hacerse desde el proveedor o tooling externo.
 
 # Ver métricas
 docker stats

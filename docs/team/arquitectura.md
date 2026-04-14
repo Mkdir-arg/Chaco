@@ -17,7 +17,7 @@
 | Frontend | Tailwind CSS + Alpine.js | CDN |
 | WebSocket | Django Channels + Redis | — |
 | Cache | Redis | 7 |
-| Servidor | Daphne ASGI (local) / Nginx + Gunicorn (despliegues legados) | — |
+| Servidor | Daphne ASGI (local) / Nginx + Daphne (producción actual) | — |
 | Contenedores | Docker Compose | — |
 | Admin UI | Django Admin | — |
 
