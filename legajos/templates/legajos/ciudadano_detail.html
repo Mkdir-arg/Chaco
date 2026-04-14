@@ -695,7 +695,7 @@
                                 <i class="fas fa-folder-open text-4xl text-gray-400"></i>
                             </div>
                             <h3 class="text-xl font-semibold text-[#252F40] mb-2">Sin acompañamientos clínicos activos</h3>
-                            <p class="text-[#8C8C8C] max-w-md mx-auto">La ficha del ciudadano se mantiene activa con programas, turnos, conversaciones e historial general.</p>
+                            <p class="text-[#8C8C8C] max-w-md mx-auto">La ficha del ciudadano se mantiene activa con programas, conversaciones e historial general.</p>
                         </div>
                     {% endif %}
             </div>
@@ -757,49 +757,6 @@
             <div class="text-center py-16">
                 <i class="fas fa-folder-open text-4xl text-gray-200 mb-3"></i>
                 <p class="text-[#8C8C8C] text-sm">No hay legajos de atención registrados para este ciudadano.</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Tab: Turnos -->
-    <div id="tab-turnos" class="tab-content hidden">
-        <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] overflow-hidden">
-            <div class="px-6 py-4 border-b border-[#E5E7EB]">
-                <h3 class="text-lg font-semibold text-[#252F40] flex items-center">
-                    <i class="fas fa-calendar-alt text-blue-500 mr-2"></i>Turnos
-                </h3>
-            </div>
-            {% if turnos_ciudadano %}
-            <div class="divide-y divide-[#E5E7EB]">
-                {% for turno in turnos_ciudadano %}
-                <div class="px-6 py-4 hover:bg-[#F9FAFB] transition-colors">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <span class="font-mono text-sm font-semibold text-blue-700">{{ turno.codigo_turno }}</span>
-                            <span class="ml-2 text-sm text-[#4A5565]">{{ turno.fecha|date:"d/m/Y" }} {{ turno.hora_inicio|time:"H:i" }}</span>
-                            {% if turno.configuracion %}
-                            <span class="ml-2 text-xs text-[#8C8C8C]">· {{ turno.configuracion }}</span>
-                            {% endif %}
-                        </div>
-                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium
-                            {% if turno.estado == 'CONFIRMADO' %}bg-green-100 text-green-700
-                            {% elif turno.estado == 'PENDIENTE' %}bg-yellow-100 text-yellow-700
-                            {% elif turno.estado == 'COMPLETADO' %}bg-blue-100 text-blue-700
-                            {% else %}bg-gray-100 text-gray-600{% endif %}">
-                            {{ turno.get_estado_display }}
-                        </span>
-                    </div>
-                    {% if turno.motivo_consulta %}
-                    <p class="mt-1 text-xs text-[#8C8C8C] truncate">{{ turno.motivo_consulta|truncatechars:100 }}</p>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="text-center py-16">
-                <i class="fas fa-calendar-times text-4xl text-gray-200 mb-3"></i>
-                <p class="text-[#8C8C8C] text-sm">No hay turnos registrados para este ciudadano.</p>
             </div>
             {% endif %}
         </div>

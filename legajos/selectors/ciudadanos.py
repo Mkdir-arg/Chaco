@@ -130,17 +130,6 @@ def build_ciudadano_detail_context(ciudadano, user=None):
         'programas_activos': SolapasService.obtener_programas_activos(ciudadano),
     }
 
-    # --- Turnos ---
-    try:
-        from portal.models import TurnoCiudadano
-        context['turnos_ciudadano'] = (
-            ciudadano.turnos
-            .select_related('configuracion', 'recurso')
-            .order_by('-fecha', '-hora_inicio')[:20]
-        )
-    except Exception:
-        context['turnos_ciudadano'] = []
-
     # --- Instituciones vinculadas (vía legajos) ---
     context['instituciones_ciudadano'] = []
 

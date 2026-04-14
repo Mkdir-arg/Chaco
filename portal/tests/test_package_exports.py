@@ -4,12 +4,11 @@ from django.test import SimpleTestCase
 class PortalPackageExportsTests(SimpleTestCase):
     def test_views_package_exports_public_symbols(self):
         from portal.views import ConsultarTramiteView, PortalHomeView
-        from portal.views.ciudadano import ciudadano_mi_perfil, ciudadano_mis_turnos
+        from portal.views.ciudadano import ciudadano_mi_perfil
 
         self.assertIsNotNone(PortalHomeView)
         self.assertIsNotNone(ConsultarTramiteView)
         self.assertTrue(callable(ciudadano_mi_perfil))
-        self.assertTrue(callable(ciudadano_mis_turnos))
 
     def test_forms_services_and_selectors_packages_export_public_symbols(self):
         from portal.forms import CiudadanoLoginForm, ConsultarTramiteForm

@@ -17,9 +17,3 @@ from .ciudadano_perfil import (  # noqa: F401
     get_ciudadano_programas_context,
 )
 from .public import get_portal_home_context, get_tramites_by_email  # noqa: F401
-from .turnos_ciudadano import (  # noqa: F401
-    get_recurso_turnos_activo_or_404,
-    get_recursos_turnos_activos,
-    get_turno_ciudadano_or_404,
-    get_turnos_ciudadano_contexto,
-)

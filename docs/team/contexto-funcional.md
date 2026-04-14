@@ -5,6 +5,8 @@
 
 > Última actualización: 2026-04-03 (sesión 9 — DX-059 stack local docker)
 
+> Nota 2026-04-14: el sistema de turnos fue retirado del proyecto activo. Si más abajo aparecen referencias a turnos, deben leerse como contexto histórico de decisiones previas, no como funcionalidad vigente.
+
 
 ---
 
@@ -23,10 +25,10 @@ Los tres dominios centrales son:
 
 | Actor | Quién es | Qué hace |
 |-------|----------|---------|
-| **Operador backoffice** | Empleado del organismo | Gestiona legajos, conversaciones, turnos, derivaciones |
+| **Operador backoffice** | Empleado del organismo | Gestiona legajos, conversaciones y derivaciones |
 | **Profesional** | Psicólogo, trabajador social, etc. | Lleva legajos de atención, planes de intervención, seguimientos |
 | **Administrador** | Rol técnico/supervisor | Configura el sistema, aprueba instituciones, gestiona usuarios |
-| **Ciudadano** | Persona en situación de vulnerabilidad | Accede al portal para turnos, ver sus programas, hacer consultas |
+| **Ciudadano** | Persona en situación de vulnerabilidad | Accede al portal para ver sus programas y hacer consultas |
 | **Encargado de Institución** | Representante de una ONG/organismo | Registra su institución, ve el estado del trámite |
 
 ---
@@ -73,7 +75,6 @@ El perfil del ciudadano es el centro de toda su información. Tiene solapas est�
 | Red Familiar | Estática | Grupo familiar |
 | Archivos | Estática | Documentos adjuntos |
 | Programas | Dinámica | Programas en los que está inscripto |
-| Turnos | Dinámica | Turnos asignados |
 | Instituciones | Dinámica | Instituciones donde fue atendido |
 | Conversaciones | Dinámica | Consultas y chat con operadores |
 | Derivaciones | Dinámica | Historial de derivaciones |

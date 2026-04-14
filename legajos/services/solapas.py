@@ -185,22 +185,6 @@ class SolapasService:
         if derivaciones_count:
             badges['derivaciones'] = {'tipo': 'numero', 'valor': derivaciones_count, 'color_hex': '#F97316'}
 
-        # Turnos próximos 7 días → número azul
-        hoy = timezone.now().date()
-        limite = hoy + datetime.timedelta(days=7)
-        try:
-            from portal.models import TurnoCiudadano
-            turnos_count = TurnoCiudadano.objects.filter(
-                ciudadano=ciudadano,
-                fecha__gte=hoy,
-                fecha__lte=limite,
-                estado__in=['PENDIENTE', 'CONFIRMADO'],
-            ).count()
-            if turnos_count:
-                badges['turnos'] = {'tipo': 'numero', 'valor': turnos_count, 'color_hex': '#3B82F6'}
-        except Exception:
-            pass
-
         # Mensajes no leídos del ciudadano → número violeta
         try:
             from conversaciones.models import Mensaje

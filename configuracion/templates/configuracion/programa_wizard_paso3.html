@@ -30,20 +30,6 @@
             {% endif %}
 
             <div class="space-y-5">
-                <!-- Turnos -->
-                <div class="flex items-start gap-3 p-4 rounded-lg border border-gray-200">
-                    <div class="pt-0.5">{{ form.tiene_turnos }}</div>
-                    <div>
-                        <p class="text-sm font-medium text-gray-900">{{ form.tiene_turnos.label }}</p>
-                        <p class="text-xs text-gray-500 mt-0.5">
-                            Habilita la gestión de agenda para este programa. La configuración de horarios y disponibilidad se realiza en el módulo de Turnos.
-                        </p>
-                    </div>
-                </div>
-                {% if form.tiene_turnos.errors %}
-                <p class="text-red-600 text-sm">{{ form.tiene_turnos.errors.0 }}</p>
-                {% endif %}
-
                 <!-- Cupo máximo -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">

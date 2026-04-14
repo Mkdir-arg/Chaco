@@ -142,7 +142,6 @@ def programa_wizard_paso3(request):
 
     if request.method == 'POST' and form.is_valid():
         data['paso3'] = {
-            'tiene_turnos': form.cleaned_data.get('tiene_turnos', False),
             'cupo_maximo': form.cleaned_data.get('cupo_maximo'),
             'tiene_lista_espera': form.cleaned_data.get('tiene_lista_espera', False),
         }
@@ -186,7 +185,6 @@ def programa_wizard_paso4(request):
             subsecretaria_id=p1['subsecretaria'],
             naturaleza=p2['naturaleza'],
             estado=Programa.Estado.BORRADOR,
-            tiene_turnos=p3.get('tiene_turnos', False),
             cupo_maximo=p3.get('cupo_maximo'),
             tiene_lista_espera=p3.get('tiene_lista_espera', False),
             icono=p4['icono'],
@@ -215,7 +213,6 @@ def programa_wizard_paso4(request):
             'descripcion': p1.get('descripcion'),
             'subsecretaria': subsecretaria,
             'naturaleza': dict(Programa.Naturaleza.choices).get(p2.get('naturaleza'), ''),
-            'tiene_turnos': p3.get('tiene_turnos', False),
             'cupo_maximo': p3.get('cupo_maximo'),
             'tiene_lista_espera': p3.get('tiene_lista_espera', False),
         },
@@ -300,7 +297,6 @@ def programa_editar_paso3(request, pk):
         return redirect('configuracion:programa_editar_paso2', pk=pk)
 
     initial = data.get('paso3', {
-        'tiene_turnos': programa.tiene_turnos,
         'cupo_maximo': programa.cupo_maximo,
         'tiene_lista_espera': programa.tiene_lista_espera,
     })
@@ -308,7 +304,6 @@ def programa_editar_paso3(request, pk):
 
     if request.method == 'POST' and form.is_valid():
         data['paso3'] = {
-            'tiene_turnos': form.cleaned_data.get('tiene_turnos', False),
             'cupo_maximo': form.cleaned_data.get('cupo_maximo'),
             'tiene_lista_espera': form.cleaned_data.get('tiene_lista_espera', False),
         }
@@ -350,7 +345,6 @@ def programa_editar_paso4(request, pk):
         programa.descripcion = p1.get('descripcion', '')
         programa.subsecretaria_id = p1['subsecretaria']
         programa.naturaleza = p2['naturaleza']
-        programa.tiene_turnos = p3.get('tiene_turnos', False)
         programa.cupo_maximo = p3.get('cupo_maximo')
         programa.tiene_lista_espera = p3.get('tiene_lista_espera', False)
         programa.icono = p4['icono']
@@ -381,7 +375,6 @@ def programa_editar_paso4(request, pk):
             'descripcion': p1.get('descripcion'),
             'subsecretaria': subsecretaria,
             'naturaleza': dict(Programa.Naturaleza.choices).get(p2.get('naturaleza'), ''),
-            'tiene_turnos': p3.get('tiene_turnos', False),
             'cupo_maximo': p3.get('cupo_maximo'),
             'tiene_lista_espera': p3.get('tiene_lista_espera', False),
         },

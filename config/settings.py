@@ -77,7 +77,6 @@ INSTALLED_APPS = [
     "health_check.db",
     "health_check.cache",
     "silk",
-    "turnos",
     "users",
     "core",
     "dashboard",

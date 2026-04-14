@@ -82,11 +82,7 @@ class ProgramaPaso2Form(forms.Form):
 
 
 class ProgramaPaso3Form(forms.Form):
-    """Paso 3 — Capacidades activables: turnos, cupo y lista de espera."""
-    tiene_turnos = forms.BooleanField(
-        required=False,
-        label='El programa gestiona turnos',
-    )
+    """Paso 3 — Capacidades activables: cupo y lista de espera."""
     cupo_maximo = forms.IntegerField(
         required=False,
         min_value=1,

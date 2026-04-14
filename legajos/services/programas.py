@@ -48,16 +48,4 @@ class BajaProgramaService:
         inscripcion.fecha_cierre = timezone.now().date()
         inscripcion.save(update_fields=['estado', 'motivo_cierre', 'fecha_cierre'])
 
-        # 2. Cancelar turnos pendientes/confirmados vinculados al programa
-        from portal.models import TurnoCiudadano
-        TurnoCiudadano.objects.filter(
-            ciudadano=inscripcion.ciudadano,
-            contexto_tipo=TurnoCiudadano.ContextoTipo.PROGRAMA,
-            contexto_id=inscripcion.programa_id,
-            estado__in=[
-                TurnoCiudadano.Estado.PENDIENTE,
-                TurnoCiudadano.Estado.CONFIRMADO,
-            ],
-        ).update(estado=TurnoCiudadano.Estado.CANCELADO_SISTEMA)
-
         return inscripcion

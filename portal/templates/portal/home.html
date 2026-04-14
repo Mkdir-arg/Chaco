@@ -112,7 +112,7 @@
                     <span class="text-white text-opacity-80">al alcance de un clic</span>
                 </h1>
                 <p class="text-lg text-white text-opacity-75 leading-relaxed mb-8 max-w-xl">
-                    Gestioná trámites, seguí tus programas sociales, solicitá turnos
+                    Gestioná trámites, seguí tus programas sociales, hacé consultas
                     y conectate con el municipio sin salir de casa.
                 </p>
 
@@ -133,11 +133,6 @@
 
             <!-- Grid de accesos rápidos -->
             <div class="grid grid-cols-2 gap-4 shrink-0 w-full max-w-xs">
-                <a href="{% url 'portal:ciudadano_login' %}?next={% url 'portal:ciudadano_mis_turnos' %}"
-                   class="bg-white bg-opacity-15 backdrop-blur-sm hover:bg-opacity-25 rounded-2xl p-5 text-center transition-all duration-200 group">
-                    <i class="fas fa-calendar-check text-3xl mb-2 group-hover:scale-110 transition-transform inline-block"></i>
-                    <p class="text-sm font-semibold">Turnos</p>
-                </a>
                 <a href="{% url 'portal:ciudadano_login' %}?next={% url 'portal:ciudadano_mis_programas' %}"
                    class="bg-white bg-opacity-15 backdrop-blur-sm hover:bg-opacity-25 rounded-2xl p-5 text-center transition-all duration-200 group">
                     <i class="fas fa-hands-helping text-3xl mb-2 group-hover:scale-110 transition-transform inline-block"></i>
@@ -329,76 +324,6 @@
     {% endif %}
 
     <!-- ══════════════════════════════════════════════════════
-         TURNOS ONLINE
-    ══════════════════════════════════════════════════════ -->
-    {% if recursos_turnos %}
-    <section class="section">
-        <div class="flex items-end justify-between mb-8">
-            <div>
-                <div class="section-label" style="background: #F0FDF4; color: #16A34A;">
-                    <i class="fas fa-calendar-check"></i> Turnos online
-                </div>
-                <h2 class="text-2xl font-extrabold text-[#252F40]">Solicitá un turno</h2>
-                <p class="text-[#8C8C8C] mt-1 text-sm">Elegí horario en instituciones y organismos del municipio, sin hacer fila</p>
-            </div>
-            <a href="{% url 'portal:ciudadano_login' %}?next={% url 'portal:ciudadano_solicitar_turno' %}"
-               class="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-green-600 transition-colors hover:text-green-700">
-                Solicitar turno <i class="fas fa-arrow-right text-xs"></i>
-            </a>
-        </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {% for recurso in recursos_turnos %}
-            <div class="turno-card bg-white rounded-2xl border border-[#E5E7EB] p-6">
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-green-50">
-                        {% if recurso.tipo == 'NODO' %}
-                            <i class="fas fa-hospital text-green-600 text-lg"></i>
-                        {% elif recurso.tipo == 'ORGANISMO' %}
-                            <i class="fas fa-landmark text-green-600 text-lg"></i>
-                        {% else %}
-                            <i class="fas fa-user-md text-green-600 text-lg"></i>
-                        {% endif %}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-bold text-[#252F40] leading-tight">{{ recurso.nombre }}</h3>
-                        <span class="inline-block mt-1 text-xs font-semibold px-2 py-0.5 rounded-full bg-green-50 text-green-700">
-                            {{ recurso.get_tipo_display }}
-                        </span>
-                    </div>
-                </div>
-                {% if recurso.descripcion %}
-                <p class="text-[#8C8C8C] text-sm leading-relaxed mb-3 line-clamp-2">{{ recurso.descripcion }}</p>
-                {% endif %}
-                {% if recurso.direccion %}
-                <div class="flex items-center gap-2 text-xs text-[#8C8C8C] mb-1">
-                    <i class="fas fa-map-marker-alt w-3"></i>
-                    <span>{{ recurso.direccion }}</span>
-                </div>
-                {% endif %}
-                {% if recurso.telefono %}
-                <div class="flex items-center gap-2 text-xs text-[#8C8C8C] mb-4">
-                    <i class="fas fa-phone w-3"></i>
-                    <span>{{ recurso.telefono }}</span>
-                </div>
-                {% endif %}
-                {% if recurso.requiere_aprobacion %}
-                <div class="text-xs text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg mb-4">
-                    <i class="fas fa-info-circle mr-1"></i> El turno requiere confirmación
-                </div>
-                {% endif %}
-                <a href="{% url 'portal:ciudadano_login' %}?next={% url 'portal:ciudadano_turno_calendario' recurso.pk %}"
-                   class="w-full text-center block text-white text-sm font-semibold py-2.5 rounded-xl transition-all duration-300 hover:shadow-md"
-                   style="background: linear-gradient(90deg, #16a34a 0%, #059669 100%);">
-                    <i class="fas fa-calendar-plus mr-2"></i>Sacar turno
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-    {% endif %}
-
-    <!-- ══════════════════════════════════════════════════════
          INSTITUCIONES NODO
     ══════════════════════════════════════════════════════ -->
     {% if instituciones %}
@@ -468,7 +393,7 @@
                 </div>
                 <h2 class="text-3xl font-extrabold mb-4">¿Ya tenés tu cuenta?<br>Ingresá ahora</h2>
                 <p class="text-white text-opacity-75 mb-8 leading-relaxed">
-                    Con tu DNI y contraseña podés ver todos tus programas, consultas y turnos
+                    Con tu DNI y contraseña podés ver todos tus programas y consultas
                     desde cualquier dispositivo.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">

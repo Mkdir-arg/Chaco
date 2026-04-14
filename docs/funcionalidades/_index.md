@@ -16,7 +16,6 @@
 | ÑACHEC | `nachec/` | v1.0 | 2026-03-09 |
 | Instituciones | `instituciones/` | v1.2 | 2026-03-15 |
 | Alertas | `alertas/` | v1.0 | 2026-03-09 |
-| Sistema de Turnos — Backoffice | `turnos-backoffice/` | v1.0 | 2026-03-09 |
 | Conversaciones — Chat Interno | `conversaciones-chat/` | v1.0 | 2026-03-09 |
 | Contactos y Red de Vínculos | `contactos-red/` | v1.0 | 2026-03-09 |
 | Usuarios y Permisos | `usuarios-permisos/` | v1.1 | 2026-03-15 |
@@ -51,8 +50,7 @@ El archivo mas reciente es el estado actual.
 |-----|------------|
 | `legajos` | Ciudadanos, legajos de atencion, programas, NACHEC, contactos, institucional |
 | `core` | Modelos base, institucion, auditoria, configuracion geografica |
-| `portal` | Portal ciudadano, turnos (modelo), registro instituciones |
-| `turnos` | Backoffice de turnos configurables |
+| `portal` | Portal ciudadano, registro instituciones |
 | `conversaciones` | Sistema de chat ciudadano-operador |
 | `configuracion` | Vistas de configuracion del sistema (geografía, instituciones) |
 | `users` | Usuarios del backoffice y permisos |

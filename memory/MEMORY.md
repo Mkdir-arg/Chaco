@@ -4,7 +4,13 @@
 ## Identidad real del repo
 
 - El repositorio activo es `SistemSo`, no `akuna_calc`.
-- Apps principales: `core`, `legajos`, `portal`, `turnos`, `conversaciones`, `configuracion`, `users`, `dashboard`, `tramites`, `healthcheck`.
+- Apps principales: `core`, `legajos`, `portal`, `conversaciones`, `configuracion`, `users`, `dashboard`, `tramites`, `healthcheck`.
+
+## Estado relevante 2026-04-14
+
+- El sistema de turnos fue retirado del proyecto activo.
+- `turnos/` ya no forma parte del arranque ni del dominio vigente; `portal` tampoco conserva modelos ni vistas de agenda ciudadana.
+- Las migraciones históricas de `core`, `portal` y `legajos` se ajustaron para que un entorno nuevo no dependa de una app eliminada.
 
 ## Estado relevante 2026-03-13
 

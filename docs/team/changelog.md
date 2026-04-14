@@ -14,6 +14,21 @@
 
 ---
 
+## 2026-04-14 — Retiro del sistema de turnos
+
+**User Story:** Como equipo de desarrollo quiero retirar el sistema de turnos del proyecto para simplificar el dominio activo y eliminar dependencias cruzadas obsoletas.
+
+**Archivos modificados:**
+- `config/settings.py`, `config/urls.py`, `portal/urls.py`, `portal/views/ciudadano.py` — sin app ni rutas activas de turnos
+- `core/models.py`, `legajos/models.py`, `legajos/models_programas.py`, `portal/models.py` — relaciones y modelos de turnos retirados del estado actual
+- `portal/migrations/0001_turnos_ciudadano.py`, `portal/migrations/0002_turnociudadano_auditoria_configuracion.py`, `portal/migrations/0003_rename_portal_turn_ciudada_idx_portal_turn_ciudada_8d9dee_idx_and_more.py`, `core/migrations/0007_institucion_configuracion_turnos.py`, `legajos/migrations/0023_configuracion_turnos_entidades.py` — migraciones históricas saneadas para no depender de la app eliminada
+- `portal/templates/portal/home.html`, `portal/templates/portal/ciudadano/base_ciudadano.html`, `legajos/templates/legajos/ciudadano_detail.html`, `configuracion/templates/configuracion/programa_wizard_paso3.html` — UI activa sin turnos ni agenda
+- `users/management/commands/setup_grupos.py`, `core/management/commands/load_initial_data.py`, `docs/team/arquitectura.md`, `docs/team/contexto-funcional.md`, `docs/funcionalidades/_index.md`, `memory/MEMORY.md`
+
+**Descripción:** Se retiró el sistema de turnos completo del proyecto activo. El portal ciudadano ya no expone agenda ni solicitud de turnos, el backoffice deja de registrar permisos o bootstrap asociado, los modelos de `core` y `legajos` dejan de enlazar con `ConfiguracionTurnos`, y la historia de migraciones quedó ajustada para que instalaciones nuevas no fallen por depender de una app inexistente.
+
+---
+
 ## 2026-04-14 — Retiro funcional de legajos clínicos e institucionales
 
 **User Story:** Como equipo de desarrollo quiero retirar del flujo activo los legajos de atención e institucionales para concentrar la operación en la ficha del ciudadano y en programas, sin perder compatibilidad con datos históricos.

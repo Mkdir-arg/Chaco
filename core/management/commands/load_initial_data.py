@@ -18,8 +18,8 @@ from django.db import transaction
 USUARIOS_DEMO = [
     # (username, first, last, password, grupos, is_staff)
     ("admin", "Admin", "Sistema", "admin123", [], True),
-    ("operador1", "Laura", "Fernández", "demo123", ["ciudadanoVer", "ciudadanoCrear", "turnoOperar", "conversacionOperar"], True),
-    ("configurador1", "Martín", "García", "demo123", ["programaConfigurar", "secretariaConfigurar", "turnoConfigurar"], True),
+    ("operador1", "Laura", "Fernández", "demo123", ["ciudadanoVer", "ciudadanoCrear", "conversacionOperar"], True),
+    ("configurador1", "Martín", "García", "demo123", ["programaConfigurar", "secretariaConfigurar"], True),
     ("profesional1", "Ana", "Martínez", "demo123", ["ciudadanoVer", "ciudadanoSensible", "Responsable"], True),
     ("encargado1", "Diego", "López", "demo123", ["EncargadoInstitucion"], False),
     ("ciudadano1", "Juan", "Pérez", "demo123", ["Ciudadanos"], False),

@@ -249,16 +249,6 @@ class Institucion(TimeStamped):
         related_name='instituciones_encargadas',
         verbose_name='Encargados de la Institución'
     )
-    
-    # Configuración de turnos (opcional)
-    configuracion_turnos = models.OneToOneField(
-        'turnos.ConfiguracionTurnos',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='institucion',
-        verbose_name='Configuración de turnos',
-    )
 
     # Información adicional para asistencia
     presta_asistencia = models.BooleanField(

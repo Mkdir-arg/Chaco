@@ -9,30 +9,4 @@ class Migration(migrations.Migration):
         ('portal', '0002_turnociudadano_auditoria_configuracion'),
     ]
 
-    operations = [
-        migrations.RenameIndex(
-            model_name='turnociudadano',
-            new_name='portal_turn_ciudada_8d9dee_idx',
-            old_name='portal_turn_ciudada_idx',
-        ),
-        migrations.RenameIndex(
-            model_name='turnociudadano',
-            new_name='portal_turn_recurso_57fadf_idx',
-            old_name='portal_turn_recurso_idx',
-        ),
-        migrations.RenameIndex(
-            model_name='turnociudadano',
-            new_name='portal_turn_fecha_96067b_idx',
-            old_name='portal_turn_fecha_idx',
-        ),
-        migrations.RenameIndex(
-            model_name='turnociudadano',
-            new_name='portal_turn_configu_702986_idx',
-            old_name='portal_turn_conf_fecha_idx',
-        ),
-        migrations.RenameIndex(
-            model_name='turnociudadano',
-            new_name='portal_turn_configu_22a7f3_idx',
-            old_name='portal_turn_conf_estado_idx',
-        ),
-    ]
+    operations = []

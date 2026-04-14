@@ -30,8 +30,7 @@ SistemSo/
 ├── config/           → settings, urls, wsgi, asgi, middlewares
 ├── core/             → Institucion, modelos geográficos, auditoría, utilidades base
 ├── legajos/          → Ciudadanos, legajos, programas, ÑACHEC, contactos, institucional
-├── portal/           → Portal ciudadano (auth, turnos legacy, registro instituciones)
-├── turnos/           → Backoffice de turnos configurables (NEW — app separada)
+├── portal/           → Portal ciudadano (auth, registro instituciones)
 ├── conversaciones/   → Chat ciudadano-operador, WebSocket
 ├── users/            → Usuarios del backoffice, permisos, SolicitudCambioEmail
 ├── configuracion/    → UI de configuración (sin modelos propios)
@@ -54,7 +53,7 @@ SistemSo/
 ### Modelos
 - Todos los modelos usan `verbose_name` y `__str__` obligatoriamente.
 - Los modelos abstractos base viven en `core/models.py` (`TimeStamped`, `LegajoBase`).
-- Las FKs entre apps se referencian como strings: `'legajos.Ciudadano'`, `'turnos.ConfiguracionTurnos'`.
+- Las FKs entre apps se referencian como strings: `'legajos.Ciudadano'`, `'core.Subsecretaria'`.
 - Los campos nuevos en modelos existentes son siempre `null=True` o tienen `default` para no romper datos.
 
 ### Migraciones
@@ -65,7 +64,6 @@ SistemSo/
 ### Seguridad
 - Todas las vistas del backoffice: `@login_required` mínimo.
 - Vistas del portal ciudadano: `@ciudadano_required` (decorator propio en `core/decorators.py`).
-- Vistas de administración de turnos: `group_required(['Administradores de Turnos'])`.
 - CSRF en todos los forms POST sin excepción. Las vistas con `@csrf_exempt` son deuda técnica.
 
 ### Modularización interna
@@ -86,6 +84,15 @@ SistemSo/
 ---
 
 ## Decisiones técnicas tomadas
+
+### DT-015 — Retiro del sistema de turnos (2026-04-14)
+**Contexto:** El proyecto dejó de ofrecer agenda ciudadana y backoffice de turnos. Mantener la app `turnos`, sus modelos legacy del portal y sus referencias cruzadas en `core` y `legajos` agregaba complejidad sin valor operativo.
+
+**Decisión:** Retirar el sistema de turnos del arranque del proyecto, del portal ciudadano, de los permisos bootstrap y de las relaciones de modelos. Las migraciones históricas de `core`, `portal` y `legajos` se limpiaron para que instalaciones nuevas no dependan de una app eliminada.
+
+**Consecuencia:** El código activo ya no expone turnos ni agenda. La documentación histórica puede seguir existiendo como referencia, pero no describe funcionalidad vigente.
+
+---
 
 ### DT-001 — Coexistencia de RecursoTurnos y ConfiguracionTurnos (2026-03-09)
 **Contexto:** El portal ciudadano usaba `RecursoTurnos` como única forma de configurar turnos. Se necesitaba extender el sistema para que cualquier entidad (Programa, Institución, Actividad) pudiera tener turnos configurables.

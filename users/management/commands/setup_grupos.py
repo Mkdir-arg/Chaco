@@ -19,7 +19,6 @@ from django.core.management.base import BaseCommand
 RENOMBRES_LEGACY = {
     "configurarSecretaria": "secretariaConfigurar",
     "ConfiguracionPrograma": "programaConfigurar",
-    "Administradores de Turnos": "turnoConfigurar",
     "EncargadoDispositivo": "EncargadoInstitucion",
 }
 
@@ -36,9 +35,6 @@ GRUPOS = [
     "programaConfigurar",
     # Programas — operativa
     "programaOperar",
-    # Turnos
-    "turnoConfigurar",
-    "turnoOperar",
     # Conversaciones
     "conversacionOperar",
     # Dashboard

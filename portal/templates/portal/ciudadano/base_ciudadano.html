@@ -78,19 +78,6 @@
                    {% endif %}>
                     <i class="fas fa-comments mr-1.5"></i>Mis Consultas
                 </a>
-
-                <a href="{% url 'portal:ciudadano_mis_turnos' %}"
-                   class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors
-                          {% if request.resolver_match.url_name == 'ciudadano_mis_turnos' or request.resolver_match.url_name == 'ciudadano_solicitar_turno' or request.resolver_match.url_name == 'ciudadano_turno_calendario' or request.resolver_match.url_name == 'ciudadano_confirmar_turno' or request.resolver_match.url_name == 'ciudadano_turno_confirmado' or request.resolver_match.url_name == 'ciudadano_cancelar_turno' %}
-                          text-white
-                          {% else %}
-                          text-[#8C8C8C] hover:text-[#252F40] hover:bg-[#F9FAFB]
-                          {% endif %}"
-                   {% if request.resolver_match.url_name == 'ciudadano_mis_turnos' or request.resolver_match.url_name == 'ciudadano_solicitar_turno' or request.resolver_match.url_name == 'ciudadano_turno_calendario' or request.resolver_match.url_name == 'ciudadano_confirmar_turno' or request.resolver_match.url_name == 'ciudadano_turno_confirmado' or request.resolver_match.url_name == 'ciudadano_cancelar_turno' %}
-                   style="background: linear-gradient(90deg, {{ branding.portal.primary_button_gradient_start }} 0%, {{ branding.portal.primary_button_gradient_end }} 100%);"
-                   {% endif %}>
-                    <i class="fas fa-calendar-alt mr-1.5"></i>Mis Turnos
-                </a>
             </nav>
 
             <!-- Botón cerrar sesión -->

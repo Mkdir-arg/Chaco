@@ -23,15 +23,6 @@ from .ciudadano_perfil import (
     ciudadano_mis_programas,
     ciudadano_programa_detalle,
 )
-from .ciudadano_turnos import (
-    ciudadano_cancelar_turno,
-    ciudadano_confirmar_turno,
-    ciudadano_mis_turnos,
-    ciudadano_solicitar_turno,
-    ciudadano_turno_calendario,
-    ciudadano_turno_confirmado,
-    ciudadano_turno_slots,
-)
 from .ciudadano_actividades import (  # noqa: F401
     ciudadano_inscribirse_actividad,
     ciudadano_mis_actividades,

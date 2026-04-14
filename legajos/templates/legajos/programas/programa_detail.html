@@ -620,7 +620,7 @@ function confirmarBaja(inscripcionId, nombreCiudadano) {
     Swal.fire({
         title: '¿Dar de baja?',
         html: `<p class="text-gray-600 mb-4">Estás por dar de baja a <strong>${nombreCiudadano}</strong> del programa.</p>
-               <p class="text-gray-600 mb-2">Esta acción cancelará sus turnos y flujo activos.</p>
+             <p class="text-gray-600 mb-2">Esta acción cerrará su inscripción activa y el flujo asociado.</p>
                <textarea id="swal-motivo" class="swal2-textarea" placeholder="Motivo obligatorio..." rows="3"></textarea>`,
         icon: 'warning',
         showCancelButton: true,

@@ -2,14 +2,11 @@ from core.models import Institucion
 from legajos.models import Ciudadano
 from legajos.models_programas import InscripcionPrograma, Programa
 
-from ..models import RecursoTurnos
-
 
 def get_portal_home_context():
     return {
         "programas": Programa.objects.filter(estado='ACTIVO').order_by("orden"),
         "instituciones": Institucion.objects.all()[:6],
-        "recursos_turnos": RecursoTurnos.objects.filter(activo=True)[:6],
         "stats": {
             "ciudadanos": Ciudadano.objects.count(),
             "instituciones": Institucion.objects.count(),
@@ -20,7 +17,6 @@ def get_portal_home_context():
         },
         "ciudadano_items": [
             "Mis programas sociales e inscripciones",
-            "Solicitar y gestionar turnos online",
             "Consultas y reclamos municipales",
             "Mis datos personales y contraseña",
         ],

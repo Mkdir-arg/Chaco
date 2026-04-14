@@ -41,16 +41,6 @@
     },
     {
         "model": "auth.group",
-        "pk": 9,
-        "fields": { "name": "turnoConfigurar", "permissions": [] }
-    },
-    {
-        "model": "auth.group",
-        "pk": 10,
-        "fields": { "name": "turnoOperar", "permissions": [] }
-    },
-    {
-        "model": "auth.group",
         "pk": 11,
         "fields": { "name": "conversacionOperar", "permissions": [] }
     },

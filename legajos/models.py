@@ -1088,16 +1088,6 @@ class PlanFortalecimiento(TimeStamped):
         verbose_name='Programa requerido',
         help_text='Solo aplica cuando tipo_acceso = Requiere inscripción a programa',
     )
-
-    # Configuración de turnos (opcional)
-    configuracion_turnos = models.OneToOneField(
-        'turnos.ConfiguracionTurnos',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='planfortalecimiento',
-        verbose_name='Configuración de turnos',
-    )
     
     class Meta:
         verbose_name = "Actividad Institucional"

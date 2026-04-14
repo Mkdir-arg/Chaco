@@ -39,7 +39,6 @@
                 </dd>
             </div>
             <div class="flex gap-2"><dt class="font-medium w-32">Naturaleza:</dt><dd>{{ resumen.naturaleza }}</dd></div>
-            <div class="flex gap-2"><dt class="font-medium w-32">Turnos:</dt><dd>{% if resumen.tiene_turnos %}Sí{% else %}No{% endif %}</dd></div>
             <div class="flex gap-2">
                 <dt class="font-medium w-32">Cupo:</dt>
                 <dd>{% if resumen.cupo_maximo %}{{ resumen.cupo_maximo }} inscripciones{% else %}Sin límite{% endif %}</dd>

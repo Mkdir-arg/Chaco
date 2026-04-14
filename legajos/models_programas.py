@@ -105,16 +105,6 @@ class Programa(TimeStamped):
         verbose_name='Subsecretaría',
     )
 
-    # Configuración de turnos (opcional)
-    configuracion_turnos = models.OneToOneField(
-        'turnos.ConfiguracionTurnos',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='programa',
-        verbose_name='Configuración de turnos',
-    )
-
     # Configuración para ciudadanos
     requiere_evaluacion = models.BooleanField(default=True)
     requiere_plan = models.BooleanField(default=True)

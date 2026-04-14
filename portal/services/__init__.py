@@ -24,8 +24,3 @@ from .consultas import (  # noqa: F401
     crear_mensaje_ciudadano_desde_portal,
 )
 from .registro import PortalRegistroService  # noqa: F401
-from .turnos_ciudadano import (  # noqa: F401
-    TurnoNoDisponibleError,
-    cancelar_turno_ciudadano,
-    reservar_turno_ciudadano,
-)
