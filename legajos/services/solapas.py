@@ -17,7 +17,6 @@ class SolapasService:
         {'id': 'conversaciones',   'nombre': 'Conversaciones',     'icono': 'comments',       'orden': 860, 'estatica': True},
         {'id': 'derivaciones',     'nombre': 'Derivaciones',       'icono': 'share-alt',      'orden': 870, 'estatica': True},
         {'id': 'alertas',          'nombre': 'Alertas',            'icono': 'bell',           'orden': 880, 'estatica': True},
-        {'id': 'cursos_actividades','nombre': 'Cursos y Actividades','icono': 'graduation-cap','orden': 900, 'estatica': True},
         {'id': 'linea_tiempo',     'nombre': 'Línea de tiempo',    'icono': 'history',        'orden': 950, 'estatica': True},
         {'id': 'red_familiar',     'nombre': 'Red Familiar',       'icono': 'users',          'orden': 998, 'estatica': True},
         {'id': 'archivos',         'nombre': 'Archivos',           'icono': 'folder',         'orden': 999, 'estatica': True},
