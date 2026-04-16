@@ -124,6 +124,8 @@
         </div>
     </section>
 
+    <div class="px-4 lg:px-5">
+
     <!-- Perfil social -->
     {% with tiene_social=ciudadano.tipo_vivienda|add:ciudadano.situacion_laboral|add:ciudadano.nivel_educativo|add:ciudadano.dni_fisico|add:ciudadano.estado_renaper|add:ciudadano.observaciones %}
     {% if tiene_social or puede_ver_sensible %}
@@ -1048,6 +1050,8 @@
             </div>
         </div>
     </div>
+</div>
+
 </div>
 
 <!-- Modal Nuevo Vínculo -->
