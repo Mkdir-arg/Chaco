@@ -14,8 +14,6 @@ class SolapasService:
     # Solapas estáticas (siempre visibles)
     SOLAPAS_ESTATICAS = [
         {'id': 'resumen',          'nombre': 'Resumen',           'icono': 'tachometer-alt', 'orden': 0,   'estatica': True},
-        {'id': 'turnos',           'nombre': 'Turnos',             'icono': 'calendar-alt',   'orden': 800, 'estatica': True},
-        {'id': 'instituciones',    'nombre': 'Instituciones',      'icono': 'building',       'orden': 850, 'estatica': True},
         {'id': 'conversaciones',   'nombre': 'Conversaciones',     'icono': 'comments',       'orden': 860, 'estatica': True},
         {'id': 'derivaciones',     'nombre': 'Derivaciones',       'icono': 'share-alt',      'orden': 870, 'estatica': True},
         {'id': 'alertas',          'nombre': 'Alertas',            'icono': 'bell',           'orden': 880, 'estatica': True},

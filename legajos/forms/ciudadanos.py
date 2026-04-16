@@ -3,6 +3,27 @@ from django import forms
 from ..models import Ciudadano
 
 
+_FLOWBITE_INPUT_CSS = (
+    'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 '
+    'text-sm text-gray-900 shadow-sm transition-colors '
+    'focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+)
+_FLOWBITE_READONLY_CSS = (
+    'block w-full rounded-lg border border-gray-200 bg-gray-100 p-2.5 '
+    'text-sm text-gray-500 shadow-sm cursor-not-allowed'
+)
+_FLOWBITE_TEXTAREA_CSS = (
+    'block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 '
+    'text-sm text-gray-900 shadow-sm transition-colors '
+    'focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20'
+)
+_FLOWBITE_FILE_CSS = (
+    'block w-full text-sm text-gray-700 file:mr-4 file:rounded-lg file:border-0 '
+    'file:bg-blue-600 file:px-4 file:py-2.5 file:font-medium file:text-white '
+    'hover:file:bg-blue-700'
+)
+
+
 class ConsultaRenaperForm(forms.Form):
     """Formulario para consultar datos en RENAPER"""
 
@@ -18,7 +39,7 @@ class ConsultaRenaperForm(forms.Form):
         label='DNI',
         widget=forms.TextInput(
             attrs={
-                'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                'class': _FLOWBITE_INPUT_CSS,
                 'placeholder': 'Ingrese el DNI (ej: 12345678)',
             }
         ),
@@ -29,7 +50,7 @@ class ConsultaRenaperForm(forms.Form):
         label='Sexo',
         widget=forms.Select(
             attrs={
-                'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                'class': _FLOWBITE_INPUT_CSS,
             }
         ),
     )
@@ -65,59 +86,59 @@ class CiudadanoForm(forms.ModelForm):
         widgets = {
             'dni': forms.TextInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_READONLY_CSS,
                     'readonly': True,
                 }
             ),
             'nombre': forms.TextInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'apellido': forms.TextInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'fecha_nacimiento': forms.DateInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                     'type': 'date',
                 }
             ),
             'genero': forms.Select(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'telefono': forms.TextInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'email': forms.EmailInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'domicilio': forms.TextInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'provincia': forms.Select(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'municipio': forms.Select(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
             'localidad': forms.Select(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                 }
             ),
         }
@@ -129,7 +150,7 @@ class CiudadanoManualForm(CiudadanoForm):
             **CiudadanoForm.Meta.widgets,
             'dni': forms.TextInput(
                 attrs={
-                    'class': 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500',
+                    'class': _FLOWBITE_INPUT_CSS,
                     'placeholder': 'Ingrese el DNI',
                 }
             ),
@@ -140,7 +161,7 @@ class CiudadanoConfirmarForm(CiudadanoForm):
     pass
 
 
-_UPDATE_CSS = 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500'
+_UPDATE_CSS = _FLOWBITE_INPUT_CSS
 
 
 class CiudadanoUpdateForm(CiudadanoForm):
@@ -160,19 +181,19 @@ class CiudadanoUpdateForm(CiudadanoForm):
         widgets = {
             **CiudadanoForm.Meta.widgets,
             'foto': forms.ClearableFileInput(attrs={
-                'class': 'mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100',
+                'class': _FLOWBITE_FILE_CSS,
                 'accept': 'image/*',
             }),
             'tipo_vivienda': forms.Select(attrs={'class': _UPDATE_CSS}),
             'tenencia_vivienda': forms.Select(attrs={'class': _UPDATE_CSS}),
-            'condiciones_vivienda': forms.Textarea(attrs={'class': _UPDATE_CSS, 'rows': 3}),
+            'condiciones_vivienda': forms.Textarea(attrs={'class': _FLOWBITE_TEXTAREA_CSS, 'rows': 3}),
             'situacion_laboral': forms.Select(attrs={'class': _UPDATE_CSS}),
             'ingreso_estimado': forms.Select(attrs={'class': _UPDATE_CSS}),
             'obra_social': forms.TextInput(attrs={'class': _UPDATE_CSS}),
             'nivel_educativo': forms.Select(attrs={'class': _UPDATE_CSS}),
             'dni_fisico': forms.Select(attrs={'class': _UPDATE_CSS}),
             'estado_renaper': forms.Select(attrs={'class': _UPDATE_CSS}),
-            'observaciones': forms.Textarea(attrs={'class': _UPDATE_CSS, 'rows': 4}),
+            'observaciones': forms.Textarea(attrs={'class': _FLOWBITE_TEXTAREA_CSS, 'rows': 4}),
         }
 
     def __init__(self, *args, puede_ver_sensible=False, **kwargs):
@@ -188,7 +209,7 @@ class CiudadanoUpdateForm(CiudadanoForm):
             self.fields['medicacion_habitual'] = forms.CharField(
                 required=False,
                 label='Medicación habitual',
-                widget=forms.Textarea(attrs={'class': self._FIELD_CSS, 'rows': 3}),
+                widget=forms.Textarea(attrs={'class': _FLOWBITE_TEXTAREA_CSS, 'rows': 3}),
             )
             self.fields['estado_migratorio'] = forms.ChoiceField(
                 choices=[('', '---------')] + list(_C.EstadoMigratorio.choices),

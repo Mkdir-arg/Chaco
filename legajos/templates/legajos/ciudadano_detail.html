@@ -4,49 +4,112 @@
 {% block title %}{{ ciudadano.apellido }}, {{ ciudadano.nombre }}{% endblock %}
 
 {% block main-content %}
-<div class="max-w-full mx-4 lg:mx-8">
+<div class="space-y-8">
 
 
     <!-- Información Personal - Header completo -->
-    <div class="mb-8">
-        <div class="bg-white rounded-2xl shadow-sm border border-[#E5E7EB] overflow-hidden">
-            <div class="relative p-8">
-                <div class="relative z-10">
-                    <div class="mb-6 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-                        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:space-x-6">
-                            <!-- Avatar / Foto -->
-                            {% if ciudadano.foto %}
-                            <img src="{{ ciudadano.foto.url }}" alt="Foto de {{ ciudadano.nombre_completo }}" class="w-20 h-20 rounded-full object-cover border-2 border-gray-200 shadow">
-                            {% else %}
-                            <div class="w-20 h-20 bg-gradient-to-br from-[#3B82F6] to-[#8B5CF6] rounded-full flex items-center justify-center">
-                                <span class="text-3xl font-bold text-white">{{ ciudadano.nombre.0 }}{{ ciudadano.apellido.0 }}</span>
+    <section class="mb-10 overflow-hidden rounded-3xl bg-gradient-to-r from-blue-50 via-white to-indigo-50 px-5 py-5 lg:px-6 lg:py-6">
+            <nav class="mb-4 flex" aria-label="Breadcrumb">
+                <ol class="inline-flex items-center gap-2 rounded-2xl border border-white/80 bg-white/80 px-3 py-2 text-sm text-gray-600 shadow-sm backdrop-blur">
+                    <li>
+                        <a href="{% url 'legajos:ciudadanos' %}" class="inline-flex items-center gap-2 rounded-lg px-2 py-1 hover:bg-white hover:text-gray-700">
+                            <i class="fas fa-users text-xs"></i>
+                            <span>Ciudadanos</span>
+                        </a>
+                    </li>
+                    <li><i class="fas fa-chevron-right text-[10px] text-gray-400"></i></li>
+                    <li class="rounded-lg bg-white px-2 py-1 text-gray-700 shadow-sm">{{ ciudadano.apellido }}, {{ ciudadano.nombre }}</li>
+                </ol>
+            </nav>
+
+            <div class="grid gap-5 xl:grid-cols-12 xl:items-center">
+                    <div class="xl:col-span-4">
+                        <div class="flex flex-col gap-4 sm:flex-row xl:flex-col xl:items-start 2xl:flex-row 2xl:items-center">
+                            <div class="flex-shrink-0">
+                                {% if ciudadano.foto %}
+                                <img src="{{ ciudadano.foto.url }}" alt="Foto de {{ ciudadano.nombre_completo }}" class="h-28 w-28 rounded-3xl object-cover shadow-sm ring-4 ring-white lg:h-32 lg:w-32">
+                                {% else %}
+                                <div class="flex h-28 w-28 items-center justify-center rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-600 shadow-sm ring-4 ring-white lg:h-32 lg:w-32">
+                                    <span class="text-4xl font-bold text-white">{{ ciudadano.nombre.0 }}{{ ciudadano.apellido.0 }}</span>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endif %}
-                            
-                            <!-- Info básica -->
+
                             <div class="min-w-0">
-                                <h2 class="mb-1 break-words text-2xl font-bold text-[#252F40] sm:text-3xl">{{ ciudadano.apellido }}, {{ ciudadano.nombre }}</h2>
-                                <p class="text-[#8C8C8C] text-lg">DNI: {{ ciudadano.dni }}</p>
+                                <div class="mb-3 flex flex-wrap items-center gap-2">
+                                    <span class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1 text-xs font-medium text-blue-700 shadow-sm ring-1 ring-blue-100">
+                                        <span class="h-2 w-2 rounded-full bg-blue-600"></span>
+                                        Ficha integral ciudadana
+                                    </span>
+                                    {% if alertas_ciudadano %}
+                                    <button onclick="cambiarTab('alertas')" class="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700 ring-1 ring-red-200 transition hover:bg-red-100">
+                                        <i class="fas fa-bell text-[10px]"></i>
+                                        {{ alertas_ciudadano.count }} alerta{{ alertas_ciudadano.count|pluralize }}
+                                    </button>
+                                    {% endif %}
+                                </div>
+
+                                <h1 class="break-words text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">{{ ciudadano.apellido }}, {{ ciudadano.nombre }}</h1>
+                                <p class="mt-3 max-w-xl text-sm leading-6 text-slate-600">Vista general del ciudadano con acceso a perfil social, alertas, actividad reciente y programas vinculados.</p>
                             </div>
                         </div>
-                        
-                        <!-- Botones de acción -->
-                        <div class="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-                            <a href="{% url 'legajos:ciudadano_editar' ciudadano.pk %}" class="flex items-center justify-center space-x-2 rounded-xl border border-[#E5E7EB] bg-white px-6 py-3 text-[#4A5565] transition-all hover:bg-[#F9FAFB]">
+                    </div>
+
+                    <div class="xl:col-span-5">
+                        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-2">
+                            <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+                                <p class="text-xs font-medium uppercase tracking-wide text-gray-500">DNI</p>
+                                <p class="mt-1 text-sm font-semibold text-gray-900">{{ ciudadano.dni }}</p>
+                            </div>
+                            {% if ciudadano.genero %}
+                            <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+                                <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Género</p>
+                                <p class="mt-1 text-sm font-semibold text-gray-900">{{ ciudadano.get_genero_display|default:ciudadano.genero }}</p>
+                            </div>
+                            {% endif %}
+                            <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+                                <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Acompañamientos</p>
+                                <p class="mt-1 text-sm font-semibold text-gray-900">{{ acompanamientos_activos_count }}</p>
+                            </div>
+                            {% if ciudadano.domicilio %}
+                            <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm sm:col-span-2 xl:col-span-1">
+                                <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Domicilio</p>
+                                <p class="mt-1 text-sm font-semibold text-gray-900">{{ ciudadano.domicilio }}</p>
+                            </div>
+                            {% endif %}
+                            {% if ciudadano.telefono %}
+                            <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm">
+                                <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Teléfono</p>
+                                <p class="mt-1 text-sm font-semibold text-gray-900">{{ ciudadano.telefono }}</p>
+                            </div>
+                            {% endif %}
+                            {% if ciudadano.email %}
+                            <div class="rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-sm sm:col-span-2">
+                                <p class="text-xs font-medium uppercase tracking-wide text-gray-500">Email</p>
+                                <p class="mt-1 text-sm font-semibold text-gray-900 break-all">{{ ciudadano.email }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="xl:col-span-3">
+                        <div class="flex h-full flex-col justify-center gap-3">
+                            <a href="{% url 'legajos:ciudadano_editar' ciudadano.pk %}" class="inline-flex items-center justify-center gap-2 rounded-2xl border border-gray-200 bg-white px-5 py-3 text-sm font-medium text-gray-700 shadow-sm transition hover:bg-gray-50 focus:outline-none focus:ring-4 focus:ring-blue-100">
                                 <i class="fas fa-edit"></i>
                                 <span>Editar</span>
                             </a>
-                            <a href="{% url 'legajos:derivar_programa' ciudadano.pk %}" class="flex items-center justify-center space-x-2 rounded-xl bg-[#10B981] px-6 py-3 font-semibold text-white shadow-sm transition-all hover:bg-[#059669]">
+                            <a href="{% url 'legajos:derivar_programa' ciudadano.pk %}" class="inline-flex items-center justify-center gap-2 rounded-2xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 focus:outline-none focus:ring-4 focus:ring-emerald-200">
                                 <i class="fas fa-share"></i>
                                 <span>Derivar a Programa</span>
                             </a>
                         </div>
                     </div>
-                    
+                </div>
+
                     <!-- Información detallada en grid -->
-                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-4 2xl:grid-cols-6">
+            <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                         {% if ciudadano.fecha_nacimiento %}
-                        <div class="bg-[#F9FAFB] rounded-xl p-4 border border-[#E5E7EB]">
+                <div class="rounded-2xl border border-gray-200 bg-white/80 p-4 shadow-sm backdrop-blur">
                             <div class="flex items-center space-x-2 mb-2">
                                 <i class="fas fa-birthday-cake text-[#F59E0B]"></i>
                                 <span class="text-[#8C8C8C] text-sm font-medium">Nacimiento</span>
@@ -54,72 +117,30 @@
                             <p class="text-[#252F40] font-semibold">{{ ciudadano.fecha_nacimiento|date:"d/m/Y" }}</p>
                         </div>
                         {% endif %}
-                        
-                        {% if ciudadano.genero %}
-                        <div class="bg-[#F9FAFB] rounded-xl p-4 border border-[#E5E7EB]">
-                            <div class="flex items-center space-x-2 mb-2">
-                                <i class="fas fa-user text-[#EC4899]"></i>
-                                <span class="text-[#8C8C8C] text-sm font-medium">Género</span>
-                            </div>
-                            <p class="text-[#252F40] font-semibold">{{ ciudadano.get_genero_display|default:ciudadano.genero }}</p>
-                        </div>
-                        {% endif %}
-                        
-                        {% if ciudadano.telefono %}
-                        <div class="bg-[#F9FAFB] rounded-xl p-4 border border-[#E5E7EB]">
-                            <div class="flex items-center space-x-2 mb-2">
-                                <i class="fas fa-phone text-[#10B981]"></i>
-                                <span class="text-[#8C8C8C] text-sm font-medium">Teléfono</span>
-                            </div>
-                            <p class="text-[#252F40] font-semibold">{{ ciudadano.telefono }}</p>
-                        </div>
-                        {% endif %}
-                        
-                        {% if ciudadano.email %}
-                        <div class="bg-[#F9FAFB] rounded-xl p-4 border border-[#E5E7EB]">
-                            <div class="flex items-center space-x-2 mb-2">
-                                <i class="fas fa-envelope text-[#3B82F6]"></i>
-                                <span class="text-[#8C8C8C] text-sm font-medium">Email</span>
-                            </div>
-                            <p class="text-[#252F40] font-semibold text-sm">{{ ciudadano.email }}</p>
-                        </div>
-                        {% endif %}
-                        
-                        {% if ciudadano.domicilio %}
-                        <div class="bg-[#F9FAFB] rounded-xl p-4 border border-[#E5E7EB] sm:col-span-2 xl:col-span-2">
-                            <div class="flex items-center space-x-2 mb-2">
-                                <i class="fas fa-map-marker-alt text-[#EF4444]"></i>
-                                <span class="text-[#8C8C8C] text-sm font-medium">Domicilio</span>
-                            </div>
-                            <p class="text-[#252F40] font-semibold">{{ ciudadano.domicilio }}</p>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Estadística de legajos -->
-                        <div class="bg-[#F9FAFB] rounded-xl p-4 border border-[#E5E7EB]">
-                            <div class="flex items-center space-x-2 mb-2">
-                                <i class="fas fa-folder text-[#3B82F6]"></i>
-                                <span class="text-[#8C8C8C] text-sm font-medium">Acompañamiento</span>
-                            </div>
-                            <p class="text-[#252F40] font-semibold text-xl">{{ acompanamientos_activos_count }}</p>
-                        </div>
                     </div>
                 </div>
-            </div>
         </div>
-    </div>
+    </section>
 
     <!-- Perfil social -->
     {% with tiene_social=ciudadano.tipo_vivienda|add:ciudadano.situacion_laboral|add:ciudadano.nivel_educativo|add:ciudadano.dni_fisico|add:ciudadano.estado_renaper|add:ciudadano.observaciones %}
     {% if tiene_social or puede_ver_sensible %}
-    <div class="mb-8">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 class="text-lg font-semibold text-gray-900 mb-5 flex items-center">
-                <i class="fas fa-address-card text-indigo-500 mr-2"></i>Perfil social
-            </h2>
+    <section class="mb-8 rounded-2xl border border-gray-200 bg-white shadow-sm">
+        <div class="border-b border-gray-200 px-6 py-4">
+            <div class="flex items-center gap-3">
+                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600">
+                    <i class="fas fa-address-card"></i>
+                </span>
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-900">Perfil social</h2>
+                    <p class="mt-1 text-sm text-gray-500">Resumen contextual para intervención, acompañamiento y seguimiento.</p>
+                </div>
+            </div>
+        </div>
+        <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% if ciudadano.tipo_vivienda %}
-                <div>
+                <div class="rounded-2xl border border-orange-100 bg-orange-50/60 p-5">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">Tipo de vivienda</p>
                     <p class="text-sm font-semibold text-gray-800">{{ ciudadano.get_tipo_vivienda_display }}</p>
                     {% if ciudadano.tenencia_vivienda %}
@@ -128,13 +149,13 @@
                 </div>
                 {% endif %}
                 {% if ciudadano.condiciones_vivienda %}
-                <div class="md:col-span-2">
+                <div class="rounded-2xl border border-orange-100 bg-orange-50/60 p-5 md:col-span-2">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">Condiciones de la vivienda</p>
                     <p class="text-sm text-gray-700">{{ ciudadano.condiciones_vivienda }}</p>
                 </div>
                 {% endif %}
                 {% if ciudadano.situacion_laboral %}
-                <div>
+                <div class="rounded-2xl border border-blue-100 bg-blue-50/60 p-5">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">Situación laboral</p>
                     <p class="text-sm font-semibold text-gray-800">{{ ciudadano.get_situacion_laboral_display }}</p>
                     {% if ciudadano.ingreso_estimado %}
@@ -143,31 +164,31 @@
                 </div>
                 {% endif %}
                 {% if ciudadano.obra_social %}
-                <div>
+                <div class="rounded-2xl border border-blue-100 bg-blue-50/60 p-5">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">Obra social</p>
                     <p class="text-sm font-semibold text-gray-800">{{ ciudadano.obra_social }}</p>
                 </div>
                 {% endif %}
                 {% if ciudadano.nivel_educativo %}
-                <div>
+                <div class="rounded-2xl border border-green-100 bg-green-50/60 p-5">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">Nivel educativo</p>
                     <p class="text-sm font-semibold text-gray-800">{{ ciudadano.get_nivel_educativo_display }}</p>
                 </div>
                 {% endif %}
                 {% if ciudadano.dni_fisico %}
-                <div>
+                <div class="rounded-2xl border border-purple-100 bg-purple-50/60 p-5">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">DNI físico</p>
                     <p class="text-sm font-semibold text-gray-800">{{ ciudadano.get_dni_fisico_display }}</p>
                 </div>
                 {% endif %}
                 {% if ciudadano.estado_renaper %}
-                <div>
+                <div class="rounded-2xl border border-purple-100 bg-purple-50/60 p-5">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">Estado RENAPER</p>
                     <p class="text-sm font-semibold text-gray-800">{{ ciudadano.get_estado_renaper_display }}</p>
                 </div>
                 {% endif %}
                 {% if ciudadano.observaciones %}
-                <div class="md:col-span-3">
+                <div class="rounded-2xl border border-yellow-100 bg-yellow-50/60 p-5 md:col-span-3">
                     <p class="text-xs text-gray-500 uppercase font-medium mb-1">Observaciones</p>
                     <p class="text-sm text-gray-700 whitespace-pre-line">{{ ciudadano.observaciones }}</p>
                 </div>
@@ -175,25 +196,25 @@
             </div>
 
             {% if puede_ver_sensible %}
-            <div class="mt-6 pt-5 border-t border-gray-200 bg-gray-50 -mx-6 -mb-6 px-6 pb-6 rounded-b-xl">
+            <div class="mt-6 rounded-2xl border border-gray-200 bg-gray-50 p-6">
                 <p class="text-xs text-gray-500 font-semibold uppercase mb-4 flex items-center">
-                    <i class="fas fa-lock mr-1"></i>Datos sensibles
+                    <i class="fas fa-lock mr-2"></i>Datos sensibles
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {% if ciudadano.cobertura_medica %}
-                    <div>
+                    <div class="rounded-2xl border border-gray-200 bg-white p-4">
                         <p class="text-xs text-gray-500 uppercase font-medium mb-1">Cobertura médica</p>
                         <p class="text-sm font-semibold text-gray-800">{{ ciudadano.cobertura_medica }}</p>
                     </div>
                     {% endif %}
                     {% if ciudadano.estado_migratorio %}
-                    <div>
+                    <div class="rounded-2xl border border-gray-200 bg-white p-4">
                         <p class="text-xs text-gray-500 uppercase font-medium mb-1">Estado migratorio</p>
                         <p class="text-sm font-semibold text-gray-800">{{ ciudadano.get_estado_migratorio_display }}</p>
                     </div>
                     {% endif %}
                     {% if ciudadano.medicacion_habitual %}
-                    <div class="md:col-span-2">
+                    <div class="rounded-2xl border border-gray-200 bg-white p-4 md:col-span-2">
                         <p class="text-xs text-gray-500 uppercase font-medium mb-1">Medicación habitual</p>
                         <p class="text-sm text-gray-700 whitespace-pre-line">{{ ciudadano.medicacion_habitual }}</p>
                     </div>
@@ -205,21 +226,21 @@
             </div>
             {% endif %}
         </div>
-    </div>
+    </section>
     {% endif %}
     {% endwith %}
 
     <!-- Alertas — resumen rápido -->
     {% if alertas_ciudadano %}
-    <div class="mb-6">
-        <div class="flex flex-col gap-3 rounded-xl border border-[#E5E7EB] bg-white px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="mb-8">
+        <div class="flex flex-col gap-3 rounded-2xl border border-red-200 bg-red-50 px-6 py-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
             <div class="flex items-center gap-3">
                 <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-100 text-red-600 font-bold text-sm">{{ alertas_ciudadano.count }}</span>
-                <span class="text-sm font-medium text-[#252F40]">
+                <span class="text-sm font-medium text-red-900">
                     {% if alertas_ciudadano.count == 1 %}Hay 1 alerta activa{% else %}Hay {{ alertas_ciudadano.count }} alertas activas{% endif %}
                 </span>
             </div>
-            <button onclick="cambiarTab('alertas')" class="text-left text-sm font-medium text-indigo-600 hover:text-indigo-800 sm:text-right">
+            <button onclick="cambiarTab('alertas')" class="inline-flex items-center justify-center rounded-lg border border-red-200 bg-white px-4 py-2 text-left text-sm font-medium text-red-700 transition hover:bg-red-100 sm:text-right">
                 Ver alertas <i class="fas fa-arrow-right ml-1"></i>
             </button>
         </div>
@@ -227,20 +248,18 @@
     {% endif %}
 
     <!-- Tabs de Navegación Dinámicos -->
-    <div class="bg-white rounded-xl shadow-lg mb-8">
-        <div class="border-b border-gray-200">
-            <nav class="flex -mb-px overflow-x-auto">
+    <div class="mb-8 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
+            <nav class="flex flex-wrap gap-2 overflow-x-auto">
                 {% for solapa in solapas %}
                 <button
                     onclick="cambiarTab('{{ solapa.id }}')"
                     data-tab="{{ solapa.id }}"
-                    class="tab-button {% if forloop.first %}border-b-2 border-blue-500 text-blue-600{% else %}border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300{% endif %} py-4 px-6 font-medium whitespace-nowrap flex items-center"
-                    {% if not solapa.estatica %}style="border-bottom-color: {{ solapa.color }};"{% endif %}
+                    class="tab-button {% if forloop.first %}bg-blue-700 text-white shadow-sm{% else %}bg-white text-gray-600 border border-gray-200 hover:bg-gray-50{% endif %} inline-flex items-center rounded-xl px-4 py-2.5 text-sm font-medium whitespace-nowrap transition"
                 >
                     <i class="fas fa-{{ solapa.icono }} mr-2"></i>{{ solapa.nombre }}
                     {% if solapa.badge %}
                         {% if solapa.badge.tipo == 'numero' %}
-                        <span class="ml-1.5 inline-flex items-center justify-center min-w-[1.2rem] h-5 px-1 text-xs font-bold text-white rounded-full" style="background-color: {{ solapa.badge.color_hex }};">{{ solapa.badge.valor }}</span>
+                        <span class="ml-1.5 inline-flex items-center justify-center min-w-[1.2rem] h-5 px-1 text-xs font-bold rounded-full {% if forloop.first %}bg-white text-blue-700{% else %}text-white{% endif %}" style="{% if not forloop.first %}background-color: {{ solapa.badge.color_hex }};{% endif %}">{% if forloop.first %}{{ solapa.badge.valor }}{% else %}{{ solapa.badge.valor }}{% endif %}</span>
                         {% else %}
                         <span class="ml-2 w-2 h-2 rounded-full inline-block" style="background-color: {{ solapa.badge.color_hex }};"></span>
                         {% endif %}
@@ -250,13 +269,12 @@
                 </button>
                 {% endfor %}
             </nav>
-        </div>
     </div>
 
     <!-- Tab: Resumen -->
     <div id="tab-resumen" class="tab-content">
     <!-- Dashboard Resumido -->
-    <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8 mb-8">
+    <div class="mt-2 bg-white rounded-xl shadow-sm border border-[#E5E7EB] p-8 mb-10">
         <h3 class="text-2xl font-bold text-[#252F40] mb-6 flex items-center">
             <div class="bg-[#3B82F6] rounded-lg p-2 mr-3">
                 <i class="fas fa-chart-bar text-white text-lg"></i>
@@ -762,37 +780,6 @@
         </div>
     </div>
 
-    <!-- Tab: Instituciones -->
-    <div id="tab-instituciones" class="tab-content hidden">
-        <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] overflow-hidden">
-            <div class="px-6 py-4 border-b border-[#E5E7EB]">
-                <h3 class="text-lg font-semibold text-[#252F40] flex items-center">
-                    <i class="fas fa-building text-purple-500 mr-2"></i>Instituciones vinculadas
-                </h3>
-            </div>
-            {% if instituciones_ciudadano %}
-            <div class="divide-y divide-[#E5E7EB]">
-                {% for inst in instituciones_ciudadano %}
-                <div class="px-6 py-4 hover:bg-[#F9FAFB] transition-colors flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                        <i class="fas fa-building text-purple-500"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-semibold text-[#252F40]">{{ inst.nombre }}</p>
-                        {% if inst.tipo %}<p class="text-xs text-[#8C8C8C]">{{ inst.tipo }}</p>{% endif %}
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-            {% else %}
-            <div class="text-center py-16">
-                <i class="fas fa-building text-4xl text-gray-200 mb-3"></i>
-                <p class="text-[#8C8C8C] text-sm">No hay instituciones vinculadas con datos activos del ciudadano.</p>
-            </div>
-            {% endif %}
-        </div>
-    </div>
-
     <!-- Tab: Conversaciones -->
     <div id="tab-conversaciones" class="tab-content hidden">
         <div class="bg-white rounded-xl shadow-sm border border-[#E5E7EB] overflow-hidden">
@@ -1224,8 +1211,8 @@ function cambiarTab(tabName) {
     });
     
     document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('border-blue-500', 'text-blue-600');
-        button.classList.add('border-transparent', 'text-gray-500');
+        button.classList.remove('bg-blue-700', 'text-white', 'shadow-sm');
+        button.classList.add('bg-white', 'text-gray-600', 'border', 'border-gray-200');
     });
     
     const tabContent = document.getElementById(`tab-${tabName}`);
@@ -1235,8 +1222,8 @@ function cambiarTab(tabName) {
     tabContent.classList.remove('hidden');
     const activeButton = document.querySelector(`[data-tab="${tabName}"]`);
     if (activeButton) {
-        activeButton.classList.add('border-blue-500', 'text-blue-600');
-        activeButton.classList.remove('border-transparent', 'text-gray-500');
+        activeButton.classList.add('bg-blue-700', 'text-white', 'shadow-sm');
+        activeButton.classList.remove('bg-white', 'text-gray-600', 'border', 'border-gray-200');
     }
     
     // Cargar datos de legajos si se abre la pestaña de acompañamiento
