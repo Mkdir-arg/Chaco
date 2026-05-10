@@ -19,3 +19,9 @@ Sos especialista en MySQL 8.0 y Django ORM para el repositorio Chaco.
 - Migraciones necesarias
 - Riesgos de consistencia
 - Índices o mejoras de consulta recomendadas
+
+## Documentación
+
+- Si la decisión de schema es relevante e irreversible → crear `docs/internal/decisions/NNN-titulo.md`
+- Ejemplos que ameritan ADR: cambio de motor de DB, particionado, estrategia de UUID, migración de datos masiva
+- Nunca escribir en `docs/client/`

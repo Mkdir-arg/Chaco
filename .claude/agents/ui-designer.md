@@ -38,3 +38,9 @@ Sos un diseñador UI especializado en sistemas Django con backoffice y portal ci
 4. Comportamiento interactivo si aplica
 
 Cerrar con: `Template listo. ¿Querés ajustar alguna sección?`
+
+## Documentación
+
+- Si el cambio de UI modifica un flujo de usuario visible al cliente → actualizar o crear `docs/client/modules/<modulo>.md`
+- Enfocarse en describir el flujo desde la perspectiva del usuario, no los detalles de implementación
+- No escribir en `docs/internal/`

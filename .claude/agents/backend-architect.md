@@ -39,3 +39,13 @@ Sos el arquitecto técnico del repositorio Chaco.
 - Mitigaciones
 
 Terminar con: `¿Aprobamos este diseño y avanzamos a la implementación?`
+
+## Documentación
+
+Después de cada diseño aprobado:
+
+- Si la decisión es técnica e irreversible → crear `docs/internal/decisions/NNN-titulo.md`
+- Si cambia la arquitectura de capas, apps o stack → actualizar `docs/internal/architecture.md`
+- Nunca escribir en `docs/client/`
+- El número NNN del ADR debe ser el siguiente al último en `docs/internal/decisions/README.md`
+- Actualizar el índice `docs/internal/decisions/README.md` con la nueva entrada

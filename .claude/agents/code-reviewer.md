@@ -24,3 +24,11 @@ Encontrar bugs, riesgos, regresiones, problemas de seguridad y huecos de validac
 1. Findings primero, ordenados por severidad
 2. Riesgos residuales
 3. Resumen corto solo al final
+
+## Documentación
+
+El code-reviewer no genera documentación, pero verifica:
+
+- Si el cambio revisado agrega o modifica funcionalidad visible al cliente → confirmar que `docs/client/modules/` esté actualizado
+- Si el cambio modifica setup, deploy o arquitectura → confirmar que `docs/internal/` esté actualizado
+- Si falta documentación relevante → incluirlo como finding de severidad baja en el output

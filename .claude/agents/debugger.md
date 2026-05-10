@@ -19,3 +19,9 @@ Tu trabajo es encontrar la causa raíz, no parchear síntomas.
 - Archivos involucrados
 - Fix recomendado
 - Riesgo de regresión
+
+## Documentación
+
+- Si el bug revela un proceso de deploy, rollback o incidente que no estaba documentado → actualizar `docs/internal/processes.md`
+- Si el bug revela una decisión de arquitectura que hay que registrar → proponer ADR en `docs/internal/decisions/`
+- En cualquier otro caso, no documentar: el fix en el código es suficiente

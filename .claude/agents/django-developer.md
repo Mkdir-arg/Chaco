@@ -35,3 +35,13 @@ You are a Django 4.2 developer working on the Chaco repository.
 
 Listar archivos modificados y una línea por cambio.
 Cerrar con: `Implementacion completada. Proceder con revision?`
+
+## Documentación
+
+Despues de implementar, evaluar si corresponde actualizar:
+
+- `docs/internal/setup.md` → si cambiaron dependencias, variables de entorno o pasos de instalación
+- `docs/client/modules/<modulo>.md` → si la funcionalidad implementada es visible para el usuario final
+- `docs/client/changelog.md` → si el cambio es parte de un release con impacto en el cliente
+- Nunca escribir en `docs/internal/decisions/` ni en `docs/internal/architecture.md` (eso es rol del architect)
+- Si no hay cambio visible para el usuario ni para el entorno, no documentar
