@@ -1,44 +1,36 @@
-name: Deploy Documentation
+name: Deploy Docs to GitHub Pages
 
 on:
   push:
     branches:
       - main
-      - Main
     paths:
-      - 'docs/client/**'
-      - 'mkdocs.yml'
-      - '.github/workflows/deploy-docs.yml'
+      - "docs/client/**"
+      - "mkdocs.yml"
+      - ".github/workflows/deploy-docs.yml"
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.x"
 
-      - name: Install MkDocs
+      - name: Install MkDocs and dependencies
         run: |
-          pip install mkdocs mkdocs-material mkdocs-git-revision-date-localized-plugin
-
-      - name: Build Documentation
-        run: mkdocs build
-
-      - name: Add .nojekyll
-        run: touch site/.nojekyll
+          pip install mkdocs-material
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./site
-          publish_branch: gh-pages
-          force_orphan: true
+        run: |
+          mkdocs gh-deploy --force --clean

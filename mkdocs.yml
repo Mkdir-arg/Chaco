@@ -1,5 +1,5 @@
 site_name: Sistema de Gestión Social — Documentación
-site_url: https://tu-org.github.io/Chaco/
+site_url: https://Mkdir-arg.github.io/Chaco/
 docs_dir: docs/client
 site_dir: site
 
@@ -20,8 +20,6 @@ theme:
 plugins:
   - search:
       lang: es
-  - git-revision-date-localized:
-      enable_creation_date: true
 
 nav:
   - Inicio: index.md
@@ -39,4 +37,4 @@ nav:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/tu-org/Chaco
+      link: https://github.com/Mkdir-arg/Chaco
