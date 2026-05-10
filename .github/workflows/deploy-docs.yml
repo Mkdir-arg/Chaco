@@ -3,9 +3,10 @@ name: Deploy Documentation
 on:
   push:
     branches:
+      - main
       - Main
     paths:
-      - 'documentos/**'
+      - 'docs/client/**'
       - 'mkdocs.yml'
       - '.github/workflows/deploy-docs.yml'
 

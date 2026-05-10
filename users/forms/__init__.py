@@ -1,8 +1,6 @@
 from django import forms
 from django.contrib.auth.models import Group, User
 
-from core.models import Provincia
-
 from ..models import Profile
 
 
@@ -73,25 +71,6 @@ class UserCreationForm(forms.ModelForm):
         ),
         label="Grupos",
     )
-    es_usuario_provincial = forms.BooleanField(
-        required=False,
-        label="Es usuario provincial",
-        widget=forms.CheckboxInput(
-            attrs={
-                "class": "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            }
-        ),
-    )
-    provincia = forms.ModelChoiceField(
-        queryset=Provincia.objects.all(),
-        required=False,
-        widget=forms.Select(
-            attrs={
-                "class": "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            }
-        ),
-        label="Provincia",
-    )
     rol = forms.CharField(
         max_length=100,
         required=False,
@@ -111,8 +90,6 @@ class UserCreationForm(forms.ModelForm):
             "email",
             "password",
             "groups",
-            "es_usuario_provincial",
-            "provincia",
             "last_name",
             "first_name",
             "rol",
@@ -148,12 +125,6 @@ class UserCreationForm(forms.ModelForm):
         args, kwargs = _normalize_groups_args(args, kwargs)
         super().__init__(*args, **kwargs)
 
-    def clean(self):
-        cleaned = super().clean()
-        if cleaned.get("es_usuario_provincial") and not cleaned.get("provincia"):
-            self.add_error("provincia", "Seleccione una provincia.")
-        return cleaned
-
 
 class CustomUserChangeForm(forms.ModelForm):
     password = forms.CharField(
@@ -178,25 +149,6 @@ class CustomUserChangeForm(forms.ModelForm):
         ),
         label="Grupos",
     )
-    es_usuario_provincial = forms.BooleanField(
-        required=False,
-        label="Es usuario provincial",
-        widget=forms.CheckboxInput(
-            attrs={
-                "class": "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-            }
-        ),
-    )
-    provincia = forms.ModelChoiceField(
-        queryset=Provincia.objects.all(),
-        required=False,
-        widget=forms.Select(
-            attrs={
-                "class": "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            }
-        ),
-        label="Provincia",
-    )
     rol = forms.CharField(
         max_length=100,
         required=False,
@@ -216,8 +168,6 @@ class CustomUserChangeForm(forms.ModelForm):
             "email",
             "password",
             "groups",
-            "es_usuario_provincial",
-            "provincia",
             "last_name",
             "first_name",
             "rol",
@@ -261,12 +211,4 @@ class CustomUserChangeForm(forms.ModelForm):
             profile = None
 
         if profile:
-            self.fields["es_usuario_provincial"].initial = profile.es_usuario_provincial
-            self.fields["provincia"].initial = profile.provincia
             self.fields["rol"].initial = profile.rol
-
-    def clean(self):
-        cleaned = super().clean()
-        if cleaned.get("es_usuario_provincial") and not cleaned.get("provincia"):
-            self.add_error("provincia", "Seleccione una provincia.")
-        return cleaned

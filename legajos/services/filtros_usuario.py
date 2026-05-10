@@ -1,7 +1,5 @@
 from django.db.models import Q
 
-from users.models import Profile
-
 from ..models import AlertaCiudadano, LegajoAtencion
 
 
@@ -24,38 +22,17 @@ class FiltrosUsuarioService:
         if legajos_responsable.exists():
             filtros |= Q(legajo__in=legajos_responsable)
 
-        try:
-            profile = usuario.profile
-            if profile.es_usuario_provincial:
-                legajos_provincia = LegajoAtencion.objects.filter(
-                    dispositivo__provincia=profile.provincia
-                ).select_related("dispositivo")
-                filtros |= Q(legajo__in=legajos_provincia)
-            else:
-                dispositivo_usuario = FiltrosUsuarioService._obtener_dispositivo_usuario(usuario)
-                if dispositivo_usuario:
-                    legajos_dispositivo = LegajoAtencion.objects.filter(
-                        dispositivo=dispositivo_usuario
-                    ).select_related("dispositivo")
-                    filtros |= Q(legajo__in=legajos_dispositivo)
-        except Profile.DoesNotExist:
-            pass
+        dispositivo_usuario = FiltrosUsuarioService._obtener_dispositivo_usuario(usuario)
+        if dispositivo_usuario:
+            legajos_dispositivo = LegajoAtencion.objects.filter(
+                dispositivo=dispositivo_usuario
+            ).select_related("dispositivo")
+            filtros |= Q(legajo__in=legajos_dispositivo)
 
         grupos_usuario = usuario.groups.values_list("name", flat=True)
 
         if "Administrador" in grupos_usuario:
             return AlertaCiudadano.objects.filter(activa=True)
-
-        if "Supervisor" in grupos_usuario:
-            try:
-                profile = usuario.profile
-                if profile.provincia:
-                    legajos_supervision = LegajoAtencion.objects.filter(
-                        dispositivo__provincia=profile.provincia
-                    ).select_related("dispositivo")
-                    filtros |= Q(legajo__in=legajos_supervision)
-            except Profile.DoesNotExist:
-                pass
 
         if not filtros:
             filtros = Q(prioridad="CRITICA")

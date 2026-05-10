@@ -144,11 +144,9 @@ def debug_alertas(request):
     es_superuser = request.user.is_superuser
     try:
         profile = request.user.profile
-        es_provincial = profile.es_usuario_provincial
-        provincia = profile.provincia.nombre if profile.provincia else None
+        rol = profile.rol or 'Sin rol'
     except:
-        es_provincial = False
-        provincia = None
+        rol = 'Sin perfil'
     
     debug_info = f"""
     <h1>Debug - Sistema de Alertas</h1>
@@ -157,8 +155,7 @@ def debug_alertas(request):
         <li><strong>Usuario:</strong> {request.user.username}</li>
         <li><strong>Superusuario:</strong> {es_superuser}</li>
         <li><strong>Grupos:</strong> {', '.join(grupos_usuario) if grupos_usuario else 'Ninguno'}</li>
-        <li><strong>Usuario Provincial:</strong> {es_provincial}</li>
-        <li><strong>Provincia:</strong> {provincia or 'No asignada'}</li>
+        <li><strong>Rol:</strong> {rol}</li>
     </ul>
     
     <h2>Estadísticas del Sistema:</h2>

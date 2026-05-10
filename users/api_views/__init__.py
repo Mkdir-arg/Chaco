@@ -145,11 +145,9 @@ class ProfileViewSet(viewsets.ModelViewSet):
     """
     ViewSet para gestionar perfiles de usuario.
     """
-    queryset = Profile.objects.select_related('user', 'provincia')
+    queryset = Profile.objects.select_related('user')
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['es_usuario_provincial', 'provincia']
     http_method_names = ['get', 'put', 'patch']  # Solo lectura y actualización
 
     def get_queryset(self):

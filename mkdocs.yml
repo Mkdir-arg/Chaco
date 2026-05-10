@@ -1,0 +1,42 @@
+site_name: Sistema de Gestión Social — Documentación
+site_url: https://tu-org.github.io/Chaco/
+docs_dir: docs/client
+site_dir: site
+
+theme:
+  name: material
+  language: es
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+
+plugins:
+  - search:
+      lang: es
+  - git-revision-date-localized:
+      enable_creation_date: true
+
+nav:
+  - Inicio: index.md
+  - Primeros pasos: getting-started.md
+  - Módulos:
+      - Índice: modules/index.md
+      - Legajos: modules/legajos.md
+      - Programas: modules/programas.md
+      - Conversaciones: modules/conversaciones.md
+      - Portal ciudadano: modules/portal.md
+  - Preguntas frecuentes: faq.md
+  - Novedades: changelog.md
+  - Soporte: support.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/tu-org/Chaco

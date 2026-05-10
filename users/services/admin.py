@@ -42,13 +42,5 @@ class UsuariosAdminService:
         user.groups.set(cleaned_data.get("groups", []))
 
         profile, _ = Profile.objects.get_or_create(user=user)
-        profile.es_usuario_provincial = cleaned_data.get(
-            "es_usuario_provincial", False
-        )
-        profile.provincia = (
-            cleaned_data.get("provincia")
-            if cleaned_data.get("es_usuario_provincial")
-            else None
-        )
         profile.rol = cleaned_data.get("rol")
         profile.save()

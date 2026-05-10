@@ -1,7 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.test import TestCase
 
-from core.models import Provincia
 from users.forms import CustomUserChangeForm, UserCreationForm
 from users.models import Profile
 from users.services_admin import UsuariosAdminService
@@ -11,7 +10,6 @@ class UsuariosAdminServiceTests(TestCase):
     def setUp(self):
         self.group_admin = Group.objects.create(name="Administrador")
         self.group_view = Group.objects.create(name="Usuario Ver")
-        self.provincia = Provincia.objects.create(nombre="San Luis")
 
     def test_create_user_from_form_persists_groups_profile_and_password(self):
         form = UserCreationForm(
@@ -20,8 +18,6 @@ class UsuariosAdminServiceTests(TestCase):
                 "email": "operador1@example.com",
                 "password": "clave-segura-123",
                 "groups[]": [str(self.group_admin.pk), str(self.group_view.pk)],
-                "es_usuario_provincial": "on",
-                "provincia": str(self.provincia.pk),
                 "last_name": "Perez",
                 "first_name": "Ana",
                 "rol": "Coordinadora",
@@ -37,8 +33,6 @@ class UsuariosAdminServiceTests(TestCase):
             list(user.groups.values_list("name", flat=True)),
             ["Administrador", "Usuario Ver"],
         )
-        self.assertTrue(user.profile.es_usuario_provincial)
-        self.assertEqual(user.profile.provincia, self.provincia)
         self.assertEqual(user.profile.rol, "Coordinadora")
 
     def test_update_user_from_form_keeps_existing_password_when_blank(self):
@@ -51,8 +45,6 @@ class UsuariosAdminServiceTests(TestCase):
         )
         user.groups.add(self.group_view)
         profile = Profile.objects.create(user=user)
-        profile.es_usuario_provincial = True
-        profile.provincia = self.provincia
         profile.rol = "Analista"
         profile.save()
         original_password_hash = user.password
@@ -63,7 +55,6 @@ class UsuariosAdminServiceTests(TestCase):
                 "email": "new@example.com",
                 "password": "",
                 "groups": [str(self.group_admin.pk)],
-                "provincia": "",
                 "last_name": "Gomez",
                 "first_name": "Luis",
                 "rol": "Supervisor",
@@ -82,6 +73,4 @@ class UsuariosAdminServiceTests(TestCase):
             list(updated_user.groups.values_list("name", flat=True)),
             ["Administrador"],
         )
-        self.assertFalse(updated_user.profile.es_usuario_provincial)
-        self.assertIsNone(updated_user.profile.provincia)
         self.assertEqual(updated_user.profile.rol, "Supervisor")

@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
 from .models import Profile
-from core.serializers import ProvinciaSerializer
 
 
 class GroupSerializer(serializers.ModelSerializer):
@@ -14,15 +13,10 @@ class GroupSerializer(serializers.ModelSerializer):
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Serializer para Profile"""
-    provincia = ProvinciaSerializer(read_only=True)
-    provincia_id = serializers.IntegerField(write_only=True, required=False, allow_null=True)
-    
+
     class Meta:
         model = Profile
-        fields = [
-            'id', 'dark_mode', 'es_usuario_provincial', 
-            'provincia', 'provincia_id', 'rol'
-        ]
+        fields = ['id', 'dark_mode', 'rol']
 
 
 class UserSerializer(serializers.ModelSerializer):

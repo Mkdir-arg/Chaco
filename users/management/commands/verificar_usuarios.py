@@ -95,8 +95,6 @@ class Command(BaseCommand):
         # Perfil
         try:
             perfil = usuario.profile
-            self.stdout.write(f'Usuario provincial: {perfil.es_usuario_provincial}')
-            self.stdout.write(f'Provincia: {perfil.provincia}')
             self.stdout.write(f'Rol: {perfil.rol}')
         except Profile.DoesNotExist:
             self.stdout.write(self.style.ERROR('Perfil: No existe'))
