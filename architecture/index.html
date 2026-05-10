@@ -8,9 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://Mkdir-arg.github.io/Chaco/changelog/">
+        <link rel="canonical" href="https://Mkdir-arg.github.io/Chaco/architecture/">
       
       
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../sprints/">
       
       
         
@@ -21,7 +25,7 @@
     
     
       
-        <title>Novedades y cambios - Chaco — Seguimiento de desarrollo</title>
+        <title>Arquitectura - Chaco — Seguimiento de desarrollo</title>
       
     
     
@@ -72,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#novedades-y-cambios" class="md-skip">
+        <a href="#arquitectura-y-tecnologias" class="md-skip">
           Saltar a contenido
         </a>
       
@@ -106,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Novedades y cambios
+              Arquitectura
             
           </span>
         </div>
@@ -210,9 +214,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../architecture/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -309,10 +315,37 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../architecture/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -328,6 +361,164 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stack-tecnologico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stack tecnológico
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stack tecnológico">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#base-de-datos-y-cache" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Base de datos y caché
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infraestructura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infraestructura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#librerias-destacadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Librerías destacadas
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#superficies-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Superficies del sistema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modulos-del-sistema" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Módulos del sistema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patron-de-capas-interno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patrón de capas interno
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tiempo-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiempo real
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auditoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditoría
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-movil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App móvil
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -476,22 +667,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v12-mayo-2026" class="md-nav__link">
+  <a href="#stack-tecnologico" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v1.2 — Mayo 2026
+        Stack tecnológico
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="v1.2 — Mayo 2026">
+    <nav class="md-nav" aria-label="Stack tecnológico">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#novedades" class="md-nav__link">
+  <a href="#backend" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Novedades
+        Backend
       
     </span>
   </a>
@@ -499,10 +690,43 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#correcciones" class="md-nav__link">
+  <a href="#base-de-datos-y-cache" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Correcciones
+        Base de datos y caché
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#frontend" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Frontend
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infraestructura" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infraestructura
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#librerias-destacadas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Librerías destacadas
       
     </span>
   </a>
@@ -515,49 +739,65 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#v11-marzo-2026" class="md-nav__link">
+  <a href="#superficies-del-sistema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v1.1 — Marzo 2026
+        Superficies del sistema
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="v1.1 — Marzo 2026">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#novedades_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Novedades
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#correcciones_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Correcciones
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#v10-febrero-2026" class="md-nav__link">
+  <a href="#modulos-del-sistema" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v1.0 — Febrero 2026
+        Módulos del sistema
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patron-de-capas-interno" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Patrón de capas interno
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tiempo-real" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tiempo real
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#auditoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Auditoría
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#app-movil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        App móvil
       
     </span>
   </a>
@@ -581,42 +821,285 @@
 
 
 
-<h1 id="novedades-y-cambios">Novedades y cambios</h1>
-<p>Registro de cambios importantes ordenados por versión. Los cambios técnicos internos no se incluyen acá.</p>
+<h1 id="arquitectura-y-tecnologias">Arquitectura y tecnologías</h1>
+<p>Descripción técnica del sistema: cómo está construido, qué tecnologías usa y cómo se organizan sus componentes.</p>
 <hr />
-<h2 id="v12-mayo-2026">v1.2 — Mayo 2026</h2>
-<h3 id="novedades">Novedades</h3>
-<ul>
-<li>Módulo NACHEC disponible para instituciones habilitadas</li>
-<li>Mejoras en la velocidad de carga de listados de ciudadanos</li>
-<li>Nueva vista de métricas en el módulo de Conversaciones</li>
-</ul>
-<h3 id="correcciones">Correcciones</h3>
-<ul>
-<li>Corregido error al derivar ciudadanos entre dispositivos de distintas secretarías</li>
-<li>Solucionado problema de sesión expirada en el portal ciudadano</li>
-</ul>
+<h2 id="stack-tecnologico">Stack tecnológico</h2>
+<h3 id="backend">Backend</h3>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Versión</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>3.12</td>
+<td>Lenguaje principal</td>
+</tr>
+<tr>
+<td>Django</td>
+<td>4.2</td>
+<td>Framework web</td>
+</tr>
+<tr>
+<td>Django REST Framework</td>
+<td>3.15</td>
+<td>API REST</td>
+</tr>
+<tr>
+<td>Django Channels</td>
+<td>4.0</td>
+<td>WebSockets y tiempo real</td>
+</tr>
+<tr>
+<td>Daphne</td>
+<td>4.0</td>
+<td>Servidor ASGI para WebSockets</td>
+</tr>
+<tr>
+<td>Gunicorn + Gevent</td>
+<td>23.0</td>
+<td>Servidor WSGI para producción</td>
+</tr>
+</tbody>
+</table>
+<h3 id="base-de-datos-y-cache">Base de datos y caché</h3>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Versión</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MySQL</td>
+<td>8.0</td>
+<td>Base de datos principal</td>
+</tr>
+<tr>
+<td>Redis</td>
+<td>7</td>
+<td>Caché, sesiones y colas de WebSocket</td>
+</tr>
+<tr>
+<td>Supabase</td>
+<td>—</td>
+<td>Almacenamiento externo para relevamientos móviles</td>
+</tr>
+</tbody>
+</table>
+<h3 id="frontend">Frontend</h3>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tailwind CSS</td>
+<td>Estilos y diseño responsivo</td>
+</tr>
+<tr>
+<td>Alpine.js</td>
+<td>Interactividad declarativa sin SPA</td>
+</tr>
+<tr>
+<td>HTML + Django Templates</td>
+<td>Renderizado server-side</td>
+</tr>
+</tbody>
+</table>
+<h3 id="infraestructura">Infraestructura</h3>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker</td>
+<td>Contenedores de aplicación</td>
+</tr>
+<tr>
+<td>Docker Compose</td>
+<td>Orquestación local y de producción</td>
+</tr>
+<tr>
+<td>GitHub Actions</td>
+<td>CI/CD y deploy automático de documentación</td>
+</tr>
+<tr>
+<td>GitHub Pages</td>
+<td>Publicación de esta documentación</td>
+</tr>
+</tbody>
+</table>
+<h3 id="librerias-destacadas">Librerías destacadas</h3>
+<table>
+<thead>
+<tr>
+<th>Librería</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>django-simple-history</td>
+<td>Auditoría automática de cambios en modelos</td>
+</tr>
+<tr>
+<td>django-filter</td>
+<td>Filtros avanzados en listados</td>
+</tr>
+<tr>
+<td>django-health-check</td>
+<td>Endpoint de salud del sistema</td>
+</tr>
+<tr>
+<td>drf-spectacular</td>
+<td>Documentación automática de la API REST</td>
+</tr>
+<tr>
+<td>structlog</td>
+<td>Logging estructurado</td>
+</tr>
+<tr>
+<td>Pillow</td>
+<td>Procesamiento de imágenes</td>
+</tr>
+<tr>
+<td>OpenAI SDK</td>
+<td>Integración con modelos de IA</td>
+</tr>
+</tbody>
+</table>
 <hr />
-<h2 id="v11-marzo-2026">v1.1 — Marzo 2026</h2>
-<h3 id="novedades_1">Novedades</h3>
-<ul>
-<li>App móvil para relevamientos de campo (disponible en solicitud)</li>
-<li>Portal ciudadano: los ciudadanos ahora pueden consultar el estado de sus trámites</li>
-<li>Integración con RENAPER para autocompletar datos al registrar ciudadanos</li>
-</ul>
-<h3 id="correcciones_1">Correcciones</h3>
-<ul>
-<li>Mejorada la estabilidad del chat en tiempo real</li>
-<li>Corregidos problemas de visualización en dispositivos móviles</li>
-</ul>
+<h2 id="superficies-del-sistema">Superficies del sistema</h2>
+<p>El sistema tiene tres superficies de acceso diferenciadas:</p>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│                    Usuarios                         │
+│                                                     │
+│  Backoffice (staff)  │  Portal ciudadano  │  App    │
+│  Operadores e        │  Ciudadanos que    │  móvil  │
+│  administradores     │  acceden a sus     │  Campo  │
+│  institucionales     │  datos y trámites  │         │
+└──────────┬───────────────────┬────────────────┬─────┘
+           │                   │                │
+           └───────────────────┴────────────────┘
+                               │
+              ┌────────────────▼────────────────┐
+              │         Django + Daphne         │
+              │   HTTP (Gunicorn) + WS (ASGI)   │
+              │   Middlewares: auth, institución │
+              └────────────────┬────────────────┘
+                               │
+              ┌────────────────▼────────────────┐
+              │         Apps de dominio         │
+              │                                 │
+              │  legajos · configuracion        │
+              │  conversaciones · portal        │
+              │  users · dashboard · tramites   │
+              └────────────────┬────────────────┘
+                               │
+           ┌───────────────────┼───────────────────┐
+           │                   │                   │
+  ┌────────▼───────┐  ┌────────▼───────┐  ┌───────▼────────┐
+  │   MySQL 8      │  │   Redis 7      │  │   Supabase     │
+  │  Datos         │  │  Caché         │  │  Relevamientos │
+  │  principales   │  │  Sesiones      │  │  móviles       │
+  │                │  │  WebSockets    │  │                │
+  └────────────────┘  └────────────────┘  └────────────────┘
+</code></pre>
 <hr />
-<h2 id="v10-febrero-2026">v1.0 — Febrero 2026</h2>
-<p>Lanzamiento inicial del sistema con:
-- Gestión de legajos de ciudadanos
-- Módulo de programas sociales
-- Portal ciudadano
-- Chat en tiempo real
-- Backoffice institucional</p>
+<h2 id="modulos-del-sistema">Módulos del sistema</h2>
+<p>Cada módulo es una app Django independiente con responsabilidad acotada:</p>
+<table>
+<thead>
+<tr>
+<th>Módulo</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>legajos</code></td>
+<td>Gestión de ciudadanos, programas sociales, derivaciones y módulo NACHEC</td>
+</tr>
+<tr>
+<td><code>configuracion</code></td>
+<td>Instituciones, secretarías, dispositivos, programas, geografía y clases</td>
+</tr>
+<tr>
+<td><code>conversaciones</code></td>
+<td>Chat en tiempo real, colas de atención y métricas de atención</td>
+</tr>
+<tr>
+<td><code>portal</code></td>
+<td>Portal ciudadano: autenticación, perfil, consultas y trámites self-service</td>
+</tr>
+<tr>
+<td><code>users</code></td>
+<td>Usuarios del backoffice, grupos, permisos y roles</td>
+</tr>
+<tr>
+<td><code>dashboard</code></td>
+<td>Métricas, indicadores y vistas de inicio por rol</td>
+</tr>
+<tr>
+<td><code>tramites</code></td>
+<td>Seguimiento de trámites institucionales</td>
+</tr>
+<tr>
+<td><code>core</code></td>
+<td>Modelos base, utilidades, caché, performance y relevamientos</td>
+</tr>
+<tr>
+<td><code>security</code></td>
+<td>Autenticación avanzada, autorización y auditoría</td>
+</tr>
+<tr>
+<td><code>healthcheck</code></td>
+<td>Endpoint de salud para monitoreo de infraestructura</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="patron-de-capas-interno">Patrón de capas interno</h2>
+<p>Cada módulo sigue el mismo patrón de organización interna:</p>
+<pre><code>&lt;modulo&gt;/
+├── models.py        → definición de datos y relaciones
+├── selectors/       → consultas de lectura, sin efectos secundarios
+├── services/        → lógica de negocio y operaciones de escritura
+├── views/           → orquestación HTTP: recibe, delega, responde
+├── forms/           → validación de entrada del usuario
+└── templates/       → presentación HTML
+</code></pre>
+<p>Este patrón garantiza que la lógica de negocio vive en <code>services/</code>, es reutilizable desde cualquier punto del sistema (vistas, comandos, señales, API) y es testeable de forma aislada.</p>
+<hr />
+<h2 id="tiempo-real">Tiempo real</h2>
+<p>El sistema usa <strong>WebSockets</strong> para funcionalidades que requieren actualización inmediata sin recargar la página:</p>
+<ul>
+<li>Chat entre operadores y ciudadanos (módulo <code>conversaciones</code>)</li>
+<li>Notificaciones de alertas y derivaciones</li>
+<li>Actualizaciones de estado en tiempo real</li>
+</ul>
+<p>La infraestructura de tiempo real usa <strong>Django Channels</strong> con <strong>Redis</strong> como capa de mensajería (channel layer). El servidor <strong>Daphne</strong> maneja las conexiones ASGI en producción.</p>
+<hr />
+<h2 id="auditoria">Auditoría</h2>
+<p>Todos los cambios en modelos críticos quedan registrados automáticamente usando <strong>django-simple-history</strong>. Cada modificación guarda: qué cambió, quién lo cambió y cuándo. Esto permite reconstruir el historial completo de cualquier registro.</p>
+<hr />
+<h2 id="app-movil">App móvil</h2>
+<p>La app móvil está construida con <strong>Expo / React Native</strong> y se conecta directamente a <strong>Supabase</strong> para el almacenamiento de relevamientos de campo. Está pensada para trabajo offline-first: los operadores de campo pueden cargar datos sin conexión y sincronizar cuando tienen red.</p>
 
 
 
