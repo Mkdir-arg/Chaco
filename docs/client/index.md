@@ -1,19 +1,11 @@
-# Bienvenido a la documentación
+# Documentación del sistema
 
-Esta documentación está pensada para instituciones y equipos que utilizan el sistema de gestión social.
+Seguimiento del desarrollo, funcionalidades y estado de cada sprint.
 
-## ¿Por dónde empezar?
+## Sprints
 
-Si es tu primera vez usando el sistema, comenzá por [Primeros pasos](getting-started.md).
+| Sprint | Período | Estado |
+|---|---|---|
+| [Sprint 001 — Gestión base de ciudadanos](sprints/sprint-001.md) | 12 may → 23 may 2026 | 🟡 En progreso |
 
-## Secciones disponibles
-
-- [Primeros pasos](getting-started.md) — acceso, configuración inicial y primer uso
-- [Módulos](modules/index.md) — guía de cada funcionalidad del sistema
-- [Preguntas frecuentes](faq.md) — respuestas a las dudas más comunes
-- [Novedades](changelog.md) — cambios y mejoras recientes
-- [Soporte](support.md) — cómo contactarnos
-
-## ¿Necesitás ayuda?
-
-Consultá la sección de [Soporte](support.md) para conocer los canales disponibles.
+[Ver todos los sprints →](sprints/index.md)

@@ -1,4 +1,4 @@
-site_name: Sistema de Gestión Social — Documentación
+site_name: Chaco — Seguimiento de desarrollo
 site_url: https://Mkdir-arg.github.io/Chaco/
 docs_dir: docs/client
 site_dir: site
@@ -14,8 +14,10 @@ theme:
     - navigation.tabs
     - navigation.sections
     - navigation.top
+    - navigation.expand
     - search.highlight
     - search.suggest
+    - toc.follow
 
 plugins:
   - search:
@@ -23,16 +25,10 @@ plugins:
 
 nav:
   - Inicio: index.md
-  - Primeros pasos: getting-started.md
-  - Módulos:
-      - Índice: modules/index.md
-      - Legajos: modules/legajos.md
-      - Programas: modules/programas.md
-      - Conversaciones: modules/conversaciones.md
-      - Portal ciudadano: modules/portal.md
-  - Preguntas frecuentes: faq.md
-  - Novedades: changelog.md
-  - Soporte: support.md
+  - Arquitectura: architecture.md
+  - Sprints:
+      - Todos los sprints: sprints/index.md
+      - Sprint 001 — Gestión base de ciudadanos: sprints/sprint-001.md
 
 extra:
   social:

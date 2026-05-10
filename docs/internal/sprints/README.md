@@ -10,7 +10,7 @@ Cada archivo documenta un sprint completo: qué se planificó, qué se analizó,
 
 | Sprint | Período | Estado | Requerimientos |
 |---|---|---|---|
-| — | — | — | — |
+| [Sprint 001](2026-05-12-sprint-001.md) | 2026-05-12 → 2026-05-23 | Activo | REQ-01 ✅, REQ-02 🔄 |
 
 ## Estados posibles
 
