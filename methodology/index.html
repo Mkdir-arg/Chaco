@@ -753,6 +753,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#9-planificacion-por-sprints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Planificación por sprints
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1182,6 +1193,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#9-planificacion-por-sprints" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Planificación por sprints
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1210,6 +1232,7 @@
 <li><a href="#6-etapas-en-detalle">Etapas en detalle</a></li>
 <li><a href="#7-documentación-producida-en-cada-etapa">Documentación producida en cada etapa</a></li>
 <li><a href="#8-reglas-generales">Reglas generales</a></li>
+<li><a href="#9-planificación-por-sprints">Planificación por sprints</a></li>
 </ol>
 <hr />
 <h2 id="1-vision-general">1. Visión general</h2>
@@ -1344,19 +1367,19 @@
 <h2 id="5-flujo-de-trabajo">5. Flujo de trabajo</h2>
 <pre class="mermaid"><code>flowchart TD
     A([🔔 Nuevo requerimiento]) --&gt; B["ANÁLISIS\n(equipo)"]
-    B --&gt; |consume horas| C["PROPUESTA\n(al cliente)"]
-    C --&gt; |consume horas — reunión| D{¿El cliente confirma?}
+    B --&gt; C["PROPUESTA\n(al cliente)"]
+    C --&gt; D{¿El cliente confirma?}
     D --&gt; |SÍ| E[ESTIMACIÓN DE HORAS]
     D --&gt; |NO| Z1([Ajuste o descarte])
-    E --&gt; |consume horas| F["DOCUMENTACIÓN\n(funcional y técnica)"]
-    F --&gt; |consume horas| G["PRESENTACIÓN\n(al cliente)"]
-    G --&gt; |consume horas — reunión| H{¿El cliente aprueba?}
+    E --&gt; F["DOCUMENTACIÓN\n(funcional y técnica)"]
+    F --&gt; G["PRESENTACIÓN\n(al cliente)"]
+    G --&gt; H{¿El cliente aprueba?}
     H --&gt; |SÍ| I[DESARROLLO]
     H --&gt; |NO| Z2([Revisión de propuesta])
-    I --&gt; |consume horas| J[PRUEBAS]
-    J --&gt; |consume horas| K["CAPACITACIÓN\n(si aplica)"]
-    K --&gt; |consume horas| L[DESPLIEGUE]
-    L --&gt; |consume horas| M([✅ Cierre del ciclo])</code></pre>
+    I --&gt; J[PRUEBAS]
+    J --&gt; K["CAPACITACIÓN\n(si aplica)"]
+    K --&gt; L[DESPLIEGUE]
+    L --&gt; M([✅ Cierre del ciclo])</code></pre>
 <hr />
 <h2 id="6-etapas-en-detalle">6. Etapas en detalle</h2>
 <h3 id="61-recepcion-del-requerimiento">6.1 Recepción del requerimiento</h3>
@@ -1371,6 +1394,7 @@
 <ul>
 <li>El equipo estudia el requerimiento: impacto funcional, técnico y sobre procesos existentes.</li>
 <li>Se identifican dudas o ambigüedades y se solicita clarificación al cliente si es necesario.</li>
+<li>El analista puede convocar la cantidad de reuniones que considere necesarias hasta contar con una comprensión completa y concreta del requerimiento. Cada reunión consume horas del paquete.</li>
 <li><strong>Consume horas</strong> desde el momento en que comienza el análisis.</li>
 </ul>
 <h3 id="63-propuesta">6.3 Propuesta</h3>
@@ -1491,6 +1515,17 @@
 <li><strong>Transparencia en el consumo.</strong> El cliente puede consultar su saldo y el detalle de consumo en cualquier momento.</li>
 <li><strong>Comunicación oficial.</strong> Todo acuerdo, aprobación o cambio se realiza por los canales escritos definidos al inicio del proyecto. Las conversaciones informales no tienen validez contractual.</li>
 </ol>
+<hr />
+<h2 id="9-planificacion-por-sprints">9. Planificación por sprints</h2>
+<p>El trabajo se organiza en <strong>sprints</strong>: iteraciones de duración fija que agrupan un conjunto de requerimientos priorizados y aprobados.</p>
+<ul>
+<li>La duración de cada sprint se acuerda con el cliente al inicio de la planificación (por ejemplo: 1, 2 o 3 semanas).</li>
+<li>Al comenzar cada sprint se define su alcance: qué ítems del backlog se comprometen para esa iteración.</li>
+<li>Durante el sprint el equipo trabaja únicamente sobre los ítems comprometidos; los cambios de alcance se tratan en el siguiente sprint.</li>
+<li>Al cierre de cada sprint se realiza una revisión con el cliente para presentar lo entregado, validar resultados y planificar el siguiente ciclo.</li>
+<li>El consumo de horas se informa al cierre de cada sprint.</li>
+</ul>
+<p>La definición y el estado de cada sprint se publican en <strong>GitHub Pages</strong> y se gestionan como Issues en <strong>GitHub Projects</strong>.</p>
 
 
 
