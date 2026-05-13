@@ -25,6 +25,10 @@ plugins:
 
 nav:
   - Inicio: index.md
+  - Proyecto:
+      - Kick Off: kickoff.md
+      - Equipo: team.md
+      - Metodología: methodology.md
   - Arquitectura: architecture.md
   - Sprints:
       - Todos los sprints: sprints/index.md
