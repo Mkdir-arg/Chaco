@@ -1151,7 +1151,7 @@
 <hr />
 <h2 id="superficies-del-sistema">Superficies del sistema</h2>
 <p>El sistema tiene tres superficies de acceso diferenciadas:</p>
-<pre><code>┌─────────────────────────────────────────────────────┐
+<div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────────────┐
 │                    Usuarios                         │
 │                                                     │
 │  Backoffice (staff)  │  Portal ciudadano  │  App    │
@@ -1184,7 +1184,7 @@
   │  principales   │  │  Sesiones      │  │  móviles       │
   │                │  │  WebSockets    │  │                │
   └────────────────┘  └────────────────┘  └────────────────┘
-</code></pre>
+</code></pre></div>
 <hr />
 <h2 id="modulos-del-sistema">Módulos del sistema</h2>
 <p>Cada módulo es una app Django independiente con responsabilidad acotada:</p>
@@ -1241,14 +1241,14 @@
 <hr />
 <h2 id="patron-de-capas-interno">Patrón de capas interno</h2>
 <p>Cada módulo sigue el mismo patrón de organización interna:</p>
-<pre><code>&lt;modulo&gt;/
+<div class="highlight"><pre><span></span><code>&lt;modulo&gt;/
 ├── models.py        → definición de datos y relaciones
 ├── selectors/       → consultas de lectura, sin efectos secundarios
 ├── services/        → lógica de negocio y operaciones de escritura
 ├── views/           → orquestación HTTP: recibe, delega, responde
 ├── forms/           → validación de entrada del usuario
 └── templates/       → presentación HTML
-</code></pre>
+</code></pre></div>
 <p>Este patrón garantiza que la lógica de negocio vive en <code>services/</code>, es reutilizable desde cualquier punto del sistema (vistas, comandos, señales, API) y es testeable de forma aislada.</p>
 <hr />
 <h2 id="tiempo-real">Tiempo real</h2>
