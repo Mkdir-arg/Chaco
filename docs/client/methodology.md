@@ -10,6 +10,7 @@
 6. [Etapas en detalle](#6-etapas-en-detalle)
 7. [Documentación producida en cada etapa](#7-documentación-producida-en-cada-etapa)
 8. [Reglas generales](#8-reglas-generales)
+9. [Planificación por sprints](#9-planificación-por-sprints)
 
 ---
 
@@ -100,19 +101,19 @@ GitHub Pages es el punto de acceso centralizado para toda la documentación del 
 ```mermaid
 flowchart TD
     A([🔔 Nuevo requerimiento]) --> B["ANÁLISIS\n(equipo)"]
-    B --> |consume horas| C["PROPUESTA\n(al cliente)"]
-    C --> |consume horas — reunión| D{¿El cliente confirma?}
+    B --> C["PROPUESTA\n(al cliente)"]
+    C --> D{¿El cliente confirma?}
     D --> |SÍ| E[ESTIMACIÓN DE HORAS]
     D --> |NO| Z1([Ajuste o descarte])
-    E --> |consume horas| F["DOCUMENTACIÓN\n(funcional y técnica)"]
-    F --> |consume horas| G["PRESENTACIÓN\n(al cliente)"]
-    G --> |consume horas — reunión| H{¿El cliente aprueba?}
+    E --> F["DOCUMENTACIÓN\n(funcional y técnica)"]
+    F --> G["PRESENTACIÓN\n(al cliente)"]
+    G --> H{¿El cliente aprueba?}
     H --> |SÍ| I[DESARROLLO]
     H --> |NO| Z2([Revisión de propuesta])
-    I --> |consume horas| J[PRUEBAS]
-    J --> |consume horas| K["CAPACITACIÓN\n(si aplica)"]
-    K --> |consume horas| L[DESPLIEGUE]
-    L --> |consume horas| M([✅ Cierre del ciclo])
+    I --> J[PRUEBAS]
+    J --> K["CAPACITACIÓN\n(si aplica)"]
+    K --> L[DESPLIEGUE]
+    L --> M([✅ Cierre del ciclo])
 ```
 
 ---
@@ -131,6 +132,7 @@ flowchart TD
 
 - El equipo estudia el requerimiento: impacto funcional, técnico y sobre procesos existentes.
 - Se identifican dudas o ambigüedades y se solicita clarificación al cliente si es necesario.
+- El analista puede convocar la cantidad de reuniones que considere necesarias hasta contar con una comprensión completa y concreta del requerimiento. Cada reunión consume horas del paquete.
 - **Consume horas** desde el momento en que comienza el análisis.
 
 ### 6.3 Propuesta
@@ -213,3 +215,17 @@ flowchart TD
 3. **Cambios de alcance reinician el ciclo.** Si el cliente solicita cambios sobre un requerimiento ya aprobado y en desarrollo, se genera un nuevo ciclo de análisis y estimación.
 4. **Transparencia en el consumo.** El cliente puede consultar su saldo y el detalle de consumo en cualquier momento.
 5. **Comunicación oficial.** Todo acuerdo, aprobación o cambio se realiza por los canales escritos definidos al inicio del proyecto. Las conversaciones informales no tienen validez contractual.
+
+---
+
+## 9. Planificación por sprints
+
+El trabajo se organiza en **sprints**: iteraciones de duración fija que agrupan un conjunto de requerimientos priorizados y aprobados.
+
+- La duración de cada sprint se acuerda con el cliente al inicio de la planificación (por ejemplo: 1, 2 o 3 semanas).
+- Al comenzar cada sprint se define su alcance: qué ítems del backlog se comprometen para esa iteración.
+- Durante el sprint el equipo trabaja únicamente sobre los ítems comprometidos; los cambios de alcance se tratan en el siguiente sprint.
+- Al cierre de cada sprint se realiza una revisión con el cliente para presentar lo entregado, validar resultados y planificar el siguiente ciclo.
+- El consumo de horas se informa al cierre de cada sprint.
+
+La definición y el estado de cada sprint se publican en **GitHub Pages** y se gestionan como Issues en **GitHub Projects**.
