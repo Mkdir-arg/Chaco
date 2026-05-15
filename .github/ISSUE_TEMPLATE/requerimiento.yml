@@ -1,0 +1,102 @@
+name: "Requerimiento"
+description: "Nuevo requerimiento funcional del cliente (ICORE / Provincia del Chaco)"
+title: "[REQ] "
+labels: ["requerimiento"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Nuevo Requerimiento
+        Completá todos los campos. Sin aprobacion del cliente no se inicia desarrollo.
+        Flujo: Backlog -> En analisis -> Estimado -> Aprobado -> En desarrollo -> En pruebas -> Cerrado
+
+  - type: input
+    id: objetivo
+    attributes:
+      label: "Objetivo"
+      description: "Que se quiere lograr con este requerimiento"
+      placeholder: "Ej: Permitir al ciudadano consultar el estado de su tramite en linea"
+    validations:
+      required: true
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "Contexto / Problema"
+      description: "Describi la situacion actual y por que se necesita este cambio"
+      placeholder: "Ej: Actualmente el ciudadano debe llamar por telefono para conocer el estado..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alcance
+    attributes:
+      label: "Alcance"
+      description: "Que incluye este requerimiento. Lista los modulos, pantallas o funciones afectadas"
+      placeholder: "Incluye: modulo tramites, vista de detalle, notificacion por email"
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusiones
+    attributes:
+      label: "Exclusiones"
+      description: "Que queda explicitamente fuera del alcance de este requerimiento"
+      placeholder: "No incluye: integracion con sistema X, modificacion de datos historicos"
+    validations:
+      required: true
+
+  - type: textarea
+    id: criterios_aceptacion
+    attributes:
+      label: "Criterios de Aceptacion"
+      description: "Como se valida que el requerimiento esta correctamente implementado"
+      placeholder: "- [ ] Criterio 1\n- [ ] Criterio 2"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: "Prioridad"
+      description: "Prioridad definida junto con el cliente"
+      options:
+        - "Alta - bloquea operacion o es compromiso contractual"
+        - "Media - mejora importante, no bloquea"
+        - "Baja - mejora menor o cosmetica"
+    validations:
+      required: true
+
+  - type: input
+    id: estimacion
+    attributes:
+      label: "Estimacion (rango de horas)"
+      description: "Completar luego del analisis. Ej: 8-12 hs"
+      placeholder: "Pendiente de analisis"
+
+  - type: input
+    id: aprobador
+    attributes:
+      label: "Aprobador del cliente"
+      description: "Nombre y rol del referente de ICORE que debe aprobar este requerimiento"
+      placeholder: "Ej: Juan Perez - Referente funcional ICORE"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: estado_inicial
+    attributes:
+      label: "Estado inicial en el flujo"
+      options:
+        - "Backlog"
+        - "En analisis"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notas
+    attributes:
+      label: "Notas adicionales"
+      description: "Adjuntos, links de referencia, capturas u otra informacion relevante"
+      placeholder: "Opcional"
