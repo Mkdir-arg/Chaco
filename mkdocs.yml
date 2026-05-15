@@ -33,13 +33,19 @@ markdown_extensions:
 nav:
   - Inicio: index.md
   - Proyecto:
-      - Kick Off: kickoff.md
-      - Equipo: team.md
-      - Metodología: methodology.md
-  - Arquitectura: architecture.md
+    - Kick Off: kickoff.md
+    - Equipo: team.md
+    - Metodología: methodology.md
+    - Gobernanza: governance.md
+    - Arquitectura: architecture.md
   - Sprints:
-      - Todos los sprints: sprints/index.md
-      - Sprint 001 — Gestión base de ciudadanos: sprints/sprint-001.md
+    - Todos los sprints: sprints/index.md
+    - Sprint 001 — Gestión base de ciudadanos: sprints/sprint-001.md
+  - Plantillas operativas:
+    - Minuta de reunión: templates/minuta-reunion.md
+    - Estimación de horas: templates/estimacion.md
+    - Reporte de pruebas: templates/reporte-pruebas.md
+    - Acta de cierre: templates/acta-cierre.md
 
 extra:
   social:
