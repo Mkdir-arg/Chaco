@@ -35,14 +35,18 @@ body:
     validations:
       required: true
 
-  - type: input
+  - type: dropdown
     id: caso_base
     attributes:
       label: "Caso base"
       description: |
-        Nombre o link del caso base que se va a ejecutar.
-        ➡️ Consultá el catálogo actualizado en [docs/client/templates/casos-base.md](https://github.com/Mkdir-arg/Chaco/blob/main/docs/client/templates/casos-base.md) y copiá el nombre o link.
-      placeholder: "Ej: Login básico / https://github.com/Mkdir-arg/Chaco/issues/1"
+        Seleccioná el caso base a ejecutar. Si no está en la lista, elegí "Otro (especificar en notas)".
+      options:
+        - "Login básico (#CB-1)"
+        - "Registro de usuario (#CB-2)"
+        - "Recupero de contraseña (#CB-3)"
+        - "Alta de trámite (#CB-4)"
+        - "Otro (especificar en notas)"
     validations:
       required: true
 
