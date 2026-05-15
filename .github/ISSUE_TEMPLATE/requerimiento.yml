@@ -7,16 +7,15 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Nuevo Requerimiento
-        Completá todos los campos. Sin aprobacion del cliente no se inicia desarrollo.
-        Flujo: Backlog -> En analisis -> Estimado -> Aprobado -> En desarrollo -> En pruebas -> Cerrado
+        ## Nuevo requerimiento
+        Completá este formulario para dejar alcance y aceptación claros antes de estimar o desarrollar.
 
   - type: input
     id: objetivo
     attributes:
       label: "Objetivo"
-      description: "Que se quiere lograr con este requerimiento"
-      placeholder: "Ej: Permitir al ciudadano consultar el estado de su tramite en linea"
+      description: "Qué resultado de negocio se busca"
+      placeholder: "Ej: Permitir al ciudadano consultar el estado de su trámite en línea"
     validations:
       required: true
 
@@ -24,7 +23,7 @@ body:
     id: contexto
     attributes:
       label: "Contexto / Problema"
-      description: "Describi la situacion actual y por que se necesita este cambio"
+      description: "Situación actual y por qué se necesita este cambio"
       placeholder: "Ej: Actualmente el ciudadano debe llamar por telefono para conocer el estado..."
     validations:
       required: true
@@ -33,8 +32,8 @@ body:
     id: alcance
     attributes:
       label: "Alcance"
-      description: "Que incluye este requerimiento. Lista los modulos, pantallas o funciones afectadas"
-      placeholder: "Incluye: modulo tramites, vista de detalle, notificacion por email"
+      description: "Qué incluye este requerimiento (módulos, pantallas, procesos)"
+      placeholder: "Incluye: módulo trámites, vista de detalle, notificación por email"
     validations:
       required: true
 
@@ -42,7 +41,7 @@ body:
     id: exclusiones
     attributes:
       label: "Exclusiones"
-      description: "Que queda explicitamente fuera del alcance de este requerimiento"
+      description: "Qué queda fuera del alcance"
       placeholder: "No incluye: integracion con sistema X, modificacion de datos historicos"
     validations:
       required: true
@@ -51,7 +50,7 @@ body:
     id: criterios_aceptacion
     attributes:
       label: "Criterios de Aceptacion"
-      description: "Como se valida que el requerimiento esta correctamente implementado"
+      description: "Cómo se valida que el requerimiento quedó correctamente implementado"
       placeholder: "- [ ] Criterio 1\n- [ ] Criterio 2"
     validations:
       required: true
@@ -60,7 +59,7 @@ body:
     id: prioridad
     attributes:
       label: "Prioridad"
-      description: "Prioridad definida junto con el cliente"
+      description: "Definida con el cliente"
       options:
         - "Alta - bloquea operacion o es compromiso contractual"
         - "Media - mejora importante, no bloquea"
@@ -72,14 +71,14 @@ body:
     id: estimacion
     attributes:
       label: "Estimacion (rango de horas)"
-      description: "Completar luego del analisis. Ej: 8-12 hs"
+      description: "Completar luego del análisis"
       placeholder: "Pendiente de analisis"
 
   - type: input
     id: aprobador
     attributes:
       label: "Aprobador del cliente"
-      description: "Nombre y rol del referente de ICORE que debe aprobar este requerimiento"
+      description: "Nombre y rol del referente funcional"
       placeholder: "Ej: Juan Perez - Referente funcional ICORE"
     validations:
       required: true
@@ -98,5 +97,5 @@ body:
     id: notas
     attributes:
       label: "Notas adicionales"
-      description: "Adjuntos, links de referencia, capturas u otra informacion relevante"
+      description: "Adjuntos, links de referencia, capturas u otra información relevante"
       placeholder: "Opcional"

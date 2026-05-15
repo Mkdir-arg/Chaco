@@ -7,18 +7,17 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Reporte de Pruebas
-        Usá este issue para ejecutar un caso base existente o crear una instancia nueva.
-        Este issue se publica en GitHub Pages como evidencia de calidad.
+        ## Testing / Pruebas
+        Registrá una instancia de ejecución de pruebas para un caso base existente.
 
   - type: dropdown
     id: modo
     attributes:
       label: "Modo de uso"
-      description: "Elegí si vas a reutilizar un caso base o crear uno nuevo"
+      description: "Cómo se origina esta instancia"
       options:
         - "Usar caso base existente"
-        - "Crear caso base nuevo"
+        - "Ejecución ad-hoc (sin caso base)"
     validations:
       required: true
 
@@ -35,18 +34,12 @@ body:
     validations:
       required: true
 
-  - type: dropdown
+  - type: input
     id: caso_base
     attributes:
       label: "Caso base"
-      description: |
-        Seleccioná el caso base a ejecutar. Si no está en la lista, elegí "Otro (especificar en notas)".
-      options:
-        - "Login básico (#CB-1)"
-        - "Registro de usuario (#CB-2)"
-        - "Recupero de contraseña (#CB-3)"
-        - "Alta de trámite (#CB-4)"
-        - "Otro (especificar en notas)"
+      description: "Issue o link del caso base (obligatorio si elegiste usar caso base existente)"
+      placeholder: "Ej: #123 o https://github.com/Mkdir-arg/Chaco/issues/123"
     validations:
       required: true
 
@@ -56,7 +49,7 @@ body:
       label: "Código de instancia"
       description: |
         Identificador único para esta ejecución.
-        ➡️ Sugerido: `EX-<nombre-caso>-<número-issue>` (ejemplo: EX-LOGIN-123). Podés completarlo después de crear el issue.
+        Sugerido: EX-<modulo>-<id> (ejemplo: EX-LOGIN-123)
       placeholder: "Ej: EX-LOGIN-123"
     validations:
       required: true
@@ -65,7 +58,7 @@ body:
     id: objetivo
     attributes:
       label: "Objetivo de las pruebas"
-      description: "Qué se valida en esta instancia de prueba"
+      description: "Qué se valida en esta ejecución"
       placeholder: "Ej: Validar acceso al sistema con usuario y contraseña"
     validations:
       required: true
@@ -74,7 +67,7 @@ body:
     id: issue_relacionado
     attributes:
       label: "Issue de requerimiento relacionado"
-      description: "Número y título del issue funcional que origina esta prueba"
+      description: "Issue funcional que origina esta prueba"
       placeholder: "Ej: #12 - Login de usuarios"
     validations:
       required: true
@@ -92,7 +85,7 @@ body:
     id: alcance
     attributes:
       label: "Alcance de las pruebas"
-      description: "Qué parte del caso base se ejecutó en esta instancia"
+      description: "Qué parte del flujo fue validada en esta instancia"
       placeholder: "Flujos probados: ingreso, validación de credenciales, acceso al home"
     validations:
       required: true
@@ -108,7 +101,7 @@ body:
     id: criterios_aceptacion
     attributes:
       label: "Resultados por Criterio de Aceptación"
-      description: "Marcá cada criterio con OK, FALLO o PENDIENTE para esta ejecución"
+      description: "Marcá cada criterio como OK, FALLO o PENDIENTE"
       placeholder: |
         - [x] El usuario ingresa con credenciales válidas - OK
         - [x] El sistema redirige al panel principal - OK
@@ -147,7 +140,7 @@ body:
     id: aprobador
     attributes:
       label: "Aprobador del cliente"
-      description: "Referente de ICORE que valida esta instancia de ejecución"
+      description: "Referente funcional que valida esta ejecución"
       placeholder: "Ej: Juan Pérez - Referente funcional ICORE"
     validations:
       required: true
@@ -165,5 +158,5 @@ body:
     id: notas
     attributes:
       label: "Evidencia / Links / Capturas"
-      description: "Links a reportes, capturas de pantalla o referencia al caso base"
+      description: "Links a reportes, capturas, logs o documentación"
       placeholder: "Opcional"

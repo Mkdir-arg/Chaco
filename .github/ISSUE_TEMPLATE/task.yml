@@ -7,9 +7,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Tarea Interna
-        Para tareas técnicas que no son requerimientos directos del cliente.
-        No requiere aprobación formal, pero sí registro de horas.
+        ## Tarea interna
+        Usar para trabajo técnico interno: refactor, mantenimiento, deuda técnica o mejora de calidad.
 
   - type: input
     id: objetivo
@@ -24,7 +23,7 @@ body:
     id: contexto
     attributes:
       label: "Contexto / Motivación"
-      description: "Por qué es necesaria esta tarea y qué problema resuelve"
+      description: "Por qué es necesaria y qué problema resuelve"
       placeholder: "Ej: El módulo actual tiene código duplicado que dificulta el mantenimiento..."
     validations:
       required: true
@@ -33,7 +32,7 @@ body:
     id: alcance
     attributes:
       label: "Alcance"
-      description: "Qué archivos, módulos o áreas del sistema involucra esta tarea"
+      description: "Archivos, módulos o áreas involucradas"
       placeholder: "Archivos afectados: core/auth.py, users/views.py"
     validations:
       required: true
@@ -42,14 +41,14 @@ body:
     id: exclusiones
     attributes:
       label: "Exclusiones"
-      description: "Qué no forma parte de esta tarea"
+      description: "Qué queda fuera de esta tarea"
       placeholder: "No incluye: cambio de interfaz de usuario, modificación de API pública"
 
   - type: textarea
     id: criterios_aceptacion
     attributes:
       label: "Criterios de Aceptación"
-      description: "Cómo se verifica que la tarea fue completada correctamente"
+      description: "Cómo se valida que la tarea está completa"
       placeholder: "- [ ] Los tests existentes pasan sin errores\n- [ ] El código pasa la revisión"
     validations:
       required: true
@@ -75,7 +74,7 @@ body:
     id: aprobador
     attributes:
       label: "Aprobador del cliente (si aplica)"
-      description: "Dejar en blanco si es tarea puramente interna"
+      description: "Opcional para tareas internas"
       placeholder: "N/A para tareas internas"
 
   - type: dropdown

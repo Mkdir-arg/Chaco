@@ -7,14 +7,14 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## Reporte de Bug
-        Completá todos los campos para agilizar el diagnóstico y la resolución.
+        ## Reporte de bug
+        Completá la información mínima para que el equipo pueda reproducir, priorizar y corregir.
 
   - type: input
     id: objetivo
     attributes:
       label: "Objetivo del reporte"
-      description: "Qué comportamiento correcto se esperaba"
+      description: "Qué comportamiento esperado debería cumplirse"
       placeholder: "Ej: El sistema debería guardar el legajo sin errores"
     validations:
       required: true
@@ -23,7 +23,7 @@ body:
     id: contexto
     attributes:
       label: "Contexto / Descripción del error"
-      description: "Describí el error con detalle: qué pasó, cuándo y en qué contexto"
+      description: "Qué pasó, cuándo pasó y en qué módulo/pantalla"
       placeholder: "Ej: Al hacer click en Guardar en el módulo legajos, aparece error 500..."
     validations:
       required: true
@@ -32,7 +32,7 @@ body:
     id: pasos_reproduccion
     attributes:
       label: "Pasos para reproducir"
-      description: "Listá los pasos exactos para reproducir el error"
+      description: "Pasos exactos para reproducir el problema"
       placeholder: |
         1. Ingresar al módulo X
         2. Completar el campo Y
@@ -45,7 +45,7 @@ body:
     id: alcance
     attributes:
       label: "Alcance del impacto"
-      description: "Qué módulos, usuarios o procesos se ven afectados"
+      description: "Qué usuarios, módulos o procesos están afectados"
       placeholder: "Afecta: módulo legajos, todos los usuarios con rol operador"
     validations:
       required: true
@@ -54,14 +54,14 @@ body:
     id: exclusiones
     attributes:
       label: "Exclusiones / Lo que sí funciona"
-      description: "Qué partes del sistema no están afectadas por este bug"
+      description: "Qué partes no están afectadas"
       placeholder: "No afecta: módulo tramites, funcionalidad de consulta"
 
   - type: textarea
     id: criterios_aceptacion
     attributes:
       label: "Criterios de Aceptación"
-      description: "Cómo se verifica que el bug fue corregido"
+      description: "Cómo se valida que la corrección quedó bien"
       placeholder: "- [ ] El sistema guarda el legajo sin error\n- [ ] Se muestra mensaje de éxito"
     validations:
       required: true
@@ -81,14 +81,14 @@ body:
     id: estimacion
     attributes:
       label: "Estimación (rango de horas)"
-      description: "Completar luego del análisis"
+      description: "Completar luego del análisis técnico"
       placeholder: "Pendiente de análisis"
 
   - type: input
     id: aprobador
     attributes:
       label: "Aprobador del cliente"
-      description: "Referente de ICORE que valida la corrección"
+      description: "Referente funcional que valida la corrección"
       placeholder: "Ej: Juan Pérez - Referente funcional ICORE"
     validations:
       required: true

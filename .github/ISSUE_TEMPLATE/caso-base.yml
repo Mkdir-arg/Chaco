@@ -1,14 +1,14 @@
 name: "Caso base de prueba"
 description: "Definición de un caso maestro reutilizable para pruebas recurrentes"
 title: "[CB] "
-labels: ["testing"]
+labels: ["testing", "caso-base"]
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
         ## Caso base de prueba
-        Usá este issue para definir un caso maestro único que luego pueda reutilizarse en múltiples instancias de ejecución.
+        Definí aquí un caso reutilizable que servirá como referencia para instancias de testing.
 
   - type: input
     id: codigo
@@ -23,7 +23,7 @@ body:
     id: tipo_caso
     attributes:
       label: "Tipo de caso"
-      description: "Clasificación del caso que se va a definir"
+      description: "Clasificación del caso base"
       options:
         - "Dato base"
         - "Caso maestro"
@@ -35,7 +35,7 @@ body:
     id: nombre
     attributes:
       label: "Nombre del caso"
-      description: "Nombre corto y claro del flujo que se valida"
+      description: "Nombre corto y claro del flujo validado"
       placeholder: "Ej: Login de usuarios"
     validations:
       required: true
@@ -44,7 +44,7 @@ body:
     id: modulo
     attributes:
       label: "Módulo"
-      description: "Área funcional donde aplica el caso base"
+      description: "Área funcional donde aplica"
       placeholder: "Ej: portal, legajos, conversaciones"
     validations:
       required: true
@@ -53,7 +53,7 @@ body:
     id: objetivo
     attributes:
       label: "Objetivo"
-      description: "Qué comportamiento estable debe garantizar este caso"
+      description: "Qué comportamiento estable debe garantizar"
       placeholder: "Ej: Validar el acceso correcto al sistema con credenciales válidas"
     validations:
       required: true
@@ -71,7 +71,7 @@ body:
     id: pasos
     attributes:
       label: "Pasos del caso base"
-      description: "Secuencia estándar que se debe repetir en cada ejecución"
+      description: "Secuencia estándar a repetir en cada ejecución"
       placeholder: |
         1. Ingresar a la pantalla de login
         2. Completar usuario y contraseña
@@ -92,7 +92,7 @@ body:
     id: criterios_aceptacion
     attributes:
       label: "Criterios de aceptación"
-      description: "Criterios que este caso base debe cumplir"
+      description: "Checklist de validación del caso base"
       placeholder: |
         - [ ] El usuario ingresa con credenciales válidas
         - [ ] El sistema redirige al panel principal
@@ -104,7 +104,7 @@ body:
     id: responsable
     attributes:
       label: "Responsable"
-      description: "Nombre del referente que mantiene este caso base"
+      description: "Referente que mantiene este caso"
       placeholder: "Ej: Agostina Coppola"
     validations:
       required: false
