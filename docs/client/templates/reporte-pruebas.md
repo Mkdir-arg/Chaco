@@ -1,6 +1,7 @@
 # Reporte de Pruebas
 
 **Proyecto:** Chaco — Digitalización de procesos provinciales
+**Caso base relacionado:** <!-- Login / Registro / etc. -->
 **Issue de requerimiento:** #<!-- N --> — <!-- título -->
 **Issue de testing:** #<!-- N -->
 **Fecha de ejecución:** <!-- YYYY-MM-DD -->
@@ -38,6 +39,14 @@
 - [ ] Casos borde (valores límite, datos vacíos)
 - [ ] Regresión: funcionalidades existentes no afectadas
 - [ ] Permisos y acceso por rol
+
+---
+
+## Referencia al caso base
+
+- **Caso base:** <!-- link o nombre del caso maestro -->
+- **Versión del caso base:** <!-- YYYY-MM-DD o versión -->
+- **Instancia actual:** <!-- link a esta corrida -->
 
 ---
 

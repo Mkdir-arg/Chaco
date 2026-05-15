@@ -42,6 +42,8 @@ nav:
     - Todos los sprints: sprints/index.md
     - Sprint 001 — Gestión base de ciudadanos: sprints/sprint-001.md
   - Plantillas operativas:
+    - Caso de prueba base: templates/caso-prueba-base.md
+    - Instancia de prueba: templates/instancia-prueba.md
     - Minuta de reunión: templates/minuta-reunion.md
     - Estimación de horas: templates/estimacion.md
     - Reporte de pruebas: templates/reporte-pruebas.md
