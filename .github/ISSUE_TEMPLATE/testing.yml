@@ -22,6 +22,19 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: tipo_caso
+    attributes:
+      label: "Tipo de caso"
+      description: "Clasificación de esta ejecución"
+      options:
+        - "Dato base"
+        - "Instancia de prueba"
+        - "Regresión"
+        - "Validación puntual"
+    validations:
+      required: true
+
   - type: input
     id: caso_base
     attributes:

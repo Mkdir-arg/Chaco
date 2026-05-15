@@ -19,6 +19,18 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: tipo_caso
+    attributes:
+      label: "Tipo de caso"
+      description: "Clasificación del caso que se va a definir"
+      options:
+        - "Dato base"
+        - "Caso maestro"
+        - "Variante"
+    validations:
+      required: true
+
   - type: input
     id: nombre
     attributes:
@@ -95,7 +107,7 @@ body:
       description: "Nombre del referente que mantiene este caso base"
       placeholder: "Ej: Agostina Coppola"
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: notas
