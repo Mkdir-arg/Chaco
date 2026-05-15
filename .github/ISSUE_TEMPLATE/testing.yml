@@ -39,8 +39,10 @@ body:
     id: caso_base
     attributes:
       label: "Caso base"
-      description: "Nombre o link del caso base que se va a ejecutar"
-      placeholder: "Ej: Login / docs/client/templates/caso-prueba-base.md"
+      description: |
+        Nombre o link del caso base que se va a ejecutar.
+        ➡️ Consultá el catálogo actualizado en [docs/client/templates/casos-base.md](https://github.com/Mkdir-arg/Chaco/blob/main/docs/client/templates/casos-base.md) y copiá el nombre o link.
+      placeholder: "Ej: Login básico / https://github.com/Mkdir-arg/Chaco/issues/1"
     validations:
       required: true
 
@@ -48,8 +50,10 @@ body:
     id: codigo_instancia
     attributes:
       label: "Código de instancia"
-      description: "Identificador único para esta ejecución"
-      placeholder: "Ej: EX-LOGIN-2026-05-15"
+      description: |
+        Identificador único para esta ejecución.
+        ➡️ Sugerido: `EX-<nombre-caso>-<número-issue>` (ejemplo: EX-LOGIN-123). Podés completarlo después de crear el issue.
+      placeholder: "Ej: EX-LOGIN-123"
     validations:
       required: true
 
