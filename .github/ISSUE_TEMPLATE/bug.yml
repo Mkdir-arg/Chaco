@@ -1,0 +1,120 @@
+name: "Bug / Corrección"
+description: "Reporte de error o comportamiento incorrecto en el sistema"
+title: "[BUG] "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Reporte de Bug
+        Completá todos los campos para agilizar el diagnóstico y la resolución.
+
+  - type: input
+    id: objetivo
+    attributes:
+      label: "Objetivo del reporte"
+      description: "Qué comportamiento correcto se esperaba"
+      placeholder: "Ej: El sistema debería guardar el legajo sin errores"
+    validations:
+      required: true
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "Contexto / Descripción del error"
+      description: "Describí el error con detalle: qué pasó, cuándo y en qué contexto"
+      placeholder: "Ej: Al hacer click en Guardar en el módulo legajos, aparece error 500..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: pasos_reproduccion
+    attributes:
+      label: "Pasos para reproducir"
+      description: "Listá los pasos exactos para reproducir el error"
+      placeholder: |
+        1. Ingresar al módulo X
+        2. Completar el campo Y
+        3. Hacer click en Z
+        4. El error aparece
+    validations:
+      required: true
+
+  - type: textarea
+    id: alcance
+    attributes:
+      label: "Alcance del impacto"
+      description: "Qué módulos, usuarios o procesos se ven afectados"
+      placeholder: "Afecta: módulo legajos, todos los usuarios con rol operador"
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusiones
+    attributes:
+      label: "Exclusiones / Lo que sí funciona"
+      description: "Qué partes del sistema no están afectadas por este bug"
+      placeholder: "No afecta: módulo tramites, funcionalidad de consulta"
+
+  - type: textarea
+    id: criterios_aceptacion
+    attributes:
+      label: "Criterios de Aceptación"
+      description: "Cómo se verifica que el bug fue corregido"
+      placeholder: "- [ ] El sistema guarda el legajo sin error\n- [ ] Se muestra mensaje de éxito"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: "Prioridad"
+      options:
+        - "Alta - bloquea operación productiva"
+        - "Media - degradación parcial, hay workaround"
+        - "Baja - molestia menor, no bloquea"
+    validations:
+      required: true
+
+  - type: input
+    id: estimacion
+    attributes:
+      label: "Estimación (rango de horas)"
+      description: "Completar luego del análisis"
+      placeholder: "Pendiente de análisis"
+
+  - type: input
+    id: aprobador
+    attributes:
+      label: "Aprobador del cliente"
+      description: "Referente de ICORE que valida la corrección"
+      placeholder: "Ej: Juan Pérez - Referente funcional ICORE"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: estado_inicial
+    attributes:
+      label: "Estado inicial en el flujo"
+      options:
+        - "Backlog"
+        - "En análisis"
+    validations:
+      required: true
+
+  - type: input
+    id: entorno
+    attributes:
+      label: "Entorno donde ocurre"
+      description: "Producción, staging, desarrollo, etc."
+      placeholder: "Ej: Producción"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notas
+    attributes:
+      label: "Evidencia / Capturas / Logs"
+      description: "Adjuntá capturas de pantalla, mensajes de error o logs relevantes"
+      placeholder: "Opcional"
