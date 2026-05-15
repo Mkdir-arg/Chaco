@@ -1,0 +1,115 @@
+name: "Crear instancias de prueba - Manual (por Iteration)"
+description: "Genera instancias de prueba para todos los casos base en una Iteration específica (ejecutar manualmente)"
+
+on:
+  workflow_dispatch:
+    inputs:
+      iteration_name:
+        description: "Nombre de la Iteration en GitHub Projects"
+        required: true
+        type: string
+        default: "Sprint 1"
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  crear-instancias-iteration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Obtener todos los casos base"
+        id: casos_base
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // Buscar todos los issues con label "caso-base"
+            const response = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'caso-base',
+              state: 'all',
+              per_page: 100
+            });
+            
+            core.setOutput('casos', JSON.stringify(response.data));
+            console.log(`✅ Se encontraron ${response.data.length} casos base`);
+
+      - name: "Crear instancia de prueba para cada caso base"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const casos = JSON.parse('${{ steps.casos_base.outputs.casos }}');
+            const iteration_name = '${{ inputs.iteration_name }}';
+            const fecha = new Date().toISOString().split('T')[0];
+            
+            if (!casos || casos.length === 0) {
+              core.setFailed('❌ No hay casos base creados con el label "caso-base"');
+              return;
+            }
+            
+            let instancias_creadas = 0;
+            
+            for (const caso of casos) {
+              const numero_caso = caso.number;
+              const titulo_caso = caso.title;
+              
+              // Generar código de instancia automático
+              const codigo_instancia = `EX-${titulo_caso.replace(/\s+/g, '-').substring(0, 20)}-${numero_caso}`;
+              
+              // Crear el título del issue de testing
+              const titulo_testing = `[TEST] ${titulo_caso} - ${iteration_name}`;
+              
+              // Crear el body del issue
+              const body = `## Instancia de Prueba - ${iteration_name}
+
+**Iteration:** ${iteration_name}
+**Caso base:** #${numero_caso} - ${titulo_caso}
+**Código de instancia:** ${codigo_instancia}
+**Fecha de creación:** ${fecha}
+
+Este issue fue creado automáticamente como instancia de prueba.
+
+### Próximos pasos:
+1. Asignate el issue
+2. Completa los campos: objetivo, contexto, alcance, exclusiones y criterios de aceptación
+3. Ejecuta las pruebas según el caso base
+4. Marca el resultado general (Aprobado / Aprobado con observaciones / Rechazado)
+5. Adjunta evidencia y capturas en el campo "Evidencia / Links / Capturas"
+
+---
+**Caso base:** #${numero_caso}
+**Referencia:** https://github.com/${{ github.repository }}/issues/${numero_caso}
+`;
+              
+              try {
+                // Crear el issue de testing
+                const newIssue = await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: titulo_testing,
+                  body: body,
+                  labels: ['testing', 'automatico']
+                });
+                
+                console.log(`✅ Creada instancia #${newIssue.data.number} para caso base #${numero_caso}`);
+                
+                // Crear un comentario en el caso base vinculando la instancia
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: numero_caso,
+                  body: `🧪 **Instancia creada para ${iteration_name}**: #${newIssue.data.number}`
+                });
+                
+                instancias_creadas++;
+              } catch (error) {
+                console.error(`❌ Error creando instancia para caso #${numero_caso}:`, error.message);
+              }
+            }
+            
+            if (instancias_creadas === 0) {
+              core.setFailed('❌ No se pudo crear ninguna instancia');
+            } else {
+              console.log(`\n✨ Se crearon exitosamente ${instancias_creadas} instancias de prueba para "${iteration_name}"`);
+            }
