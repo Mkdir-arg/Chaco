@@ -1,0 +1,119 @@
+name: "Testing / Pruebas"
+description: "Documentación de pruebas funcionales y criterios de aceptación por requerimiento"
+title: "[TEST] "
+labels: ["testing"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Reporte de Pruebas
+        Documentá los resultados de testing por criterio de aceptación.
+        Este issue se publica en GitHub Pages como evidencia de calidad.
+
+  - type: input
+    id: objetivo
+    attributes:
+      label: "Objetivo de las pruebas"
+      description: "Qué requerimiento o funcionalidad se está probando"
+      placeholder: "Ej: Validar módulo de consulta de trámites - Issue #12"
+    validations:
+      required: true
+
+  - type: input
+    id: issue_relacionado
+    attributes:
+      label: "Issue de requerimiento relacionado"
+      description: "Número y título del issue de requerimiento que origina estas pruebas"
+      placeholder: "Ej: #12 - Consulta de estado de trámite"
+    validations:
+      required: true
+
+  - type: textarea
+    id: contexto
+    attributes:
+      label: "Contexto"
+      description: "Descripción breve del alcance probado y entorno de ejecución"
+      placeholder: "Ej: Pruebas ejecutadas en entorno staging. Versión desplegada: commit abc123"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alcance
+    attributes:
+      label: "Alcance de las pruebas"
+      description: "Qué módulos, flujos y casos fueron cubiertos"
+      placeholder: "Flujos probados: alta de trámite, consulta de estado, notificación por email"
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusiones
+    attributes:
+      label: "Exclusiones"
+      description: "Qué casos quedan fuera de este ciclo de pruebas"
+      placeholder: "No incluye: pruebas de performance, integración con sistema X"
+
+  - type: textarea
+    id: criterios_aceptacion
+    attributes:
+      label: "Resultados por Criterio de Aceptación"
+      description: "Marcá cada criterio con OK, FALLO o PENDIENTE"
+      placeholder: |
+        - [x] El ciudadano puede ver el estado actual de su trámite - OK
+        - [x] El sistema muestra fecha de última actualización - OK
+        - [ ] Se envía notificación cuando el estado cambia - PENDIENTE
+    validations:
+      required: true
+
+  - type: dropdown
+    id: resultado_general
+    attributes:
+      label: "Resultado general"
+      options:
+        - "Aprobado - todos los criterios OK"
+        - "Aprobado con observaciones - hay items pendientes menores"
+        - "Rechazado - hay criterios que fallan y bloquean el despliegue"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: "Prioridad de resolución de observaciones"
+      options:
+        - "Alta - bloquea despliegue"
+        - "Media - se puede desplegar con workaround"
+        - "Baja - se trata en el siguiente sprint"
+
+  - type: input
+    id: estimacion
+    attributes:
+      label: "Estimación de correcciones (rango de horas)"
+      description: "Solo si hay observaciones a resolver"
+      placeholder: "Ej: 2-4 hs"
+
+  - type: input
+    id: aprobador
+    attributes:
+      label: "Aprobador del cliente"
+      description: "Referente de ICORE que valida los resultados"
+      placeholder: "Ej: Juan Pérez - Referente funcional ICORE"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: estado_inicial
+    attributes:
+      label: "Estado inicial en el flujo"
+      options:
+        - "En pruebas"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notas
+    attributes:
+      label: "Evidencia / Links / Capturas"
+      description: "Links a reportes, capturas de pantalla u otra evidencia"
+      placeholder: "Opcional"
