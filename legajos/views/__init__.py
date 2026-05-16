@@ -8,7 +8,6 @@ from .alertas import (  # noqa: F401
     debug_alertas,
     test_alertas_page,
 )
-from .api_derivaciones import derivaciones_programa_api  # noqa: F401
 from .ciudadanos import (  # noqa: F401
     CiudadanoConfirmarView,
     CiudadanoCreateView,

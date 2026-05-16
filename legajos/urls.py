@@ -1,7 +1,6 @@
 from django.urls import include, path
 
 from .views import alertas as views_alertas
-from .views import api_derivaciones as views_api_derivaciones
 from .views import ciudadanos as views_ciudadanos
 from .views import contactos_api as views_contactos_api
 from .views import contactos_panel as views_contactos_panel
@@ -37,11 +36,6 @@ urlpatterns = [
         "ciudadanos/<int:ciudadano_id>/derivar-programa/",
         views_derivacion.derivar_programa_view,
         name="derivar_programa",
-    ),
-    path(
-        "ciudadanos/<int:ciudadano_id>/derivaciones-programa/<int:programa_id>/",
-        views_api_derivaciones.derivaciones_programa_api,
-        name="derivaciones_programa_api",
     ),
     path("plan/<int:pk>/marcar-etapa/", views_simple.marcar_etapa_plan, name="marcar_etapa_plan"),
     path("dashboard-contactos/", views_contactos_panel.dashboard_contactos_simple, name="dashboard_contactos"),
