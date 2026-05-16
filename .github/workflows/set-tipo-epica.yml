@@ -7,7 +7,6 @@ on:
 permissions:
   contents: read
   issues: read
-  projects: write
 
 jobs:
   set-tipo-epica:
@@ -40,30 +39,9 @@ jobs:
                       }
                     }
                   }
-                }
-                organization(login:$owner) {
-                  projectV2(number:$projectNumber) {
-                    id
-                    fields(first:100) {
-                      nodes {
-                        ... on ProjectV2FieldCommon { id name }
-                        ... on ProjectV2SingleSelectField {
-                          id
-                          name
-                          options { id name }
-                        }
-                      }
-                    }
-                  }
-                }
-                repository(owner:$owner, name:$repo) {
-                  issue(number:$issueNumber) {
-                    id
-                    projectItems(first:100) {
-                      nodes {
-                        id
-                        project { id }
-                      }
+                  repository(name:$repo) {
+                    issue(number:$issueNumber) {
+                      id
                     }
                   }
                 }
@@ -71,74 +49,51 @@ jobs:
             `;
 
             const data = await github.graphql(q, { owner, repo, projectNumber, issueNumber });
-            const project = data.user?.projectV2 || data.organization?.projectV2;
+            const project = data.user.projectV2;
+            const issueId = data.user.repository.issue.id;
+            const projectId = project.id;
 
-            if (!project) {
-              core.setFailed(`No se encontro Project v2 #${projectNumber} para owner ${owner}`);
-              return;
-            }
-
-            const issue = data.repository?.issue;
-            if (!issue) {
-              core.setFailed(`No se encontro issue #${issueNumber}`);
-              return;
-            }
-
-            const tipoField = project.fields.nodes.find(
-              (f) => f.name && f.name.toLowerCase() === 'tipo' && f.options
-            );
-
+            // Find Tipo field
+            const tipoField = project.fields.nodes.find(f => f.name === 'Tipo');
             if (!tipoField) {
-              core.setFailed('No se encontro el campo Tipo en el Project');
+              core.setFailed('Campo Tipo no encontrado en el Project');
               return;
             }
-
-            const epicaOption = tipoField.options.find(
-              (o) => o.name && o.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() === 'epica'
-            );
-
+            const epicaOption = tipoField.options?.find(o => o.name === 'Epica');
             if (!epicaOption) {
-              core.setFailed('No se encontro la opcion Epica en el campo Tipo');
+              core.setFailed('Opcion Epica no encontrada en el campo Tipo');
               return;
             }
 
-            let item = issue.projectItems.nodes.find((n) => n.project.id === project.id);
-
-            if (!item) {
-              const addMutation = `
-                mutation($projectId:ID!, $contentId:ID!) {
-                  addProjectV2ItemById(input:{projectId:$projectId, contentId:$contentId}) {
-                    item { id }
-                  }
+            // Add issue to project if not already there
+            const addMutation = `
+              mutation($projectId:ID!, $contentId:ID!) {
+                addProjectV2ItemById(input:{projectId:$projectId, contentId:$contentId}) {
+                  item { id }
                 }
-              `;
-              const added = await github.graphql(addMutation, {
-                projectId: project.id,
-                contentId: issue.id,
-              });
-              item = added.addProjectV2ItemById.item;
-            }
+              }
+            `;
+            const addResult = await github.graphql(addMutation, { projectId, contentId: issueId });
+            const itemId = addResult.addProjectV2ItemById.item.id;
 
-            const updateMutation = `
+            // Set Tipo = Epica
+            const setMutation = `
               mutation($projectId:ID!, $itemId:ID!, $fieldId:ID!, $optionId:String!) {
-                updateProjectV2ItemFieldValue(
-                  input:{
-                    projectId:$projectId,
-                    itemId:$itemId,
-                    fieldId:$fieldId,
-                    value:{ singleSelectOptionId:$optionId }
-                  }
-                ) {
+                updateProjectV2ItemFieldValue(input:{
+                  projectId:$projectId,
+                  itemId:$itemId,
+                  fieldId:$fieldId,
+                  value:{ singleSelectOptionId:$optionId }
+                }) {
                   projectV2Item { id }
                 }
               }
             `;
-
-            await github.graphql(updateMutation, {
-              projectId: project.id,
-              itemId: item.id,
+            await github.graphql(setMutation, {
+              projectId,
+              itemId,
               fieldId: tipoField.id,
-              optionId: epicaOption.id,
+              optionId: epicaOption.id
             });
 
-            core.info(`Issue #${issueNumber} seteado con Tipo=Epica en Project #${projectNumber}`);
+            console.log(`Tipo=Epica seteado correctamente en item ${itemId}`);
