@@ -331,12 +331,12 @@ class Derivacion(TimeStamped):
         related_name="derivaciones"
     )
     actividad_destino = models.ForeignKey(
-        'PlanFortalecimiento',
+        'legajos.Programa',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="derivaciones",
-        verbose_name="Actividad Específica"
+        verbose_name="Programa destino"
     )
     motivo = models.TextField()
     urgencia = models.CharField(

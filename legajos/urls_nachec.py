@@ -4,29 +4,27 @@ URLs para transiciones de estado Ñachec
 
 from django.urls import path
 
-from .views import (
-    activar_plan,
+from .views.nachec_cierre import cerrar_caso_nachec, reabrir_caso_nachec
+from .views.nachec_dashboard import dashboard_nachec
+from .views.nachec_decisiones import activar_plan, cerrar_caso, evaluar_caso, pasar_a_seguimiento
+from .views.nachec_operacion import (
     adjuntar_evidencias,
     asignar_territorial,
     autosave_relevamiento,
-    cancelar_prestacion,
-    cerrar_caso,
-    cerrar_caso_nachec,
     completar_tarea,
     completar_validacion,
-    confirmar_entrega_prestacion,
-    dashboard_nachec,
     enviar_a_asignacion,
-    evaluar_caso,
     finalizar_relevamiento,
     formulario_relevamiento,
-    iniciar_prestacion,
     iniciar_relevamiento,
-    pasar_a_seguimiento,
     reasignar_territorial,
-    reabrir_caso_nachec,
-    reprogramar_prestacion,
     ver_tarea_validacion,
+)
+from .views.nachec_prestaciones import (
+    cancelar_prestacion,
+    confirmar_entrega_prestacion,
+    iniciar_prestacion,
+    reprogramar_prestacion,
 )
 
 urlpatterns = [

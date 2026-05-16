@@ -4,7 +4,6 @@ from .views import alertas as views_alertas
 from .views import ciudadanos as views_ciudadanos
 from .views import contactos_api as views_contactos_api
 from .views import contactos_panel as views_contactos_panel
-from .views import cursos as views_cursos
 from .views import dashboard_simple as views_simple
 from .views import derivacion as views_derivacion
 from .views import derivacion_programa as views_derivacion_programa
@@ -31,7 +30,6 @@ urlpatterns = [
         views_derivacion.derivar_programa_view,
         name="derivar_programa",
     ),
-    path("plan/<int:pk>/marcar-etapa/", views_simple.marcar_etapa_plan, name="marcar_etapa_plan"),
     path("dashboard-contactos/", views_contactos_panel.dashboard_contactos_simple, name="dashboard_contactos"),
     path("reportes/", views_simple.reportes_view, name="reportes"),
     path("reportes/exportar-csv/", views_simple.exportar_reportes_csv, name="exportar_csv"),
@@ -69,11 +67,6 @@ urlpatterns = [
         name="alertas_ciudadano",
     ),
     path("alertas/<int:alerta_id>/cerrar/", views_contactos_api.cerrar_alerta_api, name="cerrar_alerta_ciudadano"),
-    path(
-        "ciudadanos/<int:pk>/cursos-actividades/",
-        views_cursos.cursos_actividades_ciudadano,
-        name="cursos_actividades_ciudadano",
-    ),
     path(
         "ciudadanos/<int:ciudadano_id>/timeline/",
         views_contactos_api.timeline_ciudadano_api,

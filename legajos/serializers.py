@@ -5,7 +5,6 @@ from .models import (
     Derivacion,
     AlertaCiudadano,
 )
-from core.models import DispositivoRed
 
 
 class CiudadanoSerializer(serializers.ModelSerializer):
@@ -25,14 +24,6 @@ class CiudadanoSerializer(serializers.ModelSerializer):
         return getattr(obj, 'legajos_count', obj.inscripciones_programas.count())
 
 
-class DispositivoRedSerializer(serializers.ModelSerializer):
-    """Serializer para DispositivoRed"""
-    
-    class Meta:
-        model = DispositivoRed
-        fields = ['id', 'nombre', 'tipo', 'activo']
-
-
 class UserSerializer(serializers.ModelSerializer):
     """Serializer básico para User"""
     
@@ -43,13 +34,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class DerivacionSerializer(serializers.ModelSerializer):
     """Serializer para Derivacion"""
-    origen = DispositivoRedSerializer(read_only=True)
-    destino = DispositivoRedSerializer(read_only=True)
+    actividad_destino_nombre = serializers.CharField(source='actividad_destino.nombre', read_only=True)
     
     class Meta:
         model = Derivacion
         fields = [
-            'id', 'legajo', 'origen', 'destino', 'motivo', 'urgencia',
+            'id', 'legajo', 'actividad_destino', 'actividad_destino_nombre', 'motivo', 'urgencia',
             'estado', 'respuesta', 'fecha_aceptacion', 'creado', 'modificado'
         ]
         read_only_fields = ['id', 'creado', 'modificado']

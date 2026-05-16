@@ -23,7 +23,3 @@ from .ciudadano_perfil import (
     ciudadano_mis_programas,
     ciudadano_programa_detalle,
 )
-from .ciudadano_actividades import (  # noqa: F401
-    ciudadano_inscribirse_actividad,
-    ciudadano_mis_actividades,
-)

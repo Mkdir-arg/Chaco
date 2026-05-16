@@ -5,7 +5,6 @@ from .models_contactos import (
     VinculoFamiliar,
 )
 from .models import Ciudadano, LegajoAtencion
-from core.models import DispositivoRed
 
 
 class CiudadanoBasicoSerializer(serializers.ModelSerializer):

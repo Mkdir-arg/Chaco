@@ -5,8 +5,12 @@ from queue import Queue, Empty
 from contextlib import contextmanager
 from django.db import connections
 from django.conf import settings
-import pymysql
 from typing import Optional, Dict, Any
+
+try:
+    import pymysql
+except ImportError:  # pragma: no cover - dependencia opcional en entornos sin MySQL directo
+    pymysql = None
 
 logger = logging.getLogger(__name__)
 
@@ -193,6 +197,9 @@ class DatabasePool:
     def _create_connection(self):
         """Crea una nueva conexión a la base de datos"""
         try:
+            if pymysql is None:
+                raise RuntimeError("pymysql no está instalado")
+
             connection = pymysql.connect(
                 host=self.db_config['HOST'],
                 port=int(self.db_config.get('PORT', 3306)),

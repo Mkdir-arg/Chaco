@@ -33,13 +33,13 @@ class CiudadanoAdmin(admin.ModelAdmin):
 
 @admin.register(Derivacion)
 class DerivacionAdmin(admin.ModelAdmin):
-    list_display = ['legajo', 'destino', 'urgencia', 'estado', 'creado']
-    list_filter = ['urgencia', 'estado', 'destino__provincia', 'creado']
-    search_fields = ['legajo__codigo', 'motivo', 'destino__nombre']
+    list_display = ['legajo', 'actividad_destino', 'urgencia', 'estado', 'creado']
+    list_filter = ['urgencia', 'estado', 'creado']
+    search_fields = ['legajo__codigo', 'motivo', 'actividad_destino__nombre']
     date_hierarchy = 'creado'
     
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related('legajo__ciudadano', 'destino')
+        return super().get_queryset(request).select_related('legajo__ciudadano', 'actividad_destino')
 
 
 @admin.register(Adjunto)

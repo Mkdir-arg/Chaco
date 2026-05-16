@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.http import JsonResponse
 from ..context_processors import alertas_criticas_cache_key
-from ..models import AlertaCiudadano
+from ..models import AlertaCiudadano, Ciudadano, LegajoAtencion
 from ..services import AlertasService, FiltrosUsuarioService
 
 

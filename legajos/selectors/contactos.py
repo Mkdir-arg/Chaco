@@ -264,7 +264,7 @@ def build_ciudadano_timeline_payload(ciudadano_id):
                     'tipo': 'EVALUACION',
                     'titulo': 'Evaluación Inicial',
                     'descripcion': (
-                        f'Evaluación realizada - Nivel de riesgo: {legajo.get_nivel_riesgo_display()}'
+                        f'Evaluación realizada - Nivel de riesgo: {legajo.nivel_riesgo}'
                     ),
                     'legajo_id': str(legajo.id),
                 }

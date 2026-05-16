@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -54,11 +54,11 @@ class DerivacionViewSet(viewsets.ModelViewSet):
     """
     ViewSet para gestionar derivaciones entre dispositivos.
     """
-    queryset = Derivacion.objects.select_related('legajo__ciudadano', 'origen', 'destino')
+    queryset = Derivacion.objects.select_related('legajo__ciudadano', 'actividad_destino')
     serializer_class = DerivacionSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['estado', 'urgencia', 'origen', 'destino']
+    filterset_fields = ['estado', 'urgencia', 'actividad_destino']
     ordering = ['-creado']
 
 
