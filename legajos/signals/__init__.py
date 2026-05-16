@@ -13,12 +13,5 @@ from .core import (  # noqa: F401
     invalidate_legajo_cache,
     invalidate_seguimiento_cache,
 )
-from .historial import (  # noqa: F401
-    crear_historial_actividad,
-    crear_historial_inscripto,
-    crear_historial_staff,
-    guardar_estado_anterior_actividad,
-    guardar_estado_anterior_derivacion,
-    guardar_estado_anterior_inscripto,
-)
+# DEPRECATED: Historial signals were removed with SEDRONAR
 from .nachec import crear_caso_nachec_desde_derivacion  # noqa: F401

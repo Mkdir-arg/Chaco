@@ -17,9 +17,9 @@ def wait_for_mysql():
         try:
             result = subprocess.run([
                 'mysql', 
-                '-h', 'sedronar-mysql',
+                '-h', 'mysql',
                 '-u', 'root',
-                '-psedronar123',
+                '-p${DATABASE_PASSWORD:-chaco_pass}',
                 '-e', 'SELECT 1'
             ], capture_output=True, timeout=5)
             

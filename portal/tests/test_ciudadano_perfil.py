@@ -30,7 +30,7 @@ class CiudadanoPerfilViewsTests(TestCase):
         self.programa = Programa.objects.create(
             codigo='PROG-1',
             nombre='Programa Uno',
-            tipo=Programa.TipoPrograma.ACOMPANAMIENTO_SEDRONAR,
+            tipo=Programa.TipoPrograma.ACOMPANAMIENTO_SOCIAL,
         )
 
     def test_programa_detalle_no_permite_ver_otra_inscripcion(self):

@@ -109,7 +109,7 @@ class LocalidadViewSet(viewsets.ModelViewSet):
 )
 class InstitucionViewSet(viewsets.ModelViewSet):
     """
-    ViewSet para gestionar instituciones registradas en SEDRONAR.
+    ViewSet para gestionar instituciones.
     
     Permite realizar operaciones CRUD sobre las instituciones de la red territorial.
     """

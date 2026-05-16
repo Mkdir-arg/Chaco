@@ -237,10 +237,11 @@ class ProfesionalTratante(TimeStamped):
         default=False,
         help_text="Responsable principal del caso"
     )
-    dispositivo = models.ForeignKey(
-        DispositivoRed,
-        on_delete=models.PROTECT,
-        help_text="Dispositivo donde trabaja"
+    dispositivo = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text="[LEGACY] Dispositivo donde trabaja - SEDRONAR eliminado"
     )
     fecha_asignacion = models.DateField(auto_now_add=True)
     fecha_desasignacion = models.DateField(
@@ -294,9 +295,11 @@ class DispositivoVinculado(TimeStamped):
         on_delete=models.CASCADE,
         related_name="dispositivos_vinculados"
     )
-    dispositivo = models.ForeignKey(
-        DispositivoRed,
-        on_delete=models.PROTECT
+    dispositivo = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True,
+        help_text="[LEGACY] Dispositivo - SEDRONAR eliminado"
     )
     fecha_admision = models.DateField()
     fecha_egreso = models.DateField(null=True, blank=True)

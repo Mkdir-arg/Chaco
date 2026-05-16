@@ -112,7 +112,6 @@ def build_ciudadano_detail_context(ciudadano, user=None):
         ciudadano=ciudadano,
         programa__tipo__in=[
             Programa.TipoPrograma.ACOMPANAMIENTO_SOCIAL,
-            Programa.TipoPrograma.ACOMPANAMIENTO_SEDRONAR,
         ],
         estado__in=[InscripcionPrograma.Estado.ACTIVO, InscripcionPrograma.Estado.EN_SEGUIMIENTO],
     ).select_related('programa', 'responsable').order_by('-fecha_inscripcion')

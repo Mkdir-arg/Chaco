@@ -7,7 +7,7 @@ class Command(BaseCommand):
     help = 'Genera reporte de performance del sistema'
     
     def handle(self, *args, **options):
-        self.stdout.write('=== REPORTE DE PERFORMANCE SEDRONAR ===\n')
+        self.stdout.write('=== REPORTE DE PERFORMANCE ===\n')
         
         # Test Redis
         self.stdout.write('1. REDIS CACHE:')

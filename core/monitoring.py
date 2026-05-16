@@ -1,6 +1,6 @@
 # core/monitoring.py
 """
-Sistema de monitoreo avanzado para SEDRONAR
+Sistema de monitoreo avanzado
 Integra métricas de sistema, aplicación y base de datos
 """
 import time

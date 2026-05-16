@@ -51,7 +51,7 @@ GRUPOS = [
     "EncargadoInstitucion",
     "AdministrativoInstitucion",
     "ProfesorInstitucion",
-    # Legacy — profesionales con legajos asignados (SEDRONAR)
+    # Profesionales con legajos asignados
     "Responsable",
 ]
 

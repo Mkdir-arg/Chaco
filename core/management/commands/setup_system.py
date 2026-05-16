@@ -6,7 +6,7 @@ class Command(BaseCommand):
     help = 'Configura el sistema completo con todas las optimizaciones'
     
     def handle(self, *args, **options):
-        self.stdout.write('🚀 Configurando SEDRONAR...')
+        self.stdout.write('🚀 Configurando sistema...')
         
         # Migraciones
         self.stdout.write('📦 Aplicando migraciones...')

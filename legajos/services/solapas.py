@@ -210,7 +210,6 @@ class SolapasService:
             str: URL name
         """
         url_map = {
-            'ACOMPANAMIENTO_SEDRONAR': 'legajos:programa_detalle',
             'ACOMPANAMIENTO_SOCIAL': 'legajos:programa_detalle',
             'NACHEC': 'nachec:detalle_caso_ciudadano',
             'ECONOMICO': 'programas:economico_detalle',

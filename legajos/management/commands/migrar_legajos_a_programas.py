@@ -5,7 +5,7 @@ from legajos.models_programas import Programa, InscripcionPrograma
 
 
 class Command(BaseCommand):
-    help = 'Migra legajos existentes al sistema de programas'
+    help = '[DEPRECATED - Legacy SEDRONAR] Migra legajos existentes al sistema de programas. Ya no se utiliza.'
     
     def add_arguments(self, parser):
         parser.add_argument(

@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "🚀 Iniciando SEDRONAR con optimizaciones..."
+echo "🚀 Iniciando sistema con optimizaciones..."
 
 # Esperar a que MySQL esté listo
 echo "⏳ Esperando MySQL..."
@@ -11,7 +11,7 @@ done
 echo "⚙️ Configurando sistema..."
 python manage.py setup_system
 
-echo "✅ SEDRONAR iniciado y optimizado correctamente"
+echo "✅ Sistema iniciado y optimizado correctamente"
 
 # Iniciar servidor
 exec "$@"

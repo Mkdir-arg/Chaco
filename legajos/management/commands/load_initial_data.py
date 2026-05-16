@@ -24,15 +24,7 @@ class Command(BaseCommand):
         except Exception as e:
             self.stdout.write(self.style.WARNING(f'    ⚠ Programas institucionales: {e}'))
         
-        # 2. Migrar legajos existentes
-        try:
-            self.stdout.write('  → Migrando legajos a programas...')
-            call_command('migrar_legajos_a_programas', verbosity=0)
-            self.stdout.write(self.style.SUCCESS('    ✓ Legajos migrados'))
-        except Exception as e:
-            self.stdout.write(self.style.WARNING(f'    ⚠ Error en migración: {e}'))
-        
-        # 3. Otros fixtures si existen
+        # 2. Otros fixtures si existen
         try:
             self.stdout.write('  → Cargando contactos iniciales...')
             call_command('loaddata', 'contactos_initial_data', verbosity=0)

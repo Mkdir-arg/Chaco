@@ -122,21 +122,17 @@ class Sexo(models.Model):
 
 
 # TODO: ELIMINAR - Stub temporal de Institucion para evitar errores de importación
-# Institucion fue eliminada con SEDRONAR - limpiar referencias en:
-# - legajos/signals/core.py, core/forms/general.py, users/views/auth.py,
-# - tramites/views/backoffice.py, configuracion/views/actividades.py,
-# - configuracion/selectors/instituciones.py, portal/selectors/public.py, etc.
 class Institucion(models.Model):
     """STUB TEMPORAL - Eliminar junto con todas las referencias"""
     nombre = models.CharField(max_length=255, default="ELIMINAR")
     
     class Meta:
-        db_table = 'sedronar_institucion_eliminada_stub'
+        db_table = 'institucion_stub'
         verbose_name = "Institución (STUB - ELIMINAR)"
         verbose_name_plural = "Instituciones (STUB - ELIMINAR)"
     
     def __str__(self):
-        return "[ELIMINADO CON SEDRONAR]"
+        return "[TEMPORAL STUB]"
 
 
 # Modelos base para sistema de legajos

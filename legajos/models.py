@@ -226,20 +226,6 @@ class LegajoAtencion(LegajoBase):
         MEDIO = "MEDIO", "Medio"
         ALTO = "ALTO", "Alto"
     
-    ciudadano = models.ForeignKey(
-        Ciudadano, 
-        on_delete=models.PROTECT, 
-        related_name="legajos"
-    )
-    # TODO: Eliminar - dispositivo eliminado con SEDRONAR
-    # dispositivo = models.ForeignKey(
-    #     Institucion, 
-    #     on_delete=models.PROTECT, 
-    #     related_name="legajos",
-    #     verbose_name="Institución",
-    #     null=True,
-    #     blank=True
-    # )
     responsable = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -272,13 +258,10 @@ class LegajoAtencion(LegajoBase):
         verbose_name = "Acompañamiento"
         verbose_name_plural = "Acompañamientos"
         indexes = [
-            # TODO: Eliminar - índices con dispositivo eliminado con SEDRONAR
-            # models.Index(fields=["ciudadano", "dispositivo"]),
             models.Index(fields=["estado"]),
             models.Index(fields=["nivel_riesgo", "fecha_admision"]),
             models.Index(fields=["plan_vigente", "estado"]),
             models.Index(fields=["via_ingreso", "fecha_admision"]),
-            # models.Index(fields=["dispositivo", "estado"]),
         ]
     
     def __str__(self):
@@ -596,13 +579,6 @@ class Derivacion(TimeStamped):
         on_delete=models.CASCADE, 
         related_name="derivaciones"
     )
-    # TODO: Eliminar - destino eliminado con SEDRONAR
-    # destino = models.ForeignKey(
-    #     Institucion, 
-    #     on_delete=models.PROTECT, 
-    #     related_name="derivaciones_destino",
-    #     verbose_name="Institución Destino"
-    # )
     actividad_destino = models.ForeignKey(
         'PlanFortalecimiento',
         on_delete=models.SET_NULL,
@@ -635,19 +611,12 @@ class Derivacion(TimeStamped):
             models.Index(fields=["legajo", "estado"]),
             models.Index(fields=["urgencia"]),
             models.Index(fields=["estado", "urgencia"]),
-            # TODO: Eliminar - índice con destino eliminado con SEDRONAR
-            # models.Index(fields=["destino", "estado"]),
         ]
     
     def __str__(self):
-        # TODO: Eliminar - __str__ con destino eliminado con SEDRONAR
-        # return f"Derivación a {self.destino.nombre}"
         return f"Derivación de legajo {self.legajo_id}"
     
     def clean(self):
-        # TODO: Eliminar - validación con destino eliminado con SEDRONAR
-        # if hasattr(self, 'destino') and self.destino and not self.destino.activo:
-        #     raise ValidationError("No es posible derivar a un dispositivo inactivo.")
         pass
 
 

@@ -58,7 +58,7 @@ class Command(BaseCommand):
             localidad=localidad,
             direccion='Calle Ejemplo 123',
             telefono='221-123-4567',
-            email='caac.laplata@sedronar.gov.ar',
+            email='caac.laplata@chacodev.gov.ar',
             activo=True,
             descripcion='Casa de Atención y Acompañamiento Comunitario de La Plata'
         )
