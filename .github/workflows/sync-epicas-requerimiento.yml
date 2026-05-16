@@ -1,0 +1,169 @@
+name: "Sync epicas in requerimiento form"
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */6 * * *"
+  issues:
+    types: [opened, edited, labeled, unlabeled, reopened, closed]
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  sync-epicas:
+    if: github.event_name != 'issues' || contains(toJson(github.event.issue.labels.*.name), 'epica')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and update requerimiento form
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const path = '.github/ISSUE_TEMPLATE/requerimiento.yml';
+
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              labels: 'epica',
+              state: 'open',
+              per_page: 100,
+              sort: 'created',
+              direction: 'desc'
+            });
+
+            const epicas = issues.filter(i => !i.pull_request);
+            const options = epicas.length
+              ? epicas.map(i => `        - "#${i.number} - ${String(i.title).replace(/"/g, '\\"')}"`).join('\n')
+              : '        - "Sin epicas disponibles - crear una epica primero"';
+
+            const content = `name: "Requerimiento"
+description: "Funcionalidad o mejora ejecutable. Debe estar vinculada a una epica."
+title: "[REQ] "
+labels: ["requerimiento"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Nuevo requerimiento
+        Este item debe quedar vinculado a una epica del proyecto.
+
+  - type: dropdown
+    id: epica_relacionada
+    attributes:
+      label: "Epica relacionada"
+      description: "Selecciona la epica existente a la que pertenece este requerimiento"
+      options:
+${options}
+    validations:
+      required: true
+
+  - type: input
+    id: objetivo
+    attributes:
+      label: "Objetivo"
+      description: "Que problema resuelve o que necesidad satisface"
+      placeholder: "Ej: Permitir al ciudadano consultar el estado de su tramite"
+    validations:
+      required: true
+
+  - type: textarea
+    id: descripcion_funcional
+    attributes:
+      label: "Descripcion funcional"
+      description: "Que debe hacer el sistema"
+      placeholder: "Describe comportamiento esperado, reglas y flujo principal"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alcance
+    attributes:
+      label: "Alcance"
+      description: "Que incluye este requerimiento"
+      placeholder: |
+        - Incluye ...
+        - Incluye ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusiones
+    attributes:
+      label: "Exclusiones"
+      description: "Que queda fuera de este requerimiento"
+      placeholder: |
+        - No incluye ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: criterios_aceptacion
+    attributes:
+      label: "Criterios de aceptacion"
+      description: "Condiciones para darlo por completo"
+      placeholder: |
+        - [ ] AC1: ...
+        - [ ] AC2: ...
+        - [ ] AC3: ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: "Prioridad"
+      options:
+        - "Alta"
+        - "Media"
+        - "Baja"
+    validations:
+      required: true
+
+  - type: input
+    id: modulo
+    attributes:
+      label: "Modulo"
+      placeholder: "Ej: ciudadanos, legajos, portal"
+
+  - type: input
+    id: responsable_funcional
+    attributes:
+      label: "Responsable funcional"
+      placeholder: "Nombre y rol"
+
+  - type: textarea
+    id: notas
+    attributes:
+      label: "Notas adicionales"
+      placeholder: "Dependencias, links, mockups, contexto extra"
+`;
+
+            let sha;
+            let current = '';
+            try {
+              const existing = await github.rest.repos.getContent({ owner, repo, path });
+              sha = existing.data.sha;
+              current = Buffer.from(existing.data.content, 'base64').toString('utf8');
+            } catch (e) {
+              if (e.status !== 404) throw e;
+            }
+
+            if (current === content) {
+              core.info('No changes needed.');
+              return;
+            }
+
+            await github.rest.repos.createOrUpdateFileContents({
+              owner,
+              repo,
+              path,
+              message: 'chore(issue-forms): sync epicas dropdown in requerimiento form',
+              content: Buffer.from(content).toString('base64'),
+              sha
+            });
+
+            core.info(`Updated ${path} with ${epicas.length} epica options.`);

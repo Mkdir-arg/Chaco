@@ -1,0 +1,114 @@
+name: "Testing"
+description: "Registro de pruebas de QA con evidencia"
+title: "[TEST] "
+labels: ["testing"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Testing / QA
+        Vincula siempre el issue de origen y adjunta evidencia para cerrar en Done.
+
+  - type: dropdown
+    id: tipo_origen
+    attributes:
+      label: "Tipo de issue de origen"
+      options:
+        - "Requerimiento"
+        - "Bug"
+    validations:
+      required: true
+
+  - type: input
+    id: issue_origen
+    attributes:
+      label: "Issue de origen"
+      description: "Numero o link del issue probado"
+      placeholder: "Ej: #123"
+    validations:
+      required: true
+
+  - type: input
+    id: epica_relacionada
+    attributes:
+      label: "Epica relacionada"
+      description: "Numero o link de la epica asociada"
+      placeholder: "Ej: #45"
+    validations:
+      required: true
+
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: "Objetivo de la prueba"
+      placeholder: "Que se esta validando en esta corrida"
+    validations:
+      required: true
+
+  - type: textarea
+    id: criterios
+    attributes:
+      label: "Criterios de aceptacion a validar"
+      placeholder: |
+        - [ ] AC1 ...
+        - [ ] AC2 ...
+        - [ ] AC3 ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: casos
+    attributes:
+      label: "Casos de prueba ejecutados"
+      placeholder: |
+        - CP-01: resultado
+        - CP-02: resultado
+        - CP-03: resultado
+    validations:
+      required: true
+
+  - type: dropdown
+    id: resultado_general
+    attributes:
+      label: "Resultado general"
+      options:
+        - "Aprobado"
+        - "Aprobado con observaciones"
+        - "Rechazado"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bugs_encontrados
+    attributes:
+      label: "Bugs encontrados"
+      description: "Referencias a issues bug generados"
+      placeholder: |
+        - #
+        - #
+
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: "Evidencia"
+      description: "Capturas, videos, logs o reportes"
+      placeholder: "Adjunta o pega links"
+    validations:
+      required: true
+
+  - type: input
+    id: ambiente
+    attributes:
+      label: "Ambiente"
+      placeholder: "Staging / Dev / Produccion"
+    validations:
+      required: true
+
+  - type: input
+    id: tester
+    attributes:
+      label: "Tester"
+      placeholder: "Nombre"
+    validations:
+      required: true

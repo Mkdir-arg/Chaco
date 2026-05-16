@@ -1,0 +1,98 @@
+name: "Bug"
+description: "Reporte de comportamiento incorrecto del sistema"
+title: "[BUG] "
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Reporte de bug
+        Incluye pasos claros para reproducir y evidencia para acelerar el diagnostico.
+
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: "Descripcion del problema"
+      description: "Que falla y en que contexto"
+      placeholder: "Describe el comportamiento incorrecto observado"
+    validations:
+      required: true
+
+  - type: textarea
+    id: esperado
+    attributes:
+      label: "Comportamiento esperado"
+      placeholder: "Que deberia pasar"
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: "Comportamiento actual"
+      placeholder: "Que pasa actualmente"
+    validations:
+      required: true
+
+  - type: textarea
+    id: pasos
+    attributes:
+      label: "Pasos para reproducir"
+      placeholder: |
+        1. Ir a ...
+        2. Hacer click en ...
+        3. Ver error ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impacto
+    attributes:
+      label: "Impacto"
+      options:
+        - "Alta - Bloquea operacion critica"
+        - "Media - Afecta funcionalidad importante"
+        - "Baja - Error menor o cosmetico"
+    validations:
+      required: true
+
+  - type: input
+    id: ambiente
+    attributes:
+      label: "Ambiente"
+      placeholder: "Produccion / Staging / Dev"
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidencia
+    attributes:
+      label: "Evidencia"
+      description: "Capturas, logs o videos"
+      placeholder: "Pega links o adjunta evidencia"
+    validations:
+      required: true
+
+  - type: textarea
+    id: criterio_correccion
+    attributes:
+      label: "Criterio de correccion"
+      description: "Como verificaremos que esta corregido"
+      placeholder: |
+        - [ ] Validacion 1
+        - [ ] Validacion 2
+    validations:
+      required: true
+
+  - type: input
+    id: modulo
+    attributes:
+      label: "Modulo"
+      placeholder: "Ej: ciudadanos, legajos, portal"
+
+  - type: input
+    id: responsable_funcional
+    attributes:
+      label: "Responsable funcional"
+      placeholder: "Nombre y rol"

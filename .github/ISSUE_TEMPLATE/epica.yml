@@ -1,0 +1,93 @@
+name: "Epica"
+description: "Agrupacion de alcance funcional. No es un item ejecutable del sprint."
+title: "[EPICA] "
+labels: ["epica"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Nueva epica
+        Define alcance macro. La epica agrupa trabajo, pero no entra como item ejecutable del sprint.
+
+  - type: textarea
+    id: objetivo
+    attributes:
+      label: "Objetivo de la epica"
+      description: "Resultado de negocio esperado"
+      placeholder: "Describe en 1-2 oraciones el objetivo de negocio"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alcance
+    attributes:
+      label: "Alcance"
+      description: "Que incluye esta epica"
+      placeholder: |
+        - Incluye ...
+        - Incluye ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: exclusiones
+    attributes:
+      label: "Exclusiones"
+      description: "Que queda fuera de alcance"
+      placeholder: |
+        - No incluye ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: metricas_exito
+    attributes:
+      label: "Metricas de exito"
+      description: "Como se validara el exito de la epica"
+      placeholder: |
+        - Metrica 1 ...
+        - Metrica 2 ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: requerimientos_hijos
+    attributes:
+      label: "Requerimientos hijos"
+      description: "Lista de issues hijos (#numero)"
+      placeholder: |
+        - [ ] #123
+        - [ ] #124
+        - [ ] #125
+    validations:
+      required: true
+
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: "Prioridad"
+      options:
+        - "Alta"
+        - "Media"
+        - "Baja"
+    validations:
+      required: true
+
+  - type: input
+    id: modulo
+    attributes:
+      label: "Modulo"
+      placeholder: "Ej: ciudadanos, legajos, portal"
+
+  - type: input
+    id: responsable_funcional
+    attributes:
+      label: "Responsable funcional"
+      placeholder: "Nombre y rol"
+
+  - type: textarea
+    id: notas
+    attributes:
+      label: "Notas adicionales"
+      placeholder: "Contexto extra, links o decisiones"
