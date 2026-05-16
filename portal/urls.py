@@ -1,12 +1,7 @@
 from django.urls import path
 
 from .views_public import (
-    ConsultarTramiteView,
-    CrearUsuarioInstitucionView,
     PortalHomeView,
-    RegistroInstitucionView,
-    get_localidades,
-    get_municipios,
 )
 from .views.ciudadano_actividades import (
     ciudadano_detalle_actividad,
@@ -39,11 +34,6 @@ app_name = 'portal'
 
 urlpatterns = [
     path('', PortalHomeView.as_view(), name='home'),
-    path('crear-usuario/', CrearUsuarioInstitucionView.as_view(), name='crear_usuario'),
-    path('registro-institucion/', RegistroInstitucionView.as_view(), name='registro_institucion'),
-    path('consultar-tramite/', ConsultarTramiteView.as_view(), name='consultar_tramite'),
-    path('api/municipios/', get_municipios, name='get_municipios'),
-    path('api/localidades/', get_localidades, name='get_localidades'),
     # Portal ciudadano
     path('mi-perfil/login/', CiudadanoLoginView.as_view(), name='ciudadano_login'),
     path('mi-perfil/logout/', CiudadanoLogoutView.as_view(), name='ciudadano_logout'),

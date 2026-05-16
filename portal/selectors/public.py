@@ -1,4 +1,3 @@
-from core.models import Institucion
 from legajos.models import Ciudadano
 from legajos.models_programas import InscripcionPrograma, Programa
 
@@ -6,10 +5,10 @@ from legajos.models_programas import InscripcionPrograma, Programa
 def get_portal_home_context():
     return {
         "programas": Programa.objects.filter(estado='ACTIVO').order_by("orden"),
-        "instituciones": Institucion.objects.all()[:6],
+        "instituciones": [],
         "stats": {
             "ciudadanos": Ciudadano.objects.count(),
-            "instituciones": Institucion.objects.count(),
+            "instituciones": 0,
             "programas": Programa.objects.filter(estado='ACTIVO').count(),
             "inscripciones_activas": InscripcionPrograma.objects.filter(
                 estado__in=["ACTIVO", "EN_SEGUIMIENTO"]
@@ -30,6 +29,4 @@ def get_portal_home_context():
 
 
 def get_tramites_by_email(email):
-    return Institucion.objects.filter(encargados__email=email).select_related(
-        "provincia", "municipio", "localidad"
-    )
+    return Programa.objects.none()

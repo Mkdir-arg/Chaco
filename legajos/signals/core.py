@@ -2,7 +2,6 @@ from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
 from core.cache_decorators import invalidate_cache_pattern
-from core.models import Institucion
 
 from ..models import Ciudadano, Derivacion, EventoCritico, LegajoAtencion, SeguimientoContacto
 
@@ -44,9 +43,3 @@ def invalidate_evento_cache(sender, **kwargs):
     invalidate_cache_pattern("reportes")
 
 
-@receiver([post_save, post_delete], sender=Institucion)
-def invalidate_institucion_cache(sender, **kwargs):
-    """Invalida cache cuando se modifica una institución."""
-    from django.core.cache import cache
-
-    cache.clear()

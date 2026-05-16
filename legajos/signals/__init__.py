@@ -9,7 +9,6 @@ from .core import (  # noqa: F401
     invalidate_ciudadano_cache,
     invalidate_derivacion_cache,
     invalidate_evento_cache,
-    invalidate_institucion_cache,
     invalidate_legajo_cache,
     invalidate_seguimiento_cache,
 )

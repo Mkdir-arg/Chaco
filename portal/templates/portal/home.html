@@ -143,7 +143,7 @@
                     <i class="fas fa-comments text-3xl mb-2 group-hover:scale-110 transition-transform inline-block"></i>
                     <p class="text-sm font-semibold">Consultas</p>
                 </a>
-                <a href="{% url 'portal:crear_usuario' %}"
+                <a href="{% url 'portal:ciudadano_login' %}"
                    class="bg-white bg-opacity-15 backdrop-blur-sm hover:bg-opacity-25 rounded-2xl p-5 text-center transition-all duration-200 group">
                     <i class="fas fa-building text-3xl mb-2 group-hover:scale-110 transition-transform inline-block"></i>
                     <p class="text-sm font-semibold">Instituciones</p>
@@ -252,12 +252,12 @@
                         {% endfor %}
                     </div>
                     <div class="flex gap-3">
-                        <a href="{% url 'portal:crear_usuario' %}"
+                        <a href="{% url 'portal:ciudadano_login' %}"
                            class="flex-1 text-center text-white font-bold py-3 rounded-xl transition-all duration-300 hover:shadow-lg hover:opacity-90"
                            style="background: linear-gradient(90deg, {{ branding.portal.home.secondary_button_gradient_start }} 0%, {{ branding.portal.home.secondary_button_gradient_end }} 100%);">
                             <i class="fas fa-rocket mr-2"></i>Iniciar trámite
                         </a>
-                        <a href="{% url 'portal:consultar_tramite' %}"
+                        <a href="{% url 'portal:ciudadano_login' %}"
                            class="flex-1 text-center font-semibold py-3 rounded-xl border-2 transition-all duration-300 hover:bg-gray-50"
                            style="color: {{ branding.portal.home.secondary_icon_gradient_start }}; border-color: {{ branding.portal.home.secondary_icon_gradient_start }};">
                             <i class="fas fa-search mr-2"></i>Consultar estado
@@ -336,7 +336,7 @@
                 <h2 class="text-2xl font-extrabold text-[#252F40]">Instituciones de la red</h2>
                 <p class="text-[#8C8C8C] mt-1 text-sm">Organizaciones que trabajan junto al municipio en el territorio</p>
             </div>
-            <a href="{% url 'portal:crear_usuario' %}"
+            <a href="{% url 'portal:ciudadano_login' %}"
                class="hidden md:inline-flex items-center gap-2 text-sm font-semibold text-orange-600 transition-colors hover:text-orange-700">
                 Registrar institución <i class="fas fa-arrow-right text-xs"></i>
             </a>

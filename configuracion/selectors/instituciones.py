@@ -10,11 +10,6 @@ from legajos.models import (
     PlanFortalecimiento,
     StaffActividad,
 )
-from legajos.models_institucional import (
-    CasoInstitucional,
-    DerivacionCiudadano,
-    InstitucionPrograma,
-)
 
 
 def get_instituciones_queryset_for_user(user, search=""):
@@ -43,10 +38,8 @@ def get_instituciones_queryset_for_user(user, search=""):
 
 
 def build_institucion_detail_context(institucion):
-    programas_activos = InstitucionPrograma.objects.filter(
-        institucion=institucion,
-        activo=True,
-    ).select_related("programa").order_by("programa__orden")
+    # DEPRECATED: legado SEDRONAR retirado (models_institucional eliminado).
+    programas_activos = []
     planes = PlanFortalecimiento.objects.filter(
         legajo_institucional__institucion=institucion
     ).prefetch_related("staff__personal").order_by("-fecha_inicio")
@@ -71,31 +64,6 @@ def build_institucion_detail_context(institucion):
         },
     ]
 
-    for institucion_programa in programas_activos:
-        programa = institucion_programa.programa
-        derivaciones_pendientes = DerivacionCiudadano.objects.filter(
-            institucion_programa=institucion_programa,
-            estado='PENDIENTE',
-        ).count()
-        casos_activos = CasoInstitucional.objects.filter(
-            institucion_programa=institucion_programa,
-            estado__in=["ACTIVO", "EN_SEGUIMIENTO"],
-        ).count()
-
-        solapas.append(
-            {
-                "id": f"programa_{programa.tipo}",
-                "nombre": programa.nombre,
-                "icono": programa.icono,
-                "color": programa.color,
-                "estatica": False,
-                "orden": 100 + programa.orden,
-                "institucion_programa_id": institucion_programa.id,
-                "badge_derivaciones": derivaciones_pendientes,
-                "badge_casos": casos_activos,
-            }
-        )
-
     solapas.sort(key=lambda item: item["orden"])
 
     return {
@@ -110,7 +78,7 @@ def build_institucion_detail_context(institucion):
         "indicadores": IndicadorInstitucional.objects.filter(
             legajo_institucional__institucion=institucion
         ).select_related("legajo_institucional").order_by("-periodo"),
-        "total_programas_activos": programas_activos.count(),
+        "total_programas_activos": len(programas_activos),
         "total_derivaciones_pendientes": sum(
             item.get("badge_derivaciones", 0)
             for item in solapas
