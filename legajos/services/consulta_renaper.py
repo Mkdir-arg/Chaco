@@ -18,6 +18,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 logger = logging.getLogger(__name__)
 
+MOJIBAKE_MARKERS = ("Ã", "Â", "â€", "â€“", "â€”", "â€œ", "â€", "â€™")
+
 
 def _clean_api_base(raw_url):
     if not raw_url:
@@ -50,6 +52,54 @@ def _normalizar_sexo(sexo):
         "otro": "X",
     }
     return mapping.get(norm, raw.upper() if raw else "")
+
+
+def _encode_mojibake_bytes(value):
+    raw = bytearray()
+    for char in value:
+        for encoding in ("cp1252", "latin1"):
+            try:
+                raw.extend(char.encode(encoding))
+                break
+            except UnicodeError:
+                continue
+        else:
+            return None
+    return bytes(raw)
+
+
+def reparar_texto_mojibake(value):
+    if not isinstance(value, str) or not any(marker in value for marker in MOJIBAKE_MARKERS):
+        return value
+
+    raw_bytes = _encode_mojibake_bytes(value)
+    if raw_bytes:
+        try:
+            repaired = raw_bytes.decode("utf-8")
+        except UnicodeError:
+            repaired = None
+        if repaired and repaired != value:
+            return repaired
+
+    for encoding in ("latin1", "cp1252"):
+        try:
+            repaired = value.encode(encoding).decode("utf-8")
+        except UnicodeError:
+            continue
+        if repaired and repaired != value:
+            return repaired
+
+    return value
+
+
+def reparar_mojibake(value):
+    if isinstance(value, dict):
+        return {key: reparar_mojibake(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [reparar_mojibake(item) for item in value]
+    if isinstance(value, tuple):
+        return tuple(reparar_mojibake(item) for item in value)
+    return reparar_texto_mojibake(value)
 
 
 class APIClient:
@@ -200,6 +250,8 @@ class APIClient:
                 "error": "Error interno: respuesta no es JSON valido.",
                 "raw_response": raw_text,
             }
+
+        data = reparar_mojibake(data)
 
         if not data.get("success", False):
             return {
