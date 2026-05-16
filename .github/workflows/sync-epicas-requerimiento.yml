@@ -16,14 +16,18 @@ jobs:
     if: github.event_name != 'issues' || contains(toJson(github.event.issue.labels.*.name), 'epica')
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Build and update requerimiento form
         uses: actions/github-script@v7
         with:
+          github-token: ${{ secrets.PROJECTS_TOKEN != '' && secrets.PROJECTS_TOKEN || github.token }}
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const path = '.github/ISSUE_TEMPLATE/requerimiento.yml';
 
+            // Fetch all open epics
             const issues = await github.paginate(github.rest.issues.listForRepo, {
               owner,
               repo,
@@ -36,134 +40,138 @@ jobs:
 
             const epicas = issues.filter(i => !i.pull_request);
             const options = epicas.length
-              ? epicas.map(i => `        - "#${i.number} - ${String(i.title).replace(/"/g, '\\"')}"`).join('\n')
-              : '        - "Sin epicas disponibles - crear una epica primero"';
+              ? epicas.map(i => '      - "#' + i.number + ' - ' + String(i.title).replace(/"/g, '\"').substring(0, 80) + '"').join('\n')
+              : '      - "Sin epicas abiertas"';
 
-            const content = `name: "Requerimiento"
-description: "Funcionalidad o mejora ejecutable. Debe estar vinculada a una epica."
-title: "[REQ] "
-labels: ["requerimiento"]
-assignees: []
-body:
-  - type: markdown
-    attributes:
-      value: |
-        ## Nuevo requerimiento
-        Este item debe quedar vinculado a una epica del proyecto.
+            const template = [
+              'name: Requerimiento',
+              'description: "Template para requerimientos funcionales [REQ]"',
+              'title: "[REQ] "',
+              'labels: ["requerimiento"]',
+              'body:',
+              '  - type: dropdown',
+              '    id: epica_relacionada',
+              '    attributes:',
+              '      label: "Epica relacionada"',
+              '      description: "Selecciona la epica existente a la que pertenece este requerimiento"',
+              '      options:',
+              options,
+              '    validations:',
+              '      required: true',
+              '',
+              '  - type: input',
+              '    id: objetivo',
+              '    attributes:',
+              '      label: "Objetivo"',
+              '      description: "Que problema resuelve o que necesidad satisface"',
+              '      placeholder: "Ej: Permitir al ciudadano consultar el estado de su tramite"',
+              '    validations:',
+              '      required: true',
+              '',
+              '  - type: textarea',
+              '    id: descripcion_funcional',
+              '    attributes:',
+              '      label: "Descripcion funcional"',
+              '      description: "Describe el comportamiento esperado del sistema"',
+              '      placeholder: "Como [actor], quiero [accion] para [beneficio]"',
+              '    validations:',
+              '      required: true',
+              '',
+              '  - type: textarea',
+              '    id: alcance',
+              '    attributes:',
+              '      label: "Alcance"',
+              '      description: "Que esta incluido en este requerimiento"',
+              '      placeholder: "- Funcionalidad A\n- Funcionalidad B"',
+              '    validations:',
+              '      required: true',
+              '',
+              '  - type: textarea',
+              '    id: exclusiones',
+              '    attributes:',
+              '      label: "Exclusiones"',
+              '      description: "Que NO esta incluido en este requerimiento"',
+              '      placeholder: "- Funcionalidad X (sera cubierta por REQ-XX)"',
+              '',
+              '  - type: textarea',
+              '    id: criterios_aceptacion',
+              '    attributes:',
+              '      label: "Criterios de aceptacion"',
+              '      description: "Condiciones que deben cumplirse para considerar este requerimiento completo"',
+              '      placeholder: "DADO que...\nCUANDO...\nENTONCES..."',
+              '    validations:',
+              '      required: true',
+              '',
+              '  - type: input',
+              '    id: modulo',
+              '    attributes:',
+              '      label: "Modulo"',
+              '      placeholder: "Ej: Autenticacion, Ciudadanos, Reportes"',
+              '',
+              '  - type: dropdown',
+              '    id: prioridad',
+              '    attributes:',
+              '      label: "Prioridad"',
+              '      options:',
+              '        - Alta',
+              '        - Media',
+              '        - Baja',
+              '    validations:',
+              '      required: true',
+              '',
+              '  - type: input',
+              '    id: estimacion_horas',
+              '    attributes:',
+              '      label: "Estimacion de horas"',
+              '      placeholder: "Ej: 8"',
+              '',
+              '  - type: input',
+              '    id: responsable_funcional',
+              '    attributes:',
+              '      label: "Responsable funcional"',
+              '      placeholder: "Nombre del responsable"',
+              '',
+              '  - type: input',
+              '    id: fecha_compromiso',
+              '    attributes:',
+              '      label: "Fecha compromiso"',
+              '      placeholder: "YYYY-MM-DD"',
+              '',
+              '  - type: textarea',
+              '    id: diseno',
+              '    attributes:',
+              '      label: "Diseno / Mockup"',
+              '      description: "Link a Figma, imagen, o descripcion del diseno"',
+              '',
+              '  - type: textarea',
+              '    id: dependencias',
+              '    attributes:',
+              '      label: "Dependencias"',
+              '      description: "Issues o sistemas externos de los que depende"',
+              '',
+              '  - type: input',
+              '    id: pr',
+              '    attributes:',
+              '      label: "PR implementada"',
+              '      description: "Completar cuando se implemente (trazabilidad obligatoria)"',
+              '      placeholder: "#PR-XXX"',
+              '',
+              '  - type: input',
+              '    id: issues_testing',
+              '    attributes:',
+              '      label: "Issues de Testing"',
+              '      description: "Completar cuando se cree el TEST asociado (trazabilidad obligatoria)"',
+              '      placeholder: "#TEST-XXX"',
+            ].join('\n');
 
-  - type: dropdown
-    id: epica_relacionada
-    attributes:
-      label: "Epica relacionada"
-      description: "Selecciona la epica existente a la que pertenece este requerimiento"
-      options:
-${options}
-    validations:
-      required: true
+            const { execSync } = require('child_process');
+            require('fs').writeFileSync('.github/ISSUE_TEMPLATE/requerimiento.yml', template);
+            console.log('Template updated with ' + epicas.length + ' epicas');
 
-  - type: input
-    id: objetivo
-    attributes:
-      label: "Objetivo"
-      description: "Que problema resuelve o que necesidad satisface"
-      placeholder: "Ej: Permitir al ciudadano consultar el estado de su tramite"
-    validations:
-      required: true
-
-  - type: textarea
-    id: descripcion_funcional
-    attributes:
-      label: "Descripcion funcional"
-      description: "Que debe hacer el sistema"
-      placeholder: "Describe comportamiento esperado, reglas y flujo principal"
-    validations:
-      required: true
-
-  - type: textarea
-    id: alcance
-    attributes:
-      label: "Alcance"
-      description: "Que incluye este requerimiento"
-      placeholder: |
-        - Incluye ...
-        - Incluye ...
-    validations:
-      required: true
-
-  - type: textarea
-    id: exclusiones
-    attributes:
-      label: "Exclusiones"
-      description: "Que queda fuera de este requerimiento"
-      placeholder: |
-        - No incluye ...
-    validations:
-      required: true
-
-  - type: textarea
-    id: criterios_aceptacion
-    attributes:
-      label: "Criterios de aceptacion"
-      description: "Condiciones para darlo por completo"
-      placeholder: |
-        - [ ] AC1: ...
-        - [ ] AC2: ...
-        - [ ] AC3: ...
-    validations:
-      required: true
-
-  - type: dropdown
-    id: prioridad
-    attributes:
-      label: "Prioridad"
-      options:
-        - "Alta"
-        - "Media"
-        - "Baja"
-    validations:
-      required: true
-
-  - type: input
-    id: modulo
-    attributes:
-      label: "Modulo"
-      placeholder: "Ej: ciudadanos, legajos, portal"
-
-  - type: input
-    id: responsable_funcional
-    attributes:
-      label: "Responsable funcional"
-      placeholder: "Nombre y rol"
-
-  - type: textarea
-    id: notas
-    attributes:
-      label: "Notas adicionales"
-      placeholder: "Dependencias, links, mockups, contexto extra"
-`;
-
-            let sha;
-            let current = '';
-            try {
-              const existing = await github.rest.repos.getContent({ owner, repo, path });
-              sha = existing.data.sha;
-              current = Buffer.from(existing.data.content, 'base64').toString('utf8');
-            } catch (e) {
-              if (e.status !== 404) throw e;
-            }
-
-            if (current === content) {
-              core.info('No changes needed.');
-              return;
-            }
-
-            await github.rest.repos.createOrUpdateFileContents({
-              owner,
-              repo,
-              path,
-              message: 'chore(issue-forms): sync epicas dropdown in requerimiento form',
-              content: Buffer.from(content).toString('base64'),
-              sha
-            });
-
-            core.info(`Updated ${path} with ${epicas.length} epica options.`);
+      - name: Commit updated template
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .github/ISSUE_TEMPLATE/requerimiento.yml
+          git diff --cached --quiet || git commit -m "chore: sync epicas list in requerimiento template [skip ci]"
+          git push
