@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from core.models import TimeStamped, DispositivoRed
+from core.models import TimeStamped
 from .models import Ciudadano, LegajoAtencion
 
 
