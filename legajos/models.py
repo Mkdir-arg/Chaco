@@ -4,11 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.core.exceptions import ValidationError
-from core.models import TimeStamped, LegajoBase, Institucion
+from core.models import TimeStamped, LegajoBase
 # from simple_history.models import HistoricalRecords  # Comentado temporalmente
-
-# Alias para compatibilidad
-DispositivoRed = Institucion
 
 
 class Ciudadano(TimeStamped):
@@ -234,14 +231,15 @@ class LegajoAtencion(LegajoBase):
         on_delete=models.PROTECT, 
         related_name="legajos"
     )
-    dispositivo = models.ForeignKey(
-        Institucion, 
-        on_delete=models.PROTECT, 
-        related_name="legajos",
-        verbose_name="Institución",
-        null=True,
-        blank=True
-    )
+    # TODO: Eliminar - dispositivo eliminado con SEDRONAR
+    # dispositivo = models.ForeignKey(
+    #     Institucion, 
+    #     on_delete=models.PROTECT, 
+    #     related_name="legajos",
+    #     verbose_name="Institución",
+    #     null=True,
+    #     blank=True
+    # )
     responsable = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -274,12 +272,13 @@ class LegajoAtencion(LegajoBase):
         verbose_name = "Acompañamiento"
         verbose_name_plural = "Acompañamientos"
         indexes = [
-            models.Index(fields=["ciudadano", "dispositivo"]),
+            # TODO: Eliminar - índices con dispositivo eliminado con SEDRONAR
+            # models.Index(fields=["ciudadano", "dispositivo"]),
             models.Index(fields=["estado"]),
             models.Index(fields=["nivel_riesgo", "fecha_admision"]),
             models.Index(fields=["plan_vigente", "estado"]),
             models.Index(fields=["via_ingreso", "fecha_admision"]),
-            models.Index(fields=["dispositivo", "estado"]),
+            # models.Index(fields=["dispositivo", "estado"]),
         ]
     
     def __str__(self):
@@ -597,12 +596,13 @@ class Derivacion(TimeStamped):
         on_delete=models.CASCADE, 
         related_name="derivaciones"
     )
-    destino = models.ForeignKey(
-        Institucion, 
-        on_delete=models.PROTECT, 
-        related_name="derivaciones_destino",
-        verbose_name="Institución Destino"
-    )
+    # TODO: Eliminar - destino eliminado con SEDRONAR
+    # destino = models.ForeignKey(
+    #     Institucion, 
+    #     on_delete=models.PROTECT, 
+    #     related_name="derivaciones_destino",
+    #     verbose_name="Institución Destino"
+    # )
     actividad_destino = models.ForeignKey(
         'PlanFortalecimiento',
         on_delete=models.SET_NULL,
@@ -635,15 +635,20 @@ class Derivacion(TimeStamped):
             models.Index(fields=["legajo", "estado"]),
             models.Index(fields=["urgencia"]),
             models.Index(fields=["estado", "urgencia"]),
-            models.Index(fields=["destino", "estado"]),
+            # TODO: Eliminar - índice con destino eliminado con SEDRONAR
+            # models.Index(fields=["destino", "estado"]),
         ]
     
     def __str__(self):
-        return f"Derivación a {self.destino.nombre}"
+        # TODO: Eliminar - __str__ con destino eliminado con SEDRONAR
+        # return f"Derivación a {self.destino.nombre}"
+        return f"Derivación de legajo {self.legajo_id}"
     
     def clean(self):
-        if hasattr(self, 'destino') and self.destino and not self.destino.activo:
-            raise ValidationError("No es posible derivar a un dispositivo inactivo.")
+        # TODO: Eliminar - validación con destino eliminado con SEDRONAR
+        # if hasattr(self, 'destino') and self.destino and not self.destino.activo:
+        #     raise ValidationError("No es posible derivar a un dispositivo inactivo.")
+        pass
 
 
 class EventoCritico(TimeStamped):
@@ -815,502 +820,17 @@ class AlertaCiudadano(TimeStamped):
         return colores.get(self.prioridad, 'bg-gray-100 text-gray-800 border-gray-200')
 
 
-class LegajoInstitucional(TimeStamped):
-    """Legajo institucional para gestión de instituciones"""
-    
-    class Estado(models.TextChoices):
-        ACTIVO = "ACTIVO", "Activo"
-        OBSERVACION = "OBSERVACION", "En Observación"
-        SUSPENDIDO = "SUSPENDIDO", "Suspendido"
-        CERRADO = "CERRADO", "Cerrado"
-    
-    institucion = models.OneToOneField(
-        Institucion,
-        on_delete=models.CASCADE,
-        related_name="legajo_institucional"
-    )
-    codigo = models.CharField(max_length=50, unique=True, editable=False)
-    
-    # Estado global - controla operatividad de TODOS los programas
-    estado_global = models.CharField(
-        max_length=20,
-        choices=Estado.choices,
-        default=Estado.ACTIVO,
-        db_index=True,
-        verbose_name="Estado Global",
-        help_text="Si es CERRADO, bloquea todos los programas de la institución"
-    )
-    
-    responsable_asignado = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="legajos_institucionales_responsable",
-        verbose_name="Responsable asignado"
-    )
-    fecha_apertura = models.DateField(auto_now_add=True)
-    fecha_cierre = models.DateField(null=True, blank=True)
-    observaciones = models.TextField(blank=True)
-    
-    class Meta:
-        verbose_name = "Legajo Institucional"
-        verbose_name_plural = "Legajos Institucionales"
-    
-    def __str__(self):
-        return f"Legajo {self.codigo} - {self.institucion.nombre}"
-    
-    def save(self, *args, **kwargs):
-        if not self.codigo:
-            from datetime import datetime
-            self.codigo = f"INST-{datetime.now().strftime('%Y%m%d')}-{self.institucion.id:04d}"
-        super().save(*args, **kwargs)
-
-
-class PersonalInstitucion(TimeStamped):
-    """Personal de la institución"""
-    
-    class TipoPersonal(models.TextChoices):
-        DIRECTOR = "DIRECTOR", "Director/a"
-        COORDINADOR = "COORDINADOR", "Coordinador/a"
-        PROFESIONAL = "PROFESIONAL", "Profesional"
-        OPERADOR = "OPERADOR", "Operador/a"
-        ADMINISTRATIVO = "ADMINISTRATIVO", "Administrativo/a"
-        OTRO = "OTRO", "Otro"
-    
-    legajo_institucional = models.ForeignKey(
-        LegajoInstitucional,
-        on_delete=models.CASCADE,
-        related_name="personal"
-    )
-    usuario = models.OneToOneField(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="personal_institucion"
-    )
-    nombre = models.CharField(max_length=100)
-    apellido = models.CharField(max_length=100)
-    dni = models.CharField(max_length=20, unique=True)
-    tipo = models.CharField(max_length=20, choices=TipoPersonal.choices)
-    titulo_profesional = models.CharField(max_length=200, blank=True)
-    matricula = models.CharField(max_length=50, blank=True)
-    activo = models.BooleanField(default=True)
-    
-    def crear_usuario(self):
-        """Crea un usuario del sistema para este personal"""
-        if not self.usuario:
-            from django.contrib.auth.models import Group
-            
-            username = f"{self.nombre.lower()}.{self.apellido.lower()}"
-            # Si ya existe, agregar DNI
-            if User.objects.filter(username=username).exists():
-                username = f"{username}.{self.dni}"
-            
-            usuario = User.objects.create_user(
-                username=username,
-                email=f"{username}@{self.legajo_institucional.institucion.nombre.lower().replace(' ', '')}.com",
-                first_name=self.nombre,
-                last_name=self.apellido,
-                password=self.dni  # Password temporal = DNI
-            )
-            
-            # Asignar grupo según tipo
-            grupo_map = {
-                'DIRECTOR': 'Directores',
-                'COORDINADOR': 'Coordinadores', 
-                'PROFESIONAL': 'Profesionales',
-                'OPERADOR': 'Operadores',
-                'ADMINISTRATIVO': 'Administrativos'
-            }
-            
-            grupo_nombre = grupo_map.get(self.tipo, 'Staff')
-            grupo, created = Group.objects.get_or_create(name=grupo_nombre)
-            usuario.groups.add(grupo)
-            
-            self.usuario = usuario
-            self.save()
-            
-            return usuario
-        return self.usuario
-    
-    class Meta:
-        verbose_name = "Personal de Institución"
-        verbose_name_plural = "Personal de Instituciones"
-    
-    def __str__(self):
-        return f"{self.apellido}, {self.nombre} - {self.get_tipo_display()}"
-
-
-class CapacitacionPersonal(TimeStamped):
-    """Capacitaciones del personal"""
-    
-    personal = models.ForeignKey(
-        PersonalInstitucion,
-        on_delete=models.CASCADE,
-        related_name="capacitaciones"
-    )
-    nombre_capacitacion = models.CharField(max_length=200)
-    institucion_capacitadora = models.CharField(max_length=200)
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField(null=True, blank=True)
-    horas_catedra = models.PositiveIntegerField(null=True, blank=True)
-    certificado = models.FileField(upload_to="capacitaciones/", blank=True)
-    
-    class Meta:
-        verbose_name = "Capacitación de Personal"
-        verbose_name_plural = "Capacitaciones de Personal"
-    
-    def __str__(self):
-        return f"{self.nombre_capacitacion} - {self.personal}"
-
-
-class EvaluacionInstitucional(TimeStamped):
-    """Evaluación de capacidades institucionales"""
-    
-    legajo_institucional = models.ForeignKey(
-        LegajoInstitucional,
-        on_delete=models.CASCADE,
-        related_name="evaluaciones"
-    )
-    fecha_evaluacion = models.DateField()
-    evaluador = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True
-    )
-    
-    # Capacidades institucionales
-    infraestructura = models.PositiveIntegerField(
-        help_text="Puntuación 1-10",
-        choices=[(i, i) for i in range(1, 11)]
-    )
-    recursos_humanos = models.PositiveIntegerField(
-        help_text="Puntuación 1-10",
-        choices=[(i, i) for i in range(1, 11)]
-    )
-    programas_servicios = models.PositiveIntegerField(
-        help_text="Puntuación 1-10",
-        choices=[(i, i) for i in range(1, 11)]
-    )
-    gestion_administrativa = models.PositiveIntegerField(
-        help_text="Puntuación 1-10",
-        choices=[(i, i) for i in range(1, 11)]
-    )
-    
-    observaciones = models.TextField(blank=True)
-    recomendaciones = models.TextField(blank=True)
-    
-    class Meta:
-        verbose_name = "Evaluación Institucional"
-        verbose_name_plural = "Evaluaciones Institucionales"
-    
-    def __str__(self):
-        return f"Evaluación {self.fecha_evaluacion} - {self.legajo_institucional.institucion.nombre}"
-    
-    @property
-    def puntaje_total(self):
-        return (self.infraestructura + self.recursos_humanos + 
-                self.programas_servicios + self.gestion_administrativa) / 4
-
-
-class PlanFortalecimiento(TimeStamped):
-    """Actividades y programas institucionales"""
-    
-    class TipoActividad(models.TextChoices):
-        PREVENCION = "PREVENCION", "Prevención"
-        TRATAMIENTO = "TRATAMIENTO", "Tratamiento"
-        REDUCCION_RIESGO = "REDUCCION_RIESGO", "Reducción de Riesgo"
-        REINSERCION = "REINSERCION", "Reinserción Social"
-        CAPACITACION = "CAPACITACION", "Capacitación"
-        OTRO = "OTRO", "Otro"
-    
-    class SubtipoActividad(models.TextChoices):
-        # Prevención
-        ÑACHEC = "ÑACHEC", "ÑACHEC"
-        PREVENCION_SELECTIVA = "PREVENCION_SELECTIVA", "Prevención Selectiva"
-        PREVENCION_INDICADA = "PREVENCION_INDICADA", "Prevención Indicada"
-        # Tratamiento
-        AMBULATORIO = "AMBULATORIO", "Ambulatorio"
-        INTERNACION = "INTERNACION", "Internación"
-        HOSPITAL_DIA = "HOSPITAL_DIA", "Hospital de Día"
-        # Reducción de Riesgo
-        INTERCAMBIO_JERINGAS = "INTERCAMBIO_JERINGAS", "Intercambio de Jeringas"
-        TESTEO_VIH = "TESTEO_VIH", "Testeo VIH"
-        CONSEJERIA = "CONSEJERIA", "Consejería"
-        # Reinserción
-        LABORAL = "LABORAL", "Laboral"
-        EDUCATIVA = "EDUCATIVA", "Educativa"
-        SOCIAL = "SOCIAL", "Social"
-        # Capacitación
-        PROFESIONAL = "PROFESIONAL", "Profesional"
-        OPERADORES = "OPERADORES", "Operadores"
-        COMUNIDAD = "COMUNIDAD", "Comunidad"
-    
-    class Estado(models.TextChoices):
-        ACTIVO = "ACTIVO", "Activo"
-        SUSPENDIDO = "SUSPENDIDO", "Suspendido"
-        FINALIZADO = "FINALIZADO", "Finalizado"
-
-    class TipoAcceso(models.TextChoices):
-        LIBRE = "LIBRE", "Libre (sin requisito)"
-        REQUIERE_PROGRAMA = "REQUIERE_PROGRAMA", "Requiere inscripción a programa"
-
-    legajo_institucional = models.ForeignKey(
-        LegajoInstitucional,
-        on_delete=models.CASCADE,
-        related_name="planes_fortalecimiento"
-    )
-    nombre = models.CharField(max_length=200)
-    tipo = models.CharField(max_length=20, choices=TipoActividad.choices)
-    subtipo = models.CharField(max_length=30, choices=SubtipoActividad.choices)
-    descripcion = models.TextField(blank=True)
-    cupo_ciudadanos = models.PositiveIntegerField(default=0, help_text="Capacidad máxima de ciudadanos")
-    fecha_inicio = models.DateField()
-    fecha_fin = models.DateField(null=True, blank=True)
-    estado = models.CharField(max_length=15, choices=Estado.choices, default=Estado.ACTIVO)
-
-    # Control de acceso
-    tipo_acceso = models.CharField(
-        max_length=20,
-        choices=TipoAcceso.choices,
-        default=TipoAcceso.LIBRE,
-        db_index=True,
-        verbose_name='Tipo de acceso',
-    )
-    programa_requerido = models.ForeignKey(
-        'legajos.Programa',
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='actividades_que_requieren',
-        verbose_name='Programa requerido',
-        help_text='Solo aplica cuando tipo_acceso = Requiere inscripción a programa',
-    )
-    
-    class Meta:
-        verbose_name = "Actividad Institucional"
-        verbose_name_plural = "Actividades Institucionales"
-    
-    def __str__(self):
-        return f"{self.nombre} - {self.get_tipo_display()}"
-
-
-class StaffActividad(TimeStamped):
-    """Staff asignado a una actividad"""
-    
-    actividad = models.ForeignKey(
-        PlanFortalecimiento,
-        on_delete=models.CASCADE,
-        related_name="staff"
-    )
-    personal = models.ForeignKey(
-        PersonalInstitucion,
-        on_delete=models.CASCADE
-    )
-    rol_en_actividad = models.CharField(
-        max_length=100,
-        help_text="Ej: Coordinador, Terapeuta, Operador"
-    )
-    activo = models.BooleanField(default=True)
-    
-    class Meta:
-        verbose_name = "Staff de Actividad"
-        verbose_name_plural = "Staff de Actividades"
-        unique_together = ['actividad', 'personal']
-    
-    def __str__(self):
-        return f"{self.personal} - {self.actividad.nombre}"
-
-
-class IndicadorInstitucional(TimeStamped):
-    """Indicadores y métricas institucionales"""
-    
-    legajo_institucional = models.ForeignKey(
-        LegajoInstitucional,
-        on_delete=models.CASCADE,
-        related_name="indicadores"
-    )
-    periodo = models.CharField(
-        max_length=20,
-        help_text="Ej: 2024-01, 2024-Q1"
-    )
-    beneficiarios_atendidos = models.PositiveIntegerField(default=0)
-    derivaciones_recibidas = models.PositiveIntegerField(default=0)
-    derivaciones_enviadas = models.PositiveIntegerField(default=0)
-    servicios_brindados = models.JSONField(
-        blank=True,
-        null=True,
-        help_text="Lista de servicios y cantidades"
-    )
-    observaciones = models.TextField(blank=True)
-    
-    class Meta:
-        verbose_name = "Indicador Institucional"
-        verbose_name_plural = "Indicadores Institucionales"
-        unique_together = ['legajo_institucional', 'periodo']
-    
-    def __str__(self):
-        return f"Indicadores {self.periodo} - {self.legajo_institucional.institucion.nombre}"
-
-
-# Importar modelos de contactos
-from .models_contactos import (
-    HistorialContacto, VinculoFamiliar, ProfesionalTratante,
-    DispositivoVinculado, ContactoEmergencia
-)
-
-# Importar timezone
-from django.utils import timezone
-
-
-class HistorialActividad(TimeStamped):
-    """Historial de cambios en actividades"""
-    
-    class TipoAccion(models.TextChoices):
-        CREACION = "CREACION", "Creación"
-        MODIFICACION = "MODIFICACION", "Modificación"
-        SUSPENSION = "SUSPENSION", "Suspensión"
-        FINALIZACION = "FINALIZACION", "Finalización"
-        REACTIVACION = "REACTIVACION", "Reactivación"
-    
-    actividad = models.ForeignKey(
-        PlanFortalecimiento,
-        on_delete=models.CASCADE,
-        related_name="historial"
-    )
-    accion = models.CharField(max_length=20, choices=TipoAccion.choices)
-    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    descripcion = models.TextField()
-    datos_anteriores = models.JSONField(null=True, blank=True)
-    
-    class Meta:
-        verbose_name = "Historial de Actividad"
-        verbose_name_plural = "Historiales de Actividades"
-        ordering = ["-creado"]
-
-
-class HistorialStaff(TimeStamped):
-    """Historial de asignaciones de staff"""
-    
-    class TipoAccion(models.TextChoices):
-        ASIGNACION = "ASIGNACION", "Asignación"
-        DESASIGNACION = "DESASIGNACION", "Desasignación"
-        CAMBIO_ROL = "CAMBIO_ROL", "Cambio de Rol"
-    
-    staff = models.ForeignKey(
-        StaffActividad,
-        on_delete=models.CASCADE,
-        related_name="historial"
-    )
-    accion = models.CharField(max_length=20, choices=TipoAccion.choices)
-    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    descripcion = models.TextField()
-    
-    class Meta:
-        verbose_name = "Historial de Staff"
-        verbose_name_plural = "Historiales de Staff"
-        ordering = ["-creado"]
-
-
-class HistorialDerivacion(TimeStamped):
-    """Historial de cambios en derivaciones"""
-    
-    class TipoAccion(models.TextChoices):
-        CREACION = "CREACION", "Creación"
-        ACEPTACION = "ACEPTACION", "Aceptación"
-        RECHAZO = "RECHAZO", "Rechazo"
-    
-    derivacion = models.ForeignKey(
-        Derivacion,
-        on_delete=models.CASCADE,
-        related_name="historial"
-    )
-    accion = models.CharField(max_length=20, choices=TipoAccion.choices)
-    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    descripcion = models.TextField()
-    estado_anterior = models.CharField(max_length=20, blank=True)
-    
-    class Meta:
-        verbose_name = "Historial de Derivación"
-        verbose_name_plural = "Historiales de Derivaciones"
-        ordering = ["-creado"]
-
-
+# TODO: ELIMINAR - Stub temporal para InscriptoActividad eliminado con SEDRONAR
 class InscriptoActividad(TimeStamped):
-    """Ciudadanos inscritos en actividades"""
-
-    class Estado(models.TextChoices):
-        INSCRITO = "INSCRITO", "Inscrito"
-        ACTIVO = "ACTIVO", "Activo"
-        FINALIZADO = "FINALIZADO", "Finalizado"
-        ABANDONADO = "ABANDONADO", "Abandonado"
-
-    actividad = models.ForeignKey(
-        PlanFortalecimiento,
-        on_delete=models.CASCADE,
-        related_name="inscriptos",
-        verbose_name='Actividad',
-    )
-    ciudadano = models.ForeignKey(
-        Ciudadano,
-        on_delete=models.CASCADE,
-        related_name="actividades_inscrito",
-        verbose_name='Ciudadano',
-    )
-    estado = models.CharField(max_length=20, choices=Estado.choices, default=Estado.INSCRITO)
-    fecha_inscripcion = models.DateField(auto_now_add=True)
-    fecha_finalizacion = models.DateField(null=True, blank=True)
-    observaciones = models.TextField(blank=True)
-    codigo_inscripcion = models.CharField(
-        max_length=8,
-        unique=True,
-        blank=True,
-        db_index=True,
-        verbose_name='Código de inscripción',
-    )
-    inscrito_por = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='inscripciones_realizadas',
-        verbose_name='Inscripto por',
-    )
-
+    """STUB TEMPORAL - Eliminar junto con modelos dependientes"""
+    nombre = models.CharField(max_length=255, default="ELIMINAR")
+    
     class Meta:
-        verbose_name = "Inscripto en Actividad"
-        verbose_name_plural = "Inscriptos en Actividades"
-        ordering = ["-fecha_inscripcion"]
-
+        db_table = 'sedronar_inscripto_eliminado_stub'
+        verbose_name = "Inscripto (STUB - ELIMINAR)"
+    
     def __str__(self):
-        return f"{self.ciudadano} en {self.actividad.nombre} [{self.codigo_inscripcion}]"
-
-
-class HistorialInscripto(TimeStamped):
-    """Historial de cambios en inscripciones"""
-    
-    class TipoAccion(models.TextChoices):
-        INSCRIPCION = "INSCRIPCION", "Inscripción"
-        ACTIVACION = "ACTIVACION", "Activación"
-        FINALIZACION = "FINALIZACION", "Finalización"
-        ABANDONO = "ABANDONO", "Abandono"
-    
-    inscripto = models.ForeignKey(
-        InscriptoActividad,
-        on_delete=models.CASCADE,
-        related_name="historial"
-    )
-    accion = models.CharField(max_length=20, choices=TipoAccion.choices)
-    usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    descripcion = models.TextField()
-    estado_anterior = models.CharField(max_length=20, blank=True)
-    
-    class Meta:
-        verbose_name = "Historial de Inscripto"
-        verbose_name_plural = "Historiales de Inscriptos"
-        ordering = ["-creado"]
+        return "[ELIMINADO CON SEDRONAR]"
 
 
 class RegistroAsistencia(TimeStamped):

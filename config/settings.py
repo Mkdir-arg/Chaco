@@ -47,7 +47,7 @@ if DEBUG:
             hosts.append(h)
 
 # Nombres de servicios Docker internos
-for h in ("app", "sedronar-http", "sedronar-ws", "nodo-web", "nodo-websocket", "web", "websocket"):
+for h in ("app", "web", "websocket"):
     if h not in hosts:
         hosts.append(h)
 
@@ -134,7 +134,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "legajos.context_processors.alertas_eventos_criticos",
-                "core.context_processors.dispositivos_context",
                 "core.context_processors.branding_context",
                 "conversaciones.context_processors.user_groups",
             ],
@@ -390,8 +389,8 @@ else:
     CSRF_COOKIE_SECURE = False
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "SEDRONAR API",
-    "DESCRIPTION": "Sistema de Gestion SEDRONAR - Documentacion de APIs",
+    "TITLE": "Sistema API",
+    "DESCRIPTION": "Documentación de APIs del Sistema",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
     "COMPONENT_SPLIT_REQUEST": True,

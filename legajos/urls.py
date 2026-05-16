@@ -15,8 +15,6 @@ from .views.dashboard_contactos import (  # importar directamente del módulo, n
 from .views import dashboard_simple as views_simple
 from .views import derivacion as views_derivacion
 from .views import derivacion_programa as views_derivacion_programa
-from .views import institucional as views_institucional
-from .views import operativa as views_operativa
 from .views import programas as views_programas
 from . import views_ciudadanos_api
 
@@ -36,42 +34,6 @@ urlpatterns = [
     path("programas/<int:pk>/", views_programas.ProgramaDetailView.as_view(), name="programa_detalle"),
     path("nachec/", include("legajos.urls_nachec")),
     path(
-        "instituciones/<int:pk>/detalle-programatico/",
-        views_institucional.institucion_detalle_programatico,
-        name="institucion_detalle_programatico",
-    ),
-    path(
-        "programa/<int:institucion_programa_id>/derivaciones/",
-        views_institucional.programa_derivaciones,
-        name="programa_derivaciones",
-    ),
-    path(
-        "derivacion/<int:derivacion_id>/aceptar/",
-        views_derivacion_programa.aceptar_derivacion_programa,
-        name="derivacion_aceptar",
-    ),
-    path(
-        "derivacion/<int:derivacion_id>/rechazar/",
-        views_derivacion_programa.rechazar_derivacion_programa,
-        name="derivacion_rechazar",
-    ),
-    path(
-        "programa/<int:institucion_programa_id>/casos/",
-        views_institucional.programa_casos,
-        name="programa_casos",
-    ),
-    path("caso/<int:caso_id>/", views_institucional.caso_detalle, name="caso_detalle"),
-    path(
-        "caso/<int:caso_id>/cambiar-estado/",
-        views_institucional.cambiar_estado_caso_view,
-        name="caso_cambiar_estado",
-    ),
-    path(
-        "programa/<int:institucion_programa_id>/indicadores/",
-        views_institucional.api_programa_indicadores,
-        name="api_programa_indicadores",
-    ),
-    path(
         "ciudadanos/<int:ciudadano_id>/derivar-programa/",
         views_derivacion.derivar_programa_view,
         name="derivar_programa",
@@ -81,12 +43,7 @@ urlpatterns = [
         views_api_derivaciones.derivaciones_programa_api,
         name="derivaciones_programa_api",
     ),
-    path("plan/<int:pk>/marcar-etapa/", views_operativa.marcar_etapa_plan, name="marcar_etapa_plan"),
-    path(
-        "actividades-por-institucion/<int:institucion_id>/",
-        views_operativa.actividades_por_institucion,
-        name="actividades_por_institucion",
-    ),
+    path("plan/<int:pk>/marcar-etapa/", views_simple.marcar_etapa_plan, name="marcar_etapa_plan"),
     path("dashboard-contactos/", views_contactos_panel.dashboard_contactos_simple, name="dashboard_contactos"),
     path("dashboard-contactos/completo/", view_dashboard_contactos_completo, name="dashboard_contactos_completo"),
     path("dashboard-contactos/api/metricas/", view_metricas_contactos_api, name="metricas_contactos_api"),
@@ -151,8 +108,4 @@ urlpatterns = [
     path("alertas/preview/", views_alertas.alertas_preview_ajax, name="alertas_preview_ajax"),
     path("alertas/debug/", views_alertas.debug_alertas, name="debug_alertas"),
     path("alertas/test/", views_alertas.test_alertas_page, name="test_alertas"),
-    path("instituciones/", views_operativa.InstitucionListView.as_view(), name="instituciones"),
-    path("instituciones/crear/", views_operativa.InstitucionCreateView.as_view(), name="institucion_crear"),
-    path("instituciones/<int:pk>/editar/", views_operativa.InstitucionUpdateView.as_view(), name="institucion_editar"),
-    path("instituciones/<int:pk>/eliminar/", views_operativa.InstitucionDeleteView.as_view(), name="institucion_eliminar"),
 ]

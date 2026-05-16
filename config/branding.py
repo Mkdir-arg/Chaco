@@ -21,7 +21,7 @@ DEFAULT_BRANDING = {
     },
     "portal": {
         "title": "Portal NODO",
-        "subtitle": "Registro de Instituciones",
+        "subtitle": "Portal Ciudadano",
         "contact_email": "info@nodo.gob.ar",
         "logo_path": "",
         "logo_width": "56px",
@@ -402,7 +402,7 @@ BRANDING_PROFILES = {
         },
         "portal": {
             "title": "Portal Ñandé",
-            "subtitle": "Registro de Instituciones",
+            "subtitle": "Portal Ciudadano",
             "contact_email": "info@chaco.gob.ar",
             "logo_path": "custom/branding/chaco/mini-logo.png",
             "logo_width": "64px",

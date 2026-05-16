@@ -24,28 +24,6 @@ urlpatterns = [
     path('localidades/<int:pk>/editar/', login_required(views.LocalidadUpdateView.as_view()), name='localidad_editar'),
     path('localidades/<int:pk>/eliminar/', login_required(views.LocalidadDeleteView.as_view()), name='localidad_eliminar'),
     
-    # Instituciones
-    path('instituciones/<int:pk>/', login_required(views.InstitucionDetailView.as_view()), name='institucion_detalle'),
-    
-    # Actividades
-    path('actividades/<int:pk>/', login_required(views.ActividadDetailView.as_view()), name='actividad_detalle'),
-    path('actividades/<int:actividad_pk>/staff/crear/', login_required(views.StaffActividadCreateView.as_view()), name='staff_crear'),
-    path('actividades/<int:actividad_pk>/buscar-personal/', views.buscar_personal_ajax, name='buscar_personal_ajax'),
-    path('derivaciones/<int:pk>/aceptar/', login_required(views.DerivacionAceptarView.as_view()), name='derivacion_aceptar'),
-    path('derivaciones/<int:pk>/rechazar/', login_required(views.DerivacionRechazarView.as_view()), name='derivacion_rechazar'),
-    path('inscriptos/<int:pk>/editar/', login_required(views.InscriptoEditarView.as_view()), name='inscripto_editar'),
-    path('actividades/<int:pk>/editar/', login_required(views.ActividadEditarView.as_view()), name='actividad_editar'),
-    path('staff/<int:pk>/editar/', login_required(views.StaffEditarView.as_view()), name='staff_editar'),
-    path('staff/<int:pk>/desasignar/', login_required(views.StaffDesasignarView.as_view()), name='staff_desasignar'),
-    path('actividades/<int:pk>/asistencia/', login_required(views.AsistenciaView.as_view()), name='asistencia'),
-    path('actividades/<int:pk>/tomar-asistencia/', login_required(views.TomarAsistenciaView.as_view()), name='tomar_asistencia'),
-    path('actividades/<int:actividad_pk>/inscribir/', login_required(views.InscripcionDirectaView.as_view()), name='inscripcion_directa'),
-    path('actividades/<int:pk>/clases/', login_required(views.ClaseListView.as_view()), name='clase_lista'),
-    path('actividades/<int:actividad_pk>/clases/crear/', login_required(views.ClaseCreateView.as_view()), name='clase_crear'),
-    path('clases/<int:pk>/editar/', login_required(views.ClaseEditarView.as_view()), name='clase_editar'),
-    path('clases/<int:pk>/eliminar/', login_required(views.ClaseEliminarView.as_view()), name='clase_eliminar'),
-    path('clases/<int:pk>/asistencia/', login_required(views.ClaseAsistenciaView.as_view()), name='clase_asistencia'),
-    
     # Secretarías y Subsecretarías
     path('secretarias/', login_required(views.SecretariaListView.as_view()), name='secretarias'),
     path('secretarias/crear/', login_required(views.SecretariaCreateView.as_view()), name='secretaria_crear'),
@@ -67,10 +45,4 @@ urlpatterns = [
     path('programas/<int:pk>/editar/paso3/', views_programas.programa_editar_paso3, name='programa_editar_paso3'),
     path('programas/<int:pk>/editar/paso4/', views_programas.programa_editar_paso4, name='programa_editar_paso4'),
     path('programas/<int:pk>/estado/', views_programas.programa_cambiar_estado, name='programa_cambiar_estado'),
-
-    # Dispositivos (compatibilidad)
-    path('dispositivos/', login_required(views.InstitucionListView.as_view()), name='dispositivos'),
-    path('dispositivos/crear/', login_required(views.InstitucionCreateView.as_view()), name='dispositivo_crear'),
-    path('dispositivos/<int:pk>/editar/', login_required(views.InstitucionUpdateView.as_view()), name='dispositivo_editar'),
-    path('dispositivos/<int:pk>/eliminar/', login_required(views.InstitucionDeleteView.as_view()), name='dispositivo_eliminar'),
 ]
