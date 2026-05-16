@@ -140,18 +140,6 @@
                 </a>
             </div>
 
-            <!-- Trámites -->
-            {% if request.user.is_staff or request.user|has_group:"Administrador" or request.user|has_group:"Supervisor" %}
-                <div class="relative">
-                    <a href="{% url 'tramites:lista_tramites' %}" class="{% if 'tramites' in pagina_actual %}bg-[#F9FAFB] text-[#FF0080] shadow-[0_4px_8px_0_rgba(0,0,0,0.1)] rounded-xl{% else %}text-[#4A5565] hover:bg-[#F9FAFB] rounded-xl{% endif %} group flex items-center p-3 text-sm font-semibold transition-all" :class="sidebarCollapsed ? 'justify-center' : 'gap-x-3'">
-                        <i class="fas fa-clipboard-list text-base {% if 'tramites' in pagina_actual %}text-[#FF0080]{% endif %}"></i>
-                        <template x-if="!sidebarCollapsed">
-                            <span>Trámites</span>
-                        </template>
-                    </a>
-                </div>
-            {% endif %}
-
             <!-- Conversaciones -->
             {% if request.user|has_group:"Conversaciones" or request.user|has_group:"OperadorCharla" %}
                 <div class="relative">
