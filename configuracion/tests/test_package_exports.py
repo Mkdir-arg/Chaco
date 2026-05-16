@@ -16,7 +16,7 @@ class ConfiguracionPackageExportsTests(SimpleTestCase):
         self.assertIsNotNone(StaffEditarView)
 
     def test_forms_services_and_selectors_packages_export_public_symbols(self):
-        from configuracion.forms import InstitucionForm, ProvinciaForm
+        from configuracion.forms import ProvinciaForm
         from configuracion.selectors import (
             build_actividad_detail_context,
             get_instituciones_queryset_for_user,
@@ -26,7 +26,6 @@ class ConfiguracionPackageExportsTests(SimpleTestCase):
             ConfiguracionWorkflowError,
         )
 
-        self.assertIsNotNone(InstitucionForm)
         self.assertIsNotNone(ProvinciaForm)
         self.assertIsNotNone(ConfiguracionInstitucionalService)
         self.assertIsNotNone(ConfiguracionWorkflowError)

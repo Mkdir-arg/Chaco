@@ -1,8 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 
-from core.forms import InstitucionForm as BaseInstitucionForm
-
 
 class CrearUsuarioInstitucionForm(forms.Form):
     username = forms.CharField(label="Usuario", max_length=150)
@@ -23,8 +21,10 @@ class CrearUsuarioInstitucionForm(forms.Form):
             raise forms.ValidationError("El email ya está registrado")
         return email
 
-class RegistroInstitucionPublicForm(BaseInstitucionForm):
-    pass
+class RegistroInstitucionPublicForm(forms.Form):
+    """DEPRECATED: registro institucional retirado."""
+
+    nombre = forms.CharField(required=False)
 
 
 class ConsultarTramiteForm(forms.Form):

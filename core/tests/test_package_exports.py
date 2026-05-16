@@ -4,7 +4,6 @@ from django.test import SimpleTestCase
 class CorePackageExportsTests(SimpleTestCase):
     def test_views_forms_and_selectors_packages_export_public_symbols(self):
         from core.api_views import ProvinciaViewSet
-        from core.forms import InstitucionForm
         from core.selectors import get_localidades_values, get_municipios_values
         from core.signals import invalidate_legajos_cache
         from core.views import (
@@ -14,7 +13,6 @@ class CorePackageExportsTests(SimpleTestCase):
             performance_dashboard,
         )
 
-        self.assertIsNotNone(InstitucionForm)
         self.assertIsNotNone(ProvinciaViewSet)
         self.assertTrue(callable(get_municipios_values))
         self.assertTrue(callable(get_localidades_values))

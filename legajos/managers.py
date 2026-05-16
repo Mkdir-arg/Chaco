@@ -8,37 +8,29 @@ class OptimizedLegajoManager(models.Manager):
     def with_full_relations(self):
         """Query completa con todas las relaciones optimizadas"""
         return self.select_related(
-            'ciudadano',
-            'dispositivo',
             'responsable'
         ).prefetch_related(
-            'seguimientos__profesional',
-            'derivaciones__origen',
-            'derivaciones__destino',
-            'eventos',
-            'planes__profesional'
+            'seguimientos',
+            'derivaciones__actividad_destino',
+            'alertas'
         ).annotate(
             seguimientos_count=Count('seguimientos'),
-            eventos_count=Count('eventos'),
+            eventos_count=Count('alertas'),
             derivaciones_count=Count('derivaciones')
         )
     
     def for_dashboard(self):
         """Query optimizada para dashboard"""
         return self.select_related(
-            'ciudadano',
-            'dispositivo',
             'responsable'
         ).annotate(
             seguimientos_count=Count('seguimientos'),
-            eventos_count=Count('eventos')
+            eventos_count=Count('alertas')
         )
     
     def for_list_view(self):
         """Query optimizada para vistas de lista"""
         return self.select_related(
-            'ciudadano',
-            'dispositivo',
             'responsable'
         ).annotate(
             seguimientos_count=Count('seguimientos')
@@ -122,8 +114,7 @@ class OptimizedAlertaManager(models.Manager):
         """Alertas activas con relaciones completas"""
         return self.select_related(
             'ciudadano',
-            'legajo__ciudadano',
-            'legajo__dispositivo',
+            'legajo',
             'cerrada_por'
         ).filter(activa=True)
     
@@ -142,10 +133,7 @@ class OptimizedDerivacionManager(models.Manager):
     def with_full_relations(self):
         """Derivaciones con relaciones completas"""
         return self.select_related(
-            'legajo__ciudadano',
-            'legajo__dispositivo',
-            'origen',
-            'destino',
+            'legajo',
             'actividad_destino'
         )
     

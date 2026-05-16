@@ -1,10 +1,7 @@
 from rest_framework import serializers
 from .models import (
-    Provincia, Municipio, Localidad, Institucion, Sexo, Mes, Dia, Turno
+    Provincia, Municipio, Localidad, Sexo, Mes, Dia, Turno
 )
-
-# Alias para compatibilidad
-DispositivoRed = Institucion
 
 
 class ProvinciaSerializer(serializers.ModelSerializer):
@@ -33,20 +30,6 @@ class LocalidadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Localidad
         fields = ['id', 'nombre', 'municipio', 'municipio_id']
-
-
-class InstitucionSerializer(serializers.ModelSerializer):
-    """Serializer para el modelo Institucion"""
-    
-    class Meta:
-        model = Institucion
-        fields = ['id', 'nombre']
-        read_only_fields = ['id']
-
-
-# Alias para compatibilidad hacia atrás
-DispositivoRedSerializer = InstitucionSerializer
-
 
 class SexoSerializer(serializers.ModelSerializer):
     """Serializer para el modelo Sexo"""

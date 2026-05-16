@@ -55,7 +55,7 @@ def _serialize_adjunto(archivo, *, legajo=None, origen='ciudadano'):
 def build_ciudadano_actividades_payload(ciudadano_id):
     ciudadano = get_object_or_404(Ciudadano, id=ciudadano_id)
     legajos = LegajoAtencion.objects.filter(ciudadano=ciudadano).select_related(
-        'dispositivo', 'responsable'
+        'responsable'
     )
     actividades = []
 
@@ -67,7 +67,7 @@ def build_ciudadano_actividades_payload(ciudadano_id):
                     'tipo': 'APERTURA',
                     'descripcion': (
                         f'Acompañamiento abierto en '
-                        f'{legajo.dispositivo.nombre if legajo.dispositivo else "Dispositivo no especificado"}'
+                        'programa vigente'
                     ),
                     'usuario_nombre': legajo.responsable.get_full_name() if legajo.responsable else 'Sistema',
                     'legajo_id': str(legajo.id),
@@ -87,7 +87,7 @@ def build_ciudadano_actividades_payload(ciudadano_id):
                 }
             )
 
-        derivaciones = Derivacion.objects.filter(legajo=legajo).select_related('destino')
+        derivaciones = Derivacion.objects.filter(legajo=legajo).select_related('actividad_destino')
         for derivacion in derivaciones:
             actividades.append(
                 {
@@ -95,7 +95,7 @@ def build_ciudadano_actividades_payload(ciudadano_id):
                     'tipo': 'DERIVACION',
                     'descripcion': (
                         f'Derivación a '
-                        f'{derivacion.destino.nombre if derivacion.destino else "destino no especificado"}'
+                        f'{derivacion.actividad_destino.nombre if derivacion.actividad_destino else "destino no especificado"}'
                         f' - Estado: {derivacion.get_estado_display()}'
                     ),
                     'usuario_nombre': 'Sistema',
@@ -214,7 +214,10 @@ def build_legajo_evolucion_payload(legajo_id):
         hitos.append(
             {
                 'tipo': 'DERIVACION',
-                'titulo': f'Derivación a {derivacion_reciente.destino.nombre}',
+                'titulo': (
+                    f'Derivación a '
+                    f'{derivacion_reciente.actividad_destino.nombre if derivacion_reciente.actividad_destino else "destino no especificado"}'
+                ),
                 'fecha': derivacion_reciente.creado.isoformat(),
             }
         )
@@ -239,7 +242,7 @@ def build_legajo_evolucion_payload(legajo_id):
 
 def build_ciudadano_timeline_payload(ciudadano_id):
     ciudadano = get_object_or_404(Ciudadano, id=ciudadano_id)
-    legajos = LegajoAtencion.objects.filter(ciudadano=ciudadano).select_related('dispositivo', 'responsable')
+    legajos = LegajoAtencion.objects.filter(ciudadano=ciudadano).select_related('responsable')
     eventos = []
 
     for legajo in legajos:
@@ -249,8 +252,7 @@ def build_ciudadano_timeline_payload(ciudadano_id):
                 'tipo': 'APERTURA',
                 'titulo': 'Apertura de Acompañamiento',
                 'descripcion': (
-                    f'Acompañamiento iniciado en '
-                    f'{legajo.dispositivo.nombre if legajo.dispositivo else "dispositivo no especificado"}'
+                    'Acompañamiento iniciado'
                 ),
                 'legajo_id': str(legajo.id),
             }
@@ -281,7 +283,7 @@ def build_ciudadano_timeline_payload(ciudadano_id):
                 }
             )
 
-        for derivacion in Derivacion.objects.filter(legajo=legajo).select_related('destino'):
+        for derivacion in Derivacion.objects.filter(legajo=legajo).select_related('actividad_destino'):
             eventos.append(
                 {
                     'fecha': derivacion.creado.isoformat(),
@@ -289,7 +291,7 @@ def build_ciudadano_timeline_payload(ciudadano_id):
                     'titulo': 'Derivación',
                     'descripcion': (
                         f'Derivado a '
-                        f'{derivacion.destino.nombre if derivacion.destino else "destino no especificado"}'
+                        f'{derivacion.actividad_destino.nombre if derivacion.actividad_destino else "destino no especificado"}'
                         f' - {derivacion.get_estado_display()}'
                     ),
                     'legajo_id': str(legajo.id),

@@ -121,20 +121,6 @@ class Sexo(models.Model):
         verbose_name_plural = "Sexos"
 
 
-# TODO: ELIMINAR - Stub temporal de Institucion para evitar errores de importación
-class Institucion(models.Model):
-    """STUB TEMPORAL - Eliminar junto con todas las referencias"""
-    nombre = models.CharField(max_length=255, default="ELIMINAR")
-    
-    class Meta:
-        db_table = 'institucion_stub'
-        verbose_name = "Institución (STUB - ELIMINAR)"
-        verbose_name_plural = "Instituciones (STUB - ELIMINAR)"
-    
-    def __str__(self):
-        return "[TEMPORAL STUB]"
-
-
 # Modelos base para sistema de legajos
 class TimeStamped(models.Model):
     """Modelo abstracto para timestamps automáticos"""

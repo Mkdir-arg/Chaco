@@ -33,13 +33,10 @@ class CrearUsuarioInstitucionView(FormView):
     form_class = CrearUsuarioInstitucionForm
 
     def form_valid(self, form):
-        user = PortalRegistroService.create_pending_user(form.cleaned_data)
-        self.request.session["pending_user_id"] = user.id
-        messages.success(
-            self.request,
-            "Usuario creado exitosamente. Complete ahora los datos de su institución.",
+        return JsonResponse(
+            {"error": "DEPRECATED: flujo de creación de usuario institucional retirado."},
+            status=410,
         )
-        return redirect("portal:registro_institucion")
 
     def form_invalid(self, form):
         _push_form_errors_to_messages(self.request, form)
@@ -51,10 +48,10 @@ class RegistroInstitucionView(FormView):
     form_class = RegistroInstitucionPublicForm
 
     def dispatch(self, request, *args, **kwargs):
-        self.pending_user_id = request.session.get("pending_user_id")
-        if not request.user.is_authenticated and not self.pending_user_id:
-            return redirect("portal:crear_usuario")
-        return super().dispatch(request, *args, **kwargs)
+        return JsonResponse(
+            {"error": "DEPRECATED: registro institucional retirado."},
+            status=410,
+        )
 
     def form_valid(self, form):
         pending_user = PortalRegistroService.get_pending_user(self.pending_user_id)
@@ -84,10 +81,9 @@ class ConsultarTramiteView(FormView):
     form_class = ConsultarTramiteForm
 
     def get(self, request, *args, **kwargs):
-        return render(
-            request,
-            self.template_name,
-            {"form": self.get_form()},
+        return JsonResponse(
+            {"error": "DEPRECATED: consulta de trámite institucional retirada."},
+            status=410,
         )
 
     def form_valid(self, form):

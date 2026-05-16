@@ -1,10 +1,5 @@
 """Selectors para la app de configuracion."""
 
-from .clases import (  # noqa: F401
-    build_clase_asistencia_context,
-    calcular_porcentaje_asistencia,
-    get_clases_de_actividad,
-)
 from .instituciones import (  # noqa: F401
     build_actividad_detail_context,
     build_institucion_detail_context,
