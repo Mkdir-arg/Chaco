@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import (
-    Ciudadano, EvaluacionInicial,
-    PlanIntervencion, SeguimientoContacto, Derivacion,
-    EventoCritico, Profesional, AlertaCiudadano
+    Ciudadano,
+    Derivacion,
+    AlertaCiudadano,
 )
 from core.models import DispositivoRed
 
@@ -41,54 +41,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 
-class ProfesionalSerializer(serializers.ModelSerializer):
-    """Serializer para Profesional"""
-    usuario = UserSerializer(read_only=True)
-    
-    class Meta:
-        model = Profesional
-        fields = ['id', 'usuario', 'matricula', 'rol']
-
-
-class EvaluacionInicialSerializer(serializers.ModelSerializer):
-    """Serializer para EvaluacionInicial"""
-    
-    class Meta:
-        model = EvaluacionInicial
-        fields = [
-            'id', 'legajo', 'situacion_consumo', 'antecedentes',
-            'red_apoyo', 'condicion_social', 'tamizajes',
-            'riesgo_suicida', 'violencia', 'creado', 'modificado'
-        ]
-        read_only_fields = ['id', 'creado', 'modificado']
-
-
-class PlanIntervencionSerializer(serializers.ModelSerializer):
-    """Serializer para PlanIntervencion"""
-    profesional = ProfesionalSerializer(read_only=True)
-    
-    class Meta:
-        model = PlanIntervencion
-        fields = [
-            'id', 'legajo', 'profesional', 'vigente', 'actividades',
-            'creado', 'modificado'
-        ]
-        read_only_fields = ['id', 'creado', 'modificado']
-
-
-class SeguimientoContactoSerializer(serializers.ModelSerializer):
-    """Serializer para SeguimientoContacto"""
-    profesional = ProfesionalSerializer(read_only=True)
-    
-    class Meta:
-        model = SeguimientoContacto
-        fields = [
-            'id', 'legajo', 'profesional', 'tipo', 'descripcion',
-            'adherencia', 'adjuntos', 'creado', 'modificado'
-        ]
-        read_only_fields = ['id', 'creado', 'modificado']
-
-
 class DerivacionSerializer(serializers.ModelSerializer):
     """Serializer para Derivacion"""
     origen = DispositivoRedSerializer(read_only=True)
@@ -99,18 +51,6 @@ class DerivacionSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'legajo', 'origen', 'destino', 'motivo', 'urgencia',
             'estado', 'respuesta', 'fecha_aceptacion', 'creado', 'modificado'
-        ]
-        read_only_fields = ['id', 'creado', 'modificado']
-
-
-class EventoCriticoSerializer(serializers.ModelSerializer):
-    """Serializer para EventoCritico"""
-    
-    class Meta:
-        model = EventoCritico
-        fields = [
-            'id', 'legajo', 'tipo', 'detalle', 'notificado_a',
-            'creado', 'modificado'
         ]
         read_only_fields = ['id', 'creado', 'modificado']
 

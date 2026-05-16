@@ -14,7 +14,8 @@ class RiskPredictor:
         """
         Calcula probabilidad de abandono del tratamiento (0-100)
         """
-        from .models import LegajoAtencion, SeguimientoContacto
+        from .models import LegajoAtencion
+        from .models_contactos import HistorialContacto
         
         score = 0
         factores = []
@@ -34,12 +35,12 @@ class RiskPredictor:
         hace_7_dias = ahora - timedelta(days=7)
         
         # Factor 1: Tiempo sin contacto (peso: 35%)
-        ultimo_seguimiento = SeguimientoContacto.objects.filter(
+        ultimo_seguimiento = HistorialContacto.objects.filter(
             legajo=legajo
-        ).order_by('-creado').first()
+        ).order_by('-fecha_contacto').first()
         
         if ultimo_seguimiento:
-            dias_sin_contacto = (ahora - ultimo_seguimiento.creado).days
+            dias_sin_contacto = (ahora - ultimo_seguimiento.fecha_contacto).days
             if dias_sin_contacto > 30:
                 score += 35
                 factores.append(f'Sin contacto hace {dias_sin_contacto} días')
@@ -53,39 +54,37 @@ class RiskPredictor:
             score += 35
             factores.append('Sin seguimientos registrados')
         
-        # Factor 2: Adherencia histórica (peso: 25%)
-        seguimientos_recientes = SeguimientoContacto.objects.filter(
+        # Factor 2: Calidad de contacto (peso: 25%)
+        seguimientos_recientes = HistorialContacto.objects.filter(
             legajo=legajo,
-            creado__gte=hace_30_dias,
-            adherencia__isnull=False
+            fecha_contacto__gte=hace_30_dias,
         )
         
         if seguimientos_recientes.exists():
-            adherencia_nula = seguimientos_recientes.filter(adherencia='NULA').count()
-            adherencia_parcial = seguimientos_recientes.filter(adherencia='PARCIAL').count()
+            contactos_fallidos = seguimientos_recientes.filter(
+                estado__in=['NO_CONTESTA', 'CANCELADO', 'REPROGRAMADO']
+            ).count()
             total = seguimientos_recientes.count()
-            
-            tasa_problemas = (adherencia_nula * 2 + adherencia_parcial) / total
+
+            tasa_problemas = contactos_fallidos / total
             if tasa_problemas > 0.6:
                 score += 25
-                factores.append('Adherencia muy baja')
+                factores.append('Alta tasa de contactos fallidos')
             elif tasa_problemas > 0.3:
                 score += 15
-                factores.append('Adherencia irregular')
+                factores.append('Contactabilidad irregular')
         
-        # Factor 3: Eventos críticos recientes (peso: 20%)
-        from .models import EventoCritico
-        eventos_recientes = EventoCritico.objects.filter(
-            legajo=legajo,
+        # Factor 3: Derivaciones recientes (peso: 20%)
+        derivaciones_recientes = legajo.derivaciones.filter(
             creado__gte=hace_30_dias
         ).count()
-        
-        if eventos_recientes >= 2:
+
+        if derivaciones_recientes >= 2:
             score += 20
-            factores.append(f'{eventos_recientes} eventos críticos recientes')
-        elif eventos_recientes == 1:
+            factores.append(f'{derivaciones_recientes} derivaciones recientes')
+        elif derivaciones_recientes == 1:
             score += 10
-            factores.append('Evento crítico reciente')
+            factores.append('Derivación reciente')
         
         # Factor 4: Falta de plan vigente (peso: 10%)
         if not legajo.plan_vigente:
@@ -120,7 +119,8 @@ class RiskPredictor:
         """
         Calcula probabilidad de evento crítico en próximos 30 días (0-100)
         """
-        from .models import LegajoAtencion, EventoCritico, EvaluacionInicial
+        from .models import LegajoAtencion
+        from .models_contactos import HistorialContacto
         
         score = 0
         factores = []
@@ -137,21 +137,20 @@ class RiskPredictor:
         hace_90_dias = ahora - timedelta(days=90)
         hace_30_dias = ahora - timedelta(days=30)
         
-        # Factor 1: Historial de eventos (peso: 40%)
-        eventos_historicos = EventoCritico.objects.filter(
-            legajo=legajo,
+        # Factor 1: Historial de derivaciones (peso: 40%)
+        derivaciones_historicas = legajo.derivaciones.filter(
             creado__gte=hace_90_dias
         ).count()
-        
-        if eventos_historicos >= 3:
+
+        if derivaciones_historicas >= 3:
             score += 40
-            factores.append(f'{eventos_historicos} eventos en últimos 90 días')
-        elif eventos_historicos >= 2:
+            factores.append(f'{derivaciones_historicas} derivaciones en últimos 90 días')
+        elif derivaciones_historicas >= 2:
             score += 30
-            factores.append('Múltiples eventos recientes')
-        elif eventos_historicos == 1:
+            factores.append('Múltiples derivaciones recientes')
+        elif derivaciones_historicas == 1:
             score += 15
-            factores.append('Evento crítico reciente')
+            factores.append('Derivación reciente')
         
         # Factor 2: Evaluación de riesgo (peso: 30%)
         try:
@@ -173,10 +172,9 @@ class RiskPredictor:
             score += 10
         
         # Factor 4: Falta de seguimiento (peso: 10%)
-        from .models import SeguimientoContacto
-        seguimientos_recientes = SeguimientoContacto.objects.filter(
+        seguimientos_recientes = HistorialContacto.objects.filter(
             legajo=legajo,
-            creado__gte=hace_30_dias
+            fecha_contacto__gte=hace_30_dias
         ).count()
         
         if seguimientos_recientes == 0:
@@ -204,7 +202,8 @@ class RiskPredictor:
         """
         Genera recomendaciones automáticas basadas en el análisis
         """
-        from .models import LegajoAtencion, SeguimientoContacto
+        from .models import LegajoAtencion
+        from .models_contactos import HistorialContacto
         
         recomendaciones = []
         
@@ -221,12 +220,12 @@ class RiskPredictor:
         hace_30_dias = ahora - timedelta(days=30)
         
         # Recomendación 1: Contacto
-        ultimo_seguimiento = SeguimientoContacto.objects.filter(
+        ultimo_seguimiento = HistorialContacto.objects.filter(
             legajo=legajo
-        ).order_by('-creado').first()
+        ).order_by('-fecha_contacto').first()
         
         if ultimo_seguimiento:
-            dias_sin_contacto = (ahora - ultimo_seguimiento.creado).days
+            dias_sin_contacto = (ahora - ultimo_seguimiento.fecha_contacto).days
             if dias_sin_contacto > 15:
                 recomendaciones.append({
                     'prioridad': 'ALTA',

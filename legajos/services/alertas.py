@@ -7,12 +7,8 @@ from django.utils import timezone
 from ..models import (
     AlertaCiudadano,
     Ciudadano,
-    Consentimiento,
     Derivacion,
-    EvaluacionInicial,
-    EventoCritico,
     LegajoAtencion,
-    PlanIntervencion,
 )
 from ..models_contactos import HistorialContacto, VinculoFamiliar
 
@@ -29,7 +25,7 @@ class AlertasService:
                 "ciudadano",
                 "dispositivo",
                 "responsable",
-            ).prefetch_related("evaluacion", "seguimientos", "eventos", "derivaciones")
+            ).prefetch_related("evaluacion", "derivaciones")
 
             AlertaCiudadano.objects.filter(
                 ciudadano=ciudadano,
@@ -79,31 +75,6 @@ class AlertasService:
                     )
                 )
 
-        try:
-            evaluacion = legajo.evaluacion
-            if evaluacion.riesgo_suicida:
-                alertas.append(
-                    AlertasService._crear_alerta(
-                        legajo.ciudadano,
-                        legajo,
-                        "RIESGO_SUICIDA",
-                        "CRITICA",
-                        "Riesgo suicida identificado en evaluación",
-                    )
-                )
-            if evaluacion.violencia:
-                alertas.append(
-                    AlertasService._crear_alerta(
-                        legajo.ciudadano,
-                        legajo,
-                        "VIOLENCIA",
-                        "CRITICA",
-                        "Situación de violencia identificada",
-                    )
-                )
-        except Exception:
-            pass
-
         if legajo.estado in ["ABIERTO", "EN_SEGUIMIENTO"] and not legajo.plan_vigente:
             alertas.append(
                 AlertasService._crear_alerta(
@@ -151,22 +122,6 @@ class AlertasService:
                 )
             )
 
-        eventos_recientes = EventoCritico.objects.filter(
-            legajo=legajo,
-            creado__gte=timezone.now() - timedelta(days=7),
-        ).count()
-
-        if eventos_recientes > 0:
-            alertas.append(
-                AlertasService._crear_alerta(
-                    legajo.ciudadano,
-                    legajo,
-                    "EVENTO_CRITICO",
-                    "CRITICA",
-                    f"{eventos_recientes} evento(s) crítico(s) en la última semana",
-                )
-            )
-
         derivaciones_pendientes = Derivacion.objects.filter(
             legajo=legajo,
             estado="PENDIENTE",
@@ -183,48 +138,6 @@ class AlertasService:
                     f"{derivaciones_pendientes} derivación(es) pendiente(s)",
                 )
             )
-
-        try:
-            from ..models import SeguimientoContacto
-
-            seguimientos_vencidos = SeguimientoContacto.objects.filter(
-                legajo=legajo,
-                fecha_proximo_contacto__lt=timezone.now().date(),
-                fecha_proximo_contacto__isnull=False,
-            ).count()
-
-            if seguimientos_vencidos > 0:
-                alertas.append(
-                    AlertasService._crear_alerta(
-                        legajo.ciudadano,
-                        legajo,
-                        "SEGUIMIENTO_VENCIDO",
-                        "ALTA",
-                        f"{seguimientos_vencidos} seguimiento(s) vencido(s)",
-                    )
-                )
-        except Exception:
-            pass
-
-        try:
-            seguimientos_recientes = SeguimientoContacto.objects.filter(
-                legajo=legajo,
-                creado__gte=timezone.now() - timedelta(days=30),
-                adherencia__in=["BAJA", "NULA"],
-            ).count()
-
-            if seguimientos_recientes >= 2:
-                alertas.append(
-                    AlertasService._crear_alerta(
-                        legajo.ciudadano,
-                        legajo,
-                        "ADHERENCIA_BAJA",
-                        "ALTA",
-                        f"Adherencia baja en {seguimientos_recientes} seguimientos recientes",
-                    )
-                )
-        except Exception:
-            pass
 
         return alertas
 
@@ -246,22 +159,6 @@ class AlertasService:
                     "SIN_RED_FAMILIAR",
                     "BAJA",
                     "Sin vínculos familiares registrados",
-                )
-            )
-
-        consentimiento_vigente = Consentimiento.objects.filter(
-            ciudadano=ciudadano,
-            vigente=True,
-        ).exists()
-
-        if not consentimiento_vigente:
-            alertas.append(
-                AlertasService._crear_alerta(
-                    ciudadano,
-                    None,
-                    "SIN_CONSENTIMIENTO",
-                    "MEDIA",
-                    "Sin consentimiento informado vigente",
                 )
             )
 

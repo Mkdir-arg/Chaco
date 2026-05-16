@@ -35,12 +35,6 @@ from .contactos_panel import (  # noqa: F401
     red_contactos_simple,
 )
 from .cursos import cursos_actividades_ciudadano  # noqa: F401
-from .dashboard_contactos import (  # noqa: F401
-    dashboard_contactos,
-    exportar_reporte_contactos,
-    metricas_contactos_api,
-    metricas_red_contactos_api,
-)
 from .dashboard_simple import dashboard_contactos_simple as dashboard_contactos_simple_debug  # noqa: F401
 from .dashboard_simple import test_api  # noqa: F401
 from .derivacion import derivar_programa_view  # noqa: F401
@@ -98,18 +92,6 @@ from .operativa import (  # noqa: F401
     marcar_etapa_plan,
 )
 from .programas import ProgramaDetailView, ProgramaListView  # noqa: F401
-from .red_contactos import (  # noqa: F401
-    buscar_ciudadanos_api,
-    buscar_usuarios_api,
-    crear_contacto_emergencia,
-    crear_profesional,
-    crear_vinculo,
-    dispositivos_api,
-    emergencias_api,
-    profesionales_api,
-    red_contactos_view,
-    vinculos_api,
-)
 from .solapas import (  # noqa: F401
     CiudadanoDetalleConSolapasView,
     aceptar_derivacion_programa,

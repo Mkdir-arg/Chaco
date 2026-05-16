@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from core.cache_decorators import invalidate_cache_pattern
 
-from ..models import Ciudadano, Derivacion, EventoCritico, LegajoAtencion, SeguimientoContacto
+from ..models import Ciudadano, Derivacion, LegajoAtencion
 
 
 @receiver([post_save, post_delete], sender=Ciudadano)
@@ -22,24 +22,10 @@ def invalidate_legajo_cache(sender, **kwargs):
     invalidate_cache_pattern("dashboard")
 
 
-@receiver([post_save, post_delete], sender=SeguimientoContacto)
-def invalidate_seguimiento_cache(sender, **kwargs):
-    """Invalida cache cuando se modifica un seguimiento."""
-    invalidate_cache_pattern("seguimiento")
-    invalidate_cache_pattern("reportes")
-
-
 @receiver([post_save, post_delete], sender=Derivacion)
 def invalidate_derivacion_cache(sender, **kwargs):
     """Invalida cache cuando se modifica una derivación."""
     invalidate_cache_pattern("derivacion")
-    invalidate_cache_pattern("reportes")
-
-
-@receiver([post_save, post_delete], sender=EventoCritico)
-def invalidate_evento_cache(sender, **kwargs):
-    """Invalida cache cuando se modifica un evento crítico."""
-    invalidate_cache_pattern("evento")
     invalidate_cache_pattern("reportes")
 
 

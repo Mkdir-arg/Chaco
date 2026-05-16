@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models_contactos import (
-    HistorialContacto, VinculoFamiliar, ProfesionalTratante,
-    DispositivoVinculado, ContactoEmergencia
+    HistorialContacto,
+    VinculoFamiliar,
 )
 from .models import Ciudadano, LegajoAtencion
 from core.models import DispositivoRed
@@ -46,39 +46,6 @@ class VinculoFamiliarSerializer(serializers.ModelSerializer):
         if data['ciudadano_principal'] == data['ciudadano_vinculado']:
             raise serializers.ValidationError("Un ciudadano no puede vincularse consigo mismo")
         return data
-
-
-class ProfesionalTratanteSerializer(serializers.ModelSerializer):
-    usuario_nombre = serializers.CharField(source='usuario.get_full_name', read_only=True)
-    dispositivo_nombre = serializers.CharField(source='dispositivo.nombre', read_only=True)
-    legajo_codigo = serializers.CharField(source='legajo.codigo', read_only=True)
-    
-    class Meta:
-        model = ProfesionalTratante
-        fields = '__all__'
-        read_only_fields = ('creado', 'modificado', 'fecha_asignacion')
-
-
-class DispositivoVinculadoSerializer(serializers.ModelSerializer):
-    dispositivo_nombre = serializers.CharField(source='dispositivo.nombre', read_only=True)
-    referente_nombre = serializers.CharField(source='referente_dispositivo.get_full_name', read_only=True)
-    
-    class Meta:
-        model = DispositivoVinculado
-        fields = '__all__'
-        read_only_fields = ('creado', 'modificado')
-
-
-class ContactoEmergenciaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ContactoEmergencia
-        fields = '__all__'
-        read_only_fields = ('creado', 'modificado')
-    
-    def validate_prioridad(self, value):
-        if value < 1:
-            raise serializers.ValidationError("La prioridad debe ser mayor a 0")
-        return value
 
 
 # Serializers para listados y búsquedas

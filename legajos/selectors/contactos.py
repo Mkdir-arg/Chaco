@@ -8,15 +8,13 @@ from ..models import (
     Adjunto,
     Ciudadano,
     Derivacion,
-    EventoCritico,
     LegajoAtencion,
-    PlanIntervencion,
-    SeguimientoContacto,
 )
 
 try:
-    from ..models_contactos import VinculoFamiliar
+    from ..models_contactos import HistorialContacto, VinculoFamiliar
 except ImportError:  # pragma: no cover - compatibilidad legacy
+    HistorialContacto = None
     VinculoFamiliar = None
 
 
@@ -89,64 +87,6 @@ def build_ciudadano_actividades_payload(ciudadano_id):
                 }
             )
 
-        seguimientos = SeguimientoContacto.objects.filter(legajo=legajo).select_related(
-            'profesional__usuario'
-        )
-        for seguimiento in seguimientos:
-            actividades.append(
-                {
-                    'fecha_hora': seguimiento.creado.isoformat(),
-                    'tipo': 'SEGUIMIENTO',
-                    'descripcion': (
-                        f'{seguimiento.get_tipo_display()}: '
-                        f'{seguimiento.descripcion[:100] if seguimiento.descripcion else "Sin descripción"}'
-                    ),
-                    'usuario_nombre': (
-                        seguimiento.profesional.usuario.get_full_name()
-                        if seguimiento.profesional and seguimiento.profesional.usuario
-                        else 'Sistema'
-                    ),
-                    'legajo_id': str(legajo.id),
-                    'legajo_codigo': _format_legajo_codigo(legajo),
-                }
-            )
-
-        evaluacion = getattr(legajo, 'evaluacion', None)
-        if evaluacion:
-            actividades.append(
-                {
-                    'fecha_hora': evaluacion.creado.isoformat(),
-                    'tipo': 'EVALUACION',
-                    'descripcion': (
-                        'Evaluación inicial realizada - '
-                        f'Riesgo: {legajo.get_nivel_riesgo_display() if legajo.nivel_riesgo else "No especificado"}'
-                    ),
-                    'usuario_nombre': 'Sistema',
-                    'legajo_id': str(legajo.id),
-                    'legajo_codigo': _format_legajo_codigo(legajo),
-                }
-            )
-
-        planes = PlanIntervencion.objects.filter(legajo=legajo).select_related('profesional__usuario')
-        for plan in planes:
-            actividades.append(
-                {
-                    'fecha_hora': plan.creado.isoformat(),
-                    'tipo': 'PLAN',
-                    'descripcion': (
-                        'Plan de intervención creado - '
-                        f'Actividades: {len(plan.actividades or [])}'
-                    ),
-                    'usuario_nombre': (
-                        plan.profesional.usuario.get_full_name()
-                        if plan.profesional and plan.profesional.usuario
-                        else 'Sistema'
-                    ),
-                    'legajo_id': str(legajo.id),
-                    'legajo_codigo': _format_legajo_codigo(legajo),
-                }
-            )
-
         derivaciones = Derivacion.objects.filter(legajo=legajo).select_related('destino')
         for derivacion in derivaciones:
             actividades.append(
@@ -157,22 +97,6 @@ def build_ciudadano_actividades_payload(ciudadano_id):
                         f'Derivación a '
                         f'{derivacion.destino.nombre if derivacion.destino else "destino no especificado"}'
                         f' - Estado: {derivacion.get_estado_display()}'
-                    ),
-                    'usuario_nombre': 'Sistema',
-                    'legajo_id': str(legajo.id),
-                    'legajo_codigo': _format_legajo_codigo(legajo),
-                }
-            )
-
-        eventos = EventoCritico.objects.filter(legajo=legajo)
-        for evento in eventos:
-            actividades.append(
-                {
-                    'fecha_hora': evento.creado.isoformat(),
-                    'tipo': 'EVENTO',
-                    'descripcion': (
-                        f'Evento crítico: {evento.get_tipo_display()} - '
-                        f'{evento.detalle[:100] if evento.detalle else ""}'
                     ),
                     'usuario_nombre': 'Sistema',
                     'legajo_id': str(legajo.id),
@@ -255,24 +179,10 @@ def build_legajo_archivos_payload(legajo_id):
 
 def build_legajo_evolucion_payload(legajo_id):
     legajo = get_object_or_404(LegajoAtencion, id=legajo_id)
-    total_seguimientos = SeguimientoContacto.objects.filter(legajo=legajo).count()
-    seguimientos_con_adherencia = SeguimientoContacto.objects.filter(
-        legajo=legajo, adherencia__isnull=False
-    )
-
+    total_seguimientos = HistorialContacto.objects.filter(legajo=legajo).count()
     adherencia_promedio = None
-    if seguimientos_con_adherencia.exists():
-        adherencia_map = {'ADECUADA': 100, 'PARCIAL': 50, 'NULA': 0}
-        total = sum(adherencia_map.get(seg.adherencia, 0) for seg in seguimientos_con_adherencia)
-        adherencia_promedio = round(total / seguimientos_con_adherencia.count())
-
-    plan_vigente = PlanIntervencion.objects.filter(legajo=legajo, vigente=True).first()
-    objetivos_totales = len(plan_vigente.actividades or []) if plan_vigente else 0
-    objetivos_cumplidos = (
-        sum(1 for actividad in plan_vigente.actividades or [] if actividad.get('completada'))
-        if plan_vigente
-        else 0
-    )
+    objetivos_totales = 0
+    objetivos_cumplidos = 0
 
     hitos = [
         {
@@ -290,21 +200,13 @@ def build_legajo_evolucion_payload(legajo_id):
                 'fecha': evaluacion.creado.isoformat(),
             }
         )
-    if plan_vigente:
-        hitos.append(
-            {
-                'tipo': 'PLAN',
-                'titulo': 'Plan de Intervención Activo',
-                'fecha': plan_vigente.creado.isoformat(),
-            }
-        )
-    ultimo_seguimiento = SeguimientoContacto.objects.filter(legajo=legajo).order_by('-creado').first()
+    ultimo_seguimiento = HistorialContacto.objects.filter(legajo=legajo).order_by('-fecha_contacto').first()
     if ultimo_seguimiento:
         hitos.append(
             {
                 'tipo': 'SEGUIMIENTO',
-                'titulo': f'Último Seguimiento - {ultimo_seguimiento.get_tipo_display()}',
-                'fecha': ultimo_seguimiento.creado.isoformat(),
+                'titulo': 'Último contacto registrado',
+                'fecha': ultimo_seguimiento.fecha_contacto.isoformat(),
             }
         )
     derivacion_reciente = Derivacion.objects.filter(legajo=legajo).order_by('-creado').first()
@@ -314,15 +216,6 @@ def build_legajo_evolucion_payload(legajo_id):
                 'tipo': 'DERIVACION',
                 'titulo': f'Derivación a {derivacion_reciente.destino.nombre}',
                 'fecha': derivacion_reciente.creado.isoformat(),
-            }
-        )
-    evento_reciente = EventoCritico.objects.filter(legajo=legajo).order_by('-creado').first()
-    if evento_reciente:
-        hitos.append(
-            {
-                'tipo': 'EVENTO',
-                'titulo': f'Evento: {evento_reciente.get_tipo_display()}',
-                'fecha': evento_reciente.creado.isoformat(),
             }
         )
     if legajo.fecha_cierre:
@@ -377,24 +270,13 @@ def build_ciudadano_timeline_payload(ciudadano_id):
                 }
             )
 
-        for plan in PlanIntervencion.objects.filter(legajo=legajo, vigente=True):
+        for seguimiento in HistorialContacto.objects.filter(legajo=legajo).order_by('-fecha_contacto')[:3]:
             eventos.append(
                 {
-                    'fecha': plan.creado.isoformat(),
-                    'tipo': 'PLAN',
-                    'titulo': 'Plan de Intervención',
-                    'descripcion': 'Plan de intervención creado y activado',
-                    'legajo_id': str(legajo.id),
-                }
-            )
-
-        for seguimiento in SeguimientoContacto.objects.filter(legajo=legajo).order_by('-creado')[:3]:
-            eventos.append(
-                {
-                    'fecha': seguimiento.creado.isoformat(),
+                    'fecha': seguimiento.fecha_contacto.isoformat(),
                     'tipo': 'SEGUIMIENTO',
-                    'titulo': f'Seguimiento - {seguimiento.get_tipo_display()}',
-                    'descripcion': seguimiento.descripcion[:150] if seguimiento.descripcion else 'Sin descripción',
+                    'titulo': 'Seguimiento',
+                    'descripcion': seguimiento.resumen[:150] if seguimiento.resumen else 'Sin descripción',
                     'legajo_id': str(legajo.id),
                 }
             )
@@ -410,17 +292,6 @@ def build_ciudadano_timeline_payload(ciudadano_id):
                         f'{derivacion.destino.nombre if derivacion.destino else "destino no especificado"}'
                         f' - {derivacion.get_estado_display()}'
                     ),
-                    'legajo_id': str(legajo.id),
-                }
-            )
-
-        for evento in EventoCritico.objects.filter(legajo=legajo):
-            eventos.append(
-                {
-                    'fecha': evento.creado.isoformat(),
-                    'tipo': 'EVENTO',
-                    'titulo': f'Evento Crítico - {evento.get_tipo_display()}',
-                    'descripcion': evento.detalle[:150] if evento.detalle else '',
                     'legajo_id': str(legajo.id),
                 }
             )

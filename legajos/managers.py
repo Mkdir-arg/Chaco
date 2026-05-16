@@ -12,11 +12,11 @@ class OptimizedLegajoManager(models.Manager):
             'dispositivo',
             'responsable'
         ).prefetch_related(
-            'seguimientos__profesional__usuario',
+            'seguimientos__profesional',
             'derivaciones__origen',
             'derivaciones__destino',
             'eventos',
-            'planes__profesional__usuario'
+            'planes__profesional'
         ).annotate(
             seguimientos_count=Count('seguimientos'),
             eventos_count=Count('eventos'),
@@ -134,26 +134,6 @@ class OptimizedAlertaManager(models.Manager):
     def criticas(self):
         """Alertas críticas optimizadas"""
         return self.por_prioridad('CRITICA')
-
-
-class OptimizedSeguimientoManager(models.Manager):
-    """Manager optimizado para SeguimientoContacto"""
-    
-    def with_relations(self):
-        """Seguimientos con relaciones optimizadas"""
-        return self.select_related(
-            'legajo__ciudadano',
-            'legajo__dispositivo',
-            'profesional__usuario'
-        )
-    
-    def recientes(self, dias=30):
-        """Seguimientos recientes optimizados"""
-        from datetime import datetime, timedelta
-        fecha_limite = datetime.now().date() - timedelta(days=dias)
-        return self.with_relations().filter(
-            creado__date__gte=fecha_limite
-        )
 
 
 class OptimizedDerivacionManager(models.Manager):

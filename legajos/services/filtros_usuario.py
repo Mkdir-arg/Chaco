@@ -47,18 +47,6 @@ class FiltrosUsuarioService:
         if legajo_responsable:
             return legajo_responsable.dispositivo
 
-        try:
-            from ..models import Profesional, SeguimientoContacto
-
-            profesional = Profesional.objects.get(usuario=usuario)
-            seguimiento = SeguimientoContacto.objects.filter(
-                profesional=profesional
-            ).select_related("legajo__dispositivo").first()
-            if seguimiento:
-                return seguimiento.legajo.dispositivo
-        except Exception:
-            pass
-
         return None
 
     @staticmethod

@@ -36,7 +36,7 @@ def reportes_view(request):
     stats = {
         'total_legajos': legajos.count(),
         'legajos_activos': legajos.exclude(estado='CERRADO').count(),
-        'riesgo_alto': legajos.filter(nivel_riesgo=LegajoAtencion.NivelRiesgo.ALTO).count(),
+        'riesgo_alto': legajos.filter(nivel_riesgo='ALTO').count(),
         'nuevos_semana': legajos.filter(fecha_admision__gte=hace_7_dias).count(),
         'por_estado': [
             {'codigo': item['estado'], 'label': item['estado'].replace('_', ' ').title(), 'total': item['total']}

@@ -3,27 +3,8 @@ from django.dispatch import receiver
 
 from conversaciones.models import Mensaje
 
-from ..models import EventoCritico, LegajoAtencion, SeguimientoContacto
+from ..models import LegajoAtencion
 from ..services import AlertasService
-
-
-@receiver(post_save, sender=EventoCritico)
-def alerta_evento_critico(sender, instance, created, **kwargs):
-    """Genera alerta automática cuando se crea un evento crítico."""
-    if created:
-        AlertasService.generar_alerta_evento_critico(
-            instance.legajo,
-            instance.get_tipo_display(),
-            instance.detalle,
-        )
-
-
-@receiver(post_save, sender=SeguimientoContacto)
-def verificar_seguimiento_vencido(sender, instance, created, **kwargs):
-    """Hook de seguimiento vencido al crear un seguimiento."""
-    if created:
-        return None
-    return None
 
 
 @receiver(post_save, sender=Mensaje)

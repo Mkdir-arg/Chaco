@@ -2,7 +2,7 @@ from datetime import date
 
 from django.db.models import Q
 
-from ..models import AlertaCiudadano, Ciudadano, EventoCritico, LegajoAtencion, SeguimientoContacto
+from ..models import AlertaCiudadano, Ciudadano, LegajoAtencion
 from ..models_programas import DerivacionPrograma, InscripcionPrograma, Programa
 from ..models_nachec import (
     CasoNachec,

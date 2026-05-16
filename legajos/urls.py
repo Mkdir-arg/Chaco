@@ -5,12 +5,6 @@ from .views import ciudadanos as views_ciudadanos
 from .views import contactos_api as views_contactos_api
 from .views import contactos_panel as views_contactos_panel
 from .views import cursos as views_cursos
-from .views.dashboard_contactos import (  # importar directamente del módulo, no del __init__
-    dashboard_contactos as view_dashboard_contactos_completo,
-    exportar_reporte_contactos as view_exportar_reporte_contactos,
-    metricas_contactos_api as view_metricas_contactos_api,
-    metricas_red_contactos_api as view_metricas_red_contactos_api,
-)
 from .views import dashboard_simple as views_simple
 from .views import derivacion as views_derivacion
 from .views import derivacion_programa as views_derivacion_programa
@@ -39,10 +33,6 @@ urlpatterns = [
     ),
     path("plan/<int:pk>/marcar-etapa/", views_simple.marcar_etapa_plan, name="marcar_etapa_plan"),
     path("dashboard-contactos/", views_contactos_panel.dashboard_contactos_simple, name="dashboard_contactos"),
-    path("dashboard-contactos/completo/", view_dashboard_contactos_completo, name="dashboard_contactos_completo"),
-    path("dashboard-contactos/api/metricas/", view_metricas_contactos_api, name="metricas_contactos_api"),
-    path("dashboard-contactos/api/metricas-red/", view_metricas_red_contactos_api, name="metricas_red_contactos_api"),
-    path("dashboard-contactos/exportar/", view_exportar_reporte_contactos, name="exportar_reporte_contactos"),
     path("reportes/", views_simple.reportes_view, name="reportes"),
     path("reportes/exportar-csv/", views_simple.exportar_reportes_csv, name="exportar_csv"),
     path("derivaciones-ciudadano/<int:derivacion_id>/aceptar/", views_derivacion_programa.aceptar_derivacion_ciudadano, name="derivacion_ciudadano_aceptar"),

@@ -7,13 +7,12 @@ from django.db.models import Q, Count
 from datetime import datetime, timedelta
 
 from ..models_contactos import (
-    HistorialContacto, VinculoFamiliar, ProfesionalTratante,
-    DispositivoVinculado, ContactoEmergencia
+    HistorialContacto,
+    VinculoFamiliar,
 )
 from ..serializers_contactos import (
     HistorialContactoSerializer, HistorialContactoListSerializer,
-    VinculoFamiliarSerializer, ProfesionalTratanteSerializer,
-    DispositivoVinculadoSerializer, ContactoEmergenciaSerializer,
+    VinculoFamiliarSerializer,
     CiudadanoBasicoSerializer, UserBasicoSerializer
 )
 from ..models import Ciudadano
@@ -106,71 +105,3 @@ class VinculoFamiliarViewSet(viewsets.ModelViewSet):
         serializer = CiudadanoBasicoSerializer(ciudadanos, many=True)
         return Response(serializer.data)
 
-
-class ProfesionalTratanteViewSet(viewsets.ModelViewSet):
-    queryset = ProfesionalTratante.objects.select_related(
-        'usuario', 'dispositivo', 'legajo__ciudadano'
-    ).all()
-    serializer_class = ProfesionalTratanteSerializer
-    permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['rol', 'es_responsable_principal', 'activo', 'dispositivo']
-    search_fields = ['usuario__first_name', 'usuario__last_name']
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        legajo_id = self.request.query_params.get('legajo', None)
-        if legajo_id:
-            queryset = queryset.filter(legajo_id=legajo_id)
-        return queryset
-    
-    @action(detail=False, methods=['get'])
-    def buscar_usuarios(self, request):
-        """Buscar usuarios para asignar como profesionales"""
-        query = request.query_params.get('q', '')
-        if len(query) < 2:
-            return Response([])
-        
-        usuarios = User.objects.filter(
-            Q(first_name__icontains=query) | 
-            Q(last_name__icontains=query) |
-            Q(username__icontains=query)
-        ).filter(is_active=True)[:10]
-        
-        serializer = UserBasicoSerializer(usuarios, many=True)
-        return Response(serializer.data)
-
-
-class DispositivoVinculadoViewSet(viewsets.ModelViewSet):
-    queryset = DispositivoVinculado.objects.select_related(
-        'dispositivo', 'referente_dispositivo', 'legajo__ciudadano'
-    ).all()
-    serializer_class = DispositivoVinculadoSerializer
-    permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['estado', 'dispositivo']
-    search_fields = ['dispositivo__nombre']
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        legajo_id = self.request.query_params.get('legajo', None)
-        if legajo_id:
-            queryset = queryset.filter(legajo_id=legajo_id)
-        return queryset
-
-
-class ContactoEmergenciaViewSet(viewsets.ModelViewSet):
-    queryset = ContactoEmergencia.objects.select_related('legajo__ciudadano').all()
-    serializer_class = ContactoEmergenciaSerializer
-    permission_classes = [IsAuthenticated]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_fields = ['disponibilidad_24hs', 'activo']
-    search_fields = ['nombre', 'relacion']
-    ordering = ['prioridad']
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        legajo_id = self.request.query_params.get('legajo', None)
-        if legajo_id:
-            queryset = queryset.filter(legajo_id=legajo_id)
-        return queryset

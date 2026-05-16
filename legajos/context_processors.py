@@ -3,8 +3,6 @@ import logging
 from django.core.cache import cache
 from django.utils.asyncio import async_unsafe
 
-from .models import EventoCritico, AlertaEventoCritico
-
 logger = logging.getLogger(__name__)
 
 ALERTAS_CRITICAS_CACHE_TIMEOUT = 30
@@ -25,13 +23,7 @@ def alertas_eventos_criticos(request):
     eventos_pendientes = cache.get(cache_key)
     if eventos_pendientes is None:
         try:
-            eventos_pendientes = list(
-                EventoCritico.objects.filter(
-                    legajo__responsable=request.user
-                ).exclude(
-                    alertas_vistas__responsable=request.user
-                ).select_related('legajo__ciudadano').order_by('-creado')[:5]
-            )
+            eventos_pendientes = []
             cache.set(cache_key, eventos_pendientes, ALERTAS_CRITICAS_CACHE_TIMEOUT)
         except Exception:
             logger.exception(

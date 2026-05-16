@@ -197,21 +197,6 @@ class Ciudadano(TimeStamped):
         return f"{self.nombre} {self.apellido}"
 
 
-class Profesional(TimeStamped):
-    """Profesionales que trabajan con legajos"""
-    
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    matricula = models.CharField(max_length=60, blank=True)
-    rol = models.CharField(max_length=80, blank=True)
-    
-    class Meta:
-        verbose_name = "Profesional"
-        verbose_name_plural = "Profesionales"
-    
-    def __str__(self):
-        return f"{self.usuario.get_full_name() or self.usuario.username}"
-
-
 class LegajoAtencion(LegajoBase):
     """Legajo de atención individual para ciudadanos"""
     
@@ -220,11 +205,6 @@ class LegajoAtencion(LegajoBase):
         DERIVACION = "DERIVACION", "Derivación"
         JUDICIAL = "JUDICIAL", "Judicial"
         HOSPITAL = "HOSPITAL", "Hospital/Guardia"
-    
-    class NivelRiesgo(models.TextChoices):
-        BAJO = "BAJO", "Bajo"
-        MEDIO = "MEDIO", "Medio"
-        ALTO = "ALTO", "Alto"
     
     responsable = models.ForeignKey(
         User,
@@ -246,8 +226,7 @@ class LegajoAtencion(LegajoBase):
     plan_vigente = models.BooleanField(default=False, db_index=True)
     nivel_riesgo = models.CharField(
         max_length=20, 
-        choices=NivelRiesgo.choices, 
-        default=NivelRiesgo.BAJO,
+        default="BAJO",
         db_index=True
     )
     
@@ -330,235 +309,7 @@ class LegajoAtencion(LegajoBase):
     @property
     def tiempo_primer_contacto(self):
         """Días hasta el primer seguimiento"""
-        primer_seguimiento = self.seguimientos.order_by('creado').first()
-        if primer_seguimiento:
-            return (primer_seguimiento.creado.date() - self.fecha_admision).days
         return None
-
-
-class Consentimiento(TimeStamped):
-    """Consentimientos informados para tratamiento de datos"""
-    
-    ciudadano = models.ForeignKey(Ciudadano, on_delete=models.PROTECT)
-    texto = models.TextField()
-    firmado_por = models.CharField(max_length=160)
-    fecha_firma = models.DateField()
-    archivo = models.FileField(upload_to="consentimientos/", null=True, blank=True)
-    vigente = models.BooleanField(default=True)
-    
-    class Meta:
-        verbose_name = "Consentimiento"
-        verbose_name_plural = "Consentimientos"
-    
-    def __str__(self):
-        return f"Consentimiento {self.ciudadano} - {self.fecha_firma}"
-
-
-class EvaluacionInicial(TimeStamped):
-    """Evaluación inicial clínico-psicosocial del legajo"""
-    
-    legajo = models.OneToOneField(
-        LegajoAtencion, 
-        on_delete=models.CASCADE, 
-        related_name="evaluacion"
-    )
-    situacion_consumo = models.TextField(
-        blank=True,
-        verbose_name="Situación de Consumo",
-        help_text="Descripción de la situación actual de consumo"
-    )
-    antecedentes = models.TextField(
-        blank=True,
-        verbose_name="Antecedentes",
-        help_text="Antecedentes médicos, psiquiátricos y de consumo"
-    )
-    red_apoyo = models.TextField(
-        blank=True,
-        verbose_name="Red de Apoyo",
-        help_text="Descripción de la red de apoyo familiar y social"
-    )
-    condicion_social = models.TextField(
-        blank=True,
-        verbose_name="Condición Social",
-        help_text="Situación socioeconómica, vivienda, trabajo, educación"
-    )
-    tamizajes = models.JSONField(
-        blank=True, 
-        null=True,
-        verbose_name="Tamizajes",
-        help_text="Resultados de tamizajes aplicados (ej: ASSIST, PHQ-9)"
-    )
-    riesgo_suicida = models.BooleanField(
-        default=False,
-        verbose_name="Riesgo Suicida",
-        help_text="Indica si presenta riesgo suicida",
-        db_index=True
-    )
-    violencia = models.BooleanField(
-        default=False,
-        verbose_name="Situación de Violencia",
-        help_text="Indica si presenta situación de violencia",
-        db_index=True
-    )
-    
-    class Meta:
-        verbose_name = "Evaluación Inicial"
-        verbose_name_plural = "Evaluaciones Iniciales"
-        indexes = [
-            models.Index(fields=["riesgo_suicida"]),
-            models.Index(fields=["violencia"]),
-        ]
-    
-    def __str__(self):
-        return f"Evaluación - {self.legajo.codigo}"
-    
-    @property
-    def tiene_riesgos(self):
-        """Indica si tiene algún tipo de riesgo identificado"""
-        return self.riesgo_suicida or self.violencia
-    
-    @property
-    def riesgos_identificados(self):
-        """Lista de riesgos identificados"""
-        riesgos = []
-        if self.riesgo_suicida:
-            riesgos.append("Riesgo Suicida")
-        if self.violencia:
-            riesgos.append("Violencia")
-        return riesgos
-    
-    @property
-    def tiene_eventos_criticos(self):
-        """Indica si el legajo tiene eventos críticos recientes"""
-        from datetime import datetime, timedelta
-        fecha_limite = datetime.now().date() - timedelta(days=30)
-        return self.legajo.eventos.filter(creado__date__gte=fecha_limite).exists()
-
-
-class Objetivo(models.Model):
-    """Objetivos del plan de intervención"""
-    
-    legajo = models.ForeignKey(
-        LegajoAtencion, 
-        on_delete=models.CASCADE, 
-        related_name="objetivos"
-    )
-    descripcion = models.CharField(max_length=240)
-    indicador_exito = models.CharField(max_length=240, blank=True)
-    cumplido = models.BooleanField(default=False)
-    
-    class Meta:
-        verbose_name = "Objetivo"
-        verbose_name_plural = "Objetivos"
-    
-    def __str__(self):
-        return f"Objetivo - {self.descripcion[:50]}"
-
-
-class PlanIntervencion(TimeStamped):
-    """Plan de intervención para el legajo"""
-    
-    legajo = models.ForeignKey(
-        LegajoAtencion, 
-        on_delete=models.CASCADE, 
-        related_name="planes"
-    )
-    profesional = models.ForeignKey(
-        Profesional, 
-        on_delete=models.PROTECT
-    )
-    vigente = models.BooleanField(default=True, db_index=True)
-    actividades = models.JSONField(
-        blank=True, 
-        null=True,
-        help_text="Lista de actividades: [{\"accion\":\"Entrevista\",\"freq\":\"semanal\",\"responsable\":\"operador\"}]"
-    )
-    
-    class Meta:
-        verbose_name = "Plan de Intervención"
-        verbose_name_plural = "Planes de Intervención"
-        indexes = [
-            models.Index(fields=["legajo", "vigente"]),
-            models.Index(fields=["profesional", "vigente"]),
-        ]
-    
-    def __str__(self):
-        return f"Plan {self.legajo.codigo} - {'Vigente' if self.vigente else 'Histórico'}"
-    
-    def clean(self):
-        from django.core.exceptions import ValidationError
-        # Solo validar si el legajo ya está asignado
-        if self.vigente and hasattr(self, 'legajo') and self.legajo and PlanIntervencion.objects.filter(
-            legajo=self.legajo, vigente=True
-        ).exclude(pk=self.pk).exists():
-            raise ValidationError("Ya existe un plan vigente para este legajo.")
-    
-    def save(self, *args, **kwargs):
-        from django.db import transaction
-        self.clean()
-        with transaction.atomic():
-            if self.vigente:
-                PlanIntervencion.objects.select_for_update().filter(
-                    legajo=self.legajo, vigente=True
-                ).exclude(pk=self.pk).update(vigente=False)
-                LegajoAtencion.objects.filter(pk=self.legajo_id).update(plan_vigente=True)
-            super().save(*args, **kwargs)
-
-
-class SeguimientoContacto(TimeStamped):
-    """Contactos y seguimientos del legajo"""
-    
-    class TipoContacto(models.TextChoices):
-        ENTREVISTA = "ENTREVISTA", "Entrevista"
-        VISITA = "VISITA", "Visita"
-        LLAMADA = "LLAMADA", "Llamada"
-        TALLER = "TALLER", "Taller"
-    
-    class Adherencia(models.TextChoices):
-        ADECUADA = "ADECUADA", "Adecuada"
-        PARCIAL = "PARCIAL", "Parcial"
-        NULA = "NULA", "Nula"
-    
-    legajo = models.ForeignKey(
-        LegajoAtencion, 
-        on_delete=models.CASCADE, 
-        related_name="seguimientos"
-    )
-    profesional = models.ForeignKey(
-        Profesional, 
-        on_delete=models.PROTECT
-    )
-    tipo = models.CharField(
-        max_length=40, 
-        choices=TipoContacto.choices,
-        db_index=True
-    )
-    descripcion = models.TextField()
-    adherencia = models.CharField(
-        max_length=20, 
-        choices=Adherencia.choices,
-        blank=True,
-        db_index=True
-    )
-    adjuntos = models.FileField(
-        upload_to="seguimientos/", 
-        blank=True, 
-        null=True
-    )
-    
-    class Meta:
-        verbose_name = "Seguimiento"
-        verbose_name_plural = "Seguimientos"
-        ordering = ["-creado"]
-        indexes = [
-            models.Index(fields=["legajo", "-creado"]),
-            models.Index(fields=["tipo"]),
-            models.Index(fields=["adherencia", "legajo"]),
-            models.Index(fields=["profesional", "-creado"]),
-        ]
-    
-    def __str__(self):
-        return f"{self.get_tipo_display()} - {self.legajo.codigo} ({self.creado.date()})"
 
 
 class Derivacion(TimeStamped):
@@ -620,45 +371,6 @@ class Derivacion(TimeStamped):
         pass
 
 
-class EventoCritico(TimeStamped):
-    """Eventos críticos del legajo"""
-    
-    class TipoEvento(models.TextChoices):
-        SOBREDOSIS = "SOBREDOSIS", "Sobredosis"
-        CRISIS = "CRISIS", "Crisis aguda"
-        VIOLENCIA = "VIOLENCIA", "Violencia"
-        INTERNACION = "INTERNACION", "Internación"
-    
-    legajo = models.ForeignKey(
-        LegajoAtencion, 
-        on_delete=models.CASCADE, 
-        related_name="eventos"
-    )
-    tipo = models.CharField(
-        max_length=40, 
-        choices=TipoEvento.choices,
-        db_index=True
-    )
-    detalle = models.TextField()
-    notificado_a = models.JSONField(
-        blank=True, 
-        null=True,
-        help_text="Lista de familiares/autoridades notificadas"
-    )
-    
-    class Meta:
-        verbose_name = "Evento Crítico"
-        verbose_name_plural = "Eventos Críticos"
-        ordering = ["-creado"]
-        indexes = [
-            models.Index(fields=["legajo", "tipo"]),
-            models.Index(fields=["-creado"]),
-        ]
-    
-    def __str__(self):
-        return f"{self.get_tipo_display()} - {self.legajo.codigo} ({self.creado.date()})"
-
-
 class Adjunto(TimeStamped):
     """Adjuntos genéricos para cualquier modelo"""
     
@@ -678,33 +390,6 @@ class Adjunto(TimeStamped):
     
     def __str__(self):
         return f"Adjunto - {self.etiqueta or self.archivo.name}"
-
-
-class AlertaEventoCritico(TimeStamped):
-    """Registro de alertas vistas por responsables"""
-    
-    evento = models.ForeignKey(
-        EventoCritico,
-        on_delete=models.CASCADE,
-        related_name="alertas_vistas"
-    )
-    responsable = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="alertas_eventos_vistas"
-    )
-    fecha_cierre = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        verbose_name = "Alerta Evento Crítico"
-        verbose_name_plural = "Alertas Eventos Críticos"
-        unique_together = ["evento", "responsable"]
-        indexes = [
-            models.Index(fields=["responsable", "fecha_cierre"]),
-        ]
-    
-    def __str__(self):
-        return f"Alerta {self.evento.tipo} vista por {self.responsable.username}"
 
 
 class AlertaCiudadano(TimeStamped):
