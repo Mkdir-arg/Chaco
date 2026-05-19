@@ -45,10 +45,13 @@ Alcance inicial del kick off:
 
 ## 4. Necesidades inminentes
 
-Para iniciar con base técnica clara necesitamos confirmar estos puntos antes o durante el kick off:
+Para iniciar con base técnica clara necesitamos confirmar los siguientes puntos:
 
-1. Arquitectura objetivo: definir si la infraestructura estará en servidores propios de la provincia o en infraestructura de terceros.
-2. SSO institucional: compartir la documentación del SSO gestionado por Innovación.
-3. Proveedor de identidad: confirmar si cuentan con Active Directory u otro IdP para autenticación y gestión de contraseñas.
+1. **Designación de responsables**: Confirmar la persona del ministerio que dará aprobación final y actuará como nexo entre ICORE y el ministerio.
+2. **Objetivos por horizonte temporal**: Definir la lista de objetivos a corto, mediano y largo plazo.
+3. **Arquitectura objetivo**: Definir si la infraestructura estará en servidores propios de la provincia o en infraestructura de terceros.
+4. **SSO institucional**: Compartir la documentación del SSO gestionado por Innovación.
+5. **Proveedor de identidad**: Confirmar si cuentan con Active Directory u otro IdP para autenticación y gestión de contraseñas.
+6. **Definir responsabilidades**: Establecer los límites claros de responsabilidad del equipo técnico de ICORE, alcance por ambiente (desarrollo, testing, producción)  
 
 Estas definiciones son críticas para evitar bloqueos al inicio y permitir una planificación realista del primer sprint.
