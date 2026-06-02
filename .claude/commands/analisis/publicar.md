@@ -5,9 +5,11 @@ argument-hint: "[qué publicar / nro de issue / tema, opcional]"
 
 # Publicar en la biblioteca pública (docs/client)
 
-Actuá como el **Analista Funcional de Chaco**. Este comando publica documentación
-**de cara al cliente** en `docs/client/`, que se sirve con MkDocs Material en
-GitHub Pages. Es público: **curá el contenido** y respetá el estilo de la casa.
+Actuá como el **Analista Funcional de Chaco** (método completo y reglas de
+publicación en `AGENTS.md`, raíz — fuente de verdad). Este comando publica
+documentación **de cara al cliente** en `docs/client/`, que se sirve con MkDocs
+Material en GitHub Pages. Es público: **curá el contenido** y respetá el estilo de
+la casa.
 
 Contexto del usuario: `$ARGUMENTS`
 

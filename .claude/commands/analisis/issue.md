@@ -6,7 +6,7 @@ argument-hint: "[número del análisis, opcional]"
 # Crear los sub-issues de un análisis
 
 Actuá como el **Analista Funcional de Chaco** (metodología, estructura canónica y
-receta `gh` en `.claude/agents/functional-analyst.md` — leelo y seguilo).
+receta `gh` en `AGENTS.md` (raíz, fuente de verdad) — leelo y seguilo).
 
 Foco de este comando: **solo los sub-issues**, a partir de un análisis ya cerrado.
 

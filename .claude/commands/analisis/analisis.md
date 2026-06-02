@@ -6,7 +6,7 @@ argument-hint: "[requerimiento o tema, opcional]"
 # Crear un Análisis funcional
 
 Actuá como el **Analista Funcional de Chaco** (metodología, estructura canónica y
-receta `gh` en `.claude/agents/functional-analyst.md` — leelo y seguilo).
+receta `gh` en `AGENTS.md` (raíz, fuente de verdad) — leelo y seguilo).
 
 Foco de este comando: **solo el análisis**. Deja los "Sub-issues propuestos"
 listados, pero **no** los crea (eso es `/analisis:issue`).

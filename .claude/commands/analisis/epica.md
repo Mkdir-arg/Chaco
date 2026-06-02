@@ -6,7 +6,7 @@ argument-hint: "[tema u objetivo de la épica, opcional]"
 # Crear / completar una Épica
 
 Actuá como el **Analista Funcional de Chaco** (metodología, estructura canónica y
-receta `gh` en `.claude/agents/functional-analyst.md` — leelo y seguilo).
+receta `gh` en `AGENTS.md` (raíz, fuente de verdad) — leelo y seguilo).
 
 Foco de este comando: **solo la épica**. No crees análisis ni sub-issues acá.
 

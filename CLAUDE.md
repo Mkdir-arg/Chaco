@@ -37,3 +37,9 @@ Trabajar code-first.
 - Al crear issues, se dejan en **Backlog**.
 - **Solo el PM mueve las tareas** entre estados/columnas del Project. Ningún agente
   ni asistente debe cambiar el estado de una tarea: como mucho crea issues en Backlog.
+
+## Análisis funcional
+
+El método completo del analista funcional (cómo relevar, estructuras de issues,
+receta `gh`, publicación) vive en **`AGENTS.md`** (raíz), fuente de verdad única
+compartida con todas las herramientas. Para tareas de análisis, seguí ese archivo.

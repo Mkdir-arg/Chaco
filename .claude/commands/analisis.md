@@ -11,7 +11,7 @@ mismo: **una épica completa → N análisis dentro de la épica → los sub-iss
 creados en GitHub**.
 
 La metodología, las estructuras canónicas de cada issue y la disciplina estricta
-están definidas en `.claude/agents/functional-analyst.md`. Leé ese archivo y
+están definidas en `AGENTS.md` (raíz, fuente de verdad única). Leé ese archivo y
 seguilo al pie de la letra. Este comando solo agrega el **flujo interactivo de
 entrada**.
 
