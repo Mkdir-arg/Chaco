@@ -1,5 +1,5 @@
 name: "Epica"
-description: "Agrupacion de alcance funcional. No es un item ejecutable del sprint."
+description: "Objetivo macro de negocio que se implementa mediante analisis y sub-issues"
 title: "[EPICA] "
 labels: ["epica"]
 assignees: []
@@ -8,14 +8,22 @@ body:
     attributes:
       value: |
         ## Nueva epica
-        Define alcance macro. La epica agrupa trabajo, pero no entra como item ejecutable del sprint.
+        La epica define el para que. No se ejecuta directo en sprint.
 
   - type: textarea
-    id: objetivo
+    id: objetivo_negocio
     attributes:
-      label: "Objetivo de la epica"
-      description: "Resultado de negocio esperado"
-      placeholder: "Describe en 1-2 oraciones el objetivo de negocio"
+      label: "Objetivo de negocio"
+      description: "Que resultado se busca lograr"
+      placeholder: "Describe el resultado esperado en 1-2 oraciones"
+    validations:
+      required: true
+
+  - type: textarea
+    id: problema
+    attributes:
+      label: "Problema a resolver"
+      placeholder: "Que problema actual existe y a quien impacta"
     validations:
       required: true
 
@@ -23,7 +31,6 @@ body:
     id: alcance
     attributes:
       label: "Alcance"
-      description: "Que incluye esta epica"
       placeholder: |
         - Incluye ...
         - Incluye ...
@@ -31,10 +38,9 @@ body:
       required: true
 
   - type: textarea
-    id: exclusiones
+    id: fuera_de_alcance
     attributes:
-      label: "Exclusiones"
-      description: "Que queda fuera de alcance"
+      label: "Fuera de alcance"
       placeholder: |
         - No incluye ...
     validations:
@@ -44,22 +50,9 @@ body:
     id: metricas_exito
     attributes:
       label: "Metricas de exito"
-      description: "Como se validara el exito de la epica"
       placeholder: |
-        - Metrica 1 ...
-        - Metrica 2 ...
-    validations:
-      required: true
-
-  - type: textarea
-    id: requerimientos_hijos
-    attributes:
-      label: "Requerimientos hijos"
-      description: "Lista de issues hijos (#numero)"
-      placeholder: |
-        - [ ] #123
-        - [ ] #124
-        - [ ] #125
+        - Metrica 1
+        - Metrica 2
     validations:
       required: true
 
@@ -68,26 +61,33 @@ body:
     attributes:
       label: "Prioridad"
       options:
-        - "Alta"
-        - "Media"
-        - "Baja"
+        - Alta
+        - Media
+        - Baja
     validations:
       required: true
 
   - type: input
-    id: modulo
+    id: modulo_principal
     attributes:
-      label: "Modulo"
-      placeholder: "Ej: ciudadanos, legajos, portal"
-
-  - type: input
-    id: responsable_funcional
-    attributes:
-      label: "Responsable funcional"
-      placeholder: "Nombre y rol"
+      label: "Modulo principal"
+      placeholder: "Ej: legajos, portal, conversaciones"
 
   - type: textarea
-    id: notas
+    id: definicion_terminado_epica
     attributes:
-      label: "Notas adicionales"
-      placeholder: "Contexto extra, links o decisiones"
+      label: "Definicion de terminado de la epica"
+      placeholder: |
+        - [ ] Analisis funcionales cerrados
+        - [ ] Sub-issues criticas completadas
+        - [ ] Validacion funcional realizada
+    validations:
+      required: true
+
+  - type: textarea
+    id: referencias
+    attributes:
+      label: "Referencias"
+      description: "Links a documentacion, decisiones o contexto"
+      placeholder: "Links relevantes"
+
