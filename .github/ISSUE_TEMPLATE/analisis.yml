@@ -74,9 +74,9 @@ body:
     id: investigacion
     attributes:
       label: "Investigación: duplicidad, relacionadas e impacto crítico"
-      description: "Resultado de la búsqueda activa en código e issues. Si algo ya existe, indicar si se reusa / evoluciona / reemplaza."
+      description: "Resultado de la búsqueda activa en código, issues y backlog del Project. Si algo ya existe, indicar si se reusa / evoluciona / reemplaza."
       placeholder: |
-        - Duplicidad: [ya existe X → se reusa / evoluciona / reemplaza | Sin duplicidad detectada]
+        - Duplicidad: [ya existe X (código / #issue / tarea #KK en Backlog) → se reusa / evoluciona / reemplaza | Sin duplicidad detectada]
         - Funcionalidades relacionadas: [feature/módulo/#issue]
         - Impacto crítico: [qué puede romper: modelos compartidos, permisos, migraciones, signals, integraciones]
         - Inconsistencias con el sistema actual: [ninguna | detalle]

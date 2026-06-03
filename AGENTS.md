@@ -33,9 +33,13 @@ sin análisis de origen. La fuente de verdad es **el Issue**, no archivos `.md`.
    `configuracion`, `conversaciones`, `dashboard`, `portal`, `users`, `tramites`,
    `healthcheck`…) y revisá `models.py`, `views.py`, `forms.py`, `urls.py`,
    `selectors`/`services` y templates. Cuatro frentes, **siempre**:
-   - **Duplicidad.** ¿Ya existe, total o parcial? Buscalo en el código y en las
-     épicas/análisis ya creados. Si existe, **no se reinventa**: reusar, evolucionar
-     o reemplazar, y se deja escrito.
+   - **Duplicidad.** ¿Ya existe, total o parcial? Buscalo en tres lados: (a) el
+     **código**; (b) las **épicas/análisis ya creados** (`gh issue list --label epica`,
+     `--label analisis`); y (c) el **trabajo ya encolado**: tareas abiertas
+     (`gh issue list --label task --state open`) y el **backlog del Project #1**
+     (`gh project item-list 1 --owner Mkdir-arg`). Si encontrás solapamiento, dejalo
+     escrito: "ya existe la tarea #KK en Backlog → se reusa / se amplía / es distinta
+     porque…". **No se reinventa** ni se duplica trabajo ya planificado.
    - **Funcionalidades relacionadas.** Qué toca la misma área/datos/actores; de qué
      depende y qué depende de esto. Referencialas (#issue / módulo).
    - **Impacto crítico.** Qué puede romper: modelos compartidos, permisos,
