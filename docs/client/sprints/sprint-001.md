@@ -86,3 +86,11 @@
 | # | Evento | Fecha | Integrantes | Minuta |
 |:-:|---|:-:|---|:-:|
 | 1 | Reunión 1 — Inicio de proyecto | 2026-06-03 | **ICORE:** Agostina Coppola, Matías Fariña · **Ministerio:** Guido, Claudia, Gualter | [Ver minuta](../minutas/reunion-inicio-proyecto-2026-06-03.md) |
+
+---
+
+## :material-timer-sand-complete: Detalle de consumo de horas
+
+Consulta el detalle de consumo por persona y motivo del Sprint 001.
+
+[:material-table-arrow-right: Ver detalle de consumo](sprint-001-consumo-horas.md){ .md-button .md-button--primary }
