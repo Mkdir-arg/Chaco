@@ -85,7 +85,7 @@
 
 | # | Evento | Fecha | Integrantes | Minuta |
 |:-:|---|:-:|---|:-:|
-| 1 | Reunión 1 — Inicio de proyecto | 2026-06-03 | **ICORE:** Agostina Coppola, Matías Fariña · **Ministerio:** Guido, Claudia, Gualter | [Ver minuta](../minutas/reunion-inicio-proyecto-2026-06-03.md) |
+| 1 | Reunión 1 — Inicio de proyecto | 2026-06-03 | **ICORE:** Agostina Coppola, Matías Fariña · **Ministerio:** Guido Cortiglia, Claudia Miserachs, Walter Giordano | [Ver minuta](../minutas/reunion-inicio-proyecto-2026-06-03.md) |
 
 ---
 
