@@ -3,14 +3,15 @@
 **Tipo:** Propuesta de épica (documento de trabajo interno)
 **Estado:** En análisis (borrador en construcción)
 **Fecha:** 2026-06-04
-**Analista:** functional-analyst
+**Responsable (ICORE):** functional-analyst
 **Programa:** Becas (primer programa sobre el módulo genérico de Programas)
 **Módulos Django candidatos:** `apps/programas`, `apps/legajos`, `apps/ciudadanos`, `users` (roles/permisos)
 
 > ⚠️ **Borrador en construcción.** Este documento consolida todo lo relevado hasta el
 > cierre del backoffice (Secciones 1–7). Falta cerrar el **bloque de integraciones**
 > (SIS → RENAPER → App de campo) y el **control estricto** antes de generar issues.
-> Nada acá es definitivo: las **Preguntas abiertas** (sección 12) deben cerrarse primero.
+> Nada acá es definitivo: todas las **dudas y preguntas** están consolidadas al final,
+> en la **Sección 16**.
 
 ---
 
@@ -48,8 +49,8 @@ Programa  (módulo con funcionamiento propio — Becas es uno, Ñachec es otro)
 | **Cupo** | Número de becas disponibles **por Programa**. | Se ocupa **después** de validar con SIS, no al aprobar. |
 | **Lista de espera** | Personas validadas-OK que no entraron por cupo lleno. | El admin promueve **a mano**. |
 
-📌 *Asunción a confirmar:* la jerarquía de 4 niveles se modela explícita; "Programa" es
-genérico aunque hoy se arranque solo con Becas.
+📌 *Asunción pendiente:* la jerarquía de 4 niveles se modela explícita; "Programa" es
+genérico aunque hoy se arranque solo con Becas. Ver detalle al final en **Sección 16.6**.
 
 ---
 
@@ -62,8 +63,8 @@ genérico aunque hoy se arranque solo con Becas.
 
 Por ahora **solo** estos dos roles (sin supervisor/coordinador).
 
-📌 *Asunción a confirmar:* ¿un mismo usuario puede ser Administrador de un programa y
-Territorial de otro a la vez, o son excluyentes? → pregunta abierta.
+📌 *Duda pendiente:* convivencia de perfiles en un mismo usuario (admin/territorial).
+Detalle consolidado al final en **Sección 16.2 (pregunta 7)**.
 
 📌 *Impacto crítico:* el rol "Administrador de programa" es nuevo y se apoya en el
 esquema de permisos existente en `users`. Hay que revisar cómo Chaco maneja roles hoy
@@ -96,8 +97,8 @@ para no inventar un esquema paralelo.
 7. **Asignación de cupo.** Si SIS aprueba y **hay cupo** disponible en el programa → la
    persona **ocupa 1 cupo**. Si el cupo está lleno → va a **lista de espera**.
 8. **Gestión de cupo (admin).** Cuando el admin **da de baja** a un beneficiario, se
-   libera un cupo y el sistema muestra una **alerta**: "se liberó un cupo, ¿querés mover a
-   alguien de la lista de espera?". El admin **promueve a mano**.
+  libera un cupo y el sistema muestra una **alerta**: "se liberó un cupo, mover a
+  alguien de la lista de espera". El admin **promueve a mano**.
 9. **Reportes.** El admin **exporta** beneficiarios, lista de espera y avance de
    relevamientos (requerimiento **clave**).
 
@@ -139,9 +140,8 @@ Enviado → Aprobado / Rechazado            (revisión del admin)
 | **Con cupo** | Ocupa una beca (había cupo disponible). |
 | **En lista de espera** | Validado-OK pero sin cupo disponible. |
 
-📌 *Asunción a confirmar:* "aprobar" (admin) y "ocupar cupo" (post-SIS) son dos cosas
-distintas. La aprobación es el caso por caso; el cupo se decide después con SIS +
-disponibilidad.
+📌 *Asunción pendiente:* "aprobar" (admin) y "ocupar cupo" (post-SIS) son dos cosas
+distintas. El detalle quedó consolidado al final en **Sección 16.6**.
 
 ---
 
@@ -154,9 +154,9 @@ disponibilidad.
 - **Lista de espera:** el admin **promueve a mano**. Al dar de baja a un beneficiario, el
   sistema dispara una **alerta proactiva** para mover a alguien de la lista.
 
-### 6.1 Hallazgos del documento del cliente (URD RQ-002 — "Tablero de Aprobación N1")
+### 6.1 Hallazgos del documento del equipo Ministerio (URD RQ-002 — "Tablero de Aprobación N1")
 
-El cliente entregó el documento **RQ-002** (Tablero de Aprobación de Primer Nivel e
+El equipo Ministerio entregó el documento **RQ-002** (Tablero de Aprobación de Primer Nivel e
 Integración SIS). **No resuelve el contrato técnico de SIS**, pero aporta encuadre y
 **revela contradicciones** que hay que reconciliar:
 
@@ -172,20 +172,21 @@ Integración SIS). **No resuelve el contrato técnico de SIS**, pero aporta encu
 qué valida SIS, qué devuelve, qué pasa si SIS **rechaza** (su matriz de estados **no tiene
 estado de rechazo SIS**), ni qué pasa si SIS está caído.
 
-**🔴 Contradicciones / huecos a reconciliar con el cliente:**
+**🔴 Contradicciones / huecos a reconciliar con el equipo Ministerio:**
 - **Roles:** el doc usa **Supervisor/Operador**; nuestra propuesta usa
-  **Administrador/Territorial**. ¿Son los mismos con otro nombre?
+  **Administrador/Territorial**.
 - **Cupo y lista de espera:** el doc **no los menciona**. En el doc, post-SIS se va directo
   a **Liquidado**; en nuestro modelo, post-SIS recién se decide **cupo / lista de espera**.
-  ¿Cómo conviven el cupo y la cadena SIS → Ayudas Sociales?
 - **Disparo a SIS:** el doc dice "automático al aprobar" PERO su Pantalla 4 tiene botón
-  **"Enviar al SIS / Confirmar transferencia"** (manual). **Se contradice solo** (afecta
-  nuestra pregunta 6: auto vs manual).
+  **"Enviar al SIS / Confirmar transferencia"** (manual), lo que contradice el flujo.
 - **Alcance:** RQ-002 es **genérico** ("beneficios sociales", "Asignación Social X", login
   con Google/OAuth), parece de una **plataforma más amplia**, no específico de Becas.
 
-📌 *Pendiente SIS (sigue diferido):* hace falta el **contrato técnico de SIS** (endpoint,
-campos, qué valida, qué devuelve, manejo de NO y de caída). El RQ-002 **no** lo tiene.
+➡️ El detalle de preguntas derivadas de estas contradicciones está consolidado en
+**Sección 16.3 (preguntas 11 a 16)**.
+
+📌 *Pendiente SIS (sigue diferido):* hace falta el **contrato técnico de SIS**.
+Detalle de preguntas consolidado al final en **Sección 16.1 (S-1 a S-10)**.
 
 ---
 
@@ -206,7 +207,7 @@ campos, qué valida, qué devuelve, manejo de NO y de caída). El RQ-002 **no** 
 
 | Integración | Rol en el flujo | Estado del relevamiento |
 |---|---|---|
-| **Sistema SIS** | Valida a la persona **aprobada**; su OK habilita ocupar cupo. | 🔻 En análisis (documento del cliente pendiente). |
+| **Sistema SIS** | Valida a la persona **aprobada**; su OK habilita ocupar cupo. | 🔻 En análisis (documento del equipo Ministerio pendiente). |
 | **RENAPER** | Valida la identidad (DNI + sexo) **al cargar** cada persona en campo. | ✅ **Relevada y probada** (reusa integración existente). |
 | **App de campo** | App **propia** (la desarrollamos nosotros). Funciona **online/offline**, sincroniza al recuperar señal; al finalizar offline confirma tras sync. | ✅ **Relevada** (alcance propio). |
 
@@ -237,7 +238,7 @@ credenciales por variables de entorno).
 backoffice o un endpoint equivalente; la validación posterior en backoffice usa el mismo
 `consultar_datos_renaper`.
 
-**Ejemplo de respuesta real (DNI de prueba 40732138, sexo M) — para mostrar al cliente:**
+**Ejemplo de respuesta real (DNI de prueba 40732138, sexo M) — para mostrar al equipo Ministerio:**
 
 ```json
 {
@@ -272,10 +273,10 @@ backoffice o un endpoint equivalente; la validación posterior en backoffice usa
 ### 8.1 Sistema SIS — estado
 
 El relevamiento de SIS queda **frenado del lado nuestro**: el documento RQ-002 no trae el
-contrato técnico. Hasta tener respuestas del cliente, SIS queda como **caja negra** en la
+contrato técnico. Hasta tener respuestas del equipo Ministerio, SIS queda como **caja negra** en la
 propuesta ("se valida contra SIS y devuelve OK/NO").
 
-**Estado SIS:** 🔴 **Bloqueado** a la espera de respuestas del cliente.
+**Estado SIS:** 🔴 **Bloqueado** a la espera de respuestas del equipo Ministerio.
 ➡️ Las preguntas concretas (S-1…S-10) están consolidadas al final, en
 **[16. Preguntas pendientes](#16-preguntas-pendientes-consolidado)**.
 
@@ -349,24 +350,21 @@ ofrecen hoy `apps/programas`, `apps/legajos`, `apps/ciudadanos` y `users` para n
 ## 12. Preguntas abiertas
 
 ➡️ **Todas las preguntas pendientes están consolidadas al final del documento**, en
-**[16. Preguntas pendientes](#16-preguntas-pendientes-consolidado)** (cliente, técnicas y
+**[16. Preguntas pendientes](#16-preguntas-pendientes-consolidado)** (equipo Ministerio, técnicas y
 de equipo, con su estado).
 
 ---
 
 ## 13. Asunciones a confirmar
 
-- Jerarquía de 4 niveles explícita; "Programa" genérico aunque hoy solo Becas.
-- "Aprobar" (admin) y "ocupar cupo" (post-SIS) son pasos distintos.
-- RENAPER se valida en campo al cargar; la detección de duplicados se apoya en los 2 datos.
-- Una persona rechazada por el admin queda con legajo creado igual.
-- Rechazo informativo ⇒ persona rechazada **sin reproceso** en el sistema.
+➡️ **Asunciones y dudas pendientes** consolidadas al final en
+**[16.6 Asunciones pendientes de confirmación](#166-asunciones-pendientes-de-confirmacion)**.
 
 ---
 
 ## 14. Próximos pasos
 
-1. **Sistema SIS** — analizar el documento del cliente y cerrar preguntas 5 y 6.
+1. **Sistema SIS** — analizar el documento del equipo Ministerio y cerrar preguntas 5 y 6.
 2. **RENAPER** — relevar validación de identidad en campo.
 3. **App de campo** — online/offline, sincronización, envío en lote.
 4. **Control estricto** — cerrar todas las preguntas abiertas y verificar consistencia.
@@ -388,46 +386,46 @@ de equipo, con su estado).
 > pendientes **bloqueantes**, NO se generan issues (control estricto de `AGENTS.md`).
 > Estado de cada una: 🔴 bloqueante · 🟡 no bloqueante (se asume y se confirma luego).
 
-### 16.1 Sistema SIS (🔴 bloqueante — caja negra hasta respuesta del cliente)
+### 16.1 Sistema SIS (🔴 bloqueante — caja negra hasta respuesta del equipo Ministerio)
 
 | # | Pregunta | Para | Estado |
 |---|---|---|:--:|
-| S-1 | **Contrato de API.** ¿SIS expone una API REST? ¿Endpoint, autenticación, ambiente de prueba? ¿Es síncrono o asíncrono? | Cliente/Técnico | 🔴 |
-| S-2 | **Datos de entrada.** ¿Qué campos se le envían por persona? (DNI/CUIL, datos del beneficio, id de programa, adjuntos) | Cliente/Técnico | 🔴 |
-| S-3 | **Qué valida SIS.** ¿Qué significa su "OK"? (elegibilidad, no estar en beneficio incompatible, cruce de datos) | Cliente | 🔴 |
-| S-4 | **Datos de salida.** ¿Qué devuelve exactamente? (OK/NO, código, motivo de rechazo, datos) | Cliente/Técnico | 🔴 |
-| S-5 | **Rechazo de SIS.** Si responde NO, ¿la persona queda fuera o el admin corrige y reenvía? | Cliente | 🔴 |
-| S-6 | **Asignación de cupo.** Con SIS OK: ¿ocupa cupo automáticamente (y manda a lista de espera si no hay) o el admin confirma a mano? | Cliente | 🔴 |
-| S-7 | **Caída / error de SIS.** Si no responde o falla, ¿queda pendiente y se reintenta? ¿Timeout / aviso? | Cliente/Técnico | 🔴 |
-| S-8 | **Cadena de 3 niveles.** ¿Becas llega hasta "ocupa cupo" o también hasta Ayudas Sociales / Liquidado (nivel 3)? | Cliente | 🔴 |
-| S-9 | **Roles.** ¿"Supervisor/Operador" del RQ-002 son los mismos "Administrador/Territorial" de Becas? | Cliente | 🔴 |
-| S-10 | **Convivencia cupo ↔ cadena SIS.** En el RQ-002 post-SIS va directo a Liquidado (sin cupo). ¿Dónde encaja el cupo/lista de espera? | Cliente | 🔴 |
+| S-1 | **Contrato de API.** ¿SIS expone una API REST? ¿Endpoint, autenticación, ambiente de prueba? ¿Es síncrono o asíncrono? | Equipo Ministerio/ICORE | 🔴 |
+| S-2 | **Datos de entrada.** ¿Qué campos se le envían por persona? (DNI/CUIL, datos del beneficio, id de programa, adjuntos) | Equipo Ministerio/ICORE | 🔴 |
+| S-3 | **Qué valida SIS.** ¿Qué significa su "OK"? (elegibilidad, no estar en beneficio incompatible, cruce de datos) | Equipo Ministerio | 🔴 |
+| S-4 | **Datos de salida.** ¿Qué devuelve exactamente? (OK/NO, código, motivo de rechazo, datos) | Equipo Ministerio/ICORE | 🔴 |
+| S-5 | **Rechazo de SIS.** Si responde NO, ¿la persona queda fuera o el admin corrige y reenvía? | Equipo Ministerio | 🔴 |
+| S-6 | **Asignación de cupo.** Con SIS OK: ¿ocupa cupo automáticamente (y manda a lista de espera si no hay) o el admin confirma a mano? | Equipo Ministerio | 🔴 |
+| S-7 | **Caída / error de SIS.** Si no responde o falla, ¿queda pendiente y se reintenta? ¿Timeout / aviso? | Equipo Ministerio/ICORE | 🔴 |
+| S-8 | **Cadena de 3 niveles.** ¿Becas llega hasta "ocupa cupo" o también hasta Ayudas Sociales / Liquidado (nivel 3)? | Equipo Ministerio | 🔴 |
+| S-9 | **Roles.** ¿"Supervisor/Operador" del RQ-002 son los mismos "Administrador/Territorial" de Becas? | Equipo Ministerio | 🔴 |
+| S-10 | **Convivencia cupo ↔ cadena SIS.** En el RQ-002 post-SIS va directo a Liquidado (sin cupo). ¿Dónde encaja el cupo/lista de espera? | Equipo Ministerio | 🔴 |
 
 ### 16.2 Formulario y reglas de negocio
 
 | # | Pregunta | Para | Estado |
 |---|---|---|:--:|
-| 2 | **Campos exactos del formulario** (aún sin definir). | Cliente | 🔴 |
-| 1 | ¿Finalizar un relevamiento es **reversible** para el territorial? | Cliente | 🟡 |
-| 3 | Cupo: ¿único por programa o puede haber **por zona/localidad/convocatoria**? | Cliente | 🟡 |
-| 4 | Lista de espera: ¿**orden/prioridad** (FIFO) o elección libre del admin? | Cliente | 🟡 |
-| 7 | ¿Un usuario puede ser **Admin de un programa y Territorial de otro** a la vez? | Cliente | 🟡 |
-| 8 | "Relevamiento del día": ¿qué pasa si **no se inicia** ese día (vence/reprograma)? | Cliente | 🟡 |
-| 9 | ¿El admin puede **editar datos** del formulario antes de aprobar? | Cliente | 🟡 |
-| 10 | Legajo creado al enviar: ¿cómo se **marca** un legajo "relevado pero rechazado en Becas"? | Equipo/Cliente | 🟡 |
+| 2 | **Campos exactos del formulario** (aún sin definir). | Equipo Ministerio | 🔴 |
+| 1 | ¿Finalizar un relevamiento es **reversible** para el territorial? | Equipo Ministerio | 🟡 |
+| 3 | Cupo: ¿único por programa o puede haber **por zona/localidad/convocatoria**? | Equipo Ministerio | 🟡 |
+| 4 | Lista de espera: ¿**orden/prioridad** (FIFO) o elección libre del admin? | Equipo Ministerio | 🟡 |
+| 7 | ¿Un usuario puede ser **Admin de un programa y Territorial de otro** a la vez? | Equipo Ministerio | 🟡 |
+| 8 | "Relevamiento del día": ¿qué pasa si **no se inicia** ese día (vence/reprograma)? | Equipo Ministerio | 🟡 |
+| 9 | ¿El admin puede **editar datos** del formulario antes de aprobar? | Equipo Ministerio | 🟡 |
+| 10 | Legajo creado al enviar: ¿cómo se **marca** un legajo "relevado pero rechazado en Becas"? | ICORE/Equipo Ministerio | 🟡 |
 
 ### 16.3 RQ-002 / cadena de aprobación (🔴 bloqueante — contradicciones a reconciliar)
 
 | # | Pregunta | Para | Estado |
 |---|---|---|:--:|
-| 11 | **Roles:** ¿"Supervisor/Operador" del RQ-002 = "Administrador/Territorial" de Becas, o distintos? | Cliente | 🔴 |
-| 12 | **Cadena de control:** ¿cómo conviven cupo/lista de espera con post-SIS → Ayudas Sociales/Liquidado? ¿El cupo se decide antes o después de SIS? | Cliente | 🔴 |
-| 13 | **Sistema de Ayudas Sociales (nivel 3):** ¿dentro del alcance de Becas o es otro requerimiento? | Cliente | 🔴 |
-| 14 | **Contrato técnico de SIS:** endpoint/API, campos, qué valida, qué devuelve, manejo de rechazo y caída. (= S-1…S-7) | Cliente/Técnico | 🔴 |
-| 15 | **Disparo a SIS:** el RQ-002 se contradice (auto al aprobar vs botón manual "Enviar al SIS"). ¿Cuál es? | Cliente | 🔴 |
-| 16 | **Alcance RQ-002:** ¿es parte de Becas o de una plataforma más amplia (login Google/OAuth, beneficios genéricos)? | Cliente | 🔴 |
+| 11 | **Roles:** ¿"Supervisor/Operador" del RQ-002 = "Administrador/Territorial" de Becas, o distintos? | Equipo Ministerio | 🔴 |
+| 12 | **Cadena de control:** ¿cómo conviven cupo/lista de espera con post-SIS → Ayudas Sociales/Liquidado? ¿El cupo se decide antes o después de SIS? | Equipo Ministerio | 🔴 |
+| 13 | **Sistema de Ayudas Sociales (nivel 3):** ¿dentro del alcance de Becas o es otro requerimiento? | Equipo Ministerio | 🔴 |
+| 14 | **Contrato técnico de SIS:** endpoint/API, campos, qué valida, qué devuelve, manejo de rechazo y caída. (= S-1…S-7) | Equipo Ministerio/ICORE | 🔴 |
+| 15 | **Disparo a SIS:** el RQ-002 se contradice (auto al aprobar vs botón manual "Enviar al SIS"). ¿Cuál es? | Equipo Ministerio | 🔴 |
+| 16 | **Alcance RQ-002:** ¿es parte de Becas o de una plataforma más amplia (login Google/OAuth, beneficios genéricos)? | Equipo Ministerio | 🔴 |
 
-### 16.4 Investigación de código pendiente (la hace el analista, no el cliente)
+### 16.4 Investigación de código pendiente (responsabilidad de ICORE)
 
 | # | Tarea | Estado |
 |---|---|:--:|
@@ -440,3 +438,12 @@ de equipo, con su estado).
   cadena cupo↔RQ-002).
 - Las 🟡 se pueden **asumir** y documentar como *Asunción a confirmar* sin frenar.
 - Falta cerrar la **investigación de código** (C-1, C-2) antes de generar.
+
+### 16.6 Asunciones pendientes de confirmación
+
+| # | Asunción / duda | Estado |
+|---|---|:--:|
+| A-1 | Jerarquía de 4 niveles explícita; "Programa" se modela genérico aunque hoy solo se use Becas. | 🟡 |
+| A-2 | "Aprobar" en backoffice y "ocupar cupo" son pasos distintos (el cupo se decide después de SIS). | 🟡 |
+| A-3 | RENAPER en campo usa la misma API (o equivalente) que backoffice para validar identidad. | 🟡 |
+| A-4 | Una persona rechazada por admin conserva legajo creado (sin reproceso en el sistema). | 🟡 |
