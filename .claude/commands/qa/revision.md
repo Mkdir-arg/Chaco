@@ -23,3 +23,5 @@ Contexto del usuario: `$ARGUMENTS`
    derivar → publicar la sección en el cuerpo de la task).
 5. **Cierre:** reportá tasks cubiertas (casos por categoría), tasks bloqueadas y
    por qué, y si alguna épica quedó lista para su `[PLAN DE PRUEBAS]` (`/qa:plan`).
+6. **Handoff al PM:** listá qué tasks cumplen ahora el gate de Ready de
+   `ESTADOS.md` y cuáles no (con el faltante). El PM decide y mueve; vos no.

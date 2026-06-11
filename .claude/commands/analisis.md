@@ -102,3 +102,7 @@ Cuando los análisis de la épica estén cerrados:
 ## Cierre
 Reportá la cadena creada: **Épica #NN → Análisis #MM, #… → Sub-issues #…**, con
 sus links. Confirmá que no quedaron preguntas abiertas en ningún análisis.
+
+**Handoff a QA:** ofrecé generar ahora los casos de prueba de las tasks creadas
+(`/qa:casos`) — sin casos no cumplen el gate de Ready (`ESTADOS.md`). Cerrá
+indicando al PM qué tasks quedaron elegibles para Ready.

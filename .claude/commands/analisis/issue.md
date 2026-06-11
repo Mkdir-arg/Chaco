@@ -32,3 +32,8 @@ Contexto del usuario: `$ARGUMENTS`
    receta `gh` del agente). No muevas las tareas de Backlog.
 5. Editá el análisis para listar los sub-issues como checklist (`- [ ] #KK`).
 6. Reportá la cadena creada: **Épica #NN → Análisis #MM → Sub-issues #…**.
+7. **Handoff a QA (no lo saltees):** ofrecé generar **ahora** los casos de prueba
+   de las tasks recién creadas (`/qa:casos`), para que cada task nazca con su
+   sección `## Casos de prueba (QA)`. Sin casos, la task no cumple el gate de
+   Ready (`ESTADOS.md`). Cerrá indicando al PM qué tasks quedaron completas
+   (estimación + casos + campos) y por lo tanto elegibles para Ready.

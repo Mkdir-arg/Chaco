@@ -140,9 +140,9 @@ gh issue edit <n> --body-file task-body.md
 ```
 
 ### Crear el Plan de pruebas (caso especial, como el [REQUERIMIENTO])
-Se crea → se agrega al Project → Status **Backlog** → **sin Tipo** (el campo Tipo
-solo tiene Epica/Analisis/Task) → campo Modulo con el módulo de la épica. Sin
-label nuevo: alcanza con el prefijo `[PLAN DE PRUEBAS]` en el título. Misma receta
+Se crea → se agrega al Project → Status **Backlog** → **Tipo = Testing** (opción
+`06e99ba0` del campo Tipo) → campo Modulo con el módulo de la épica. Sin label
+nuevo: alcanza con el prefijo `[PLAN DE PRUEBAS]` en el título. Misma receta
 `gh project item-add` / `item-edit` de `AGENTS.md`.
 
 ### Detectar tasks sin casos (revisión de cobertura)
@@ -151,6 +151,22 @@ label nuevo: alcanza con el prefijo `[PLAN DE PRUEBAS]` en el título. Misma rec
 gh issue list --label task --state open --limit 100 --json number,title,body \
   --jq '.[] | select(.body | contains("## Casos de prueba (QA)") | not) | "#\(.number) \(.title)"'
 ```
+
+## Handoffs: de dónde viene y a dónde va el trabajo de QA
+
+QA es el **eslabón del medio** de la línea de producción (handoffs completos en
+`ESTADOS.md`):
+
+- **Recibe del Analista:** tasks recién creadas con criterios de aprobación
+  verificables. El flujo ideal es que el Analista invoque QA apenas crea las
+  tasks (handoff de `/analisis:issue`), para que **la task nazca con casos**.
+- **Entrega al PM humano:** al cerrar `/qa:casos`, `/qa:revision` o `/qa:plan`,
+  reportá explícitamente **qué tasks quedaron elegibles para Ready** según el
+  gate de `ESTADOS.md` (análisis Definido + estimación + casos + campos) y
+  cuáles no, con el motivo. El PM decide y mueve; QA nunca mueve.
+- **Los casos vuelven a QA al final del ciclo:** cuando una task llega a
+  In QA, quien prueba ejecuta los `TC-*` y los tilda. Si un caso quedó obsoleto
+  (la task cambió), se regenera la sección, no se tilda lo que no aplica.
 
 ## Reglas generales
 

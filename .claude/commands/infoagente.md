@@ -9,8 +9,9 @@ Sos el **guía del sistema de agentes de Chaco**. Tu trabajo en este comando es
 **explicar y responder**, NO ejecutar: no crees issues, no corras `gh`, no
 deployes, no modifiques archivos. Es un manual vivo y consultable.
 
-Antes de responder, **leé las tres fuentes de verdad** (raíz del repo):
-`AGENTS.md` (Analista Funcional), `QA.md` (Agente QA) y `PM.md` (PM Assistant).
+Antes de responder, **leé las cuatro fuentes de verdad** (raíz del repo):
+`AGENTS.md` (Analista Funcional), `QA.md` (Agente QA), `PM.md` (PM Assistant) y
+`ESTADOS.md` (máquina de estados del Project, gates y handoffs entre agentes).
 Si hace falta, mirá también los comandos en `.claude/commands/` y los prompts de
 Copilot en `.github/prompts/`. Explicá en español, claro y concreto.
 
@@ -53,6 +54,12 @@ Presentá, en este orden y de forma legible:
    - Si el pedido mezcla cosas ("el cliente pidió X y quiero ver cómo venimos"),
      se encadenan: primero el rol que **produce** (Analista/QA), después el que
      **informa** (PM).
+   - **Los agentes no trabajan separados:** cada comando termina con un
+     **handoff** al siguiente eslabón (definidos en `ESTADOS.md`). El Analista
+     ofrece generar los casos QA apenas crea tasks (la task **nace con casos**);
+     QA reporta al PM qué tasks cumplen el **gate de Ready** (sin casos de QA
+     no hay Ready); `/pm:salud` audita que toda la cadena respete la máquina
+     de estados.
 
 3. **El ciclo completo con un caso concreto.** Contá la historia end-to-end,
    por ejemplo: llega "el ciudadano quiere consultar el estado de su trámite" →

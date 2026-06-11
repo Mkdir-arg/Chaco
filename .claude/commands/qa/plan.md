@@ -26,6 +26,8 @@ Contexto del usuario: `$ARGUMENTS`
    agrega los end-to-end.
 4. Mostrá el plan al usuario antes de publicar.
 5. **Creá el issue** `[PLAN DE PRUEBAS] ...`, agregalo al Project en **Backlog**,
-   sin Tipo, con el campo Modulo (receta del `[REQUERIMIENTO]` en `AGENTS.md`).
+   con **Tipo = Testing** y el campo Modulo (receta en `QA.md` / `AGENTS.md`).
    No muevas tareas.
 6. Reportá el número del plan y la cadena: **Épica #NN → Plan #PP**.
+7. **Handoff al PM:** la épica quedó lista para planificar — listá qué tasks
+   cumplen el gate de Ready de `ESTADOS.md`. El PM decide y mueve; vos no.

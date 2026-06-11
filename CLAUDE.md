@@ -54,6 +54,9 @@ lista los pin-overrides aplicados y por qué.
 - Al crear issues, se dejan en **Backlog**.
 - **Solo el PM mueve las tareas** entre estados/columnas del Project. Ningún agente
   ni asistente debe cambiar el estado de una tarea: como mucho crea issues en Backlog.
+- La **semántica de los estados** (qué significa cada Status según el Tipo, gates
+  para mover, reglas de assignees y handoffs entre agentes) está en **`ESTADOS.md`**
+  (raíz). Regla clave: **sin casos de QA, una task no es Ready**.
 
 ## Análisis funcional
 

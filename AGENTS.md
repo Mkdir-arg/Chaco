@@ -155,7 +155,12 @@ PROJECT_NUMBER=1
 PROJECT_ID=PVT_kwHODLaoqM4BXQVZ
 STATUS_FIELD=PVTSSF_lAHODLaoqM4BXQVZzhSeb2Q   # opción Backlog = f75ad846
 TIPO_FIELD=PVTSSF_lAHODLaoqM4BXQVZzhS9ZPE      # Epica=abc63c47 · Analisis=3dab4bf3 · Task=e03cf9e1
+                                               # Requerimiento=f49bbfa6 · Testing=06e99ba0 · Bug=2aed63a7
 ```
+
+> La **semántica de los estados** (qué significa cada Status según el Tipo, gates
+> para mover y reglas de assignees) está en **`ESTADOS.md`** (raíz). Los agentes
+> crean en Backlog y no mueven; los gates son para el PM humano y `/pm:salud`.
 
 ### Por cada issue (épica, análisis y cada sub-issue)
 ```bash
@@ -173,10 +178,10 @@ gh project item-edit --id "$ITEM" --project-id PVT_kwHODLaoqM4BXQVZ \
 
 ### Requerimiento completo (caso especial)
 Se crea igual (crear → item-add → Status Backlog → Prioridad + Modulo), con el
-título `[REQUERIMIENTO] ...`. **Sin opción de Tipo propia**: el campo Tipo del
-Project hoy solo tiene Epica/Analisis/Task, así que el Requerimiento se deja **sin
-Tipo** (o con "Requerimiento" si el PM agrega esa opción). No lleva label nuevo:
-alcanza con el prefijo `[REQUERIMIENTO]` en el título.
+título `[REQUERIMIENTO] ...` y **Tipo = Requerimiento** (opción `f49bbfa6`).
+No lleva label nuevo: alcanza con el prefijo `[REQUERIMIENTO]` en el título.
+(El `[PLAN DE PRUEBAS]` de QA usa la misma receta con **Tipo = Testing**,
+opción `06e99ba0`; ver `QA.md`.)
 
 ### Campos del Project a completar (con los datos del análisis)
 No dejes la info solo en el cuerpo del issue: cargá también los **campos
@@ -185,6 +190,8 @@ estructurados** del Project para que el PM pueda filtrar y sumar. IDs de campo:
 PRIORIDAD_FIELD=PVTSSF_lAHODLaoqM4BXQVZzhSec48   # Alta=79628723 · Media=0a877460 · Baja=da944a9c
 MODULO_FIELD=PVTF_lAHODLaoqM4BXQVZzhTBIdY         # texto
 ESTHORAS_FIELD=PVTF_lAHODLaoqM4BXQVZzhTBIYY       # número
+RESPFUNC_FIELD=PVTF_lAHODLaoqM4BXQVZzhTBIdc       # texto: quién responde dudas funcionales
+FECHACOMP_FIELD=PVTF_lAHODLaoqM4BXQVZzhTBIkc      # fecha: solo compromisos con el cliente
 ```
 Qué campo va en cada nivel:
 
@@ -193,6 +200,12 @@ Qué campo va en cada nivel:
 | Prioridad (single-select) | ✔ | — | ✔ |
 | Modulo (texto) | ✔ | ✔ | ✔ |
 | EstimacionHoras (número) | — | — | ✔ |
+| ResponsableFuncional (texto) | ✔ | ✔ | — |
+| FechaCompromiso (fecha) | solo si hay compromiso con el cliente | — | — |
+
+`Size` y `Estimate` (defaults de GitHub) **no se usan**: la estimación es
+`EstimacionHoras`. `Iteration` (sprint) y `Assignees` los administra el PM
+humano según las reglas de `ESTADOS.md`.
 
 ```bash
 # Prioridad (single-select)
@@ -228,6 +241,19 @@ Minutas, Sprints, **Funcionalidades**, Plantillas. Reglas:
   de `mkdocs.yml`.
 - **Deploy:** `python -m mkdocs build --strict` y luego `python -m mkdocs gh-deploy`
   (requiere `pip install mkdocs-material`). Confirmar antes de deployar (publica online).
+
+## Handoff: qué pasa después del analista
+
+El analista es el **primer eslabón** de la línea de producción (los handoffs
+completos están en `ESTADOS.md`). Su entrega no termina al crear los issues:
+
+- **Al cerrar la generación de sub-issues** (paso 6 / `/analisis:issue`), ofrecé
+  el paso siguiente: correr `/qa:casos` sobre las tasks recién creadas, para que
+  **cada task nazca con su sección de casos de prueba**. Sin casos no cumple el
+  gate de Ready (`ESTADOS.md`), así que generarlos en el momento evita que el
+  trabajo quede varado en Backlog.
+- **Reportá al PM humano** qué tasks quedaron completas (estimación + casos +
+  campos cargados) y por lo tanto elegibles para Ready. El PM decide y mueve.
 
 ## Relación con QA
 

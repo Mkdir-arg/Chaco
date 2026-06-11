@@ -51,7 +51,8 @@ Secciones, en este orden:
 
 ### 2. Salud (`/pm:salud`) — auditoría de trazabilidad
 
-Verifica la disciplina del método completo (Analista + QA). Una sección por
+Verifica la disciplina del método completo (Analista + QA) **y la máquina de
+estados de `ESTADOS.md`** (gates, assignees, iteraciones). Una sección por
 chequeo, cada una con la lista concreta de issues que fallan (o "✔ OK"):
 1. **Cadena rota** — tasks sin `Análisis de origen: #MM` o sin `Épica padre: #NN`;
    análisis sin épica padre.
@@ -66,6 +67,13 @@ chequeo, cada una con la lista concreta de issues que fallan (o "✔ OK"):
    tasks) o sin EstimacionHoras (tasks).
 6. **Estancados** — items en el mismo Status sin actividad (comentarios/edits)
    hace más de 7 días.
+7. **Violaciones de la máquina de estados** (`ESTADOS.md`) — tasks en Ready+
+   sin casos de QA / sin estimación / sin assignee único / sin iteración;
+   análisis en Done con preguntas abiertas; épicas en estados intermedios (son
+   agrupadores: solo Backlog/Done); `[REQUERIMIENTO]` desincronizado de sus
+   tasks (es el tracker macro: Backlog → In progress → In QA → Done);
+   `[PLAN DE PRUEBAS]` en estados de flujo; Blocked sin causa escrita o con más
+   de 7 días; tasks In QA sin avance en sus `- [ ] Pasa` hace más de 5 días.
 Cierre: **score de salud** (chequeos OK / total) y las 3 acciones más urgentes.
 
 ### 3. Minuta (`/pm:minuta`) — registro de reunión

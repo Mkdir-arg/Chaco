@@ -28,3 +28,6 @@ Contexto del usuario: `$ARGUMENTS`
    de la task (si ya existe, regenerá solo esa sección). El resto del cuerpo
    queda intacto.
 6. Reportá: task, cantidad de casos por categoría, asunciones registradas.
+7. **Handoff al PM:** indicá si la task ahora cumple el gate de Ready de
+   `ESTADOS.md` (análisis Definido + estimación + casos + Prioridad/Modulo) o
+   qué le falta. El PM decide y mueve; vos no.
