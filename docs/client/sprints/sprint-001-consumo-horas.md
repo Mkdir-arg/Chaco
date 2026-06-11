@@ -13,10 +13,11 @@
 | 2026-06-05 | Agostina Coppola | Continuar análisis funcional para la propuesta | Finalizar análisis | 148 min |
 | 2026-06-07 | Agostina Coppola | Análisis funcional | Análsis de los requerimientos | 85 min |
 | 2026-06-08 | Agostina Coppola | Análisis de los requerimientos | Revisión de la documentación, análisis de los nuevos requerimientos y ajuste de propuestas | 307 min |
+| 2026-06-11 | Agostina Coppola | Analista funcional | Testing y documentación | 234 min |
 
 ---
 
 ## :material-counter: Total consumido
 
 !!! success "Contador total"
-    **1049 minutos** (17 h 29 min)
+    **1283 minutos** (21 h 23 min)
