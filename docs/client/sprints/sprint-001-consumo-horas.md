@@ -18,10 +18,11 @@
 | 2026-06-10 | Matías Fariña | Actualización a la versión 3 del flujo de becas | Sesión de trabajo para actualizar el flujo de becas a la v3 | 300 min |
 | 2026-06-10 | Agostina Coppola | Actualización a la versión 3 del flujo de becas | Sesión de trabajo para actualizar el flujo de becas a la v3 | 300 min |
 | 2026-06-11 | Juani Portilla | Reunion interna | Revision de tareas, flujos, responsabilidades, etc. | 60 min |
+| 2026-06-11 | Pablo Cao | Reunion interna | Revision de tareas, flujos, responsabilidades, etc. | 60 min |
 
 ---
 
 ## :material-counter: Total consumido
 
 !!! success "Contador total"
-    **1800 minutos** (30 h 00 min)
+    **1860 minutos** (31 h 00 min)
