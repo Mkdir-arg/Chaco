@@ -434,94 +434,20 @@
         </a>
     </div>
 
-    <!-- Estado del Sistema Avanzado -->
-    {% with system_status=branding.dashboard.system_status %}
-    <div class="bg-white rounded-xl shadow-lg p-6">
-        <h3 class="text-xl font-semibold text-gray-900 mb-6">Estado del Sistema</h3>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="text-center">
-                {% if system_status.icon_mode == 'uniform_gradient' %}
-                    <div class="inline-flex items-center justify-center rounded-full mb-4" style="width: {{ system_status.icon_container_size }}; height: {{ system_status.icon_container_size }}; background: {{ system_status.icon_container_bg }};">
-                        <i class="fas fa-server text-transparent bg-clip-text" style="font-size: {{ system_status.icon_size }}; background-image: linear-gradient(180deg, {{ system_status.icon_gradient_start }} 0%, {{ system_status.icon_gradient_end }} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
-                    </div>
-                {% else %}
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-cyan-100 rounded-full mb-4">
-                        <i class="fas fa-server text-nodo-cyan text-2xl"></i>
-                    </div>
-                {% endif %}
-                <h4 class="font-semibold text-gray-900 mb-2">Servidor</h4>
-                <div class="bg-gray-200 rounded-full h-2 mb-2">
-                    <div class="h-2 rounded-full" style="width: 95%; {% if system_status.bar_fill %}background: {{ system_status.bar_fill }};{% else %}background: #08B8CC;{% endif %}"></div>
-                </div>
-                <p class="text-sm text-gray-500">95% Rendimiento</p>
-            </div>
-
-            <div class="text-center">
-                {% if system_status.icon_mode == 'uniform_gradient' %}
-                    <div class="inline-flex items-center justify-center rounded-full mb-4" style="width: {{ system_status.icon_container_size }}; height: {{ system_status.icon_container_size }}; background: {{ system_status.icon_container_bg }};">
-                        <i class="fas fa-database text-transparent bg-clip-text" style="font-size: {{ system_status.icon_size }}; background-image: linear-gradient(180deg, {{ system_status.icon_gradient_start }} 0%, {{ system_status.icon_gradient_end }} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
-                    </div>
-                {% else %}
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-100 rounded-full mb-4">
-                        <i class="fas fa-database text-nodo-purple text-2xl"></i>
-                    </div>
-                {% endif %}
-                <h4 class="font-semibold text-gray-900 mb-2">Base de Datos</h4>
-                <div class="bg-gray-200 rounded-full h-2 mb-2">
-                    <div class="h-2 rounded-full" style="width: 88%; {% if system_status.bar_fill %}background: {{ system_status.bar_fill }};{% else %}background: #7928CA;{% endif %}"></div>
-                </div>
-                <p class="text-sm text-gray-500">88% Uso</p>
-            </div>
-
-            <div class="text-center">
-                {% if system_status.icon_mode == 'uniform_gradient' %}
-                    <div class="inline-flex items-center justify-center rounded-full mb-4" style="width: {{ system_status.icon_container_size }}; height: {{ system_status.icon_container_size }}; background: {{ system_status.icon_container_bg }};">
-                        <i class="fas fa-shield-alt text-transparent bg-clip-text" style="font-size: {{ system_status.icon_size }}; background-image: linear-gradient(180deg, {{ system_status.icon_gradient_start }} 0%, {{ system_status.icon_gradient_end }} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
-                    </div>
-                {% else %}
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-pink-100 rounded-full mb-4">
-                        <i class="fas fa-shield-alt text-magenta text-2xl"></i>
-                    </div>
-                {% endif %}
-                <h4 class="font-semibold text-gray-900 mb-2">Seguridad</h4>
-                <div class="bg-gray-200 rounded-full h-2 mb-2">
-                    <div class="h-2 rounded-full" style="width: 100%; {% if system_status.bar_fill %}background: {{ system_status.bar_fill }};{% else %}background: var(--ui-highlight-color);{% endif %}"></div>
-                </div>
-                <p class="text-sm text-gray-500">Protección Activa</p>
-            </div>
-
-            <div class="text-center">
-                {% if system_status.icon_mode == 'uniform_gradient' %}
-                    <div class="inline-flex items-center justify-center rounded-full mb-4" style="width: {{ system_status.icon_container_size }}; height: {{ system_status.icon_container_size }}; background: {{ system_status.icon_container_bg }};">
-                        <i class="fas fa-users text-transparent bg-clip-text" style="font-size: {{ system_status.icon_size }}; background-image: linear-gradient(180deg, {{ system_status.icon_gradient_start }} 0%, {{ system_status.icon_gradient_end }} 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;"></i>
-                    </div>
-                {% else %}
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-yellow-100 rounded-full mb-4">
-                        <i class="fas fa-users text-yellow-600 text-2xl"></i>
-                    </div>
-                {% endif %}
-                <h4 class="font-semibold text-gray-900 mb-2">Usuarios</h4>
-                <div class="bg-gray-200 rounded-full h-2 mb-2">
-                    <div class="h-2 rounded-full" style="width: 67%; {% if system_status.bar_fill %}background: {{ system_status.bar_fill }};{% else %}background: #F59E0B;{% endif %}"></div>
-                </div>
-                <p class="text-sm text-gray-500" x-text="usuariosConectados + ' conectados'"></p>
-            </div>
-        </div>
-    </div>
-    {% endwith %}
 </div>
+
+{{ programas_chart|json_script:"programas-data" }}
 
 <script>
 function dashboard() {
     return {
-        darkMode: false,
         busqueda: '',
         resultadosBusqueda: [],
         periodo: '30d',
-        notificaciones: 5,
-        usuariosConectados: 12,
         saludo: '',
         fechaHora: '',
+        chartTendencias: null,
+        chartEstados: null,
         metricas: {
             ciudadanos: {{ total_ciudadanos|default:"0" }},
             legajos: {{ legajos_activos|default:"0" }},
@@ -529,29 +455,20 @@ function dashboard() {
             alertas: {{ alertas_activas|default:"0" }}
         },
         estadosLegajos: {
-            abiertos: 45,
-            seguimiento: 78,
-            derivados: 23,
-            cerrados: 10
+            abiertos: 0,
+            seguimiento: 0,
+            derivados: 0,
+            cerrados: 0
         },
-        alertasCriticas: [
-            { ciudadano: 'Juan Pérez', tipo: 'Riesgo Alto', fecha: 'Hace 2 horas' },
-            { ciudadano: 'María García', tipo: 'Sin Contacto', fecha: 'Hace 4 horas' },
-            { ciudadano: 'Carlos López', tipo: 'Seguimiento Vencido', fecha: 'Ayer' }
-        ],
-        actividadReciente: [
-            { descripcion: 'Nuevo legajo creado', usuario: 'Dr. Martínez', tiempo: 'Hace 5 min', tipo: 'create', icono: 'fas fa-plus' },
-            { descripcion: 'Seguimiento completado', usuario: 'Lic. Rodríguez', tiempo: 'Hace 12 min', tipo: 'update', icono: 'fas fa-check' },
-            { descripcion: 'Alerta generada', usuario: 'Sistema', tiempo: 'Hace 18 min', tipo: 'alert', icono: 'fas fa-exclamation-triangle' },
-            { descripción: 'Usuario conectado', usuario: 'Dra. Fernández', tiempo: 'Hace 25 min', tipo: 'login', icono: 'fas fa-sign-in-alt' }
-        ],
+        alertasCriticas: [],
+        actividadReciente: [],
 
         init() {
             this.actualizarSaludo();
             this.actualizarFechaHora();
-            this.cargarDatosIniciales();
             this.inicializarGraficos();
-            this.inicializarMapa();
+            this.cargarTendencias();
+            this.actualizarDatos();
             setInterval(() => this.actualizarFechaHora(), 1000);
             setInterval(() => this.actualizarDatos(), 30000);
         },
@@ -593,11 +510,6 @@ function dashboard() {
             });
         },
 
-        toggleTheme() {
-            this.darkMode = !this.darkMode;
-            document.documentElement.classList.toggle('dark', this.darkMode);
-        },
-
         buscarCiudadano() {
             if (this.busqueda.length < 3) {
                 this.resultadosBusqueda = [];
@@ -617,7 +529,19 @@ function dashboard() {
 
         cambiarPeriodo(nuevoPeriodo) {
             this.periodo = nuevoPeriodo;
-            this.actualizarGraficoTendencias();
+            this.cargarTendencias();
+        },
+
+        cargarTendencias() {
+            fetch(`/dashboard/api/tendencias/?periodo=${this.periodo}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (!this.chartTendencias) return;
+                    this.chartTendencias.data.labels = data.labels || [];
+                    this.chartTendencias.data.datasets[0].data = data.datos || [];
+                    this.chartTendencias.update();
+                })
+                .catch(error => console.error('Error cargando tendencias:', error));
         },
 
         getIconoActividad(tipo) {
@@ -650,36 +574,38 @@ function dashboard() {
                 const blue = parseInt(expandedHex.slice(4, 6), 16);
                 return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
             };
-            // Gráfico de tendencias
+            // Gráfico de tendencias (los datos los trae cargarTendencias del API)
             const ctxTendencias = document.getElementById('chartTendencias').getContext('2d');
-            new Chart(ctxTendencias, {
+            this.chartTendencias = new Chart(ctxTendencias, {
                 type: 'line',
                 data: {
-                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+                    labels: [],
                     datasets: [{
-                        label: 'Nuevos Legajos',
-                        data: [12, 19, 15, 25, 22, 30],
+                        label: 'Nuevas inscripciones',
+                        data: [],
                         borderColor: trendLineColor,
                         backgroundColor: hexToRgba(trendLineColor, 0.1),
-                        tension: 0.4
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
+                    scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
                 }
             });
 
-            // Gráfico de estados
+            // Gráfico de estados (los datos los trae actualizarDatos del API)
             const ctxEstados = document.getElementById('chartEstados').getContext('2d');
-            new Chart(ctxEstados, {
+            this.chartEstados = new Chart(ctxEstados, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Abiertos', 'En Seguimiento', 'Derivados', 'Cerrados'],
+                    labels: ['Abiertos', 'En Seguimiento', 'Derivaciones pendientes', 'Cerrados'],
                     datasets: [{
-                        data: [45, 78, 23, 10],
+                        data: [0, 0, 0, 0],
                         backgroundColor: [
                             legajoStatesChartColors.abiertos,
                             legajoStatesChartColors.seguimiento,
@@ -695,49 +621,29 @@ function dashboard() {
                 }
             });
 
-            // Mini gráficos en métricas
-            ['chartCiudadanos', 'chartLegajos', 'chartSeguimientos', 'chartAlertas'].forEach(id => {
-                const ctx = document.getElementById(id).getContext('2d');
-                new Chart(ctx, {
-                    type: 'line',
+            // Inscripciones activas por programa (datos server-side)
+            const programasData = JSON.parse(document.getElementById('programas-data').textContent || '[]');
+            const canvasProgramas = document.getElementById('chartProgramas');
+            if (canvasProgramas && programasData.length) {
+                new Chart(canvasProgramas.getContext('2d'), {
+                    type: 'bar',
                     data: {
-                        labels: ['', '', '', '', '', ''],
+                        labels: programasData.map(p => p.nombre),
                         datasets: [{
-                            data: [10, 15, 12, 18, 16, 20],
-                            borderColor: 'rgba(255, 255, 255, 0.8)',
-                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.4
+                            data: programasData.map(p => p.count),
+                            backgroundColor: programasData.map(p => p.color),
+                            borderRadius: 6
                         }]
                     },
                     options: {
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: { legend: { display: false } },
-                        scales: {
-                            x: { display: false },
-                            y: { display: false }
-                        },
-                        elements: { point: { radius: 0 } }
+                        scales: { x: { beginAtZero: true, ticks: { precision: 0 } } }
                     }
                 });
-            });
-        },
-
-        inicializarMapa() {
-            const mapa = L.map('mapa').setView([-34.6037, -58.3816], 10);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapa);
-            
-            // Puntos de ejemplo
-            const puntos = [
-                [-34.6037, -58.3816, 'Centro: 25 casos'],
-                [-34.6158, -58.3731, 'Norte: 18 casos'],
-                [-34.5875, -58.3974, 'Sur: 32 casos']
-            ];
-            
-            puntos.forEach(([lat, lng, texto]) => {
-                L.marker([lat, lng]).addTo(mapa).bindPopup(texto);
-            });
+            }
         },
 
         actualizarDatos() {
@@ -746,10 +652,18 @@ function dashboard() {
                 .then(data => {
                     this.metricas = data.metricas;
                     this.estadosLegajos = data.estados_legajos;
-                    this.usuariosConectados = data.usuarios_conectados;
+                    if (this.chartEstados) {
+                        this.chartEstados.data.datasets[0].data = [
+                            data.estados_legajos.abiertos,
+                            data.estados_legajos.seguimiento,
+                            data.estados_legajos.derivados,
+                            data.estados_legajos.cerrados
+                        ];
+                        this.chartEstados.update();
+                    }
                 })
                 .catch(error => console.error('Error actualizando métricas:', error));
-            
+
             this.cargarDatosIniciales();
         }
     }
