@@ -35,9 +35,9 @@ Jerarquía (actualizada: se agrega **Subsegmento**; los requisitos de segmento p
 
 ```
 Programa  (Becas)
-   └─ Convocatoria              (1..N; al crearla se selecciona UN Segmento)
+   └─ Convocatoria              (1..N; segmento requerido + subsegmento opcional)
         ├─ Segmento             (sub-modalidad de la beca → cupo propio + requisitos NATIVOS configurables)
-        │     └─ Subsegmento    (nivel opcional configurable, ej. Ladrillo / Carbón en Producción Territorial)
+        │     └─ Subsegmento    (nivel opcional; tiene cupo propio; para seleccionarlo el segmento debe estar elegido)
         └─ Relevamiento         (campaña de campo, asignada a UN territorial, con fecha y zona)
              └─ Formulario       (N por relevamiento; cada uno = 1 persona / legajo)
 ```
@@ -45,7 +45,7 @@ Programa  (Becas)
 | Entidad | Descripción | Notas clave |
 |---|---|---|
 | **Programa** | Marco genérico. Becas es el primero; Ñachec es otro programa. | El **cupo** vive a nivel **Segmento** (no a nivel Programa). |
-| **Convocatoria** | Agrupador dentro del programa. Un programa tiene 1..N convocatorias. Al crearla se **selecciona un Segmento**. | — |
+| **Convocatoria** | Agrupador dentro del programa. Un programa tiene 1..N convocatorias. Al crearla se **selecciona un Segmento** (requerido) y opcionalmente un **Subsegmento** de ese segmento. Para elegir un subsegmento el segmento debe estar seleccionado primero. | Si tiene subsegmento, el cupo se descuenta del subsegmento; si no, del segmento. |
 | **Segmento** | Sub-modalidad de la beca (Producción Territorial/Fuego y Barro, Cultura/Mi Pequeño Artista, Futuro Joven, Comunidades Originarias/Mamá Ñachec, Redes de Fe, Deportes/Talento Deportivo, Vivienda/Casa Ñachec — ver §6.2). | Define **cupo propio** y sus **requisitos específicos NATIVOS** (configurables; **ya no vienen de SIS**). |
 | **Subsegmento** | Nivel **opcional configurable** dentro de un segmento (ej. **Ladrillo / Carbón** en Producción Territorial). | Tiene **`cupo_maximo` propio** y puede tener requisitos propios. La suma de cupos de los subsegmentos de un segmento no puede superar el cupo del segmento (RN-40). |
 | **Relevamiento** | Campaña de campo asignada a **un solo** territorial. Se **auto-nombra** "Relevamiento XXX". | Tiene territorial, fecha/plazo y zona/localidad. Reasignable. |
@@ -83,7 +83,7 @@ un esquema paralelo.
    los **requisitos generales** (compartidos por todas las convocatorias) y los **requisitos
    de cada segmento** (**nativos, configurables**; ya no vienen de SIS). Crea una o varias
    **convocatorias** y, al crear cada una, **selecciona el segmento**; sus requisitos quedan
-   visibles en la convocatoria. Dentro de la convocatoria crea **relevamientos**; al crear un
+   visibles en la convocatoria. Dentro de la convocatoria, si corresponde, también puede **seleccionar el subsegmento** del segmento elegido (para elegirlo primero debe estar el segmento). Dentro de la convocatoria crea **relevamientos**; al crear un
    relevamiento define: **territorial asignado**, **fecha/plazo** y **zona/localidad**. El
    relevamiento se **auto-nombra** "Relevamiento XXX". Puede **reasignarlo** a otro territorial.
 2. **Inicio en campo (territorial).** El territorial entra a la app, ve el **listado de
@@ -335,7 +335,7 @@ segmentos).
 
 | Pantalla | Operaciones principales |
 |---|---|
-| **Convocatorias** | ABM + al crear **seleccionar el segmento**; sus requisitos (nativos del segmento) quedan visibles en la convocatoria. Listar, editar, ver, (des)activar. |
+| **Convocatorias** | ABM + al crear **seleccionar el segmento** (requerido) y opcionalmente el **subsegmento** (filtrado por segmento; bloqueado hasta elegir segmento; oculto si el segmento no tiene subsegmentos). Los requisitos nativos del segmento y del subsegmento quedan visibles en el detalle. Listar, editar, ver, (des)activar. |
 | **Relevamientos** | ABM + **asignar/reasignar** territorial, fecha/plazo, zona. Ver estado. |
 | **Revisión de relevamiento** | Entrar a un relevamiento finalizado → listado de formularios → abrir uno por uno → **aprobar/rechazar** (motivo). Botón **"Validar contra SIS"** disponible para revalidación manual. |
 | **Validación territorial (Coordinador)** | El coordinador **valida las postulaciones** del territorio y **reprograma** relevamientos vencidos. |
@@ -572,7 +572,7 @@ exponer esa acción de revalidar.
 | RN-27 | Un usuario **puede tener múltiples roles a la vez** (ej. **Administrador** de un programa y **Territorial** de otro). El acceso por módulo/programa depende de los roles asignados. |
 | RN-28 | El relevamiento que **no se inicia el día asignado vence** y el **Coordinador lo reprograma** (nueva fecha). |
 | RN-29 | El admin **puede editar los datos del formulario** desde el backoffice **antes de aprobar/rechazar**. |
-| RN-30 | Un **Segmento** es una sub-modalidad de la beca. La **convocatoria** apunta a un segmento (se selecciona al crearla). |
+| RN-30 | La convocatoria requiere un **segmento** (siempre). Opcionalmente se puede seleccionar un **subsegmento** del segmento elegido; para elegirlo el segmento debe estar seleccionado primero. Si la convocatoria tiene subsegmento, el cupo se descuenta del subsegmento; si no, del segmento. |
 | RN-31 | **Requisitos generales:** preguntas **configurables** desde Configuración del programa, **compartidas por todas las convocatorias**; son el **Cuestionario social de 13 preguntas** (§6.3) y **se responden en el formulario**. |
 | RN-32 | **Requisitos de segmento/subsegmento:** son **nativos** del sistema, **configurables** al configurar el segmento (ya **no vienen de SIS**); se muestran **informativos** al territorial al completar el formulario. |
 | RN-33 | La **evaluación** se reparte: **Nodo** valida los **requisitos nativos** (admin/coordinador en la revisión) y **SIS** hace el **control de incompatibilidades** (devuelve **OKA / negativa**). |
@@ -733,7 +733,7 @@ Asunciones y dudas pendientes consolidadas al final en la **Sección 16.6**.
 |---|---|---|:--:|
 | R-1.c | El segmento **"Solidaria"** no figura en el doc del Ministerio. ¿Sigue existiendo? | Equipo Ministerio | No bloq. |
 | R-6 | **Asignación persona↔segmento:** ¿queda determinado por la convocatoria (implícito) o se asigna por persona? ¿Puede una persona estar en más de un segmento? | Equipo Ministerio | No bloq. |
-| R-8 | **Cardinalidad convocatoria↔segmento:** ¿una convocatoria apunta a **un solo** segmento o puede tener **varios**? | Equipo Ministerio | No bloq. |
+| R-8 | ~~Cardinalidad convocatoria↔segmento~~ **Cerrada:** una convocatoria apunta a un solo segmento (requerido) y opcionalmente a un subsegmento de ese segmento. No puede tener varios segmentos. | — | **Cerrada** |
 | ~~R-8.b~~ | ~~¿Cupo por segmento o por subsegmento?~~ **Cerrada:** los subsegmentos tienen su propio `cupo_maximo`; la suma no puede superar el del segmento. Sin subsegmentos, el cupo del segmento es el total (ver RN-40). | — | **Cerrada** |
 | R-11 | **Documentación/adjuntos:** confirmar obligatoriedades por segmento y cuáles son **imágenes cargadas en el formulario**. | Equipo Ministerio | No bloq. |
 | R-13 | **Requisitos y documentación como campos vs informativo:** los requisitos configurables y la documentación (certificado de domicilio, CUIL, constancia de estudios, convenio de confidencialidad) ¿aparecen como **campos del formulario** o son solo **a modo informativo**? | Equipo Ministerio | Por definir |
