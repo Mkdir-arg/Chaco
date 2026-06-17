@@ -26,6 +26,10 @@
 | 2026-06-11 | Pablo Cao | Reunion interna | Revision de tareas, flujos, responsabilidades, etc. | 60 min |
 | 2026-06-11 | Agostina Coppola | Reunion interna | Revision de tareas, flujos, responsabilidades, etc. | 60 min |
 | 2026-06-11 | Matías Fariña | analisis legajo ciudadano | Epica Legajo ciudadano , ajuste de documentacion | 181 min |
+| 2026-06-17 | Juani Portilla | Reunion de planificacion | Revision y asignacion de tareas | 60 min |
+| 2026-06-17 | Pablo Cao | Reunion de planificacion | Revision y asignacion de tareas | 60 min |
+| 2026-06-17 | Agostina Coppola | Reunion de planificacion | Revision y asignacion de tareas | 60 min |
+| 2026-06-17 | Matías Fariña | Reunion de planificacion | Revision y asignacion de tareas | 60 min |
 
 ---
 
