@@ -91,6 +91,7 @@ nav:
   - Funcionalidades:
     - funcionalidades/index.md
     - Programa Becas: funcionalidades/programa-becas.md
+    - Estimación Programa Becas: funcionalidades/estimacion-programa-becas.md
   - Plantillas operativas:
     - templates/index.md
     - Caso de prueba base: templates/caso-prueba-base.md
