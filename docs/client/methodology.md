@@ -143,7 +143,7 @@ flowchart TD
 ```
 
 !!! note "Importante"
-    Una vez aprobado, el requerimiento **no entra automáticamente en desarrollo**: primero se incorpora al backlog priorizado y se confirma en la **planificación del sprint** según prioridad, capacidad del equipo, dependencias y compromisos ya asumidos.
+    Una vez aprobado, el requerimiento **no entra automáticamente en desarrollo**: primero se incorpora al backlog priorizado y se confirma en la **planificación de la versión** según prioridad, capacidad del equipo, dependencias y compromisos ya asumidos.
 
 ---
 
@@ -190,25 +190,32 @@ flowchart TD
 
     !!! warning "Sin aprobación, no se inicia el desarrollo."
 
-??? abstract "6.7 — Desarrollo"
+??? abstract "6.7 — Planificación de la versión"
+    - El requerimiento aprobado se incorpora al backlog priorizado.
+    - En la planificación de la próxima versión se evalúa: prioridad, capacidad del equipo, dependencias y compromisos ya asumidos.
+    - Se confirma cuándo se desarrollará y se comunica al cliente.
+
+    !!! info "El backlog no es FIFO: se prioriza por impacto y dependencias."
+
+??? abstract "6.8 — Desarrollo"
     - El equipo implementa la solución según lo documentado.
     - Se registran las horas consumidas por tarea.
     - El Issue avanza al estado **"En desarrollo"** en Jira.
 
     !!! warning "Cambios de alcance durante el desarrollo requieren un nuevo ciclo de análisis y estimación."
 
-??? abstract "6.8 — Pruebas"
+??? abstract "6.9 — Pruebas"
     - El equipo realiza pruebas **funcionales y de regresión**.
     - Se documenta el resultado por criterio de aceptación y se publica en GitHub Pages.
     - El Issue avanza al estado **"En pruebas"**.
     - Si hay observaciones, se corrigen y re-prueban dentro del bloque de horas estimado (salvo que el volumen lo supere).
 
-??? abstract "6.9 — Capacitación"
+??? abstract "6.10 — Capacitación"
     - Se realiza solo cuando la funcionalidad lo requiere.
     - Puede ser presencial, por videollamada o mediante documentación de usuario.
     - Se agenda con anticipación y consume horas del paquete.
 
-??? abstract "6.10 — Despliegue"
+??? abstract "6.11 — Despliegue"
     - El equipo despliega en el entorno productivo según la ventana acordada.
     - Se verifica el correcto funcionamiento post-deploy.
     - El **acta de cierre** se publica en GitHub Pages.
@@ -243,23 +250,23 @@ flowchart TD
 
 ---
 
-## :material-calendar-week-outline: Planificación por sprints
+## :material-calendar-week-outline: Planificación por versiones
 
-El trabajo se organiza en **sprints**: iteraciones de duración fija que agrupan un conjunto de requerimientos priorizados y aprobados.
+El trabajo se organiza en **versiones**: iteraciones de duración variable que agrupan un conjunto de requerimientos priorizados y aprobados.
 
 <div class="grid cards" markdown>
 
--   :material-timer-outline: **Duración acordada**
+-   :material-timer-outline: **Duración variable**
 
-    Se acuerda con el cliente al inicio de la planificación (por ejemplo: 1, 2 o 3 semanas).
+    Se acuerda con el cliente según la complejidad del alcance de cada versión.
 
 -   :material-bullseye-arrow: **Alcance definido**
 
-    Al comenzar el sprint se define qué ítems del backlog se comprometen para esa iteración.
+    Al comenzar la versión se define qué ítems del backlog se comprometen para esa iteración.
 
 -   :material-lock-outline: **Foco protegido**
 
-    Durante el sprint el equipo trabaja únicamente sobre los ítems comprometidos. Los cambios se tratan en el siguiente sprint.
+    Durante la versión el equipo trabaja únicamente sobre los ítems comprometidos. Los cambios se tratan en la siguiente versión.
 
 -   :material-presentation-play: **Revisión al cierre**
 
@@ -267,10 +274,10 @@ El trabajo se organiza en **sprints**: iteraciones de duración fija que agrupan
 
 -   :material-counter: **Consumo informado**
 
-    Al cierre de cada sprint se informa el consumo real de horas.
+    Al cierre de cada versión se informa el consumo real de horas.
 
 -   :material-link-variant: **Trazabilidad pública**
 
-    La definición y estado de cada sprint se publica en **GitHub Pages** y se gestiona como Issue en **Jira**.
+    La definición y estado de cada versión se publica en **GitHub Pages** y se gestiona como Issue en **Jira**.
 
 </div>

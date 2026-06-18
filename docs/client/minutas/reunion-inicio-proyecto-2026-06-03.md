@@ -14,7 +14,7 @@
 | :material-clock-outline: **Horario** | 15:00 a 16:00 hs |
 | :material-video-outline: **Modalidad** | A confirmar |
 | :material-account-edit-outline: **Redactada por** | Equipo ICORE |
-| :material-sprout: **Sprint** | [Sprint 001](../sprints/sprint-001.md) |
+| :material-package-variant-closed: **Versión** | [Versión 001](../versiones/version-001.md) |
 
 ---
 

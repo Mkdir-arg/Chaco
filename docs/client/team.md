@@ -73,7 +73,7 @@ flowchart LR
 - El **cliente** define prioridades de negocio y valida el resultado esperado.
 - El **equipo** propone la solución funcional y técnica más simple para cubrir esa necesidad.
 - **Cambios con impacto** en alcance, tiempos o datos sensibles se revisan con el referente institucional antes de desarrollarse.
-- Cada sprint deja trazabilidad visible en la sección de [**Sprints**](sprints/index.md).
+- Cada versión deja trazabilidad visible en la sección de [**Versiones**](versiones/index.md).
 
 ---
 

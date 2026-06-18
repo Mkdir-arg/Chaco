@@ -6,7 +6,7 @@ hide:
 # Chaco — Centro de Control del Proyecto
 
 !!! abstract "Espacio único de seguimiento"
-    Toda la información funcional y técnica del proyecto en un solo lugar: alcance, metodología, sprints, evidencias y plantillas operativas. Mantenido por el equipo, accesible para el cliente.
+    Toda la información funcional y técnica del proyecto en un solo lugar: alcance, metodología, versiones, evidencias y plantillas operativas. Mantenido por el equipo, accesible para el cliente.
 
 ---
 
@@ -133,14 +133,14 @@ flowchart LR
     |---|---|
     | Alinear objetivos y alcance | [Kick Off](kickoff.md) |
     | Entender el ciclo de trabajo | [Metodología](methodology.md) |
-    | Seguir avances y entregas | [Sprints](sprints/index.md) |
+    | Seguir avances y entregas | [Versiones](versiones/index.md) |
 
 === ":material-code-tags: Desarrollo"
 
     | Para qué | Ir a |
     |---|---|
     | Stack, capas y decisiones técnicas | [Arquitectura](architecture.md) |
-    | Sprint activo y backlog | [Sprints](sprints/index.md) |
+    | Versión activa y backlog | [Versiones](versiones/index.md) |
     | Estimar requerimientos | [Plantilla de estimación](templates/estimacion.md) |
 
 === ":material-checkbox-marked-circle-outline: QA y validación"

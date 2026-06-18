@@ -53,7 +53,7 @@
     | :material-link-variant: Integración entre áreas y sistemas | Mejor tiempo de respuesta y coordinación |
     | :material-clipboard-list-outline: Esquema único de seguimiento | Estados, responsables y métricas compartidas |
     | :material-server-network: Base técnica definida | Infraestructura, identidad y autenticación sin retrabajo |
-    | :material-sprint: Metodología por sprints | Prioridades acordadas, entregas iterativas, revisión continua |
+    | :material-package-variant-closed: Metodología por versiones | Prioridades acordadas, entregas iterativas, revisión continua |
 
 ---
 
@@ -71,7 +71,7 @@ El proyecto sigue la metodología definida en [**Metodología**](methodology.md)
 
     Análisis :material-arrow-right: Propuesta :material-arrow-right: Aprobación :material-arrow-right: Desarrollo :material-arrow-right: Pruebas :material-arrow-right: Capacitación :material-arrow-right: Despliegue.
 
--   :material-calendar-week-outline: **Planificación por sprints**
+-   :material-calendar-week-outline: **Planificación por versiones**
 
     Alcance acordado, revisión al cierre de cada iteración.
 
@@ -81,7 +81,7 @@ El proyecto sigue la metodología definida en [**Metodología**](methodology.md)
 
 - [x] Alinear el problema principal y los objetivos del primer tramo.
 - [x] Confirmar restricciones, prioridades y dependencias.
-- [x] Definir qué condiciones deben cumplirse para iniciar el primer sprint.
+- [x] Definir qué condiciones deben cumplirse para iniciar la primera versión.
 
 ---
 
@@ -112,12 +112,12 @@ El proyecto sigue la metodología definida en [**Metodología**](methodology.md)
 
     Cerrar las definiciones pendientes con el referente del ministerio.
 
--   :material-numeric-2-circle: **Planificar Sprint 001**
+-   :material-numeric-2-circle: **Planificar Versión 001**
 
-    Acordar alcance, duración y compromisos del primer sprint.
+    Acordar alcance, duración y compromisos de la primera versión.
 
 -   :material-numeric-3-circle: **Iniciar el ciclo**
 
-    Arrancar el primer sprint con backlog priorizado y aprobado.
+    Arrancar la primera versión con backlog priorizado y aprobado.
 
 </div>
