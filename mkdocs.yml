@@ -84,10 +84,13 @@ nav:
     - Reunión 1 — Inicio de proyecto: minutas/reunion-inicio-proyecto-2026-06-03.md
     - Reunión 2 — Roles y formularios - 2026-06-08: minutas/seguimiento-roles-formularios-2026-06-08.md
     - Reunión 3 — Estadísticas de instituciones - 2026-06-10: minutas/seguimiento-estadisticas-instituciones-2026-06-10.md
-  - Sprints:
-    - sprints/index.md
-    - Sprint 001 — Programa Becas y roles/permisos: sprints/sprint-001.md
-    - Sprint 001 — Detalle de consumo de horas: sprints/sprint-001-consumo-horas.md
+  - Versiones:
+    - versiones/index.md
+    - Version 001 - Programa Becas y roles/permisos: versiones/version-001.md
+    - Version 001 - Detalle de consumo de horas: versiones/version-001-consumo-horas.md
+  - Financiero:
+    - financiero/index.md
+    - Junio 2026: financiero/mes-2026-06.md
   - Funcionalidades:
     - funcionalidades/index.md
     - Programa Becas: funcionalidades/programa-becas.md
