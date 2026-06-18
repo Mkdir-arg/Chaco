@@ -2,8 +2,10 @@
 ## Relevamiento territorial y asignación de cupos
 
 **Fecha:** 2026-06-17
-**Versión:** 1.1
+**Versión:** 1.2
 **Alcance cubierto:** Análisis A — funcionalidades sin dependencia de integración SIS
+
+> **Nota de consumo:** Al 18 de junio de 2026 se han consumido 60 horas del sprint en análisis funcional, setup de entorno y desarrollo del motor RBAC base. Esta estimación cubre las 654 horas restantes del presupuesto de junio.
 
 ---
 
@@ -11,12 +13,14 @@
 
 | Concepto | Horas |
 |---|---:|
-| Desarrollo | 166 |
-| Diseño UX/UI | 25 |
-| Pruebas funcionales y QA | 84 |
-| Despliegue a ambiente QA | 14 |
-| Capacitación | 20 |
-| **Total** | **309** |
+| Desarrollo Backend | 168 |
+| Desarrollo Frontend | 52 |
+| Desarrollo App (React Native) | 158 |
+| Diseño UX/UI | 126 |
+| Pruebas funcionales y QA | 105 |
+| Despliegue a ambiente QA | 30 |
+| Capacitación | 15 |
+| **Total** | **654** |
 
 > Las horas corresponden a esfuerzo técnico neto. No incluyen reuniones de seguimiento, gestión de proyecto ni la integración con el Sistema SIS (Análisis B, pendiente de contrato técnico — ver §6).
 
@@ -26,45 +30,44 @@
 
 ### 2.1 Detalle por módulo
 
-| Ref | Módulo | Descripción | Horas |
+| Ref | Módulo | Descripción | Horas | Perfil |
 |---|---|---|---:|
-| T-01 | Modelo de datos | Modelos del dominio Becas: Segmento, Subsegmento, Convocatoria, Relevamiento, PreguntaGlobal, RequisitoNativo, AsignacionCoordinador, Formulario, TracaFormulario, ListaEspera. Migraciones y admin básico. | 12 |
-| T-02 | Configuración del programa | ABM de segmentos, subsegmentos con validación de cupo, asignación de coordinadores por segmento, ABM de requisitos nativos con tipo de campo (texto / número / selector / fecha / archivo) y ABM del cuestionario social (13 preguntas globales con toggle activo). | 10 |
-| T-03 | Convocatorias | ABM de convocatorias con selección dinámica de segmento y subsegmento (Alpine.js). Visualización de requisitos configurados. | 4 |
-| T-04 | Relevamientos | ABM de relevamientos, asignación y reasignación de territorial, reprogramación por Coordinador. | 5 |
-| T-05 | Revisión de formularios | Pantalla de revisión caso a caso: aprobación, rechazo con motivo, edición de datos con trazabilidad completa (quién / cuándo / valor anterior). | 6 |
-| T-06 | Gestión de cupo | Vista de cupo por segmento, lista de beneficiarios activos, lista de espera, baja manual y promoción manual. | 5 |
-| T-07 | Roles y autorización | Creación de roles Admin, Territorial y Coordinador integrados al motor RBAC existente. Control de acceso por segmento asignado para el rol Coordinador. | 5 |
-| T-08 | Solapa Becas en legajo | Pestaña dinámica "Becas" en el legajo del ciudadano: estado, datos del formulario, vínculo con la pantalla de revisión. | 10 |
-| T-09 | Reportes | Exportación CSV/Excel de beneficiarios activos, lista de espera y avance de relevamientos, con filtros por segmento y convocatoria. | 4 |
-| T-10 | API para app de campo | Endpoints REST para la app territorial: autenticación, listado de relevamientos con definición dinámica del formulario (tipos de campo y opciones), carga de formularios, sincronización offline y finalización en lote. | 8 |
-| T-11 | Validación RENAPER | Integración de los 3 caminos de validación de identidad (escaneo de DNI / RENAPER online / carga manual). Revalidación diferida desde el backoffice. | 4 |
-| T-12 | App de campo (React Native) | App Expo/React Native para el agente territorial: autenticación JWT con persistencia de sesión, listado de relevamientos asignados, motor de formulario dinámico (6 tipos de campo: STRING / INT / SELECTOR / SELECTOR_MULTIPLE / DATE / ARCHIVO), captura GPS automática, escaneo y validación de DNI (3 caminos RENAPER), carga de adjuntos con cámara, almacenamiento offline con sync automático al reconectar, finalización de relevamiento. EAS Build para Android e iOS. | 64 |
-| | **Subtotal desarrollo** | | **166** |
+| T-01 | Modelo de datos | Modelos del dominio Becas: Segmento, Subsegmento, Convocatoria, Relevamiento, PreguntaGlobal, RequisitoNativo, AsignacionCoordinador, Formulario, TracaFormulario, ListaEspera. Migraciones y admin básico. | 21 | Backend |
+| T-02 | Configuración del programa | ABM de segmentos, subsegmentos con validación de cupo, asignación de coordinadores por segmento, ABM de requisitos nativos con tipo de campo (texto / número / selector / fecha / archivo) y ABM del cuestionario social (13 preguntas globales con toggle activo). | 32 | Backend + Frontend |
+| T-03 | Convocatorias | ABM de convocatorias con selección dinámica de segmento y subsegmento (Alpine.js). Visualización de requisitos configurados. | 13 | Backend + Frontend |
+| T-04 | Relevamientos | ABM de relevamientos, asignación y reasignación de territorial, reprogramación por Coordinador. | 16 | Backend + Frontend |
+| T-05 | Revisión de formularios | Pantalla de revisión caso a caso: aprobación, rechazo con motivo, edición de datos con trazabilidad completa (quién / cuándo / valor anterior). | 21 | Backend + Frontend |
+| T-06 | Gestión de cupo | Vista de cupo por segmento, lista de beneficiarios activos, lista de espera, baja manual y promoción manual. | 19 | Backend + Frontend |
+| T-07 | Roles y autorización | Creación de roles Admin, Territorial y Coordinador integrados al motor RBAC existente. Control de acceso por segmento asignado para el rol Coordinador. | 13 | Backend |
+| T-08 | Solapa Becas en legajo | Pestaña dinámica "Becas" en el legajo del ciudadano: estado, datos del formulario, vínculo con la pantalla de revisión. | 16 | Backend + Frontend |
+| T-09 | Reportes | Exportación CSV/Excel de beneficiarios activos, lista de espera y avance de relevamientos, con filtros por segmento y convocatoria. | 13 | Backend + Frontend |
+| T-10 | API para app de campo | Endpoints REST para la app territorial: autenticación, listado de relevamientos con definición dinámica del formulario (tipos de campo y opciones), carga de formularios, sincronización offline y finalización en lote. | 29 | Backend |
+| T-11 | Validación RENAPER | Integración de los 3 caminos de validación de identidad (escaneo de DNI / RENAPER online / carga manual). Revalidación diferida desde el backoffice. | 19 | Backend |
+| T-12 | App de campo (React Native) | App Expo/React Native para el agente territorial: autenticación JWT con persistencia de sesión, listado de relevamientos asignados, motor de formulario dinámico (6 tipos de campo: STRING / INT / SELECTOR / SELECTOR_MULTIPLE / DATE / ARCHIVO), captura GPS automática, escaneo y validación de DNI (3 caminos RENAPER), carga de adjuntos con cámara, almacenamiento offline con sync automático al reconectar, finalización de relevamiento. EAS Build para Android e iOS. | 158 | App React Native |
+| | **Subtotal desarrollo** | | **378** | |
 
 ### 2.2 Detalle de la app de campo (T-12)
 
 | Componente | Horas |
 |---|---:|
-| Setup: proyecto Expo, navegación, estado global, auth JWT | 8 |
-| Pantalla de relevamientos (lista, detalle, badges de estado) | 6 |
-| Motor de formulario dinámico (6 tipos de campo, bloques fijos, GPS) | 14 |
-| Escaneo de DNI y flujo de validación RENAPER (3 caminos) | 8 |
-| Carga y almacenamiento de adjuntos (cámara + archivos) | 6 |
-| Sincronización offline (cola local, retry, indicador de estado) | 10 |
-| Envío, actualización y finalización de relevamiento | 5 |
-| EAS Build, signing, configuración de entornos y distribución de prueba | 7 |
-| **Total T-12** | **64** |
+| Setup: proyecto Expo, navegación, estado global, auth JWT | 21 |
+| Pantalla de relevamientos (lista, detalle, badges de estado) | 16 |
+| Motor de formulario dinámico (6 tipos de campo, bloques fijos, GPS) | 37 |
+| Escaneo de DNI y flujo de validación RENAPER (3 caminos) | 21 |
+| Carga y almacenamiento de adjuntos (cámara + archivos) | 16 |
+| Sincronización offline (cola local, retry, indicador de estado) | 26 |
+| Envío, actualización y finalización de relevamiento | 11 |
+| EAS Build, signing, configuración de entornos y distribución de prueba | 10 |
+| **Total T-12** | **158** |
 
 ### 2.3 Distribución por perfil
 
 | Perfil | Módulos | Horas |
 |---|---|---:|
-| Desarrollador fullstack | T-01 a T-09 | 73 |
-| Desarrollador backend / API | T-10, T-11 | 15 |
-| Desarrollador React Native | T-12 | 73 |
-| Revisión técnica / code review | Todos | 5 |
-| **Total** | | **166** |
+| Desarrollador Backend | T-01, T-07, T-10, T-11 + parte de T-02 a T-09 | 168 |
+| Desarrollador Frontend | Parte de T-02 a T-09 | 52 |
+| Desarrollador React Native | T-12 | 158 |
+| **Total** | | **378** |
 
 ---
 
@@ -74,25 +77,25 @@
 
 | Concepto | Horas |
 |---|---:|
-| Escritura de casos de prueba documentados (módulos T-01 a T-11) | 14 |
-| Ejecución de pruebas por módulo | 18 |
-| Pruebas de flujo end-to-end (relevamiento completo: desde configuración hasta cupo asignado) | 10 |
-| Pruebas de la API (Postman o herramienta equivalente) | 5 |
-| Registro de defectos, re-test y cierre | 5 |
-| **Subtotal QA backoffice** | **52** |
+| Escritura de casos de prueba documentados (módulos T-01 a T-11) | 19 |
+| Ejecución de pruebas por módulo | 25 |
+| Pruebas de flujo end-to-end (relevamiento completo: desde configuración hasta cupo asignado) | 15 |
+| Pruebas de la API (Postman o herramienta equivalente) | 8 |
+| Registro de defectos, re-test y cierre | 6 |
+| **Subtotal QA backoffice** | **73** |
 
 ### 3.2 Alcance — app de campo (React Native)
 
 | Concepto | Horas |
 |---|---:|
 | Escritura de casos de prueba (formulario dinámico, offline, RENAPER) | 8 |
-| Ejecución en dispositivo Android (flujo completo) | 10 |
+| Ejecución en dispositivo Android (flujo completo) | 11 |
 | Pruebas de escenarios offline: guardar borrador → reconectar → sync | 7 |
-| Pruebas de los 3 caminos de validación RENAPER desde el dispositivo | 5 |
+| Pruebas de los 3 caminos de validación RENAPER desde el dispositivo | 4 |
 | Registro de defectos, re-test y cierre | 2 |
 | **Subtotal QA app** | **32** |
 
-| **Total QA** | **84** |
+| **Total QA** | **105** |
 |---|---:|
 
 ### 3.3 Escenarios críticos cubiertos
@@ -111,12 +114,12 @@
 
 | Concepto | Horas |
 |---|---:|
-| Configuración del ambiente (Docker, variables de entorno, base de datos) | 3 |
-| Despliegue del código y ejecución de migraciones | 2 |
-| Carga de datos iniciales de prueba (segmentos, preguntas del cuestionario social, usuarios y roles de prueba) | 3 |
-| Verificación post-despliegue y smoke tests del backoffice | 2 |
-| EAS Build del apk de prueba y distribución interna (Firebase App Distribution o similar) | 4 |
-| **Subtotal despliegue** | **14** |
+| Configuración del ambiente (Docker, variables de entorno, base de datos) | 8 |
+| Despliegue del código y ejecución de migraciones | 5 |
+| Carga de datos iniciales de prueba (segmentos, preguntas del cuestionario social, usuarios y roles de prueba) | 6 |
+| Verificación post-despliegue y smoke tests del backoffice | 5 |
+| EAS Build del apk de prueba y distribución interna (Firebase App Distribution o similar) | 6 |
+| **Subtotal despliegue** | **30** |
 
 ---
 
@@ -124,11 +127,11 @@
 
 | Sesión | Destinatarios | Horas |
 |---|---|---:|
-| Elaboración de materiales (guía de usuario por rol, manual de la app) | — | 6 |
+| Elaboración de materiales (guía de usuario por rol, manual de la app) | — | 4 |
 | Administradores del programa: configuración de segmentos, convocatorias, revisión de formularios, cupo y reportes | Equipo ministerio | 5 |
-| Coordinadores: revisión de formularios y reprogramación de relevamientos | Coordinadores territoriales | 3 |
-| Territoriales: instalación de la app y uso en campo (relevamientos y carga de formularios) | Agentes de campo | 6 |
-| **Subtotal capacitación** | | **20** |
+| Coordinadores: revisión de formularios y reprogramación de relevamientos | Coordinadores territoriales | 2 |
+| Territoriales: instalación de la app y uso en campo (relevamientos y carga de formularios) | Agentes de campo | 4 |
+| **Subtotal capacitación** | | **15** |
 
 ---
 
@@ -158,20 +161,24 @@
 ## 8. Resumen por fase
 
 ```
-Desarrollo ················· 166 h  ████████████████████████████████████░░░░
-Diseño UX/UI ················ 25 h  ██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Pruebas y QA ················ 84 h  ██████████████████████░░░░░░░░░░░░░░░░░
-Despliegue a QA ·············· 14 h  ███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-Capacitación ················ 20 h  █████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Desarrollo Backend ············ 168 h  ████████████████████████████░░░░░░░░
+Desarrollo Frontend ········· 52 h  ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Desarrollo App ·············· 158 h  ████████████████████████░░░░░░░░░░░░
+Diseño UX/UI ················ 126 h  ███████████████████░░░░░░░░░░░░░░░░░
+Pruebas y QA ················ 105 h  ████████████████░░░░░░░░░░░░░░░░░░░░
+Despliegue a QA ············· 30 h  █████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+Capacitación ················ 15 h  ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 
-Total                       309 h
+Total                       654 h
 ```
 
 | | Horas | % |
 |---|---:|---:|
-| Desarrollo | 166 | 54 % |
-| Diseño UX/UI | 25 | 8 % |
-| Pruebas y QA | 84 | 27 % |
-| Despliegue | 14 | 5 % |
-| Capacitación | 20 | 6 % |
-| **Total** | **309** | **100 %** |
+| Desarrollo Backend | 168 | 26 % |
+| Desarrollo Frontend | 52 | 8 % |
+| Desarrollo App | 158 | 24 % |
+| Diseño UX/UI | 126 | 19 % |
+| Pruebas y QA | 105 | 16 % |
+| Despliegue | 30 | 5 % |
+| Capacitación | 15 | 2 % |
+| **Total** | **654** | **100 %** |
