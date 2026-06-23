@@ -42,6 +42,7 @@ urlpatterns = [
     path("api/legajos/", include("legajos.urls.api")),
     path("api/core/", include("core.api_urls")),
     path("api/users/", include("users.api_urls")),
+    path("api/becas/", include("programas.api_urls")),
     path("api/conversaciones/", include(("conversaciones.api_urls", "conversaciones_api"), namespace="conversaciones_api")),
     
     # API Documentation

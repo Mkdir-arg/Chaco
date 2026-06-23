@@ -36,6 +36,32 @@ def get_campos_formulario(convocatoria):
     return globales, requisitos
 
 
+def _campo_dict(obj):
+    return {
+        "id": obj.pk,
+        "texto": obj.texto,
+        "tipo": obj.tipo,
+        "opciones": obj.opciones or [],
+        "obligatorio": obj.obligatorio,
+        "orden": obj.orden,
+    }
+
+
+def definicion_formulario(relevamiento):
+    """Definición del formulario para la app de campo (#82).
+
+    Devuelve preguntas globales y requisitos (con herencia de subsegmento) según
+    la convocatoria del relevamiento, más el flag ``requiere_gps`` del segmento.
+    """
+    convocatoria = relevamiento.convocatoria
+    globales, requisitos = get_campos_formulario(convocatoria)
+    return {
+        "requiere_gps": convocatoria.segmento.requiere_gps,
+        "globales": [_campo_dict(p) for p in globales],
+        "requisitos": [_campo_dict(r) for r in requisitos],
+    }
+
+
 def get_segmentos_coordinador(user):
     """Segmentos sobre los que ``user`` tiene una asignación de coordinador activa."""
     if user is None or not getattr(user, "is_authenticated", False):
