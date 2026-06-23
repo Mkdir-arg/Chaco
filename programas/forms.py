@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from programas.models import (
     AsignacionCoordinador,
     Convocatoria,
+    Formulario,
     PreguntaGlobal,
     Relevamiento,
     RequisitoNativo,
@@ -226,3 +227,37 @@ class ReprogramarForm(forms.Form):
         widget=forms.DateInput(attrs={"class": INPUT_CLASS, "type": "date"}),
         label="Nueva fecha asignada",
     )
+
+
+class FormularioRevisionForm(forms.ModelForm):
+    """Edición en revisión de los campos de contacto/apoderado del formulario.
+
+    Cada cambio queda registrado en ``TracaFormulario`` (lo hace la vista, no el
+    form). Las respuestas dinámicas y la identidad RENAPER no se editan acá.
+    """
+
+    # Etiquetas legibles de los campos auditables (para la traza).
+    LABELS = {
+        "celular": "Celular",
+        "email_contacto": "Correo electrónico",
+        "apoderado_nombre": "Apoderado · nombre",
+        "apoderado_apellido": "Apoderado · apellido",
+        "apoderado_fecha_nacimiento": "Apoderado · fecha de nacimiento",
+    }
+
+    class Meta:
+        model = Formulario
+        fields = [
+            "celular",
+            "email_contacto",
+            "apoderado_nombre",
+            "apoderado_apellido",
+            "apoderado_fecha_nacimiento",
+        ]
+        widgets = {
+            "celular": forms.TextInput(attrs={"class": INPUT_CLASS}),
+            "email_contacto": forms.EmailInput(attrs={"class": INPUT_CLASS}),
+            "apoderado_nombre": forms.TextInput(attrs={"class": INPUT_CLASS}),
+            "apoderado_apellido": forms.TextInput(attrs={"class": INPUT_CLASS}),
+            "apoderado_fecha_nacimiento": forms.DateInput(attrs={"class": INPUT_CLASS, "type": "date"}),
+        }

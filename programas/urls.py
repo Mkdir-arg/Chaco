@@ -3,6 +3,7 @@ from django.urls import path
 
 from programas.views import configuracion as cfg
 from programas.views import relevamientos as rel
+from programas.views import revision as rev
 
 app_name = "becas"
 
@@ -45,4 +46,13 @@ urlpatterns = [
     path("relevamientos/<int:pk>/", rel.RelevamientoDetailView.as_view(), name="relevamiento_detalle"),
     path("relevamientos/<int:pk>/reasignar/", rel.relevamiento_reasignar, name="relevamiento_reasignar"),
     path("relevamientos/<int:pk>/reprogramar/", rel.relevamiento_reprogramar, name="relevamiento_reprogramar"),
+
+    # --- Revisión de formularios ---
+    path("revision/", rev.RevisionRelevamientoListView.as_view(), name="revision"),
+    path("revision/relevamiento/<int:relevamiento_pk>/", rev.revision_formularios, name="revision_formularios"),
+    path("revision/relevamiento/<int:pk>/iniciar/", rev.relevamiento_iniciar_revision, name="revision_iniciar"),
+    path("revision/relevamiento/<int:pk>/terminar/", rev.relevamiento_terminar, name="revision_terminar"),
+    path("revision/formulario/<int:pk>/", rev.formulario_detalle, name="formulario_detalle"),
+    path("revision/formulario/<int:pk>/aprobar/", rev.formulario_aprobar, name="formulario_aprobar"),
+    path("revision/formulario/<int:pk>/rechazar/", rev.formulario_rechazar, name="formulario_rechazar"),
 ]

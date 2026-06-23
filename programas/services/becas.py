@@ -74,6 +74,29 @@ def es_menor(fecha_nacimiento, referencia=None):
     return edad < 18
 
 
+def registrar_traza(formulario, usuario, cambios):
+    """Registra en ``TracaFormulario`` una lista de cambios de campos (RN-14/29).
+
+    ``cambios``: iterable de ``(campo, valor_anterior, valor_nuevo)``. Crea una
+    fila inmutable por cambio. Devuelve la cantidad registrada.
+    """
+    from programas.models import TracaFormulario
+
+    objs = [
+        TracaFormulario(
+            formulario=formulario,
+            editado_por=usuario,
+            campo=campo,
+            valor_anterior="" if va in (None, "") else str(va),
+            valor_nuevo="" if vn in (None, "") else str(vn),
+        )
+        for (campo, va, vn) in cambios
+    ]
+    if objs:
+        TracaFormulario.objects.bulk_create(objs)
+    return len(objs)
+
+
 @transaction.atomic
 def resolver_ciudadano_offline(formulario):
     """Resuelve el ciudadano de un formulario que llegó por sync offline.

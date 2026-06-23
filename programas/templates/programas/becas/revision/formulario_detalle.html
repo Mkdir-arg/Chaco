@@ -1,0 +1,149 @@
+{% extends "includes/base.html" %}
+{% block title %}Becas · Formulario #{{ formulario.pk }}{% endblock %}
+
+{% block main-content %}
+<div class="max-w-5xl mx-auto space-y-6">
+  <div>
+    <a href="{% url 'becas:revision_formularios' relevamiento.pk %}" class="text-xs text-body-subtle hover:underline">← {{ relevamiento.nombre }}</a>
+    <div class="flex items-center gap-3">
+      <h1 class="text-2xl font-bold text-heading">Formulario #{{ formulario.pk }}</h1>
+      {% if formulario.estado == 'APROBADO' %}<span class="inline-flex rounded-full bg-success-soft px-3 py-0.5 text-xs font-medium text-fg-success">Aprobado</span>
+      {% elif formulario.estado == 'RECHAZADO' %}<span class="inline-flex rounded-full bg-danger-soft px-3 py-0.5 text-xs font-medium text-fg-danger">Rechazado</span>
+      {% else %}<span class="inline-flex rounded-full bg-warning-soft px-3 py-0.5 text-xs font-medium text-fg-warning">Enviado</span>{% endif %}
+    </div>
+  </div>
+
+  {% if formulario.estado == 'RECHAZADO' and formulario.motivo_rechazo %}
+  <div class="rounded-lg bg-danger-soft p-3 text-sm text-fg-danger"><strong>Motivo de rechazo:</strong> {{ formulario.motivo_rechazo }}</div>
+  {% endif %}
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Identidad + SIS -->
+    <div class="space-y-4">
+      <div class="rounded-xl border border-base bg-primary p-5 text-sm space-y-1">
+        <h3 class="font-semibold text-heading mb-2">Identidad</h3>
+        {% if formulario.ciudadano %}
+          <p class="text-heading font-medium">{{ formulario.ciudadano.nombre }} {{ formulario.ciudadano.apellido }}</p>
+          <p class="text-body-subtle">DNI {{ formulario.ciudadano.dni }}</p>
+        {% elif formulario.datos_identificacion %}
+          <p class="text-heading font-medium">{{ formulario.datos_identificacion.nombre }} {{ formulario.datos_identificacion.apellido }}</p>
+          <p class="text-body-subtle">DNI {{ formulario.datos_identificacion.dni }} · capturado offline</p>
+        {% else %}
+          <p class="text-body-subtle">Sin identificar</p>
+        {% endif %}
+        <p class="pt-2">RENAPER:
+          {% if formulario.validado_renaper %}<span class="text-fg-success">validado</span>{% else %}<span class="text-body-subtle">pendiente</span>{% endif %}
+        </p>
+      </div>
+      <div class="rounded-xl border border-dashed border-base bg-secondary-soft p-5 text-sm">
+        <h3 class="font-semibold text-heading mb-1"><i class="fas fa-plug mr-1"></i> Resultado SIS</h3>
+        <p class="text-body-subtle">Integración pendiente. La validación socioeconómica y la asignación de cupo se resolverán cuando el SIS esté disponible.</p>
+      </div>
+    </div>
+
+    <!-- Edición contacto/apoderado -->
+    <div class="lg:col-span-2">
+      <form method="post" class="rounded-xl border border-base bg-primary p-6">
+        {% csrf_token %}
+        <h3 class="font-semibold text-heading mb-4">Datos de contacto y apoderado</h3>
+        {% if form.non_field_errors %}<div class="mb-3 rounded-lg bg-danger-soft p-3 text-sm text-fg-danger">{{ form.non_field_errors }}</div>{% endif %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {% for field in form %}<div>{% include "programas/becas/_field.html" %}</div>{% endfor %}
+        </div>
+        <p class="text-xs text-body-subtle mt-2"><i class="fas fa-history mr-1"></i> Cada cambio queda registrado en la traza.</p>
+        <div class="text-right mt-4">
+          <button type="submit" class="rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-strong">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Respuestas del cuestionario -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+    <div class="rounded-xl border border-base bg-primary p-5">
+      <h3 class="font-semibold text-heading mb-3">Cuestionario social</h3>
+      {% if globales_list %}<dl class="space-y-2 text-sm">
+        {% for label, valor in globales_list %}<div><dt class="text-body-subtle">{{ label }}</dt><dd class="text-heading">{{ valor }}</dd></div>{% endfor %}
+      </dl>{% else %}<p class="text-sm text-body-subtle">Sin respuestas.</p>{% endif %}
+    </div>
+    <div class="rounded-xl border border-base bg-primary p-5">
+      <h3 class="font-semibold text-heading mb-3">Requisitos del segmento</h3>
+      {% if requisitos_list %}<dl class="space-y-2 text-sm">
+        {% for label, valor in requisitos_list %}<div><dt class="text-body-subtle">{{ label }}</dt><dd class="text-heading">{{ valor }}</dd></div>{% endfor %}
+      </dl>{% else %}<p class="text-sm text-body-subtle">Sin respuestas.</p>{% endif %}
+    </div>
+  </div>
+
+  <!-- Acciones de revisión -->
+  {% if formulario.estado == 'ENVIADO' %}
+  <div class="flex justify-end gap-3">
+    <button type="button" id="btn-rechazar" class="rounded-xl bg-danger px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90">
+      <i class="fas fa-times mr-1"></i> Rechazar
+    </button>
+    <form method="post" action="{% url 'becas:formulario_aprobar' formulario.pk %}" id="form-aprobar">
+      {% csrf_token %}
+      <button type="button" id="btn-aprobar" class="rounded-xl bg-success px-5 py-2.5 text-sm font-semibold text-white hover:opacity-90">
+        <i class="fas fa-check mr-1"></i> Aprobar
+      </button>
+    </form>
+  </div>
+  <form method="post" action="{% url 'becas:formulario_rechazar' formulario.pk %}" id="form-rechazar" class="hidden">
+    {% csrf_token %}<input type="hidden" name="motivo" id="motivo-rechazo">
+  </form>
+  {% endif %}
+
+  <!-- Traza -->
+  <div class="rounded-xl border border-base bg-primary p-5">
+    <h3 class="font-semibold text-heading mb-3"><i class="fas fa-history mr-1"></i> Traza de cambios</h3>
+    {% if trazas %}
+    <ul class="space-y-2 text-sm">
+      {% for t in trazas %}
+      <li class="flex items-start gap-3 border-b border-base/50 pb-2">
+        <span class="text-body-subtle whitespace-nowrap">{{ t.created_at|date:"d/m/Y H:i" }}</span>
+        <span class="text-heading"><strong>{{ t.campo }}</strong>: <span class="text-body-subtle line-through">{{ t.valor_anterior|default:"—" }}</span> → {{ t.valor_nuevo|default:"—" }}</span>
+        <span class="ml-auto text-body-subtle">{{ t.editado_por.username|default:"—" }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}<p class="text-sm text-body-subtle">Sin cambios registrados.</p>{% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block customJS %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const btnAprobar = document.getElementById('btn-aprobar');
+  if (btnAprobar) {
+    btnAprobar.addEventListener('click', function () {
+      Swal.fire({
+        title: '¿Aprobar formulario?', icon: 'question', showCancelButton: true,
+        confirmButtonColor: '#16a34a', cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, aprobar', cancelButtonText: 'Cancelar',
+      }).then(function (r) { if (r.isConfirmed) document.getElementById('form-aprobar').submit(); });
+    });
+  }
+  const btnRechazar = document.getElementById('btn-rechazar');
+  if (btnRechazar) {
+    btnRechazar.addEventListener('click', function () {
+      Swal.fire({
+        title: 'Rechazar formulario',
+        input: 'textarea',
+        inputLabel: 'Motivo del rechazo (obligatorio)',
+        inputPlaceholder: 'Detallá el motivo...',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626', cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Rechazar', cancelButtonText: 'Cancelar',
+        inputValidator: function (value) { if (!value || !value.trim()) return 'El motivo es obligatorio.'; },
+      }).then(function (r) {
+        if (r.isConfirmed) {
+          document.getElementById('motivo-rechazo').value = r.value;
+          document.getElementById('form-rechazar').submit();
+        }
+      });
+    });
+  }
+});
+</script>
+{% endblock %}

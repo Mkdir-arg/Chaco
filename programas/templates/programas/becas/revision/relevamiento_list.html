@@ -1,0 +1,46 @@
+{% extends "includes/base.html" %}
+{% block title %}Becas · Revisión{% endblock %}
+
+{% block main-content %}
+<div class="mb-8">
+  <div class="mb-6">
+    <h1 class="text-2xl sm:text-3xl font-bold text-heading">Revisión de formularios</h1>
+    <p class="text-body-subtle mt-1 text-sm">Relevamientos finalizados, listos para revisar caso a caso</p>
+  </div>
+
+  <div class="rounded-xl border border-base bg-primary overflow-hidden">
+    {% if relevamientos %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-secondary-soft text-body-subtle"><tr>
+          <th class="px-5 py-3 text-left font-semibold">RELEVAMIENTO</th>
+          <th class="px-5 py-3 text-left font-semibold">SEGMENTO</th>
+          <th class="px-5 py-3 text-left font-semibold">TERRITORIAL</th>
+          <th class="px-5 py-3 text-left font-semibold">ESTADO</th>
+          <th class="px-5 py-3 text-right font-semibold"></th>
+        </tr></thead>
+        <tbody class="divide-y divide-[color:var(--border-base)]">
+          {% for rel in relevamientos %}
+          <tr class="hover:bg-secondary-soft">
+            <td class="px-5 py-3 font-medium text-heading">{{ rel.nombre }}</td>
+            <td class="px-5 py-3">{{ rel.convocatoria.segmento.nombre }}</td>
+            <td class="px-5 py-3">{{ rel.territorial.get_full_name|default:rel.territorial.username }}</td>
+            <td class="px-5 py-3">{% include "programas/becas/relevamientos/_estado_badge.html" %}</td>
+            <td class="px-5 py-3 text-right">
+              <a href="{% url 'becas:revision_formularios' rel.pk %}" class="text-fg-brand hover:underline">Revisar →</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-12 text-center">
+      <i class="fas fa-clipboard-list text-5xl text-body-subtle/40 mb-4"></i>
+      <h3 class="text-lg font-semibold text-heading mb-1">No hay relevamientos para revisar</h3>
+      <p class="text-body-subtle text-sm">Aparecerán acá cuando el territorial finalice su carga.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

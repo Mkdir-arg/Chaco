@@ -119,6 +119,10 @@ class RelevamientoDetailView(_RelevMixin, DetailView):
         ctx["form_reprogramar"] = ReprogramarForm(initial={"fecha_asignada": rel.fecha_asignada})
         ctx["n_formularios"] = rel.formularios.count()
         ctx["puede_revisar"] = puede(self.request.user, "becas.revisar")
+        ctx["estados_revisables"] = [
+            Relevamiento.Estado.FINALIZADO,
+            Relevamiento.Estado.EN_REVISION,
+        ]
         return ctx
 
 

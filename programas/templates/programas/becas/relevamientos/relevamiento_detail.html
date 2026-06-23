@@ -41,6 +41,12 @@
     </div>
   </div>
 
-  {% block revision_link %}{% endblock %}
+  {% if puede_revisar and relevamiento.estado in estados_revisables %}
+  <div class="text-right">
+    <a href="{% url 'becas:revision_formularios' relevamiento.pk %}" class="inline-flex items-center gap-2 rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-strong">
+      <i class="fas fa-clipboard-check"></i> Revisar formularios
+    </a>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

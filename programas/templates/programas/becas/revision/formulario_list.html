@@ -1,0 +1,77 @@
+{% extends "includes/base.html" %}
+{% block title %}Becas · Revisión {{ relevamiento.nombre }}{% endblock %}
+
+{% block main-content %}
+<div class="mb-8">
+  <a href="{% url 'becas:revision' %}" class="text-xs text-body-subtle hover:underline">← Revisión</a>
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
+    <div>
+      <h1 class="text-2xl font-bold text-heading flex items-center gap-3">
+        {{ relevamiento.nombre }}
+        {% with rel=relevamiento %}{% include "programas/becas/relevamientos/_estado_badge.html" %}{% endwith %}
+      </h1>
+      <p class="text-body-subtle text-sm">{{ relevamiento.convocatoria.segmento.nombre }} · {{ pendientes }} pendiente(s) de revisión</p>
+    </div>
+    <div class="flex gap-2">
+      {% if relevamiento.estado == 'FINALIZADO' %}
+      <form method="post" action="{% url 'becas:revision_iniciar' relevamiento.pk %}">{% csrf_token %}
+        <button class="rounded-xl border border-brand px-4 py-2 text-sm font-semibold text-fg-brand hover:bg-brand-softer">Iniciar revisión</button>
+      </form>
+      {% elif relevamiento.estado == 'EN_REVISION' %}
+      <form method="post" action="{% url 'becas:revision_terminar' relevamiento.pk %}">{% csrf_token %}
+        <button class="rounded-xl bg-success px-4 py-2 text-sm font-semibold text-white hover:opacity-90">Marcar terminado</button>
+      </form>
+      {% endif %}
+    </div>
+  </div>
+
+  <form method="get" class="mb-4 flex items-center gap-2">
+    <label class="text-sm text-body-subtle">Estado:</label>
+    <select name="estado" onchange="this.form.submit()" class="rounded-lg border border-base bg-secondary-soft px-3 py-1.5 text-sm">
+      <option value="">Todos</option>
+      {% for value, label in estados %}<option value="{{ value }}" {% if value == estado_actual %}selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+  </form>
+
+  <div class="rounded-xl border border-base bg-primary overflow-hidden">
+    {% if formularios %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-secondary-soft text-body-subtle"><tr>
+          <th class="px-5 py-3 text-left font-semibold">CIUDADANO</th>
+          <th class="px-5 py-3 text-left font-semibold">CONTACTO</th>
+          <th class="px-5 py-3 text-center font-semibold">RENAPER</th>
+          <th class="px-5 py-3 text-left font-semibold">ESTADO</th>
+          <th class="px-5 py-3 text-right font-semibold"></th>
+        </tr></thead>
+        <tbody class="divide-y divide-[color:var(--border-base)]">
+          {% for f in formularios %}
+          <tr class="hover:bg-secondary-soft">
+            <td class="px-5 py-3 text-heading">
+              {% if f.ciudadano %}{{ f.ciudadano.nombre }} {{ f.ciudadano.apellido }} <span class="text-body-subtle">({{ f.ciudadano.dni }})</span>
+              {% elif f.datos_identificacion %}{{ f.datos_identificacion.nombre }} {{ f.datos_identificacion.apellido }} <span class="text-body-subtle">(offline)</span>
+              {% else %}<span class="text-body-subtle">Sin identificar</span>{% endif %}
+            </td>
+            <td class="px-5 py-3">{{ f.celular }}</td>
+            <td class="px-5 py-3 text-center">{% if f.validado_renaper %}<i class="fas fa-check text-fg-success"></i>{% else %}<i class="fas fa-clock text-body-subtle"></i>{% endif %}</td>
+            <td class="px-5 py-3">
+              {% if f.estado == 'APROBADO' %}<span class="inline-flex rounded-full bg-success-soft px-2.5 py-0.5 text-xs font-medium text-fg-success">Aprobado</span>
+              {% elif f.estado == 'RECHAZADO' %}<span class="inline-flex rounded-full bg-danger-soft px-2.5 py-0.5 text-xs font-medium text-fg-danger">Rechazado</span>
+              {% else %}<span class="inline-flex rounded-full bg-warning-soft px-2.5 py-0.5 text-xs font-medium text-fg-warning">Enviado</span>{% endif %}
+            </td>
+            <td class="px-5 py-3 text-right"><a href="{% url 'becas:formulario_detalle' f.pk %}" class="text-fg-brand hover:underline">Abrir →</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="p-12 text-center">
+      <i class="fas fa-inbox text-5xl text-body-subtle/40 mb-4"></i>
+      <h3 class="text-lg font-semibold text-heading mb-1">Sin formularios</h3>
+      <p class="text-body-subtle text-sm">Este relevamiento todavía no tiene formularios cargados.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
