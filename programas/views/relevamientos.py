@@ -115,7 +115,7 @@ class RelevamientoDetailView(_RelevMixin, DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         rel = self.object
-        ctx["form_reasignar"] = ReasignarTerritorialForm()
+        ctx["form_reasignar"] = ReasignarTerritorialForm(initial={"territorial": rel.territorial})
         ctx["form_reprogramar"] = ReprogramarForm(initial={"fecha_asignada": rel.fecha_asignada})
         ctx["n_formularios"] = rel.formularios.count()
         ctx["puede_revisar"] = puede(self.request.user, "becas.revisar")

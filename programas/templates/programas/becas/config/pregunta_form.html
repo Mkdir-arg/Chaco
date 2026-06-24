@@ -26,3 +26,22 @@
   </form>
 </div>
 {% endblock %}
+
+{% block customJS %}
+<script>
+(function () {
+  var TIPOS_CON_OPCIONES = ['SELECTOR', 'SELECTOR_MULTIPLE'];
+  var tipoSelect = document.getElementById('id_tipo');
+  var opcionesField = document.getElementById('id_opciones_texto');
+  if (!tipoSelect || !opcionesField) return;
+  var opcionesWrapper = opcionesField.closest('.mb-4');
+  if (!opcionesWrapper) return;
+
+  function toggle() {
+    opcionesWrapper.style.display = TIPOS_CON_OPCIONES.indexOf(tipoSelect.value) !== -1 ? '' : 'none';
+  }
+  toggle();
+  tipoSelect.addEventListener('change', toggle);
+})();
+</script>
+{% endblock %}

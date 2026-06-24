@@ -156,7 +156,7 @@
         <div>{{ form_requisito.texto.label_tag }}{{ form_requisito.texto }}</div>
         <div>{{ form_requisito.tipo.label_tag }}{{ form_requisito.tipo }}</div>
       </div>
-      <div>
+      <div data-opciones-wrapper>
         {{ form_requisito.opciones_texto.label_tag }}{{ form_requisito.opciones_texto }}
         <p class="text-xs text-body-subtle mt-1">{{ form_requisito.opciones_texto.help_text }}</p>
       </div>
@@ -172,4 +172,24 @@
 </div>
 {% endblock %}
 
-{% block customJS %}{% include "programas/becas/_confirm_js.html" %}{% endblock %}
+{% block customJS %}
+{% include "programas/becas/_confirm_js.html" %}
+<script>
+(function () {
+  var TIPOS_CON_OPCIONES = ['SELECTOR', 'SELECTOR_MULTIPLE'];
+
+  function toggleOpciones(tipoSelect, opcionesWrapper) {
+    var mostrar = TIPOS_CON_OPCIONES.indexOf(tipoSelect.value) !== -1;
+    opcionesWrapper.style.display = mostrar ? '' : 'none';
+  }
+
+  document.querySelectorAll('form[action*="requisitos"]').forEach(function (form) {
+    var tipoSelect = form.querySelector('select[name="tipo"]');
+    var opcionesWrapper = form.querySelector('[data-opciones-wrapper]');
+    if (!tipoSelect || !opcionesWrapper) return;
+    toggleOpciones(tipoSelect, opcionesWrapper);
+    tipoSelect.addEventListener('change', function () { toggleOpciones(tipoSelect, opcionesWrapper); });
+  });
+})();
+</script>
+{% endblock %}

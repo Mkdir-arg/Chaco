@@ -111,11 +111,10 @@ class RequisitoNativoForm(_OpcionesMixin):
 
     class Meta:
         model = RequisitoNativo
-        fields = ["texto", "tipo", "orden", "obligatorio"]
+        fields = ["texto", "tipo", "obligatorio"]
         widgets = {
             "texto": forms.TextInput(attrs={"class": INPUT_CLASS}),
             "tipo": forms.Select(attrs={"class": INPUT_CLASS}),
-            "orden": forms.NumberInput(attrs={"class": INPUT_CLASS, "min": 0}),
             "obligatorio": forms.CheckboxInput(attrs={"class": CHECKBOX_CLASS}),
         }
 
