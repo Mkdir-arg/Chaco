@@ -68,9 +68,20 @@
 | 2026-06-24 | Juani Portilla | Becas | Desarrollo del módulo de asignación de cupos (en curso) | 90 min |
 | 2026-06-24 | Pablo Cao | App mobile y app web | Ajuste de diseño y maqueta de la app; merge de `development`; limpieza de la app web para quitar la capa de branding dinamico y dejar Chaco fijo sin depender del `.env`; validacion de Django y templates principales. | 274 min |
 
+| 2026-06-18 | Agostina Coppola | Análisis y testing | Testing requerimientos y análisis de legajos dispositivos/merenderos  | 370 min |
+| 2026-06-24 | Juani Portilla | Becas #73 — Modelos de datos | Modelos de dominio Becas: Segmento, Subsegmento, Convocatoria, Relevamiento, Formulario, TracaFormulario, helpers y seed | 90 min |
+| 2026-06-24 | Juani Portilla | Becas #79 — Roles RBAC | Roles Admin/Coordinador/Territorial integrados al motor de capacidades con scoping por segmento | 90 min |
+| 2026-06-24 | Juani Portilla | Becas #74 — Configuración del programa | ABM segmentos/subsegmentos, cupo RN-40, asignación de coordinadores, requisitos nativos y cuestionario social | 90 min |
+| 2026-06-24 | Juani Portilla | Becas #76 — ABM Relevamientos y Convocatorias | Alta con nombre auto, reasignación de territorial, reprogramación, estados como badges y scoping por segmento | 60 min |
+| 2026-06-24 | Juani Portilla | Becas #77 — Revisión caso a caso | Edición con traza, aprobar/rechazar con motivo obligatorio, transiciones de estado y placeholder SIS | 60 min |
+| 2026-06-24 | Juani Portilla | Becas #82 — API REST app de campo | Auth por token, relevamientos asignados, definición de formulario, iniciar/finalizar/reabrir y CRUD con sync offline | 90 min |
+
+
 ---
 
 ## :material-counter: Total consumido
 
 !!! success "Contador total"
+
     **10784 minutos** (179 h 44 min)
+
