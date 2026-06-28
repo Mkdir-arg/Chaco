@@ -78,7 +78,7 @@ El diseño a construir es **exactamente** el del kit de referencia. En orden de 
 ```
 Superficies  --bg-white/#fff · --bg-primary #fff (cards) · --bg-secondary #F9FAFB (canvas, hovers suaves)
              --bg-tertiary #F3F4F6 (hover fila/chip) · --bg-quaternary #E5E7EB · --bg-disabled #F3F4F6 · --bg-navy #252F40
-Marca        --bg-brand #5059BC · --bg-brand-soft #FEE9FF · --bg-brand-medium #FEE3FF · --bg-brand-tint #DEE1FF (hover tertiary)
+Marca        --bg-brand #5059BC · --bg-brand-softer #FEF3FF · --bg-brand-soft #FEE9FF · --bg-brand-medium #FEE3FF · --bg-brand-tint #DEE1FF (hover tertiary)
              --bg-pink #F98DFF · --bg-info-soft (= brand-050 #F5F3FF)
 Texto        --text-heading #252F40 (navy) · --text-body #4B5563 · --text-body-subtle #6B7280 · --text-disabled #9CA3AF
              --text-white #fff · --text-fg-brand #5059BC · --text-fg-brand-strong #3730A3 · --text-link/-hover
@@ -137,6 +137,7 @@ border-radius:var(--radius-full); white-space:nowrap`. Hover: tertiary → `bg-b
 **Disabled:** `background: var(--bg-disabled); color: var(--text-disabled); cursor: not-allowed` (NUNCA opacity; `Button.jsx` usa `opacity .55` como atajo del prototipo → overrideá con tokens).
 **Prohibido:** 2 brand en la misma sección · brand como disparador destructivo (usá danger) · `font-normal` · cambiar el gradiente.
 En el repo usar `.btn-nodo .btn-brand/.btn-secondary/.btn-tertiary/.btn-danger` + `.btn-xs…xl`.
+> **Espejo `nodo-buttons.css` vs kit:** difiere en hover `brightness .90` (kit .93), `.btn-sm` padding `8px 12px` (kit `8px 14px`) y un `min-width` por tamaño que el kit NO tiene; para calce exacto alineá esos valores. (Usa `var(--text-fg-disabled)` —existe en el proyecto— pero el token del kit es `--text-disabled`.)
 
 ---
 
@@ -186,7 +187,7 @@ Clases `.badge .badge-gray/white/brand/success/warning/danger/info`. Un badge no
 - **EmptyState:** `padding 56px 24px; text-align center; flex column; gap 10`. Ícono **48** `var(--text-fg-brand)` + título `17 / 700 / var(--text-heading)` +
   mensaje `14 / var(--text-body)` (max-width 360) + CTA opcional. **Obligatorio** en toda tabla/lista vacía (nunca un blanco).
 - **Pagination:** `flex justify-between; padding 12px 16px; border-top 1px var(--border-light); background var(--bg-secondary)`.
-  Texto "Mostrando X de Y {label}" `12.5 / var(--text-body-subtle)` + Button `sm tertiary` Anterior/Siguiente + "1 de N" `13 / 600 / var(--text-body)`.
+  Texto "Mostrando X de Y {label}" `12.5 / var(--text-body-subtle)` + Button `sm tertiary`: «Anterior» con `chevronLeft 16` (disabled en pág. 1) + «Siguiente» **sin ícono** + "1 de N" `13 / 600 / var(--text-body)`.
 
 ---
 
@@ -194,7 +195,7 @@ Clases `.badge .badge-gray/white/brand/success/warning/danger/info`. Un badge no
 
 `background var(--bg-primary); border 1px var(--border-base); border-radius var(--radius-xl); box-shadow var(--shadow-sm); padding 20; flex column; gap 14`.
 - Fila superior: **label** `13 / 600 / var(--text-body-subtle)` (NO uppercase) + **ícono cuadrado** `44×44; border-radius var(--radius-lg)`,
-  fondo `tono-soft` (brand/success/warning/danger/olive/neutral) con `color: tono-fg`, fontSize 18 — o `var(--gradient-brand)` + `#fff` si es de marca.
+  fondo `tono-soft` para brand/success/warning/danger (`olive` = `--color-olive-200/-700`; `neutral` = `--bg-tertiary/--color-gray-600`; no hay `-soft` para esos dos) con `color: tono-fg` — o `var(--gradient-brand)` + `#fff` si es de marca.
   **Alert dot** opcional `10×10; bg var(--bg-danger); border 2px var(--bg-primary)` arriba-derecha.
 - **Valor:** `32 / 800 / var(--text-heading)`, line-height 1. **Delta:** `13 / 600`, color `success`(+) / `danger`(−), con prefijo +/-.
 - Footnote `12 / var(--text-body-subtle)`. **No clickeable** (cursor default).
@@ -261,7 +262,7 @@ inactivo `500 / var(--text-body-subtle)`. Chip de conteo `11 / 700; padding 1px 
 - **User card:** `padding 14px 16px; border-bottom 1px var(--border-base)`; Avatar 36 + nombre `13 / 700` + rol `11 / var(--text-body-subtle)`.
 - **Nav:** `padding 12; gap 2`. Ítem: `padding 10px 14px; border-radius 9999 (pill)`; **activo** `bg var(--bg-brand); color #fff; font 13.5 / 700`;
   inactivo `transparent; color var(--text-body); 500`; **hover `bg var(--bg-tertiary)`**. Ícono 20 (activo `#fff`, inactivo `var(--text-body-subtle)`).
-  Chip de conteo `11 / 700; radius 9999` — activo `rgba(255,255,255,.25)/#fff`, inactivo `bg-tertiary/text-body-subtle`. **Un solo ítem activo.**
+  Chip de conteo `11 / 700; radius 9999` — activo `rgba(255,255,255,.25)/#fff`, inactivo `bg-tertiary/text-body-subtle`. **Un solo ítem activo.** En modo **colapsado** el conteo es un dot `7×7` (absolute `top 4 right 14`; activo `#fff`, inactivo `var(--bg-danger)`), no chip.
 - **Footer:** botón "Minimizar" `bg var(--bg-secondary); radius 9999`.
 - **Siempre visible** en desktop post-login. Texto trunca con ellipsis. Sin sidebar en el portal ciudadano.
 - **Nota tokens:** `--sidebar-width 288 / -collapsed 80` (`spacing.css`) están desfasados; el kit renderiza **276/84** (gana el HTML). El shell real de `base.html` usa `lg:pl-72/pl-20` (288/80) — al construir, no toques el ancho del shell.
@@ -338,6 +339,9 @@ Regla `position absolute; left 23; width 2; background var(--border-base)`; nodo
 - **Banda de validación tonal** full-width (`radius 12; padding 12px 16px`), color por estado (success/warning/danger soft + border + text) con ícono 20 (ej. RENAPER).
 - Layout `grid 1.7fr / 1fr`: izquierda datos; derecha **Card "Resolución del caso"** con Button **block** Aprobar (brand) / Rechazar (danger) + mini-historial (dots `10×10` + línea `2px`). Rechazo → Modal ~520 con textarea de motivo.
 - **Beneficiarios** (tab dentro de un detalle) = TableCard estándar (§17).
+
+### Reportes / lista de tarjetas de acción
+PageHeader **sin CTA** + grilla de 4 StatCard (una `gradientIcon`) + **lista de report-cards**: Card `padding 20` (columna, `gap 14`); fila interna `flex; align center; gap 16`; icon-tile `46×46; border-radius var(--radius-xl)`, `bg var(--bg-brand-soft)`, `color var(--text-fg-brand)`, ícono 24; título `15.5 / 700`, descripción `13 / var(--text-body-subtle)`; acción a la derecha (Button tertiary/brand).
 
 ---
 
