@@ -38,7 +38,7 @@ El diseño a construir es **exactamente** el del kit de referencia. En orden de 
 `nodo-buttons.css` (`.btn-*`), `nodo-badges.css` (`.badge-*`).
 
 **Reglas inviolables:**
-- **Cero hex hardcodeados** en la UI (salvo `#fff`/`#ffffff` y los del propio chaco-tokens.css). Todo sale de un token semántico.
+- **Cero hex hardcodeados** en la UI (salvo `#fff`/`#ffffff`, los del propio chaco-tokens.css, y **valores dinámicos del backend** como `{{ programa.color }}` —datos del modelo, no diseño: NO los marques como violación, preservalos con `|default:'var(--token)'`). Todo lo de diseño sale de un token semántico.
 - Nunca referencies primitivas (`--color-brand-700`, `#5059bc`) en componentes; usá el semántico (`var(--bg-brand)`).
 - **Manrope es la ÚNICA tipografía** (UI, cuerpo, títulos, display). `--font-sans`/`--font-display` resuelven a Manrope.
   `Gellat`/`Fredoka`/`Geliat`/`Satoshi`/`Inter`/`Montserrat` → reemplazar por Manrope.
@@ -397,7 +397,7 @@ PageHeader **sin CTA** + grilla de 4 StatCard (una `gradientIcon`) + **lista de 
 1. **Detectar alcance** y **leer** cada template de UI completo. **Clasificar** Tailwind nuevo vs Bootstrap legacy (no cruzar en un componente).
 2. Ante un componente, **mirá su par en el kit** (`Programa Becas - Chaco NODO.html` / `components/*.jsx`) y calcá sus valores exactos.
 3. **Escanear violaciones** con grep:
-   - Hex crudo: `grep -nE '#[0-9a-fA-F]{3,6}'` (ignorá `#fff` y chaco-tokens.css).
+   - Hex crudo: `grep -nE '#[0-9a-fA-F]{3,6}'` (ignorá `#fff`, chaco-tokens.css y valores dinámicos `{{ ... }}` del backend).
    - Tipografía: `grep -niE 'fredoka|gellat|geliat|satoshi|font-(brand|display)|Inter|Roboto|Montserrat'`.
    - `opacity:` como disabled · `outline:\s*none` · `z-index:\s*9999` · `confirm(` · `window.alert(`.
    - Color hardcodeado en ícono: `grep -nE 'fill=|stroke=|color:\s*#'` en SVG/íconos.

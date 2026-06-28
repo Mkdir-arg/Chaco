@@ -31,7 +31,7 @@ Fuente de verdad del diseño (orden de autoridad), idéntica a la del revisor:
 
 Espejo en el repo: `static/custom/css/chaco-tokens.css`, `nodo-buttons.css` (`.btn-*`), `nodo-badges.css` (`.badge-*`).
 
-**Reglas de oro (no negociables):** cero hex hardcodeado (salvo `#fff`) · solo tokens semánticos
+**Reglas de oro (no negociables):** cero hex hardcodeado (salvo `#fff` y **valores dinámicos del backend** como `{{ programa.color }}` —son DATOS del modelo, no diseño: preservalos, con `|default:'var(--token)'` de fallback) · solo tokens semánticos
 (nunca primitivas) · **Manrope única** · `disabled` por token, nunca `opacity` · gradiente de marca
 Jacarandá→Rosa 45° (uno por sección) · accesibilidad (focus visible, color + ícono + texto).
 
