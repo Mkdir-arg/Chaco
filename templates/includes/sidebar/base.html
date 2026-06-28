@@ -3,6 +3,14 @@
      SIDEBAR — Chaco NODO Design System §14
      Mobile overlay + Desktop fixed (colapsable)
      ============================================================ -->
+<style>
+    /* Sidebar — blindaje de colores contra el CSS global legacy: gana siempre el token.
+       Inactivo = texto/ícono por token; activo ([aria-current="page"]) = pill de marca + blanco. */
+    .ds-snav a, .ds-snav button { color: var(--text-body) !important; }
+    .ds-snav a svg, .ds-snav button svg { color: var(--text-body-subtle) !important; }
+    .ds-snav [aria-current="page"] { background: var(--bg-brand) !important; color: #fff !important; }
+    .ds-snav [aria-current="page"] svg { color: #fff !important; }
+</style>
 
 <!-- ── Mobile overlay (sidebarOpen) ─────────────────────────── -->
 <div class="relative z-50 lg:hidden"

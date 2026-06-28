@@ -53,19 +53,8 @@
         </template>
     </div>
 
-    {# ── Nav principal ───────────────────────────────────────── #}
-    {#
-       Clases de ítem reutilizadas:
-         activo:   bg var(--bg-brand); color #fff; font-weight 700
-         inactivo: transparent; color var(--text-body); font-weight 500
-         hover:    bg var(--bg-tertiary)
-       Ícono activo:  #fff
-       Ícono inactivo: var(--text-body-subtle)
-       Padding ítem:  10px 14px
-       border-radius: 9999px (pill)
-       gap entre ítems: 2px (margin-bottom en cada div)
-    #}
-    <nav style="display: flex; flex-direction: column; gap: 2px;">
+    {# Nav principal — colores blindados en el <style> de sidebar/base.html (.ds-snav) #}
+    <nav class="ds-snav" style="display: flex; flex-direction: column; gap: 2px;">
 
         {# ── Inicio ─────────────────────────────────────────── #}
         <div class="relative" style="margin-bottom: 2px;">
