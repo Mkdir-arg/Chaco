@@ -3,13 +3,18 @@
 
 {% block main-content %}
 <style>[x-cloak]{display:none!important}</style>
-<div class="max-w-6xl mx-auto space-y-5"
+<div class="space-y-5"
      x-data="{
        tab: 'info',
        modalReq: false,
        modalReqEdit: false,
        modalSub: false,
+       modalSubEdit: false,
        subCupo: '',
+       subEditUrl: '',
+       subEditNombre: '',
+       subEditDesc: '',
+       subEditCupo: '',
        editReqUrl: '',
        editReqTexto: '',
        editReqTipo: '',
@@ -24,9 +29,16 @@
          this.editReqOrden = orden;
          this.editReqOpciones = (opciones || []).join('\n');
          this.modalReqEdit = true;
+       },
+       openSubEdit(url, nombre, desc, cupo) {
+         this.subEditUrl = url;
+         this.subEditNombre = nombre;
+         this.subEditDesc = desc;
+         this.subEditCupo = cupo;
+         this.modalSubEdit = true;
        }
      }"
-     @becas-saved.window="modalSub=false; modalReq=false; modalReqEdit=false; subCupo=''">
+     @becas-saved.window="modalSub=false; modalSubEdit=false; modalReq=false; modalReqEdit=false; subCupo=''">
 
   {# Volver #}
   <div>
@@ -334,6 +346,74 @@
              style="border-color:var(--border-light)">
           <button type="button" @click="modalSub=false" class="btn-nodo btn-tertiary btn-base">Cancelar</button>
           <button type="submit" class="btn-nodo btn-brand btn-base">Crear subsegmento</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  {# ============ Modal: Editar subsegmento ============ #}
+  <div x-show="modalSubEdit" x-cloak @click="modalSubEdit=false" class="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm" style="background:rgba(0,0,0,.5)">
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-[540px] overflow-hidden" @click.stop>
+
+      {% comment %}HEADER{% endcomment %}
+      <div class="flex items-center justify-between px-6 py-5 border-b" style="border-color:var(--border-light)">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
+               style="background:var(--bg-brand-soft);color:var(--text-fg-brand)">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3 class="text-lg font-bold text-heading">Editar subsegmento</h3>
+        </div>
+        <button type="button" @click="modalSubEdit=false" aria-label="Cerrar"
+                class="p-1.5 rounded-lg text-body-subtle hover:text-heading hover:bg-secondary transition-colors">
+          <i class="fas fa-xmark text-base"></i>
+        </button>
+      </div>
+
+      {% comment %}FORM envuelve body + footer{% endcomment %}
+      <form method="post" :action="subEditUrl" data-ajax data-reset="false">
+        {% csrf_token %}
+        <input type="hidden" name="origin" value="panel">
+
+        {% comment %}BODY{% endcomment %}
+        <div class="p-6 space-y-5">
+
+          {% comment %}Nombre{% endcomment %}
+          <div>
+            <label class="block text-[13px] font-semibold text-heading mb-1.5">
+              Nombre<span class="text-fg-danger" style="margin-left:3px">*</span>
+            </label>
+            <input type="text" name="nombre" required class="nodo-field" x-model="subEditNombre">
+            <p class="mt-1 text-xs text-fg-danger hidden" data-error="nombre"></p>
+          </div>
+
+          {% comment %}Descripción{% endcomment %}
+          <div>
+            <label class="block text-[13px] font-semibold text-heading mb-1.5">
+              Descripción
+            </label>
+            <textarea name="descripcion" rows="2" class="nodo-field" x-model="subEditDesc"></textarea>
+            <p class="mt-1 text-xs text-fg-danger hidden" data-error="descripcion"></p>
+          </div>
+
+          {% comment %}Cupo máximo{% endcomment %}
+          <div>
+            <label class="block text-[13px] font-semibold text-heading mb-1.5">
+              Cupo máximo<span class="text-fg-danger" style="margin-left:3px">*</span>
+            </label>
+            <input type="number" name="cupo_maximo" min="0" required class="nodo-field" x-model="subEditCupo">
+            <p class="mt-1 text-xs text-fg-danger hidden" data-error="cupo_maximo"></p>
+          </div>
+
+          <p class="text-xs text-fg-danger hidden" data-error="__all__"></p>
+        </div>
+
+        {% comment %}FOOTER{% endcomment %}
+        <div class="flex justify-end gap-3 px-6 py-4 border-t bg-secondary"
+             style="border-color:var(--border-light)">
+          <button type="button" @click="modalSubEdit=false" class="btn-nodo btn-tertiary btn-base">Cancelar</button>
+          <button type="submit" class="btn-nodo btn-brand btn-base"><i class="fas fa-check"></i> Guardar cambios</button>
         </div>
 
       </form>

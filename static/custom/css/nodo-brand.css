@@ -94,10 +94,10 @@ button[type="submit"]:not(.btn-secondary):not(.btn-tertiary):not(.btn-danger):fo
 
 /* Badges (.badge-brand/.badge-success/.badge-warning/.badge-danger ahora en nodo-badges.css) */
 
-/* Badges cyan */
+/* Badges azul/info — tinte del sistema (antes rgba cyan hardcodeada) */
 .bg-blue-100,
 .bg-cyan-100 {
-    background: rgba(8, 184, 204, 0.1) !important;
+    background: var(--bg-info-soft) !important;
 }
 
 .text-blue-800,
