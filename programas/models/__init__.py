@@ -164,6 +164,7 @@ class InscripcionPrograma(TimeStamped):
     def save(self, *args, **kwargs):
         if not self.codigo:
             from datetime import datetime
+
             self.codigo = f"{self.programa.codigo}-{datetime.now().strftime('%Y%m%d')}-{self.ciudadano.dni}"
         super().save(*args, **kwargs)
 
@@ -494,9 +495,7 @@ class Convocatoria(TimeStamped):
         super().clean()
         if self.subsegmento_id and self.segmento_id:
             if self.subsegmento.segmento_id != self.segmento_id:
-                raise ValidationError(
-                    {"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."}
-                )
+                raise ValidationError({"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."})
 
 
 class Relevamiento(TimeStamped):
@@ -642,9 +641,7 @@ class RequisitoNativo(TimeStamped):
         super().clean()
         if self.subsegmento_id and self.segmento_id:
             if self.subsegmento.segmento_id != self.segmento_id:
-                raise ValidationError(
-                    {"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."}
-                )
+                raise ValidationError({"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."})
 
 
 class AsignacionCoordinador(TimeStamped):
