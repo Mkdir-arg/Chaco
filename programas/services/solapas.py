@@ -208,26 +208,25 @@ class SolapasService:
         from django.urls import reverse
 
         from programas.models import Formulario, ListaEspera
+        from programas.services.cupo import estado_relevante_becas
 
         formularios_qs = Formulario.objects.filter(ciudadano=ciudadano)
-        if not formularios_qs.exists():
+        estados = set(formularios_qs.values_list("estado", flat=True))
+        if not estados:
             return None
 
-        estados = set(formularios_qs.values_list("estado", flat=True))
         en_espera = ListaEspera.objects.filter(
             formulario__ciudadano=ciudadano, promovido=False
         ).exists()
 
-        if Formulario.Estado.APROBADO in estados:
-            badge = {"tipo": "texto", "texto": "Beneficiario", "color": "success"}
-        elif en_espera:
-            badge = {"tipo": "texto", "texto": "Lista de espera", "color": "warning"}
-        elif Formulario.Estado.RECHAZADO in estados:
-            badge = {"tipo": "texto", "texto": "Rechazado", "color": "danger"}
-        elif Formulario.Estado.BAJA in estados:
-            badge = {"tipo": "texto", "texto": "Dado de baja", "color": "gray"}
-        else:
-            badge = {"tipo": "texto", "texto": "Pendiente", "color": "gray"}
+        texto, color = estado_relevante_becas(estados, en_espera)
+        color_hex = {
+            "success": "var(--text-fg-success)",
+            "warning": "var(--text-fg-warning)",
+            "danger": "var(--text-fg-danger)",
+            "gray": "var(--text-body-subtle)",
+        }[color]
+        badge = {"tipo": "punto", "color_hex": color_hex, "title": texto}
 
         return {
             "id": "becas",

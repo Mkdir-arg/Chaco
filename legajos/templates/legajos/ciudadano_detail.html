@@ -183,13 +183,13 @@
                 <p class="mb-3 text-xs font-semibold uppercase text-slate-500">Programas activos</p>
                 <div class="flex flex-wrap gap-3">
                     {% for solapa in solapas_programas %}
-                    <button onclick="cambiarTab('{{ solapa.id }}')" type="button" class="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm transition hover:border-slate-300 hover:shadow">
+                    <button onclick="{% if solapa.url %}window.location.href='{{ solapa.url }}'{% else %}cambiarTab('{{ solapa.id }}'){% endif %}" type="button" class="group flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left shadow-sm transition hover:border-slate-300 hover:shadow">
                         <span class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-white" style="background-color: {{ solapa.color|default:'#3B82F6' }};">
                             <i class="fas fa-{{ solapa.icono }}"></i>
                         </span>
                         <span class="min-w-0">
                             <span class="block truncate text-sm font-semibold text-slate-900">{{ solapa.nombre }}</span>
-                            <span class="block text-xs text-slate-500">{{ solapa.inscripcion.get_estado_display }} · desde {{ solapa.inscripcion.fecha_inscripcion|date:"d/m/Y" }}</span>
+                            <span class="block text-xs text-slate-500">{% if solapa.inscripcion %}{{ solapa.inscripcion.get_estado_display }} · desde {{ solapa.inscripcion.fecha_inscripcion|date:"d/m/Y" }}{% elif solapa.badge.title %}{{ solapa.badge.title }}{% endif %}</span>
                         </span>
                         <i class="fas fa-chevron-right ml-2 text-xs text-slate-300 transition group-hover:text-slate-500"></i>
                     </button>

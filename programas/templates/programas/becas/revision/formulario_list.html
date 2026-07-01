@@ -91,6 +91,8 @@
                 <span class="badge badge-success badge-dot">Aprobado</span>
               {% elif f.estado == 'RECHAZADO' %}
                 <span class="badge badge-danger badge-dot">Rechazado</span>
+              {% elif f.estado == 'BAJA' %}
+                <span class="badge badge-gray badge-dot">Dado de baja</span>
               {% else %}
                 <span class="badge badge-warning badge-dot">Enviado</span>
               {% endif %}

@@ -27,6 +27,26 @@ def get_cupo_stats(segmento):
     }
 
 
+def estado_relevante_becas(estados, en_espera):
+    """Determina ``(texto, color)`` del estado más relevante de un ciudadano en
+    Becas a partir de sus estados de formulario y si tiene lista de espera activa.
+
+    ``color`` es el sufijo semántico (success/warning/danger/gray) usado tanto
+    por las clases ``badge-*`` como por los tokens de color del punto de la
+    solapa; cada consumidor lo adapta a su propio contrato de renderizado.
+    """
+    estados = set(estados)
+    if Formulario.Estado.APROBADO in estados:
+        return "Beneficiario", "success"
+    if en_espera:
+        return "Lista de espera", "warning"
+    if Formulario.Estado.RECHAZADO in estados:
+        return "Rechazado", "danger"
+    if Formulario.Estado.BAJA in estados:
+        return "Dado de baja", "gray"
+    return "Pendiente", "gray"
+
+
 @transaction.atomic
 def dar_baja_beneficiario(formulario, user):
     """Da de baja a un beneficiario (RN-05): cambia estado a BAJA.
@@ -93,6 +113,11 @@ def agregar_a_lista_espera(formulario, segmento, user):
     ).exists()
     if ya_en_espera:
         raise ValidationError("Este formulario ya está en la lista de espera de este segmento.")
+
+    # Serializa altas concurrentes en el mismo segmento: sin este lock, dos
+    # requests simultáneos pueden leer el mismo Max("posicion") y crear
+    # entradas con la misma posición.
+    Segmento.objects.select_for_update().get(pk=segmento.pk)
 
     max_pos = ListaEspera.objects.filter(
         segmento=segmento, promovido=False

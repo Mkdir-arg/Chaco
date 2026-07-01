@@ -6,30 +6,9 @@ from django.shortcuts import get_object_or_404, render
 from core.rbac import requiere
 from legajos.models import Ciudadano
 from programas.models import Formulario
+from programas.services.cupo import estado_relevante_becas
 
 CAP = "ciudadano.ver"
-
-
-def _estado_relevante(formularios):
-    """Determina el estado más relevante del ciudadano en Becas.
-
-    Asume que formularios tiene prefetch_related("lista_espera") aplicado.
-    """
-    estados = {f.estado for f in formularios}
-    # Usa el prefetch para evitar queries adicionales
-    en_espera = any(
-        any(not le.promovido for le in f.lista_espera.all())
-        for f in formularios
-    )
-    if Formulario.Estado.APROBADO in estados:
-        return "Beneficiario", "success"
-    if en_espera:
-        return "Lista de espera", "warning"
-    if Formulario.Estado.RECHAZADO in estados:
-        return "Rechazado", "danger"
-    if Formulario.Estado.BAJA in estados:
-        return "Dado de baja", "gray"
-    return "Pendiente", "gray"
 
 
 @login_required
@@ -50,7 +29,12 @@ def becas_ciudadano_detalle(request, pk):
     for f in formularios:
         f.en_espera_activa = any(not le.promovido for le in f.lista_espera.all())
 
-    estado_texto, estado_color = _estado_relevante(formularios) if formularios else ("—", "gray")
+    if formularios:
+        estados = {f.estado for f in formularios}
+        en_espera = any(f.en_espera_activa for f in formularios)
+        estado_texto, estado_color = estado_relevante_becas(estados, en_espera)
+    else:
+        estado_texto, estado_color = "—", "gray"
 
     # Stat cards basadas en formulario más reciente
     formulario_reciente = formularios[0] if formularios else None
