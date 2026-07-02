@@ -1,0 +1,4807 @@
+
+<!doctype html>
+<html lang="es" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://Mkdir-arg.github.io/Chaco/funcionalidades/programa-dispositivos/">
+      
+      
+        <link rel="prev" href="../programa-becas/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Programa Dispositivos - Chaco — Seguimiento de desarrollo</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#programa-dispositivos-legajo-institucional-admisiones-camas-y-merenderos" class="md-skip">
+          Saltar a contenido
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabecera">
+    <a href="../.." title="Chaco — Seguimiento de desarrollo" class="md-header__button md-logo" aria-label="Chaco — Seguimiento de desarrollo" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Chaco — Seguimiento de desarrollo
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Programa Dispositivos
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo oscuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo oscuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Cambiar a modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Cambiar a modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Búsqueda" placeholder="Búsqueda" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Buscar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpiar" aria-label="Limpiar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando búsqueda
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Pestañas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Inicio
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../kickoff/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Proyecto
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../minutas/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Minutas
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../versiones/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Versiones
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../financiero/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Financiero
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Funcionalidades
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegación" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Chaco — Seguimiento de desarrollo" class="md-nav__button md-logo" aria-label="Chaco — Seguimiento de desarrollo" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Chaco — Seguimiento de desarrollo
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Inicio
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proyecto
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Proyecto
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../kickoff/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kick Off
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../team/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Equipo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../methodology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Metodología
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Arquitectura
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../minutas/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Minutas
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Minutas
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../minutas/kickoff-2026-05-20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Kickoff ICORE / Chaco - 2026-05-20
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../minutas/reunion-inicio-proyecto-2026-06-03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reunión 1 — Inicio de proyecto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../minutas/seguimiento-roles-formularios-2026-06-08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reunión 2 — Roles y formularios - 2026-06-08
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../minutas/seguimiento-estadisticas-instituciones-2026-06-10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reunión 3 — Estadísticas de instituciones - 2026-06-10
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../minutas/seguimiento-becas-dispositivos-2026-06-19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reunión 4 — Becas y Legajo de Dispositivos - 2026-06-19
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../minutas/seguimiento-dispositivos-merenderos-2026-06-26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reunión 5 — Dispositivos y merenderos - 2026-06-26
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../versiones/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Versiones
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Versiones
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../versiones/version-001/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Version 001 - Programa Becas y roles/permisos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../versiones/version-001-consumo-horas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Version 001 - Detalle de consumo de horas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../financiero/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Financiero
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Financiero
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../financiero/mes-2026-06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Junio 2026
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Funcionalidades
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Funcionalidades
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../programa-becas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa Becas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa Dispositivos
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Programa Dispositivos
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-que-resuelve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Qué resuelve
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-a-quien-esta-dirigido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. A quién está dirigido
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Cómo funciona
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Cómo funciona">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-legajo-del-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Legajo del dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-tipos-de-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Tipos de dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-legajo-de-merenderos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Legajo de merenderos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-los-formularios-del-programa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Los formularios del programa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-estados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Estados
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-indicadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Indicadores
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-alcance-de-esta-etapa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Alcance de esta etapa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-temas-a-confirmar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Temas a confirmar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#propuesta-funcional-programa-dispositivos-nodo-legajo-institucional-admisiones-camas-y-merenderos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propuesta funcional — Programa Dispositivos (NODO): legajo institucional, admisiones, camas y merenderos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Propuesta funcional — Programa Dispositivos (NODO): legajo institucional, admisiones, camas y merenderos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-encuadre-nodo-macro-vs-programa-dispositivos-alcance-de-esta-epica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Encuadre: NODO (macro) vs Programa Dispositivos (alcance de esta épica)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-concepto-modelo-del-dominio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Concepto / modelo del dominio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Concepto / modelo del dominio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-hallazgo-critico-anclaje-code-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Hallazgo crítico (anclaje code-first)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-tipos-de-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Tipos de dispositivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Tipos de dispositivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-f-00-adultos-mayores-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 F-00 Adultos Mayores — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-f-00-abordaje-psicosocial-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 F-00 Abordaje Psicosocial — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-actores-y-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Actores y roles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-funcionamiento-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Funcionamiento end-to-end
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Funcionamiento end-to-end">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-legajo-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Legajo Dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-legajo-merenderos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Legajo Merenderos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-estados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Estados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Estados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-dispositivo-p01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Dispositivo (P01)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-admision-estadia-p04p07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Admisión / Estadía (P04/P07)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-cama-p07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Cama (P07)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-merendero-p06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Merendero (P06)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-entidades-funcionales-y-mapeo-al-codigo-existente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Entidades funcionales y mapeo al código existente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-formularios-configurables-f-00-f-01-f-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Formularios configurables (F-00 / F-01 / F-02)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Formularios configurables (F-00 / F-01 / F-02)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-f-01-registro-diario-de-novedades-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 F-01 — Registro Diario de Novedades — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-gestion-de-camas-ingresoegreso-y-calculos-automaticos-p07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Gestión de camas, ingreso/egreso y cálculos automáticos (P07)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-merenderos-p06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Merenderos (P06)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Merenderos (P06)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#f-02-prestacion-alimentaria-mensual-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-02 — Prestación Alimentaria Mensual — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-reglas-de-negocio-consolidadas-preliminares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Reglas de negocio (consolidadas, preliminares)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-fuera-de-alcance-diferido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Fuera de alcance / diferido
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Fuera de alcance / diferido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fuera-de-alcance-esta-epica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fuera de alcance (esta épica)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diferido-a-faseversion-posterior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diferido a fase/versión posterior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-dependencias-e-impacto-critico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Dependencias e impacto crítico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-pantallas-del-backoffice-mapa-preliminar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Pantallas del backoffice (mapa preliminar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-mapeo-nodo-p01p13-alcance-de-la-epica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Mapeo NODO (P01–P13) → alcance de la épica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-preguntas-abiertas-consolidado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Preguntas abiertas (consolidado)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. Preguntas abiertas (consolidado)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171-alcance-y-dominio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 Alcance y dominio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#172-procesos-y-operacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2 Procesos y operación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#173-tecnicas-icore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3 Técnicas (ICORE)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-proximos-pasos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Próximos pasos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-historial-de-cambios-del-analisis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Historial de cambios del análisis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Tabla de contenidos">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Tabla de contenidos
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-que-resuelve" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Qué resuelve
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-a-quien-esta-dirigido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. A quién está dirigido
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-como-funciona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Cómo funciona
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Cómo funciona">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-legajo-del-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Legajo del dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-tipos-de-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Tipos de dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-legajo-de-merenderos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 Legajo de merenderos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34-los-formularios-del-programa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4 Los formularios del programa
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-estados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Estados
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-indicadores" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Indicadores
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-alcance-de-esta-etapa" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Alcance de esta etapa
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-temas-a-confirmar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Temas a confirmar
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#propuesta-funcional-programa-dispositivos-nodo-legajo-institucional-admisiones-camas-y-merenderos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Propuesta funcional — Programa Dispositivos (NODO): legajo institucional, admisiones, camas y merenderos
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Propuesta funcional — Programa Dispositivos (NODO): legajo institucional, admisiones, camas y merenderos">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-objetivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Objetivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-encuadre-nodo-macro-vs-programa-dispositivos-alcance-de-esta-epica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Encuadre: NODO (macro) vs Programa Dispositivos (alcance de esta épica)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-concepto-modelo-del-dominio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Concepto / modelo del dominio
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Concepto / modelo del dominio">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-hallazgo-critico-anclaje-code-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Hallazgo crítico (anclaje code-first)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-tipos-de-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Tipos de dispositivo
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Tipos de dispositivo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-f-00-adultos-mayores-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 F-00 Adultos Mayores — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-f-00-abordaje-psicosocial-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 F-00 Abordaje Psicosocial — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-actores-y-roles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Actores y roles
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-funcionamiento-end-to-end" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Funcionamiento end-to-end
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Funcionamiento end-to-end">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-legajo-dispositivo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1 Legajo Dispositivo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-legajo-merenderos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2 Legajo Merenderos
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-estados" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Estados
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Estados">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-dispositivo-p01" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.1 Dispositivo (P01)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#72-admision-estadia-p04p07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.2 Admisión / Estadía (P04/P07)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#73-cama-p07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.3 Cama (P07)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#74-merendero-p06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7.4 Merendero (P06)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-entidades-funcionales-y-mapeo-al-codigo-existente" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Entidades funcionales y mapeo al código existente
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-formularios-configurables-f-00-f-01-f-02" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Formularios configurables (F-00 / F-01 / F-02)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="9. Formularios configurables (F-00 / F-01 / F-02)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#91-f-01-registro-diario-de-novedades-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9.1 F-01 — Registro Diario de Novedades — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-gestion-de-camas-ingresoegreso-y-calculos-automaticos-p07" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Gestión de camas, ingreso/egreso y cálculos automáticos (P07)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#11-merenderos-p06" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Merenderos (P06)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="11. Merenderos (P06)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#f-02-prestacion-alimentaria-mensual-campo-a-campo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-02 — Prestación Alimentaria Mensual — campo a campo
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-reglas-de-negocio-consolidadas-preliminares" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Reglas de negocio (consolidadas, preliminares)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-fuera-de-alcance-diferido" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Fuera de alcance / diferido
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="13. Fuera de alcance / diferido">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fuera-de-alcance-esta-epica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fuera de alcance (esta épica)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#diferido-a-faseversion-posterior" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diferido a fase/versión posterior
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-dependencias-e-impacto-critico" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Dependencias e impacto crítico
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-pantallas-del-backoffice-mapa-preliminar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Pantallas del backoffice (mapa preliminar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-mapeo-nodo-p01p13-alcance-de-la-epica" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Mapeo NODO (P01–P13) → alcance de la épica
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-preguntas-abiertas-consolidado" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17. Preguntas abiertas (consolidado)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="17. Preguntas abiertas (consolidado)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#171-alcance-y-dominio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.1 Alcance y dominio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#172-procesos-y-operacion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.2 Procesos y operación
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#173-tecnicas-icore" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        17.3 Técnicas (ICORE)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#18-proximos-pasos" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18. Próximos pasos
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#19-historial-de-cambios-del-analisis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        19. Historial de cambios del análisis
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="programa-dispositivos-legajo-institucional-admisiones-camas-y-merenderos">Programa Dispositivos — Legajo institucional, admisiones, camas y merenderos</h1>
+<div class="admonition abstract">
+<p class="admonition-title">En una línea</p>
+<p>Gestionar en el sistema cada <strong>dispositivo</strong> (hogares, residencias y espacios de atención) y cada <strong>merendero</strong>: su legajo institucional, las personas que ingresan y egresan, la disponibilidad de camas en tiempo real y la asistencia alimentaria.</p>
+</div>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Módulo</strong></td>
+<td>Programas</td>
+</tr>
+<tr>
+<td><strong>Estado</strong></td>
+<td>En análisis</td>
+</tr>
+<tr>
+<td><strong>Programa</strong></td>
+<td>Dispositivos (segundo programa sobre la base de Programas, después de Becas)</td>
+</tr>
+<tr>
+<td><strong>Última actualización</strong></td>
+<td>2026-06-26</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition info">
+<p class="admonition-title">Encuadre dentro de NODO</p>
+<p>NODO es la plataforma integral de gestión territorial del organismo. El <strong>Programa Dispositivos</strong> es la primera etapa concreta: pone en el sistema el <strong>legajo de cada dispositivo y merendero</strong>, las <strong>admisiones y egresos</strong> de personas y la <strong>ocupación de camas</strong>. Otros frentes de NODO (Línea 102, personal, fondos, infraestructura tecnológica) se abordan en etapas posteriores.</p>
+</div>
+<hr />
+<h2 id="1-que-resuelve">1. Qué resuelve</h2>
+<p>Hoy la información de los dispositivos y merenderos vive dispersa (planillas, documentos, registros sueltos). Este módulo la unifica en un <strong>único registro maestro por institución</strong>, conectado al <strong>legajo de cada persona</strong> que pasa por ella. Con eso, el organismo puede saber <strong>en todo momento</strong> cuántas camas hay disponibles, quién está alojado, quién ingresó o egresó, y qué prestación brinda cada merendero, con trazabilidad completa.</p>
+<p>Los principios que ordenan el módulo:</p>
+<ul>
+<li><strong>Dato único:</strong> cada persona y cada dispositivo tienen un solo registro, reutilizado por todo el sistema.</li>
+<li><strong>Trazabilidad:</strong> toda alta, cambio, validación y egreso queda registrado con usuario, fecha y hora.</li>
+<li><strong>Historial permanente:</strong> los registros no se borran; se inactivan o cierran conservando la historia.</li>
+<li><strong>Validación por responsabilidad:</strong> el dispositivo carga la información y el área competente la valida.</li>
+<li><strong>Ocupación real:</strong> la disponibilidad de camas se calcula a partir de los movimientos, no de una carga manual.</li>
+</ul>
+<hr />
+<h2 id="2-a-quien-esta-dirigido">2. A quién está dirigido</h2>
+<table>
+<thead>
+<tr>
+<th>Actor</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Operador del dispositivo</strong></td>
+<td>Carga y actualiza personas, admisiones, egresos y datos operativos de su dispositivo.</td>
+</tr>
+<tr>
+<td><strong>Responsable institucional</strong></td>
+<td>Controla la carga de su dispositivo y confirma los cierres.</td>
+</tr>
+<tr>
+<td><strong>Supervisor del área</strong></td>
+<td>Valida altas, cambios sensibles, observaciones y correcciones.</td>
+</tr>
+<tr>
+<td><strong>Administrador central</strong></td>
+<td>Administra catálogos, perfiles y permisos, y resuelve duplicados.</td>
+</tr>
+<tr>
+<td><strong>Equipo territorial</strong></td>
+<td>Releva y propone correcciones de los datos de las instituciones.</td>
+</tr>
+<tr>
+<td><strong>Consulta / auditoría</strong></td>
+<td>Accede a reportes y trazabilidad, sin modificar datos.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-como-funciona">3. Cómo funciona</h2>
+<h3 id="31-legajo-del-dispositivo">3.1 Legajo del dispositivo</h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Alta del dispositivo → Validación del área → Configuración de camas
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>   → Admisión de personas → Estadía → Egreso / Traslado
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>   → Disponibilidad y métricas siempre actualizadas
+</span></code></pre></div>
+<ol>
+<li><strong>Alta.</strong> Se da de alta el dispositivo buscando primero si ya existe (para no duplicarlo). Se completan su identidad, domicilio y geolocalización, responsable, <strong>tipo</strong>, capacidad de camas, horarios y contacto.</li>
+<li><strong>Validación.</strong> El área compara con la fuente oficial y <strong>valida, observa o rechaza</strong>. Validado, el dispositivo queda <strong>activo</strong> y habilitado para recibir personas.</li>
+<li><strong>Configuración de camas.</strong> Se cargan las <strong>camas totales</strong> del dispositivo.</li>
+<li><strong>Admisión.</strong> Al ingresar una persona, se la <strong>busca por DNI</strong> en el legajo ciudadano (si existe se vincula, si no se crea), se le <strong>asigna una cama</strong>, se registra la fecha de ingreso y se completa la <strong>información específica según el tipo</strong> de dispositivo.</li>
+<li><strong>Egreso o traslado.</strong> El egreso registra fecha, motivo y destino, y <strong>libera la cama</strong>. El traslado cierra la estadía y abre una nueva vinculada a la misma persona.</li>
+<li><strong>Disponibilidad automática.</strong> En todo momento el sistema muestra <strong>camas libres, camas ocupadas</strong> y <strong>métricas de ingreso, egreso y ocupación</strong>, calculadas solas.</li>
+</ol>
+<p>Mientras una persona esté alojada, en su <strong>legajo ciudadano</strong> aparece la <strong>solapa del Programa Dispositivos</strong> con su estado.</p>
+<h3 id="32-tipos-de-dispositivo">3.2 Tipos de dispositivo</h3>
+<p>Cada tipo define qué información específica se carga de la persona al admitirla:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Información específica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Adulto Mayor</strong></td>
+<td>Datos personales, situación laboral y económica, permanencia/nutrición y vivienda, red de sostén, datos de la familia, salud, ingresos mensuales, intereses y actividades, grado de dependencia.</td>
+</tr>
+<tr>
+<td><strong>Abordaje Psicosocial</strong></td>
+<td>Datos personales, reingreso, situación personal/educativa/laboral, oficio, grupo y dinámica familiar, vivienda, ingresos y egresos, red de sostén, salud, consumos, situaciones de crisis, necesidades básicas, grado de dependencia.</td>
+</tr>
+<tr>
+<td><strong>UPI / ECA</strong></td>
+<td>A confirmar.</td>
+</tr>
+<tr>
+<td><strong>UPI</strong></td>
+<td>A confirmar.</td>
+</tr>
+<tr>
+<td><strong>Residencias Universitarias</strong></td>
+<td>A confirmar.</td>
+</tr>
+<tr>
+<td><strong>Fortalecimiento Familiar</strong></td>
+<td>A confirmar.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition tip">
+<p class="admonition-title">Formularios configurables</p>
+<p>La información que se pide en cada tipo de dispositivo es <strong>configurable</strong> desde el sistema: el organismo puede ajustar o ampliar los formularios sin cambiar el programa.</p>
+</div>
+<h3 id="33-legajo-de-merenderos">3.3 Legajo de merenderos</h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Alta del merendero → Validación → Información de funcionamiento → Prestación alimentaria
+</span></code></pre></div>
+<ol>
+<li><strong>Alta.</strong> La organización presenta su solicitud con datos institucionales, responsable, domicilio, <strong>zona y barrio</strong>, días y horarios.</li>
+<li><strong>Validación.</strong> El área controla y aprueba; la aprobación crea el legajo del merendero.</li>
+<li><strong>Información de funcionamiento.</strong> Cantidad de <strong>kits de mercadería</strong>, fecha de entrega y servicio.</li>
+<li><strong>Prestación.</strong> Se registran los servicios brindados: <strong>desayuno/colación, almuerzo, merienda/colación, cena</strong> y observaciones.</li>
+</ol>
+<h3 id="34-los-formularios-del-programa">3.4 Los formularios del programa</h3>
+<p>El programa trabaja con tres formularios. Una idea ordena a los tres: <strong>el operador carga solo lo que el sistema no puede saber por sí mismo</strong>. Los datos de identidad (nombre, DNI, fecha de nacimiento, edad), el responsable, las fechas y los cálculos los <strong>completa el sistema</strong> automáticamente; el operador se concentra en la información propia de cada caso.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">F-00 · Admisión de la persona</label><label for="__tabbed_1_2">F-01 · Registro diario de novedades por turno</label><label for="__tabbed_1_3">F-02 · Prestación alimentaria mensual (merenderos)</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p>Es el formulario que se completa <strong>al admitir a una persona</strong>, y cambia según el <strong>tipo de dispositivo</strong>. Recupera la identidad de la persona desde su legajo ciudadano (y RENAPER) para no volver a pedirla, y agrupa la información en bloques.</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Bloques de información</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Adulto Mayor</strong></td>
+<td>Datos personales · Situación laboral y económica · Permanencia, nutrición y vivienda · Red de sostén · Datos de la familia · Salud · Egresos mensuales · Intereses y actividades · Grado de dependencia.</td>
+</tr>
+<tr>
+<td><strong>Abordaje Psicosocial</strong></td>
+<td>Datos personales · Reingreso · Situación personal, educativa y laboral · Grupo familiar · Dinámica familiar · Vivienda · Ingresos y egresos · Red de sostén · Salud · Consumos · Situaciones de crisis · Necesidades básicas · Grado de dependencia.</td>
+</tr>
+</tbody>
+</table>
+<p>Cuando una persona ya tuvo una estadía anterior, el sistema <strong>detecta el reingreso</strong> solo, sin marcarlo a mano. Los totales económicos (egresos mensuales, saldo) se <strong>calculan</strong> a partir de los conceptos cargados.</p>
+</div>
+<div class="tabbed-block">
+<p>Es el <strong>parte diario</strong> de cada dispositivo, por <strong>turno</strong> (mañana, tarde, noche). El operador elige el turno y escribe las <strong>observaciones del turno</strong>; el resto lo arma el sistema: camas totales, ingresos y egresos del día, ocupación nocturna y camas disponibles, todo <strong>calculado</strong> a partir de los movimientos registrados.</p>
+</div>
+<div class="tabbed-block">
+<p>Es la <strong>planilla mensual</strong> del merendero: una fila por día del mes y una columna por servicio (desayuno/colación, almuerzo, merienda/colación, cena). El operador carga la <strong>cantidad de raciones</strong> servidas por día; el sistema calcula el <strong>total diario</strong> y completa mes, año y firma.</p>
+</div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Menos carga manual, menos errores</p>
+<p>Al reutilizar el legajo ciudadano y calcular solo los totales y la ocupación, los formularios piden únicamente lo imprescindible. Eso acelera la carga y evita inconsistencias entre lo declarado y lo que muestra el sistema.</p>
+</div>
+<hr />
+<h2 id="4-estados">4. Estados</h2>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:4"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><input id="__tabbed_2_3" name="__tabbed_2" type="radio" /><input id="__tabbed_2_4" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Dispositivo</label><label for="__tabbed_2_2">Admisión de persona</label><label for="__tabbed_2_3">Cama</label><label for="__tabbed_2_4">Merendero</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<p><code>Borrador</code> → <code>Pendiente de validación</code> → <code>Activo</code> / <code>Observado</code> / <code>Rechazado</code> → <code>Inactivo</code> / <code>Cerrado</code></p>
+</div>
+<div class="tabbed-block">
+<p><code>Solicitado</code> → <code>En revisión</code> → <code>Lista de espera</code> / <code>Aprobado</code> / <code>Rechazado</code> → <code>Alojado</code> → <code>Egresado</code> / <code>Trasladado</code></p>
+</div>
+<div class="tabbed-block">
+<p><code>Disponible</code> → <code>Reservada</code> → <code>Ocupada</code> → <code>Fuera de servicio</code></p>
+</div>
+<div class="tabbed-block">
+<p>Solicitud: <code>Borrador</code> → <code>En revisión</code> → <code>Observada</code> / <code>Aprobada</code> / <code>Rechazada</code> · Merendero: <code>Activo</code> → <code>Suspendido</code> / <code>Cerrado</code></p>
+</div>
+</div>
+</div>
+<hr />
+<h2 id="5-indicadores">5. Indicadores</h2>
+<p>El módulo ofrece indicadores con semáforo para la gestión:</p>
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th>Semáforo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ocupación de camas</strong></td>
+<td>Verde &lt; 50% · Amarillo 50–79% · Rojo ≥ 80% (configurable por tipo).</td>
+</tr>
+<tr>
+<td><strong>Disponibilidad</strong></td>
+<td>Verde con disponibilidad · Amarillo limitada · Rojo sin disponibilidad.</td>
+</tr>
+<tr>
+<td><strong>Actualización de datos</strong></td>
+<td>Verde ≤ 15 días · Amarillo 16–30 · Rojo &gt; 30 días desde la última carga.</td>
+</tr>
+<tr>
+<td><strong>Completitud</strong></td>
+<td>Según campos obligatorios completos sobre los esperados.</td>
+</tr>
+<tr>
+<td><strong>Cobertura alimentaria</strong></td>
+<td>Alerta cuando la demanda supera la capacidad o la entrega.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-alcance-de-esta-etapa">6. Alcance de esta etapa</h2>
+<div class="admonition success">
+<p class="admonition-title">Incluye</p>
+<ul>
+<li>Legajo institucional del dispositivo (alta, validación, mantenimiento).</li>
+<li>Tipos de dispositivo con su información específica configurable.</li>
+<li>Admisión, estadía, egreso y traslado de personas vinculadas al legajo ciudadano.</li>
+<li>Gestión de camas con disponibilidad y métricas automáticas.</li>
+<li>Legajo de merenderos con información de funcionamiento y prestación alimentaria.</li>
+<li>Indicadores básicos de ocupación, disponibilidad y actualización.</li>
+</ul>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Para etapas posteriores</p>
+<ul>
+<li>Línea 102, denuncias y derivaciones de casos sensibles.</li>
+<li>Gestión de personal y dotación por dispositivo.</li>
+<li>Rendiciones de fondos y recursos.</li>
+<li>Relevamiento de infraestructura y preparación tecnológica.</li>
+<li>Cierre mensual formal y tablero de comando completo.</li>
+</ul>
+</div>
+<hr />
+<h2 id="7-temas-a-confirmar">7. Temas a confirmar</h2>
+<ul>
+<li>Detalle de los formularios de los tipos <strong>UPI/ECA, UPI, Residencias Universitarias y Fortalecimiento Familiar</strong>.</li>
+<li>Si <strong>Merenderos</strong> se gestiona como un tipo dentro del Programa Dispositivos o como un programa propio.</li>
+<li>Qué tipos de dispositivo manejan camas y cuáles trabajan con cupos o plazas.</li>
+<li>Alcance del padrón nominal de niños y tutores, y de la asistencia alimentaria diaria de los merenderos.</li>
+</ul>
+<hr />
+<h2 id="propuesta-funcional-programa-dispositivos-nodo-legajo-institucional-admisiones-camas-y-merenderos">Propuesta funcional — Programa Dispositivos (NODO): legajo institucional, admisiones, camas y merenderos</h2>
+<p><strong>Tipo:</strong> Propuesta de épica (documento de trabajo interno)
+<strong>Estado:</strong> En análisis (borrador en construcción)
+<strong>Fecha:</strong> 2026-06-25 · <strong>Última actualización:</strong> 2026-06-26
+<strong>Responsable (ICORE):</strong> functional-analyst
+<strong>Programa:</strong> Dispositivos (segundo programa sobre el módulo genérico de Programas, después de Becas)
+<strong>Módulos Django candidatos:</strong> <code>apps/programas</code>, <code>apps/legajos</code>, <code>apps/ciudadanos</code> (core), <code>users</code>/<code>core.rbac</code> (roles/permisos), <code>dashboard</code></p>
+<blockquote>
+<p><strong>Borrador en construcción.</strong> Esta propuesta nace de dos fuentes del cliente: (1) el <strong>Miro</strong>
+del Programa Dispositivos (legajo del dispositivo con tipos + cálculos de camas, y legajo de
+merenderos) y (2) la <strong>Especificación funcional de procesos para NODO</strong> (13 procesos macro,
+reglas transversales e indicadores). El Miro es el <strong>alcance concreto</strong> que arrancamos; NODO
+es la <strong>visión macro</strong> de la plataforma. Este documento reconcilia ambos y los <strong>ancla al
+código real</strong>. Todas las <strong>dudas y preguntas</strong> están al final, en la <strong>Sección 17</strong>.</p>
+</blockquote>
+<hr />
+<h3 id="1-objetivo">1. Objetivo</h3>
+<p>Construir, en el <strong>backoffice</strong>, el <strong>Programa Dispositivos</strong> de NODO: un módulo que permita dar
+de alta y mantener un <strong>legajo institucional único por dispositivo</strong> (establecimiento físico:
+hogar de adultos mayores, dispositivo de abordaje psicosocial, residencia universitaria, etc.),
+gestionar la <strong>admisión, ocupación de camas y egreso</strong> de las personas que ingresan a cada
+dispositivo, y registrar la <strong>información específica de cada persona según el tipo de
+dispositivo</strong> mediante formularios configurables. Como rama hermana del mismo programa, se
+gestiona el <strong>legajo de merenderos/comedores</strong>: alta institucional, información de funcionamiento
+y registro de la prestación alimentaria.</p>
+<p>Cada persona admitida se <strong>vincula al Legajo Ciudadano</strong> existente (dato único, sin duplicar
+identidad), y el dispositivo mantiene en tiempo real su <strong>disponibilidad de camas</strong> y sus
+<strong>métricas de ingreso/egreso/ocupación</strong> a partir de los movimientos registrados, no de una
+carga manual paralela.</p>
+<hr />
+<h3 id="2-encuadre-nodo-macro-vs-programa-dispositivos-alcance-de-esta-epica">2. Encuadre: NODO (macro) vs Programa Dispositivos (alcance de esta épica)</h3>
+<p><strong>NODO</strong> es la plataforma integral de gestión territorial del organismo. La especificación del
+cliente describe <strong>13 procesos</strong> (P01–P13) que cubren toda la operación (dispositivos, personas,
+admisiones, asistencia, merenderos, albergues, denuncias/Línea 102, fondos, personal,
+infraestructura tecnológica, migración y cierre mensual).</p>
+<p>El <strong>Programa Dispositivos</strong> (lo que muestra el Miro) es la <strong>primera tajada concreta</strong> de NODO.
+Se apoya en el <strong>módulo genérico de Programas</strong> ya construido para Becas. El mapeo completo
+NODO → alcance está en la <strong>§16</strong>; el resumen:</p>
+<table>
+<thead>
+<tr>
+<th>Proceso NODO</th>
+<th>¿En esta épica?</th>
+<th>Comentario</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>P01</strong> Alta y mantenimiento del dispositivo</td>
+<td>✅ Núcleo</td>
+<td>Es el "Legajo Dispo" del Miro (Información Base + tipo).</td>
+</tr>
+<tr>
+<td><strong>P03</strong> Alta/actualización de persona y legajo</td>
+<td>✅ Reuso</td>
+<td>Reusa <code>Ciudadano</code> existente; no se reinventa.</td>
+</tr>
+<tr>
+<td><strong>P04</strong> Inscripción, admisión, egreso y traslado</td>
+<td>✅ Núcleo</td>
+<td>"Ingreso/Egreso persona" del Miro.</td>
+</tr>
+<tr>
+<td><strong>P07</strong> Albergues, residencias y camas</td>
+<td>✅ Núcleo</td>
+<td>"Camas totales / libres / ocupadas / métricas".</td>
+</tr>
+<tr>
+<td><strong>P06</strong> Merenderos y comedores</td>
+<td>✅ Núcleo</td>
+<td>"Legajo Merenderos" + Formulario F-02.</td>
+</tr>
+<tr>
+<td><strong>P05</strong> Asistencia y prestación diaria</td>
+<td>🟡 Parcial</td>
+<td>El Miro solo muestra prestación en merenderos; asistencia diaria general → confirmar alcance.</td>
+</tr>
+<tr>
+<td><strong>P02</strong> Usuarios, perfiles y permisos</td>
+<td>🟡 Reuso</td>
+<td>Reusa <code>core.rbac</code>; agrega roles del programa.</td>
+</tr>
+<tr>
+<td><strong>P11</strong> Infraestructura y preparación tecnológica</td>
+<td>🟡 Diferible</td>
+<td>Semáforo edilicio/tecnológico de PCs → fase posterior.</td>
+</tr>
+<tr>
+<td><strong>P08</strong> Denuncias, riesgo y derivaciones (Línea 102)</td>
+<td>⛔ Fuera (V2+)</td>
+<td>Casos sensibles NNA; otra épica.</td>
+</tr>
+<tr>
+<td><strong>P09</strong> Fondos, raciones, kits y rendiciones</td>
+<td>🟡 Parcial</td>
+<td>Solo "kits de mercadería" del merendero entra; rendiciones financieras → diferido.</td>
+</tr>
+<tr>
+<td><strong>P10</strong> Personal y asignaciones</td>
+<td>⛔ Fuera (V2+)</td>
+<td>Dotación por dispositivo; no está en el Miro.</td>
+</tr>
+<tr>
+<td><strong>P12</strong> Migración, corrección y duplicados</td>
+<td>🟡 Transversal</td>
+<td>Aplica al alta inicial de dispositivos; tratar como tarea de migración.</td>
+</tr>
+<tr>
+<td><strong>P13</strong> Cierre mensual y tablero</td>
+<td>🟡 Diferible</td>
+<td>Indicadores básicos sí; cierre mensual formal → fase posterior.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Decisión de alcance (a confirmar):</strong> esta épica = <strong>P01 + P03(reuso) + P04 + P06 + P07</strong>,
+más lo transversal mínimo (roles, indicadores básicos, solapa en el legajo). El resto se
+documenta para encuadre pero queda <strong>fuera</strong> o <strong>diferido</strong> (§13).</p>
+</blockquote>
+<hr />
+<h3 id="3-concepto-modelo-del-dominio">3. Concepto / modelo del dominio</h3>
+<p>La entidad central nueva es el <strong>Dispositivo</strong> (establecimiento/institución). De él cuelgan su
+<strong>tipo</strong>, su <strong>configuración operativa</strong> (camas) y las <strong>admisiones</strong> de personas. Los
+<strong>Merenderos</strong> son una segunda clase de legajo institucional, hermana, con su propio circuito.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>NODO (plataforma)
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a> └─ Programa Dispositivos                         (apoyado en el módulo genérico Programa)
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>      ├─ Dispositivo                              (institución: 1..N; &quot;Legajo Dispo&quot;)
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>      │    ├─ Información base                     (nombre, domicilio, contacto, responsable)
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>      │    ├─ Tipo de dispositivo                  (define el formulario de admisión)
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>      │    ├─ Configuración (Form. F-01)           (camas totales; reglas de ingreso/egreso)
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>      │    ├─ Admisión / Estadía / Egreso          (N por dispositivo; 1 = 1 persona/legajo)
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>      │    │      └─ vínculo a Legajo Ciudadano
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>      │    └─ Cálculos automáticos                 (camas libres/ocupadas, métricas)
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>      │
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>      └─ Merendero                                 (institución: 1..N; &quot;Legajo Merenderos&quot;)
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>           ├─ Información base                      (nombre, dom., zona, barrio, responsable)
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>           ├─ Información extra                     (kits de mercadería, fecha de entrega, servicio)
+</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>           └─ Prestación (Form. F-02)              (desayuno/almuerzo/merienda/cena, observaciones)
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Entidad</th>
+<th>Descripción</th>
+<th>Notas clave / anclaje en código</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Programa Dispositivos</strong></td>
+<td>Marco genérico. Es <strong>otro <code>Programa</code></strong> además de Becas/Ñachec.</td>
+<td><code>Programa</code> ya existe (<code>programas/models/__init__.py:9</code>). Se crea con <code>tipo="DISPOSITIVOS"</code>.</td>
+</tr>
+<tr>
+<td><strong>Dispositivo</strong> <em>(NUEVO)</em></td>
+<td>Establecimiento físico con identidad institucional, domicilio, responsable, capacidad y tipo.</td>
+<td><strong>No existe modelo hoy.</strong> Hay que crearlo. ⚠️ Colisión de nombre: en código <code>dispositivo</code> ya es un <em>alias</em> de <code>LegajoAtencion</code> (<code>legajos/models/base.py</code>); usar un nombre distinto (ej. <code>DispositivoInstitucional</code>).</td>
+</tr>
+<tr>
+<td><strong>Tipo de dispositivo</strong></td>
+<td>Clasifica el dispositivo y <strong>determina el formulario de admisión</strong> (F-00). Tipos del Miro: Adulto Mayor, Abordaje Psicosocial, UPI/ECA, UPI, Residencias Universitarias, Fortalecimiento Familiar.</td>
+<td>Conceptualmente equivale al <strong>Segmento</strong> de Becas (cada tipo → su set de campos). Ver §4 y §9.</td>
+</tr>
+<tr>
+<td><strong>Persona / Legajo Ciudadano</strong></td>
+<td>La persona que ingresa al dispositivo. Dato único.</td>
+<td><strong>Reusa</strong> <code>Ciudadano</code> (<code>legajos/models/base.py:13</code>). Se busca por DNI; si existe se relaciona, si no se crea.</td>
+</tr>
+<tr>
+<td><strong>Admisión / Estadía</strong> <em>(NUEVO)</em></td>
+<td>Relación temporal persona↔dispositivo: ingreso, ocupación de cama, egreso/traslado.</td>
+<td><strong>No existe.</strong> Conceptualmente cercano a <code>InscripcionPrograma</code> (<code>programas/models/__init__.py:93</code>) pero con cama/fecha de ingreso-egreso. Evaluar reuso vs modelo nuevo (§8).</td>
+</tr>
+<tr>
+<td><strong>Cama / Plaza</strong> <em>(NUEVO)</em></td>
+<td>Unidad de capacidad del dispositivo. Estado: Disponible/Reservada/Ocupada/Fuera de servicio.</td>
+<td><strong>No existe.</strong> El Miro pide camas totales + libres + ocupadas (cálculo). Ver §10.</td>
+</tr>
+<tr>
+<td><strong>Formulario de admisión (F-00)</strong></td>
+<td>Información específica de la persona según el <strong>tipo</strong> de dispositivo.</td>
+<td>Configurable por tipo. Reusa el patrón <code>PreguntaGlobal</code>/<code>RequisitoNativo</code> (§9).</td>
+</tr>
+<tr>
+<td><strong>Configuración del dispositivo (F-01)</strong></td>
+<td>Parametría operativa: camas totales, reglas de ingreso/egreso.</td>
+<td>"Solapa de configuración" del Miro.</td>
+</tr>
+<tr>
+<td><strong>Merendero</strong> <em>(NUEVO)</em></td>
+<td>Organización comunitaria que brinda asistencia alimentaria. Legajo institucional propio.</td>
+<td><strong>No existe.</strong> Hermano del Dispositivo, circuito distinto (no maneja camas).</td>
+</tr>
+<tr>
+<td><strong>Prestación de merendero (F-02)</strong></td>
+<td>Servicios alimentarios brindados (desayuno/almuerzo/merienda/cena) + observaciones.</td>
+<td>Configurable.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="31-hallazgo-critico-anclaje-code-first">3.1 Hallazgo crítico (anclaje code-first)</h4>
+<p>El módulo <strong>Programa</strong> modela hoy la <strong>inscripción de un ciudadano a un programa</strong>
+(<code>InscripcionPrograma</code>), no un <strong>establecimiento</strong>. El "Dispositivo" del Miro/NODO es una
+<strong>entidad institucional nueva</strong> (como un legajo de la institución), que <strong>no tiene equivalente</strong>
+en el código. Es el principal trabajo de modelado de esta épica. Lo demás (identidad de la
+persona, solapas, RBAC, formularios configurables) <strong>se reusa</strong>.</p>
+<blockquote>
+<p><strong>Colisión de terminología a resolver (RN-DI-19):</strong> el término <code>dispositivo</code> ya existe en el
+código como propiedad/alias de <code>LegajoAtencion</code> (el legajo de atención de un ciudadano dentro
+de un programa). El <strong>Dispositivo institucional</strong> de esta épica es algo distinto. Hay que elegir
+un nombre de modelo que no choque (propuesta: <code>DispositivoInstitucional</code> / app o submódulo
+propio) y aclararlo en el código para evitar ambigüedad.</p>
+</blockquote>
+<hr />
+<h3 id="4-tipos-de-dispositivo">4. Tipos de dispositivo</h3>
+<p>Cada <strong>tipo</strong> define qué información específica se carga al admitir a una persona (el formulario
+F-00). Los tipos del Miro:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Form. de admisión</th>
+<th>¿Maneja camas?</th>
+<th style="text-align: center;">¿Detalle en el Miro?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Adulto Mayor</strong></td>
+<td>F-00 – Ingreso Adultos Mayores</td>
+<td>Sí</td>
+<td style="text-align: center;">✅ Detallado</td>
+</tr>
+<tr>
+<td><strong>Abordaje Psicosocial</strong></td>
+<td>F-00 – Abordaje Psicosocial</td>
+<td>Sí (probable)</td>
+<td style="text-align: center;">✅ Detallado</td>
+</tr>
+<tr>
+<td><strong>UPI / ECA</strong></td>
+<td>Información específica</td>
+<td>A confirmar</td>
+<td style="text-align: center;">❌ Pendiente</td>
+</tr>
+<tr>
+<td><strong>UPI</strong></td>
+<td>Información específica</td>
+<td>A confirmar</td>
+<td style="text-align: center;">❌ Pendiente</td>
+</tr>
+<tr>
+<td><strong>Residencias Universitarias</strong></td>
+<td>Información específica</td>
+<td>Sí (camas/plazas)</td>
+<td style="text-align: center;">❌ Pendiente</td>
+</tr>
+<tr>
+<td><strong>Fortalecimiento Familiar</strong></td>
+<td>Información específica</td>
+<td>A confirmar</td>
+<td style="text-align: center;">❌ Pendiente</td>
+</tr>
+</tbody>
+</table>
+<p><strong>F-00 – Adultos Mayores</strong> (bloques del Miro): Datos personales · Situación laboral y económica ·
+Permanencia, nutrición y vivienda · Red de sostén · Datos generales de la familia · Salud ·
+Ingresos mensuales · Egresos del dispositivo · Intereses y actividades · Grado de dependencia.</p>
+<p><strong>F-00 – Abordaje Psicosocial</strong> (bloques del Miro): Datos personales · Reingreso · Situación
+personal, educativa y laboral · Oficio laboral · Grupo familiar · Dinámica familiar · Vivienda ·
+Ingresos y egresos económicos · Red de sostén · Salud · Consumos · Situaciones de crisis ·
+Necesidades básicas · Grado de dependencia.</p>
+<blockquote>
+<p><strong>Decisión de modelado (a confirmar):</strong> los <strong>bloques</strong> se modelan como <strong>secciones</strong> y los
+campos de cada bloque como <strong>preguntas configurables por tipo</strong> (patrón <code>RequisitoNativo</code>),
+de modo que el tipo "Adulto Mayor" y "Abordaje Psicosocial" tengan cada uno su propio set
+sin tocar código. Para los 4 tipos sin detalle (UPI/ECA, UPI, Residencias Univ.,
+Fortalecimiento Familiar) hace falta el <strong>detalle de sus formularios</strong> (§17, Q-1).</p>
+</blockquote>
+<hr />
+<h4 id="41-f-00-adultos-mayores-campo-a-campo">4.1 F-00 Adultos Mayores — campo a campo</h4>
+<p><em>Área: Sistema Integral Gerontológico.</em></p>
+<p><strong>Convención:</strong> <code>FORMULARIO</code> = campo que carga el operador. <code>FUNCIONALIDAD</code> = lo provee el sistema (cálculo, Legajo Ciudadano, usuario logueado). <code>CONFIRMAR</code> = requiere verificación antes de implementar.</p>
+<p><strong>Resumen:</strong> 31 al formulario · 17 funcionalidades · 2 a confirmar (C-6, C-7)</p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Clasificación</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encabezado</td>
+<td>Institución / sede</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Contexto del dispositivo activo</td>
+</tr>
+<tr>
+<td>Encabezado</td>
+<td>Fecha y hora</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Timestamp de la admisión</td>
+</tr>
+<tr>
+<td>Encabezado</td>
+<td>Reingreso (Sí/No)</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Sistema detecta estadía anterior cerrada del ciudadano</td>
+</tr>
+<tr>
+<td>Encabezado</td>
+<td>Responsable</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Nombre y apellido</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Legajo Ciudadano / RENAPER (RN-DI-12)</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>DNI / CUIL</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Clave de búsqueda del Legajo Ciudadano</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Edad</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculada de fecha de nacimiento del legajo</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Fecha de nacimiento</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Legajo Ciudadano / RENAPER (RN-DI-12)</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Género</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Legajo Ciudadano / RENAPER (RN-DI-12)</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Obra social / N°</td>
+<td>texto</td>
+<td><code>CONFIRMAR</code></td>
+<td>Ver C-6: verificar si ya en solapa Salud del Legajo Ciudadano</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Nivel instrucción</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Pre-completar desde legajo educativo si existe</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Oficio</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Pre-completar desde legajo laboral si existe</td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Capacitaciones (Sí/No + cuáles)</td>
+<td>bool + texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>A. Datos personales</td>
+<td>Interés en formación (Sí/No + cuál)</td>
+<td>bool + texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>B. Sit. laboral y econ.</td>
+<td>Empleo</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Formal / Informal / Sin empleo</td>
+</tr>
+<tr>
+<td>B. Sit. laboral y econ.</td>
+<td>Lugar de trabajo</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>B. Sit. laboral y econ.</td>
+<td>Ocupación</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Pre-completar desde legajo laboral si existe</td>
+</tr>
+<tr>
+<td>B. Sit. laboral y econ.</td>
+<td>Ingreso mensual</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>B. Sit. laboral y econ.</td>
+<td>Plan social / beca (Sí/No + cuál)</td>
+<td>bool + texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>B. Sit. laboral y econ.</td>
+<td>Jubilación / pensión (Sí/No + cuál)</td>
+<td>bool + texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Perfil permanencia</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Larga estadía / Mediana estadía / Tránsito-crítico</td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Requerimiento nutricional</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>General / Adulto mayor / Especial</td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Relación familiar (Sí/No)</td>
+<td>bool</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Último domicilio</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Domicilio previo al ingreso; ≠ domicilio del Legajo Ciudadano</td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Motivo egreso hogar</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Por qué dejó su vivienda anterior. ≠ egreso del dispositivo (Sección H)</td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Posee vivienda (Sí/No)</td>
+<td>bool</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Dónde duerme actualmente</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Situación habitacional justo antes del ingreso</td>
+</tr>
+<tr>
+<td>C. Permanencia, nutrición y vivienda</td>
+<td>Observaciones</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>D. Red de sostén</td>
+<td>Tipos de red</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Parientes / Institucional / Vecinos / ONG / Iglesia / CC / Gubernamental / Otros</td>
+</tr>
+<tr>
+<td>D. Red de sostén</td>
+<td>Detalle red de sostén</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>E. Datos familia</td>
+<td>Tabla familiar</td>
+<td>tabla N filas</td>
+<td><code>FORMULARIO</code></td>
+<td>Nombre / Parentesco / Edad / Nivel / Ingreso / Teléfono</td>
+</tr>
+<tr>
+<td>F. Salud</td>
+<td>Grupo sanguíneo</td>
+<td>texto</td>
+<td><code>CONFIRMAR</code></td>
+<td>Ver C-7: verificar si ya en solapa Salud del Legajo Ciudadano</td>
+</tr>
+<tr>
+<td>F. Salud</td>
+<td>Tratamiento médico (Sí/No + dónde)</td>
+<td>bool + texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>F. Salud</td>
+<td>Antecedentes / condiciones de salud</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Tuberculosis / Diabetes / Cardíacos / Respiratorios / Salud mental / Discapacidad / ETS / Otros</td>
+</tr>
+<tr>
+<td>F. Salud</td>
+<td>Observaciones de salud</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>G. Egresos mensuales</td>
+<td>Alquiler</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>G. Egresos mensuales</td>
+<td>Créditos</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>G. Egresos mensuales</td>
+<td>Cuotas</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>G. Egresos mensuales</td>
+<td>Medicamentos</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>G. Egresos mensuales</td>
+<td>Transporte / otros</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>G. Egresos mensuales</td>
+<td>Total egresos</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: suma de los conceptos anteriores</td>
+</tr>
+<tr>
+<td>H. Egreso del dispositivo</td>
+<td>Sección completa (Fecha / Motivo / Destino / Derivación)</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Es el flujo de egreso, no el formulario de admisión. En papel están juntos; en el sistema es una acción separada al momento del retiro.</td>
+</tr>
+<tr>
+<td>I. Intereses y actividades</td>
+<td>Intereses</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>J. Dependencia y cierre</td>
+<td>Grado de dependencia</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Autoválido / Semi-válido / Postrado</td>
+</tr>
+<tr>
+<td>J. Dependencia y cierre</td>
+<td>Fecha de revisión</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Timestamp del sistema</td>
+</tr>
+<tr>
+<td>J. Dependencia y cierre</td>
+<td>Firma y aclaración</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado</td>
+</tr>
+<tr>
+<td>J. Dependencia y cierre</td>
+<td>DNI / cargo</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Del usuario logueado</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h4 id="42-f-00-abordaje-psicosocial-campo-a-campo">4.2 F-00 Abordaje Psicosocial — campo a campo</h4>
+<p><em>Área: Dirección de Inclusión y Abordaje Psicosocial.</em></p>
+<p><strong>Resumen:</strong> 44 al formulario · 17 funcionalidades</p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Clasificación</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Encabezado</td>
+<td>Institución / sede</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Contexto del dispositivo activo</td>
+</tr>
+<tr>
+<td>Encabezado</td>
+<td>Fecha</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Timestamp de la admisión</td>
+</tr>
+<tr>
+<td>Encabezado</td>
+<td>Tipo de ingreso (1ª vez / Reingreso)</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Sistema detecta estadía anterior; no es checkbox manual</td>
+</tr>
+<tr>
+<td>Encabezado</td>
+<td>Responsable</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado</td>
+</tr>
+<tr>
+<td>1. Datos personales</td>
+<td>Fecha de ingreso</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Timestamp de la admisión</td>
+</tr>
+<tr>
+<td>1. Datos personales</td>
+<td>DNI / CUIL</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Clave de búsqueda del Legajo Ciudadano</td>
+</tr>
+<tr>
+<td>1. Datos personales</td>
+<td>Nombre y apellido</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Legajo Ciudadano / RENAPER (RN-DI-12)</td>
+</tr>
+<tr>
+<td>1. Datos personales</td>
+<td>Edad</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculada de fecha de nacimiento</td>
+</tr>
+<tr>
+<td>1. Datos personales</td>
+<td>Lugar y fecha de nacimiento</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Legajo Ciudadano / RENAPER (RN-DI-12)</td>
+</tr>
+<tr>
+<td>1. Datos personales</td>
+<td>Tel. / Cel.</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Pre-completar del Legajo Ciudadano</td>
+</tr>
+<tr>
+<td>2. Reingreso</td>
+<td>Fecha de reingreso</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Nueva fecha de admisión; auto-capturada</td>
+</tr>
+<tr>
+<td>2. Reingreso</td>
+<td>Observaciones</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Contexto del reingreso</td>
+</tr>
+<tr>
+<td>2. Reingreso</td>
+<td>Observaciones ampliadas</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Nivel educativo</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Pre-completar desde legajo educativo si existe</td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Capacitaciones</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Interés en formación</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Ocupación</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Pre-completar desde legajo laboral si existe</td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Lugar de trabajo</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Ingreso mensual</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Empleo (Formal / Informal)</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Oficio / saber laboral</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Carpintería / Electricista / Albañilería / Soldador/a / Mecánica / Peluquería / Jardinería / Panadería / Artesanía / Otro</td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Ayuda económica externa (Sí/No + monto)</td>
+<td>bool + número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Plan social / beca (Sí/No + cuál)</td>
+<td>bool + texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>3. Sit. personal, educativa y laboral</td>
+<td>Jubilación / pensión (Sí/No + cuál)</td>
+<td>bool + texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>4. Grupo familiar</td>
+<td>Tabla grupo familiar</td>
+<td>tabla N filas</td>
+<td><code>FORMULARIO</code></td>
+<td>Nombre / Parentesco / Edad / Educación / Ocupación / Ingreso</td>
+</tr>
+<tr>
+<td>5. Dinámica familiar</td>
+<td>Relación con su familia</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>5. Dinámica familiar</td>
+<td>Último domicilio</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Domicilio previo al ingreso al dispositivo</td>
+</tr>
+<tr>
+<td>5. Dinámica familiar</td>
+<td>Motivo de egreso</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>⚠ "Egreso" aquí = razón por la que dejó su hogar anterior. No es el egreso del dispositivo.</td>
+</tr>
+<tr>
+<td>5. Dinámica familiar</td>
+<td>Derivación / referencia</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Quién o qué institución derivó al ciudadano</td>
+</tr>
+<tr>
+<td>5. Dinámica familiar</td>
+<td>Historia familiar</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>6. Vivienda</td>
+<td>Posee vivienda (Sí/No)</td>
+<td>bool</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>6. Vivienda</td>
+<td>Condición</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Propia / Alquilada / Prestada</td>
+</tr>
+<tr>
+<td>6. Vivienda</td>
+<td>Observaciones</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>6. Vivienda</td>
+<td>Localidad / barrio</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>7. Ingresos y egresos econ.</td>
+<td>Ingreso total mensual</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>7. Ingresos y egresos econ.</td>
+<td>Ayuda alimentaria</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Comedor / Bolsa / Trueque / Otro</td>
+</tr>
+<tr>
+<td>7. Ingresos y egresos econ.</td>
+<td>Alquiler / Medicamentos / Transporte / Créditos / Otros</td>
+<td>número (x5)</td>
+<td><code>FORMULARIO</code></td>
+<td>Cinco campos de gasto mensual declarado</td>
+</tr>
+<tr>
+<td>7. Ingresos y egresos econ.</td>
+<td>Total egresos</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: suma de los conceptos anteriores</td>
+</tr>
+<tr>
+<td>7. Ingresos y egresos econ.</td>
+<td>Saldo estimado</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: ingreso total − total egresos</td>
+</tr>
+<tr>
+<td>8. Red de sostén</td>
+<td>Tipos de red</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Familiares / Vecinos / Iglesia / Centro comunitario / Estado / Otros</td>
+</tr>
+<tr>
+<td>8. Red de sostén</td>
+<td>Detalle / referentes</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>9. Salud</td>
+<td>Cobertura de salud (Sí/No)</td>
+<td>bool</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>9. Salud</td>
+<td>Nro. afiliado</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>9. Salud</td>
+<td>Tabla Problema / Enfermedad / Tratamiento / Medicación</td>
+<td>tabla N filas</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>9. Salud</td>
+<td>Problemas de salud declarados</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Diabetes / Cardíacos / Respiratorios / Salud mental / Discapacidad / Otros</td>
+</tr>
+<tr>
+<td>10. Consumos</td>
+<td>Consume sustancias (Sí/No)</td>
+<td>bool</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>10. Consumos</td>
+<td>Cuáles</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>10. Consumos</td>
+<td>Tratamiento</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Ambulatorio / Internación / Otro</td>
+</tr>
+<tr>
+<td>10. Consumos</td>
+<td>Derivación</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>11. Situaciones de crisis</td>
+<td>Situaciones registradas</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Violencia / Adicciones / Abandono / Migración / Enfermedad grave / Muerte familiar / Otros</td>
+</tr>
+<tr>
+<td>11. Situaciones de crisis</td>
+<td>Descripción breve</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td></td>
+</tr>
+<tr>
+<td>12. Necesidades básicas</td>
+<td>Necesidades observadas</td>
+<td>multi-selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Hacinamiento / Vivienda precaria / Falta de agua / Niños sin escuela / Problemas de salud</td>
+</tr>
+<tr>
+<td>13. Grado de dependencia</td>
+<td>Condición funcional</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Autoválido / Semi-válido / Postrado</td>
+</tr>
+<tr>
+<td>Cierre</td>
+<td>Responsable del relevamiento</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado</td>
+</tr>
+<tr>
+<td>Cierre</td>
+<td>Firma</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado</td>
+</tr>
+<tr>
+<td>Cierre</td>
+<td>Fecha de carga / revisión</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Timestamp del sistema</td>
+</tr>
+<tr>
+<td>Cierre</td>
+<td>Estado (Completo / Pendiente)</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Borrador / completado según flujo del sistema</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="5-actores-y-roles">5. Actores y roles</h3>
+<p>Anclado en <code>core/rbac.py</code> (categorías de rol; la categoría <strong>PROGRAMA</strong> ya exige FK a un
+<code>Programa</code>). Los roles que aplican a Dispositivos:</p>
+<table>
+<thead>
+<tr>
+<th>Actor (NODO)</th>
+<th>Rol propuesto</th>
+<th>Acceso / alcance</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Operador del dispositivo</strong></td>
+<td>Categoría PROGRAMA, alcance al dispositivo.</td>
+<td>Ve y opera <strong>su</strong> dispositivo.</td>
+<td>Carga/actualiza personas, admisiones, egresos, prestaciones y datos operativos.</td>
+</tr>
+<tr>
+<td><strong>Responsable institucional</strong></td>
+<td>Categoría PROGRAMA/INSTITUCION.</td>
+<td>Su dispositivo.</td>
+<td>Controla la carga y confirma cierres (diarios/mensuales en fases posteriores).</td>
+</tr>
+<tr>
+<td><strong>Supervisor del área</strong></td>
+<td>Categoría PROGRAMA.</td>
+<td>Su área/varios dispositivos.</td>
+<td><strong>Valida</strong> altas de dispositivo, cambios sensibles, observaciones y correcciones.</td>
+</tr>
+<tr>
+<td><strong>Administrador central</strong></td>
+<td>Categoría SISTEMA/PROGRAMA.</td>
+<td>Todo el programa.</td>
+<td>Catálogos, perfiles/permisos, reaperturas, fusión de duplicados, configuración.</td>
+</tr>
+<tr>
+<td><strong>Equipo territorial / relevamiento</strong></td>
+<td>Categoría PROGRAMA/INSTITUCION.</td>
+<td>Relevamiento.</td>
+<td>Releva y propone correcciones de datos maestros e infraestructura.</td>
+</tr>
+<tr>
+<td><strong>Consulta / auditoría</strong></td>
+<td>Rol de solo lectura.</td>
+<td>Reportes/trazabilidad.</td>
+<td>Accede a reportes y trazabilidad <strong>sin modificar</strong>.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Anclaje:</strong> el catálogo RBAC ya tiene módulos <code>programas</code> (<code>programa.ver/operar/configurar</code>,
+alcance=programa) y <code>relevamientos</code>. Se agregarían codenames para Dispositivos (ej.
+<code>dispositivo.ver/operar/configurar</code>, <code>dispositivo.admitir</code>, <code>merendero.operar</code>). <strong>No inventar
+esquema paralelo</strong> — reusar <code>RolMeta</code> (<code>users/models/__init__.py:25</code>) con <code>categoria=PROGRAMA</code>
+y <code>programa = Programa(codigo="DISPOSITIVOS")</code>.</p>
+<hr />
+<h3 id="6-funcionamiento-end-to-end">6. Funcionamiento end-to-end</h3>
+<h4 id="61-legajo-dispositivo">6.1 Legajo Dispositivo</h4>
+<ol>
+<li><strong>Alta del dispositivo (P01).</strong> Un usuario autorizado <strong>busca primero</strong> por código/nombre/
+   localidad (evita duplicados). Si no existe, crea un <strong>borrador</strong>, completa identidad
+   institucional, ubicación + geolocalización, responsable, <strong>tipo</strong>, capacidad (camas),
+   horarios y contacto, y referencia el instrumento de creación.</li>
+<li><strong>Validación (supervisor).</strong> El supervisor compara con la fuente oficial y <strong>valida, observa
+   o rechaza</strong>. Al validar, el dispositivo queda <strong>Activo</strong> y habilitado para recibir personas.</li>
+<li><strong>Configuración operativa (F-01).</strong> Se cargan <strong>camas totales</strong> y reglas de ingreso/egreso.</li>
+<li><strong>Admisión de persona (P04).</strong> El operador <strong>busca la persona por DNI</strong> en el Legajo
+   Ciudadano (si existe se relaciona, si no se crea). Verifica disponibilidad de cama, <strong>asigna
+   cama</strong>, registra <strong>fecha/hora de ingreso</strong> y completa el <strong>formulario F-00 según el tipo</strong> del
+   dispositivo (info específica de la persona).</li>
+<li><strong>Estadía.</strong> Durante la permanencia se registran cambios de cama, sala, modalidad o referente,
+   conservando historial.</li>
+<li><strong>Egreso / traslado.</strong> El egreso registra <strong>fecha, motivo, destino y responsable</strong> y <strong>libera
+   la cama</strong>. El traslado cierra la estadía anterior y abre una nueva vinculada al mismo legajo.</li>
+<li><strong>Cálculos automáticos.</strong> En todo momento el sistema deriva <strong>camas libres</strong>, <strong>camas
+   ocupadas</strong> y <strong>métricas de ingreso/egreso/ocupación</strong> desde las admisiones activas (RN-DI-08).</li>
+<li><strong>Solapa en el Legajo Ciudadano.</strong> Mientras la persona esté admitida (activa), aparece la
+   <strong>solapa "Dispositivos"</strong> en su legajo, mostrando el estado.</li>
+</ol>
+<h4 id="62-legajo-merenderos">6.2 Legajo Merenderos</h4>
+<ol>
+<li><strong>Alta del merendero (P06).</strong> La organización presenta la solicitud (datos institucionales,
+   responsable, domicilio + geolocalización, zona, barrio, días/horarios, capacidad).</li>
+<li><strong>Validación.</strong> El área controla domicilio, capacidad y documentación → aprueba/observa/
+   rechaza. La aprobación crea el <strong>legajo del merendero</strong> (Activo).</li>
+<li><strong>Información extra.</strong> Se registra <strong>cantidad de kits de mercadería</strong>, <strong>fecha de entrega</strong> y
+   <strong>servicio</strong>.</li>
+<li><strong>Prestación (F-02).</strong> Se registran los servicios brindados: <strong>desayuno/colación, almuerzo,
+   merienda/colación, cena</strong> y <strong>observaciones</strong>.</li>
+<li><em>(Padrón nominal de niños/tutores y asistencia alimentaria diaria — según P06 de NODO — ver
+   §17 Q-7: confirmar si entra en esta épica o es fase posterior.)</em></li>
+</ol>
+<hr />
+<h3 id="7-estados">7. Estados</h3>
+<h4 id="71-dispositivo-p01">7.1 Dispositivo (P01)</h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Borrador → Pendiente de validación → Activo / Observado / Rechazado → Inactivo / Cerrado
+</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Estado</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Borrador</strong></td>
+<td>Creado, admite datos incompletos (RN-DI-04).</td>
+</tr>
+<tr>
+<td><strong>Pendiente de validación</strong></td>
+<td>Esperando control del supervisor.</td>
+</tr>
+<tr>
+<td><strong>Activo</strong></td>
+<td>Validado; puede recibir personas, camas, admisiones.</td>
+</tr>
+<tr>
+<td><strong>Observado</strong></td>
+<td>Tiene observaciones; no puede iniciar nuevos períodos operativos hasta resolver las críticas.</td>
+</tr>
+<tr>
+<td><strong>Rechazado</strong></td>
+<td>El alta no procede.</td>
+</tr>
+<tr>
+<td><strong>Inactivo / Cerrado</strong></td>
+<td>No admite nuevas cargas; <strong>conserva</strong> personas, admisiones e historial.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="72-admision-estadia-p04p07">7.2 Admisión / Estadía (P04/P07)</h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Solicitado → En revisión → (Lista de espera / Aprobado / Rechazado) → Alojado → Egresado / Trasladado
+</span></code></pre></div>
+<h4 id="73-cama-p07">7.3 Cama (P07)</h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Disponible → Reservada → Ocupada → Fuera de servicio
+</span></code></pre></div>
+<h4 id="74-merendero-p06">7.4 Merendero (P06)</h4>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Solicitud: Borrador → En revisión → Observada / Aprobada / Rechazada
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Merendero: Activo → Suspendido / Cerrado
+</span></code></pre></div>
+<hr />
+<h3 id="8-entidades-funcionales-y-mapeo-al-codigo-existente">8. Entidades funcionales y mapeo al código existente</h3>
+<blockquote>
+<p><strong>Anclaje code-first.</strong> Qué se <strong>reusa</strong> y qué se <strong>crea</strong>. Rutas con <code>file_path:line</code>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Entidad NODO</th>
+<th>¿Existe?</th>
+<th>Anclaje / decisión</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Programa</strong></td>
+<td>✅ Reuso</td>
+<td><code>programas/models/__init__.py:9</code> — crear instancia <code>tipo="DISPOSITIVOS"</code>.</td>
+</tr>
+<tr>
+<td><strong>Persona</strong></td>
+<td>✅ Reuso</td>
+<td><code>Ciudadano</code> (<code>legajos/models/base.py:13</code>): DNI único e indexado, vivienda/laboral/educativo/salud/migración ya modelados.</td>
+</tr>
+<tr>
+<td><strong>Identidad / RENAPER</strong></td>
+<td>✅ Reuso</td>
+<td><code>legajos/services/consulta_renaper.py</code> (DNI+sexo → autocompleta).</td>
+</tr>
+<tr>
+<td><strong>Solapa en legajo</strong></td>
+<td>✅ Reuso</td>
+<td><code>programas/services/solapas.py</code> — <code>SolapasService.obtener_solapas_ciudadano()</code> genera solapa dinámica si hay inscripción activa. Hay que enganchar Dispositivos al mismo mecanismo.</td>
+</tr>
+<tr>
+<td><strong>Roles/permisos</strong></td>
+<td>✅ Reuso</td>
+<td><code>core/rbac.py</code> + <code>RolMeta</code> (<code>users/models/__init__.py:25</code>), categoría PROGRAMA con FK a Programa.</td>
+</tr>
+<tr>
+<td><strong>Formulario configurable</strong></td>
+<td>✅ Reuso (patrón)</td>
+<td><code>PreguntaGlobal</code> (<code>programas/models/__init__.py:569</code>) + <code>RequisitoNativo</code> (<code>:599</code>) con tipos STRING/INT/SELECTOR/SELECTOR_MULTIPLE/DATE/ARCHIVO (<code>TipoCampo</code>, <code>:330</code>). Adaptar: la clave de agrupación pasa de "Segmento" a "Tipo de dispositivo".</td>
+</tr>
+<tr>
+<td><strong>Auditoría/traza</strong></td>
+<td>✅ Reuso (patrón)</td>
+<td><code>TracaFormulario</code> (<code>programas/models/__init__.py:760</code>) — patrón antes/después/usuario para RN-DI-06.</td>
+</tr>
+<tr>
+<td><strong>Lista de espera</strong></td>
+<td>✅ Reuso (patrón)</td>
+<td><code>ListaEspera</code> (<code>programas/models/__init__.py:791</code>).</td>
+</tr>
+<tr>
+<td><strong>Dispositivo (institución)</strong></td>
+<td>⛔ NUEVO</td>
+<td>No existe. Crear <code>DispositivoInstitucional</code> (evitar colisión con alias <code>dispositivo</code> de <code>LegajoAtencion</code>). Campos mínimos: código único, nombre, tipo, estado, domicilio, geolocalización, contacto, responsable, capacidad (camas), horarios.</td>
+</tr>
+<tr>
+<td><strong>Cama / Plaza</strong></td>
+<td>⛔ NUEVO</td>
+<td>No existe. Estados Disponible/Reservada/Ocupada/Fuera de servicio; ocupación calculada (RN-DI-08).</td>
+</tr>
+<tr>
+<td><strong>Admisión / Estadía</strong></td>
+<td>⛔ NUEVO (¿reuso parcial?)</td>
+<td>No existe con semántica de cama/ingreso-egreso. Evaluar extender <code>InscripcionPrograma</code> (<code>:93</code>, ya tiene estados y vía de ingreso) vs modelo dedicado.</td>
+</tr>
+<tr>
+<td><strong>Merendero</strong></td>
+<td>⛔ NUEVO</td>
+<td>No existe. Legajo institucional propio.</td>
+</tr>
+<tr>
+<td><strong>Asistencia/prestación diaria</strong></td>
+<td>⛔ NUEVO</td>
+<td>No existe modelo. (<code>legajos_registroasistencia</code> aparece referenciada en particionado pero <strong>sin modelo definido</strong> — confirmar.)</td>
+</tr>
+<tr>
+<td><strong>Indicadores/tablero</strong></td>
+<td>🟡 Mínimo</td>
+<td><code>dashboard</code> solo tiene un contador primitivo (<code>dashboard/models/__init__.py</code>). Tablero real = trabajo nuevo.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conclusión de modelado:</strong> la épica crea <strong>4 entidades nuevas</strong> (Dispositivo institucional,
+Cama, Admisión/Estadía, Merendero) + el set de <strong>formularios configurables por tipo</strong>, y
+<strong>reusa</strong> toda la base de identidad, solapas, RBAC y patrón de preguntas/traza.</p>
+<hr />
+<h3 id="9-formularios-configurables-f-00-f-01-f-02">9. Formularios configurables (F-00 / F-01 / F-02)</h3>
+<p>El Miro distingue tres "formularios". Se modelan con el mecanismo dinámico ya probado en Becas:</p>
+<table>
+<thead>
+<tr>
+<th>Form.</th>
+<th>Qué es</th>
+<th>Mecanismo propuesto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>F-00</strong></td>
+<td>Información específica de <strong>la persona</strong> según el <strong>tipo</strong> de dispositivo (Adulto Mayor, Abordaje Psicosocial, …).</td>
+<td>Preguntas configurables <strong>agrupadas por tipo de dispositivo</strong> (patrón <code>RequisitoNativo</code>), con secciones por bloque. Respuestas en JSON tipo <code>data</code> del <code>Formulario</code>.</td>
+</tr>
+<tr>
+<td><strong>F-01</strong></td>
+<td><strong>Registro diario de novedades por turno</strong> del dispositivo. Contiene turno (Mañana/Tarde/Noche), cantidades calculadas de camas y movimientos, y observaciones libres. <em>Actualización: no es solo configuración — es un registro operativo diario. Resuelve Q-9.</em></td>
+<td>Modelo de registro diario propio del dispositivo. Las cantidades (camas totales/ingresos/egresos/ocupación/disponibles) son <strong>calculadas</strong>; el operador solo aporta el turno y las observaciones. Ver §9.1.</td>
+</tr>
+<tr>
+<td><strong>F-02</strong></td>
+<td>Prestación del <strong>merendero</strong> (servicios alimentarios + observaciones).</td>
+<td>Campos fijos del modelo <code>Merendero</code>/prestación; los "servicios" pueden ser SELECTOR_MULTIPLE configurable.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Paralelo con Becas (importante para reuso):</strong></p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Becas:        Segmento            → RequisitoNativo (campos configurables del formulario)
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>Dispositivos: Tipo de dispositivo → (mismo patrón) campos configurables del F-00 por tipo
+</span></code></pre></div>
+<p>Esto permite que agregar/editar el formulario de un tipo (o sumar el detalle de UPI/ECA, UPI,
+etc.) sea <strong>configuración, no código</strong>. Los datos que provee <strong>RENAPER/escaneo</strong> (personales,
+CUIL, domicilio) <strong>no se vuelven a preguntar</strong> (RN-DI-12, alinea con RN-37 de Becas).</p>
+<hr />
+<h4 id="91-f-01-registro-diario-de-novedades-campo-a-campo">9.1 F-01 — Registro Diario de Novedades — campo a campo</h4>
+<p><strong>Resumen:</strong> 2 al formulario · 9 funcionalidades · 1 a confirmar</p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Clasificación</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Datos del registro</td>
+<td>Institución / sede</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Contexto del dispositivo activo</td>
+</tr>
+<tr>
+<td>Datos del registro</td>
+<td>Fecha</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Fecha del sistema al crear el registro</td>
+</tr>
+<tr>
+<td>Datos del registro</td>
+<td>Responsable del turno</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado</td>
+</tr>
+<tr>
+<td>Datos del registro</td>
+<td>Turno</td>
+<td>selector</td>
+<td><code>FORMULARIO</code></td>
+<td>Mañana / Tarde / Noche — único dato que aporta el operador en el encabezado</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>A. Camas totales — Cantidad</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Viene de la configuración del dispositivo</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>A. Camas totales — Observaciones</td>
+<td>texto</td>
+<td><code>CONFIRMAR</code></td>
+<td>¿Un cambio de capacidad se anota aquí o dispara una reconfiguración formal?</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>B. Ingresos del día — Cantidad</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: count de admisiones con fecha = hoy</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>C. Egresos del día — Cantidad</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: count de egresos con fecha = hoy</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>D. Ocupación nocturna — Cantidad</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: estadías activas al cierre del día</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>E. Camas disponibles — Cantidad</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: totales − ocupadas − fuera de servicio (RN-DI-08)</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>Observaciones filas B–E</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Sin campo propio: cada admisión/egreso ya tiene observaciones propias</td>
+</tr>
+<tr>
+<td>Novedades</td>
+<td>Observaciones generales del turno</td>
+<td>texto libre</td>
+<td><code>FORMULARIO</code></td>
+<td>Narrativa libre del turno; campo principal que aporta el operador</td>
+</tr>
+<tr>
+<td>Cierre</td>
+<td>Firma y Aclaración</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="10-gestion-de-camas-ingresoegreso-y-calculos-automaticos-p07">10. Gestión de camas, ingreso/egreso y cálculos automáticos (P07)</h3>
+<p>Esto es el corazón del "Legajo Dispo" del Miro ("Camas totales", "Cama Libres", "Camas
+ocupadas", "Métrica de ingreso/egreso/ocupación").</p>
+<p><strong>Reglas (de NODO P07, ancladas en RN-DI-08):</strong></p>
+<ul>
+<li><strong>Camas totales</strong> = capacidad configurada del dispositivo (F-01).</li>
+<li><strong>Camas ocupadas</strong> = <code>count(estadías activas con cama asignada)</code> — <strong>calculado</strong>, nunca carga manual.</li>
+<li><strong>Camas libres</strong> = camas totales − ocupadas − fuera de servicio.</li>
+<li><strong>Una cama no puede asignarse a dos personas a la vez</strong> (RN-DI-09).</li>
+<li><strong>Censo diario</strong> (si entra en alcance): <code>existencia inicial + ingresos − egresos = existencia final</code>.</li>
+<li><strong>Métricas</strong>: ingresos, egresos, permanencia promedio, % de ocupación — derivadas de las estadías.</li>
+</ul>
+<p><strong>Indicador de ocupación (semáforo, de NODO §8):</strong> Verde &lt;50% · Amarillo 50–79% · Rojo ≥80%.
+Configurable por tipo.</p>
+<blockquote>
+<p><strong>F-01 y el censo diario (Q-9 cerrada):</strong> el formulario F-01 del cliente es un "Registro Diario
+de Novedades por Turno". Confirma que el <strong>censo diario sí existe</strong> en el circuito operativo.
+En el sistema las cantidades son calculadas (no cargadas manualmente); el operador solo
+selecciona el turno y escribe observaciones libres. Ver clasificación campo a campo en §9.1.</p>
+<p><strong>A confirmar (Q-5):</strong> ¿todos los tipos manejan camas? Merenderos claramente <strong>no</strong>. Adultos
+Mayores y Residencias Universitarias <strong>sí</strong>. UPI/ECA, UPI y Fortalecimiento Familiar →
+confirmar. Quizá "camas" deba generalizarse a "plazas/cupos" para tipos sin internación.</p>
+</blockquote>
+<hr />
+<h3 id="11-merenderos-p06">11. Merenderos (P06)</h3>
+<p>Rama hermana, <strong>sin camas</strong>. Campos del Miro:</p>
+<ul>
+<li><strong>Información base:</strong> Nombre, Dirección, <strong>Zona</strong>, <strong>Barrio</strong>, Teléfono + <strong>Responsable</strong>
+  (Nombre, CUIT/DNI, Email).</li>
+<li><strong>Información extra:</strong> Cantidad de <strong>kits de mercadería</strong>, <strong>Fecha de entrega</strong>, <strong>Servicio</strong>.</li>
+<li><strong>Prestación (F-02):</strong> Desayuno/colación, Almuerzo, Merienda/colación, Cena, Observaciones.</li>
+</ul>
+<p>NODO P06 amplía con <strong>padrón nominal de niños y tutores</strong>, <strong>días/horarios de apertura</strong> y
+<strong>asistencia/entrega de kits con responsable receptor</strong>. Confirmar cuánto de eso entra en V1
+(Q-7).</p>
+<blockquote>
+<p><strong>A confirmar (Q-2):</strong> ¿Merenderos es <strong>otro tipo</strong> dentro del Programa Dispositivos, o un
+<strong>programa aparte</strong> que comparte plataforma? El Miro los pone como legajos hermanos. Impacta si
+es un <code>tipo</code> más de <code>DispositivoInstitucional</code> o un modelo/programa separado.</p>
+</blockquote>
+<hr />
+<h4 id="f-02-prestacion-alimentaria-mensual-campo-a-campo">F-02 — Prestación Alimentaria Mensual — campo a campo</h4>
+<p><em>Formulario mensual: una fila por día del mes, columnas por servicio alimentario.</em></p>
+<p><strong>Resumen:</strong> 5 al formulario · 6 funcionalidades · 1 a confirmar (C-8)</p>
+<table>
+<thead>
+<tr>
+<th>Sección</th>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Clasificación</th>
+<th>Nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cabecera</td>
+<td>Institución / sede</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Contexto del merendero activo</td>
+</tr>
+<tr>
+<td>Cabecera</td>
+<td>Mes</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Pre-completado con el mes actual al crear el registro</td>
+</tr>
+<tr>
+<td>Cabecera</td>
+<td>Año</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Pre-completado</td>
+</tr>
+<tr>
+<td>Cabecera</td>
+<td>Servicio (Desayuno / Almuerzo / Merienda / Cena)</td>
+<td>multi-selector</td>
+<td><code>CONFIRMAR</code></td>
+<td>C-8: ¿configuración del legajo del merendero (qué servicios ofrece, definida una vez) o selector por cada registro mensual? Determina qué columnas aparecen en la tabla.</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Día (1–31)</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>El sistema genera una fila por cada día del mes</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Desayuno / colación (cantidad)</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td>Cantidad de raciones servidas</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Almuerzo (cantidad)</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td>Cantidad de raciones servidas</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Merienda / colación (cantidad)</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td>Cantidad de raciones servidas</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Cena (cantidad)</td>
+<td>número</td>
+<td><code>FORMULARIO</code></td>
+<td>Cantidad de raciones servidas</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Total por día</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Calculado: suma de los 4 servicios del día</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Observaciones por día</td>
+<td>texto</td>
+<td><code>FORMULARIO</code></td>
+<td>Texto libre opcional por fila</td>
+</tr>
+<tr>
+<td>Tabla diaria</td>
+<td>Firma por día</td>
+<td>—</td>
+<td><code>FUNCIONALIDAD</code></td>
+<td>Usuario logueado al cargar la fila</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="12-reglas-de-negocio-consolidadas-preliminares">12. Reglas de negocio (consolidadas, preliminares)</h3>
+<p>Combina las <strong>reglas transversales de NODO (RN-01…RN-10)</strong> con reglas propias de Dispositivos.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Regla</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RN-DI-01</td>
+<td><strong>No eliminación física.</strong> Los registros operativos se <strong>anulan/inactivan</strong>, nunca se eliminan; se conserva historial (NODO RN-01).</td>
+</tr>
+<tr>
+<td>RN-DI-02</td>
+<td><strong>Identidad única.</strong> La persona se busca por <strong>DNI</strong> (y reglas de coincidencia) antes de crear; una persona puede estar vinculada a varios dispositivos sin duplicar identidad (NODO RN-02).</td>
+</tr>
+<tr>
+<td>RN-DI-03</td>
+<td><strong>Dato único de dispositivo.</strong> Antes de crear un dispositivo, se busca por código/nombre/localidad para evitar duplicados. El <strong>código institucional es único</strong>.</td>
+</tr>
+<tr>
+<td>RN-DI-04</td>
+<td><strong>Campos por estado.</strong> Un <strong>borrador</strong> admite datos incompletos; <strong>validar/cerrar</strong> exige los campos obligatorios del proceso (NODO RN-04).</td>
+</tr>
+<tr>
+<td>RN-DI-05</td>
+<td><strong>Control de acceso por alcance.</strong> El permiso depende de rol, área, dispositivo y sensibilidad (NODO RN-05); se implementa con <code>core.rbac</code> categoría PROGRAMA.</td>
+</tr>
+<tr>
+<td>RN-DI-06</td>
+<td><strong>Auditoría.</strong> Altas, cambios, validaciones, egresos, reaperturas y fusiones registran <strong>usuario, fecha, hora y valor anterior</strong> (NODO RN-06).</td>
+</tr>
+<tr>
+<td>RN-DI-07</td>
+<td><strong>Fechas coherentes.</strong> La fecha de egreso no puede ser anterior a la de ingreso; asignaciones y períodos respetan orden cronológico (NODO RN-07).</td>
+</tr>
+<tr>
+<td>RN-DI-08</td>
+<td><strong>Ocupación calculada.</strong> Camas ocupadas/libres y métricas se <strong>derivan</strong> de las estadías activas, <strong>no</strong> de una carga manual paralela (NODO RN-08).</td>
+</tr>
+<tr>
+<td>RN-DI-09</td>
+<td><strong>Una cama, una persona.</strong> Una cama no puede asignarse simultáneamente a dos personas.</td>
+</tr>
+<tr>
+<td>RN-DI-10</td>
+<td><strong>Dispositivo cerrado.</strong> No admite nuevas admisiones; conserva personas, estadías e historial.</td>
+</tr>
+<tr>
+<td>RN-DI-11</td>
+<td><strong>Dispositivo observado.</strong> No puede iniciar nuevos períodos operativos hasta resolver observaciones críticas.</td>
+</tr>
+<tr>
+<td>RN-DI-12</td>
+<td><strong>RENAPER/escaneo.</strong> Los datos que provee RENAPER o el escaneo de DNI no se vuelven a preguntar; solo se cargan a mano sin conexión.</td>
+</tr>
+<tr>
+<td>RN-DI-13</td>
+<td><strong>Validación por responsabilidad.</strong> El dispositivo <strong>carga</strong>; el área competente <strong>observa/valida/rechaza</strong> (NODO §1).</td>
+</tr>
+<tr>
+<td>RN-DI-14</td>
+<td><strong>No cupo sin disponibilidad.</strong> No se aprueba una admisión si el dispositivo está cerrado o sin cama, salvo autorización registrada.</td>
+</tr>
+<tr>
+<td>RN-DI-15</td>
+<td><strong>Lista de espera.</strong> Si no hay cama, la admisión validada va a lista de espera; la promoción es manual (reusa patrón <code>ListaEspera</code>).</td>
+</tr>
+<tr>
+<td>RN-DI-16</td>
+<td><strong>Traslado.</strong> Cierra la estadía anterior y abre una nueva vinculada al mismo legajo, conservando historia.</td>
+</tr>
+<tr>
+<td>RN-DI-17</td>
+<td><strong>Solapa dinámica.</strong> Si el ciudadano tiene una admisión activa en un dispositivo, aparece la solapa "Dispositivos" en su legajo con el estado (reusa <code>SolapasService</code>).</td>
+</tr>
+<tr>
+<td>RN-DI-18</td>
+<td><strong>Contingencia territorial.</strong> Debe contemplarse carga diferida/sin conectividad evitando duplicados en la sincronización (NODO RN-09).</td>
+</tr>
+<tr>
+<td>RN-DI-19</td>
+<td><strong>Nomenclatura.</strong> El "Dispositivo institucional" (esta épica) es distinto del alias <code>dispositivo</code> de <code>LegajoAtencion</code>. Resolver con un nombre de modelo no ambiguo.</td>
+</tr>
+<tr>
+<td>RN-DI-20</td>
+<td><strong>Fuente del dato.</strong> Todo dato migrado o corregido conserva fuente, fecha y responsable (NODO RN-03); no se publica como oficial una dirección pendiente de verificación.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="13-fuera-de-alcance-diferido">13. Fuera de alcance / diferido</h3>
+<h4 id="fuera-de-alcance-esta-epica">Fuera de alcance (esta épica)</h4>
+<ul>
+<li><strong>P08 — Línea 102 / denuncias / riesgo / derivaciones NNA</strong> (casos sensibles; épica propia).</li>
+<li><strong>P10 — Personal y asignaciones por dispositivo</strong> (no está en el Miro).</li>
+<li><strong>P09 — Fondos, rendiciones financieras</strong> (solo entran los <em>kits de mercadería</em> del merendero).</li>
+</ul>
+<h4 id="diferido-a-faseversion-posterior">Diferido a fase/versión posterior</h4>
+<ul>
+<li><strong>P11 — Infraestructura y preparación tecnológica</strong> (semáforo edilicio y de PCs).</li>
+<li><strong>P13 — Cierre mensual formal</strong> y tablero de comando completo (sí indicadores básicos).</li>
+<li><strong>P05 — Asistencia/prestación diaria general</strong> más allá de merenderos.</li>
+<li><strong>Padrón nominal de niños/tutores y asistencia alimentaria diaria</strong> del merendero (P06 ampliado).</li>
+</ul>
+<hr />
+<h3 id="14-dependencias-e-impacto-critico">14. Dependencias e impacto crítico</h3>
+<ul>
+<li><strong><code>programas</code>:</strong> se apoya en el <code>Programa</code> genérico; se agregan modelos institucionales nuevos.</li>
+<li><strong><code>legajos</code> / <code>ciudadanos</code>:</strong> la persona = <code>Ciudadano</code>. Reusar identidad (DNI/CUIL) y RENAPER;
+  vigilar deduplicación. La relación con el programa se visualiza con <strong>solapas dinámicas</strong>.</li>
+<li><strong><code>users</code> / <code>core.rbac</code>:</strong> roles del programa con alcance por dispositivo. <strong>No inventar
+  esquema paralelo.</strong></li>
+<li><strong><code>solapas.py</code>:</strong> enganchar la solapa de Dispositivos al <code>SolapasService</code>.</li>
+<li><strong>Migración inicial (P12):</strong> alta de dispositivos existentes desde matriz/Excel con fuente y
+  nivel de confianza; reconciliar antes de definir el padrón oficial.</li>
+<li><strong>Colisión de nombres (<code>dispositivo</code>)</strong> — RN-DI-19.</li>
+</ul>
+<hr />
+<h3 id="15-pantallas-del-backoffice-mapa-preliminar">15. Pantallas del backoffice (mapa preliminar)</h3>
+<table>
+<thead>
+<tr>
+<th>Pantalla</th>
+<th>Operaciones principales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dispositivos</strong></td>
+<td>ABM con búsqueda anti-duplicado; alta en borrador; validar/observar/rechazar; ver estado y ocupación.</td>
+</tr>
+<tr>
+<td><strong>Detalle de dispositivo</strong></td>
+<td>Información base, tipo, configuración de camas (F-01), listado de admisiones, cálculos automáticos.</td>
+</tr>
+<tr>
+<td><strong>Admisión / Egreso</strong></td>
+<td>Buscar persona (DNI) → asignar cama → completar F-00 según tipo → registrar egreso/traslado.</td>
+</tr>
+<tr>
+<td><strong>Camas</strong></td>
+<td>Estado de cada cama (disponible/reservada/ocupada/fuera de servicio); censo.</td>
+</tr>
+<tr>
+<td><strong>Merenderos</strong></td>
+<td>ABM institucional; información extra (kits); prestación F-02.</td>
+</tr>
+<tr>
+<td><strong>Configuración del programa</strong></td>
+<td>ABM de <strong>tipos de dispositivo</strong> y de los <strong>campos del F-00 por tipo</strong> (preguntas configurables); catálogo de servicios de merendero.</td>
+</tr>
+<tr>
+<td><strong>Indicadores</strong></td>
+<td>Ocupación, disponibilidad, actualización de datos, completitud (semáforos §8 de NODO).</td>
+</tr>
+<tr>
+<td><strong>Reportes</strong></td>
+<td>Exportar dispositivos, ocupación, admisiones/egresos, padrón de merenderos.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="16-mapeo-nodo-p01p13-alcance-de-la-epica">16. Mapeo NODO (P01–P13) → alcance de la épica</h3>
+<table>
+<thead>
+<tr>
+<th>Proc.</th>
+<th>Nombre</th>
+<th>Alcance</th>
+<th>Anclaje / nota</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P01</td>
+<td>Alta y mantenimiento del dispositivo</td>
+<td>✅ Núcleo</td>
+<td>Modelo <code>DispositivoInstitucional</code> nuevo; estados §7.1.</td>
+</tr>
+<tr>
+<td>P02</td>
+<td>Usuarios, perfiles y permisos</td>
+<td>🟡 Reuso</td>
+<td><code>core.rbac</code> + roles del programa.</td>
+</tr>
+<tr>
+<td>P03</td>
+<td>Alta/actualización de persona y legajo</td>
+<td>✅ Reuso</td>
+<td><code>Ciudadano</code> + RENAPER.</td>
+</tr>
+<tr>
+<td>P04</td>
+<td>Inscripción, admisión, egreso y traslado</td>
+<td>✅ Núcleo</td>
+<td><code>Admisión/Estadía</code> nuevo; estados §7.2.</td>
+</tr>
+<tr>
+<td>P05</td>
+<td>Asistencia y prestación diaria</td>
+<td>🟡 Parcial</td>
+<td>Solo merenderos en V1.</td>
+</tr>
+<tr>
+<td>P06</td>
+<td>Merenderos y comedores</td>
+<td>✅ Núcleo</td>
+<td><code>Merendero</code> + F-02.</td>
+</tr>
+<tr>
+<td>P07</td>
+<td>Albergues, residencias y camas</td>
+<td>✅ Núcleo</td>
+<td><code>Cama</code> + cálculos §10.</td>
+</tr>
+<tr>
+<td>P08</td>
+<td>Denuncias, riesgo y derivaciones</td>
+<td>⛔ Fuera</td>
+<td>Línea 102, NNA.</td>
+</tr>
+<tr>
+<td>P09</td>
+<td>Fondos, raciones, kits y rendiciones</td>
+<td>🟡 Parcial</td>
+<td>Solo kits del merendero.</td>
+</tr>
+<tr>
+<td>P10</td>
+<td>Personal y asignaciones</td>
+<td>⛔ Fuera</td>
+<td>No está en el Miro.</td>
+</tr>
+<tr>
+<td>P11</td>
+<td>Infraestructura y preparación tecnológica</td>
+<td>🟡 Diferible</td>
+<td>Semáforo de PCs.</td>
+</tr>
+<tr>
+<td>P12</td>
+<td>Migración, corrección y duplicados</td>
+<td>🟡 Transversal</td>
+<td>Alta inicial de dispositivos.</td>
+</tr>
+<tr>
+<td>P13</td>
+<td>Cierre mensual y tablero</td>
+<td>🟡 Diferible</td>
+<td>Indicadores básicos sí.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="17-preguntas-abiertas-consolidado">17. Preguntas abiertas (consolidado)</h3>
+<blockquote>
+<p>Mientras existan pendientes <strong>bloqueantes</strong>, NO se generan issues (control estricto de
+<code>AGENTS.md</code>). Estado: Bloqueante · No bloq. · Diferida · Cerrada.</p>
+</blockquote>
+<h4 id="171-alcance-y-dominio">17.1 Alcance y dominio</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Pregunta</th>
+<th>Para</th>
+<th style="text-align: center;">Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q-1</td>
+<td><strong>Tipos sin detalle.</strong> Falta el detalle de los formularios F-00 de <strong>UPI/ECA, UPI, Residencias Universitarias y Fortalecimiento Familiar</strong>. ¿Hay más Miro/docs o los dejamos como "a configurar"?</td>
+<td>Cliente</td>
+<td style="text-align: center;">Bloqueante (para esos tipos)</td>
+</tr>
+<tr>
+<td>Q-2</td>
+<td><strong>Merenderos: ¿tipo o programa aparte?</strong> ¿Es un <code>tipo</code> más del Programa Dispositivos o un programa/módulo separado que comparte plataforma?</td>
+<td>Cliente</td>
+<td style="text-align: center;">Bloqueante</td>
+</tr>
+<tr>
+<td>Q-3</td>
+<td><strong>Qué es un "dispositivo".</strong> Confirmar que = establecimiento físico (hogar/residencia) con capacidad de camas y responsable.</td>
+<td>Cliente</td>
+<td style="text-align: center;">No bloq.</td>
+</tr>
+<tr>
+<td>Q-4</td>
+<td><strong>Tipos: ¿lista fija o configurable?</strong> ¿Los 6 tipos son fijos o un catálogo ABM que crecerá? Define si los F-00 son configurables (recomendado) o hardcodeados.</td>
+<td>Cliente</td>
+<td style="text-align: center;">No bloq.</td>
+</tr>
+<tr>
+<td>Q-5</td>
+<td><strong>¿Todos los tipos manejan camas?</strong> Merenderos no. AM y Residencias sí. UPI/ECA, UPI, Fortalecimiento → confirmar. ¿Generalizar "camas" a "plazas/cupos"?</td>
+<td>Cliente</td>
+<td style="text-align: center;">No bloq.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="172-procesos-y-operacion">17.2 Procesos y operación</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Pregunta</th>
+<th>Para</th>
+<th style="text-align: center;">Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q-6</td>
+<td><strong>Validación del alta.</strong> ¿Quién valida el alta de un dispositivo (supervisor del área) y con qué criterio? ¿Aplica el circuito borrador→validación a todos los tipos?</td>
+<td>Cliente</td>
+<td style="text-align: center;">No bloq.</td>
+</tr>
+<tr>
+<td>Q-7</td>
+<td><strong>Merenderos en V1.</strong> ¿Entra el <strong>padrón nominal de niños/tutores</strong> y la <strong>asistencia/entrega de kits diaria</strong> (P06 ampliado), o V1 es solo legajo + prestación F-02?</td>
+<td>Cliente</td>
+<td style="text-align: center;">No bloq.</td>
+</tr>
+<tr>
+<td>Q-8</td>
+<td><strong>Asistencia diaria (P05).</strong> ¿Hay registro de asistencia diaria para dispositivos con internación, o el alcance es solo admisión/egreso?</td>
+<td>Cliente</td>
+<td style="text-align: center;">No bloq.</td>
+</tr>
+<tr>
+<td>Q-9</td>
+<td><strong>Censo de camas.</strong> ¿Se requiere censo diario formal (existencia inicial + ingresos − egresos)?</td>
+<td>Cliente</td>
+<td style="text-align: center;"><strong>Cerrada</strong> — El F-01 es un Registro Diario de Novedades por Turno; el censo diario existe. Las cantidades son calculadas en el sistema. Ver §9.1 y §10.</td>
+</tr>
+<tr>
+<td>Q-10</td>
+<td><strong>Reingreso (Abordaje Ps).</strong> El F-00 psicosocial tiene "Reingreso". ¿Cómo se modela una persona que vuelve a ingresar (nueva estadía vinculada al mismo legajo)?</td>
+<td>Cliente</td>
+<td style="text-align: center;">No bloq.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="173-tecnicas-icore">17.3 Técnicas (ICORE)</h4>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Tarea</th>
+<th style="text-align: center;">Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C-1</td>
+<td><strong>Nombre del modelo.</strong> Resolver colisión <code>dispositivo</code> (alias de <code>LegajoAtencion</code>) vs <code>DispositivoInstitucional</code>. Definir app/submódulo.</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+<tr>
+<td>C-2</td>
+<td><strong>Admisión: reuso vs nuevo.</strong> Evaluar si extender <code>InscripcionPrograma</code> (ya tiene estados/vía de ingreso) cubre la admisión con cama, o conviene modelo dedicado.</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+<tr>
+<td>C-3</td>
+<td><strong>Formularios por tipo.</strong> Confirmar que el patrón <code>PreguntaGlobal</code>/<code>RequisitoNativo</code> se puede re-clavar de "Segmento" a "Tipo de dispositivo" sin refactor mayor.</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+<tr>
+<td>C-4</td>
+<td><strong>Solapa.</strong> Verificar cómo enganchar Dispositivos en <code>SolapasService</code> (hoy mira <code>InscripcionPrograma</code> activa).</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+<tr>
+<td>C-5</td>
+<td><strong><code>legajos_registroasistencia</code>.</strong> Confirmar si existe modelo de asistencia (aparece en particionado pero sin modelo) o es un fantasma.</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+<tr>
+<td>C-6</td>
+<td><strong>Obra social en Legajo Ciudadano (F-00 AM).</strong> Verificar si el campo "Obra social / N°" ya existe en la solapa Salud del Legajo Ciudadano. Si sí: pre-completar y no volver a preguntar. Si no: es campo del formulario de admisión.</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+<tr>
+<td>C-7</td>
+<td><strong>Grupo sanguíneo en Legajo Ciudadano (F-00 AM).</strong> Verificar si ya existe en la solapa Salud del legajo.</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+<tr>
+<td>C-8</td>
+<td><strong>"Servicio" en F-02 Merenderos.</strong> Definir si los servicios que ofrece el merendero (Desayuno/Almuerzo/Merienda/Cena) son configuración del legajo del merendero (definida una vez) o un selector por cada registro mensual. Determina qué columnas aparecen en la tabla de prestación.</td>
+<td style="text-align: center;">Pendiente</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="18-proximos-pasos">18. Próximos pasos</h3>
+<ol>
+<li><strong>Cerrar bloqueantes de alcance</strong> (Q-1, Q-2) con el cliente: detalle de los 4 tipos faltantes
+   y decisión Merenderos = tipo vs programa.</li>
+<li><strong>Resolver pendientes técnicos</strong> (C-1…C-8) por ICORE (especialmente C-6 y C-7 para confirmar
+   qué campos del F-00 AM ya están en el Legajo Ciudadano).</li>
+<li><strong>Confirmar decisiones de modelado</strong> (C-1…C-5) por ICORE.</li>
+<li><strong>Validar este encuadre</strong> con el cliente: alcance §2 (P01+P03+P04+P06+P07) + clasificación
+   formulario/funcionalidad de §4 y §11.</li>
+<li><strong>Cerrar el catálogo de campos</strong> del F-00 para los 4 tipos sin detalle (UPI/ECA, UPI,
+   Residencias Universitarias, Fortalecimiento Familiar).</li>
+<li><strong>Generación en GitHub</strong> — épica → análisis → sub-issues (recién con bloqueantes Q-1 y Q-2
+   cerrados).</li>
+</ol>
+<hr />
+<h3 id="19-historial-de-cambios-del-analisis">19. Historial de cambios del análisis</h3>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Cambio</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2026-06-25</td>
+<td>Versión inicial</td>
+<td>Primer borrador a partir del Miro del Programa Dispositivos + Especificación NODO + mapeo del código real.</td>
+</tr>
+<tr>
+<td>2026-06-26</td>
+<td>Integración de formularios F-00/F-01/F-02 campo a campo</td>
+<td>Se incorporaron los 4 formularios del cliente y se clasificó cada campo como FORMULARIO, FUNCIONALIDAD o CONFIRMAR. Se cerró Q-9 y se agregaron C-6, C-7, C-8.</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Volver al principio
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Mkdir-arg/Chaco" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.expand", "navigation.indexes", "navigation.tracking", "search.highlight", "search.suggest", "toc.follow", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copiado al portapapeles", "clipboard.copy": "Copiar al portapapeles", "search.result.more.one": "1 m\u00e1s en esta p\u00e1gina", "search.result.more.other": "# m\u00e1s en esta p\u00e1gina", "search.result.none": "No se encontraron documentos", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Teclee para comenzar b\u00fasqueda", "search.result.term.missing": "Falta", "select.version": "Seleccionar versi\u00f3n"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
