@@ -34,7 +34,7 @@ hide:
 
     ---
 
-    **Junio 2026:** 499h consumidas | 654h estimadas | -439h saldo (excedido)
+    **Junio 2026 (cerrado):** 499h consumidas de 714h (70%) — dentro del presupuesto
 
     [:octicons-arrow-right-16: Ver dashboard](financiero/mes-2026-06.md)
 
