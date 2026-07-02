@@ -8,7 +8,7 @@
 
 -   :material-calendar-range: **Período**
 
-    3 jun → 24 jun 2026
+    3 jun 2026 → en curso
 
 -   :material-counter: **Avance**
 
@@ -16,7 +16,7 @@
 
 -   :material-clock-outline: **Horas consumidas**
 
-    167h 3min
+    204h 20min (al 01/07/2026)
 
 </div>
 
@@ -31,6 +31,9 @@
 |:-:|---|:-:|:-:|:-:|:-:|
 | 1 | Programa Becas (análisis) | Alta | En análisis | — | 85h |
 | 2 | Motor RBAC base | Alta | Completado | — | 68h |
+
+!!! note "Horas por funcionalidad"
+    Las horas por funcionalidad corresponden al corte del 24/06 y están en consolidación. El total actualizado de la versión (204h 20min al 01/07) incluye además el desarrollo del backend de Becas, la app móvil de relevamiento, el Design System y el análisis de dispositivos/merenderos — ver [detalle de consumo](version-001-consumo-horas.md).
 
 ---
 

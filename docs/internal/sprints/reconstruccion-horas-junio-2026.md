@@ -38,18 +38,19 @@ Anclas de memoria (para ubicar sesiones no cargadas, completar solo si fueron re
 
 ---
 
-## Juan "Kitro" — Backend de Becas
+## Juan Portilla Kitroser — Backend de Becas
 
-⚠️ **Antes de cargar:** el backend de Becas de junio está registrado a nombre de
-**Juani Portilla** (RBAC + Becas, 56 h 45 min). Confirmar con Matías:
+✅ **Identidad resuelta por git:** "Juan Kitro" = **Juani Portilla** (`juanikitro` /
+`Juan Ignacio Portilla Kitroser`). Ya tiene 56 h 45 min registradas en junio (hasta el
+24/06). **El historial de git muestra 3 días de trabajo fuerte SIN registrar** —
+completar solo la duración real:
 
-- Si "Juan Kitro" **es la misma persona**, acá solo van sesiones que falten (no
-  re-registrar lo ya cargado).
-- Si **es otra persona**, indicar qué partes del backend hizo cada uno, sin superponer.
-
-| Fecha | Tarea (qué hiciste) | Duración | Evidencia |
+| Fecha | Tarea (evidencia de commits) | Duración | Evidencia |
 |---|---|---|---|
-| | | | |
+| 2026-06-26 | Becas: convocatorias (listado + detalle 4 tabs), infraestructura AJAX para modales, requisitos por segmento + cuestionario social, segmentos con modales AJAX, campo observaciones | | 6 commits `feat(becas)` del 26/06 + PR #96 |
+| 2026-06-29 | Becas: filtrado dinámico de subsegmento (#75) · Roles: tabs de capacidades + buscador + ÑACHEC/Becas | | commits 29/06 + PRs #105/#106/#107 |
+| 2026-06-30 | CI de GitHub Actions para PRs (setup + fixes Ruff/Bandit/coverage) · Becas: cupo/lista de espera UI + solapa Becas en legajo ciudadano | | commits 30/06 + PRs #110/#111/#113 |
+| 2026-06-03 | Design KB inicial (NODO design-kb + resolución conflictos NODO vs CHACO) — verificar si quedó dentro de los 480 min registrados el 08/06 | | 2 commits del 03/06 |
 | | | | |
 
 ---
