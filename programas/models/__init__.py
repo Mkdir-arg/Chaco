@@ -164,6 +164,7 @@ class InscripcionPrograma(TimeStamped):
     def save(self, *args, **kwargs):
         if not self.codigo:
             from datetime import datetime
+
             self.codigo = f"{self.programa.codigo}-{datetime.now().strftime('%Y%m%d')}-{self.ciudadano.dni}"
         super().save(*args, **kwargs)
 
@@ -389,6 +390,7 @@ class Subsegmento(TimeStamped):
         verbose_name="Segmento",
     )
     nombre = models.CharField(max_length=200, verbose_name="Nombre")
+    descripcion = models.TextField(blank=True, verbose_name="Descripción")
     cupo_maximo = models.PositiveIntegerField(verbose_name="Cupo máximo")
 
     class Meta:
@@ -493,9 +495,7 @@ class Convocatoria(TimeStamped):
         super().clean()
         if self.subsegmento_id and self.segmento_id:
             if self.subsegmento.segmento_id != self.segmento_id:
-                raise ValidationError(
-                    {"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."}
-                )
+                raise ValidationError({"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."})
 
 
 class Relevamiento(TimeStamped):
@@ -641,9 +641,7 @@ class RequisitoNativo(TimeStamped):
         super().clean()
         if self.subsegmento_id and self.segmento_id:
             if self.subsegmento.segmento_id != self.segmento_id:
-                raise ValidationError(
-                    {"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."}
-                )
+                raise ValidationError({"subsegmento": "El subsegmento debe pertenecer al segmento seleccionado."})
 
 
 class AsignacionCoordinador(TimeStamped):
@@ -683,6 +681,7 @@ class Formulario(TimeStamped):
         ENVIADO = "ENVIADO", "Enviado"
         APROBADO = "APROBADO", "Aprobado"
         RECHAZADO = "RECHAZADO", "Rechazado"
+        BAJA = "BAJA", "Dado de baja"
 
     relevamiento = models.ForeignKey(
         Relevamiento,
@@ -756,6 +755,53 @@ class Formulario(TimeStamped):
         if self.ciudadano_id:
             return f"Formulario #{self.pk} - {self.ciudadano}"
         return f"Formulario #{self.pk} (sin ciudadano)"
+
+
+class AdjuntoFormulario(TimeStamped):
+    """Archivo subido por el territorial para un campo tipo ARCHIVO (pregunta
+    global o requisito nativo) de un formulario (#82)."""
+
+    formulario = models.ForeignKey(
+        Formulario,
+        on_delete=models.CASCADE,
+        related_name="adjuntos",
+        verbose_name="Formulario",
+    )
+    pregunta_global = models.ForeignKey(
+        PreguntaGlobal,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="adjuntos_formulario",
+        verbose_name="Pregunta global",
+    )
+    requisito_nativo = models.ForeignKey(
+        RequisitoNativo,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="adjuntos_formulario",
+        verbose_name="Requisito nativo",
+    )
+    archivo = models.FileField(upload_to="becas/adjuntos/%Y/%m/", verbose_name="Archivo")
+
+    class Meta:
+        verbose_name = "Adjunto de formulario"
+        verbose_name_plural = "Adjuntos de formulario"
+        ordering = ["-creado"]
+        constraints = [
+            models.CheckConstraint(
+                check=(
+                    models.Q(pregunta_global__isnull=False, requisito_nativo__isnull=True)
+                    | models.Q(pregunta_global__isnull=True, requisito_nativo__isnull=False)
+                ),
+                name="adjunto_formulario_una_sola_referencia",
+            )
+        ]
+
+    def __str__(self):
+        campo = self.pregunta_global or self.requisito_nativo
+        return f"Formulario #{self.formulario_id} · {campo}"
 
 
 class TracaFormulario(models.Model):

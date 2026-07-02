@@ -1,4 +1,5 @@
 """Formularios del backoffice del Programa Becas (#74 / #76)."""
+
 from django import forms
 from django.contrib.auth.models import User
 from django.db import models
@@ -19,9 +20,6 @@ from programas.models import (
 # Definida en static/custom/css/nodo-forms.css (alto 42px, foco de marca con ring).
 INPUT_CLASS = "nodo-field"
 CHECKBOX_CLASS = "h-4 w-4 rounded border-base text-fg-brand focus:ring-brand"
-
-ROL_COORDINADOR = "Becas — Coordinador"
-ROL_TERRITORIAL = "Becas — Territorial"
 
 
 def _text_widget(rows=3):
@@ -59,25 +57,35 @@ class SegmentoCreateForm(forms.ModelForm):
         model = Segmento
         fields = ["nombre", "descripcion", "cupo_maximo"]
         widgets = {
-            "nombre": forms.TextInput(attrs={
-                "class": INPUT_CLASS,
-                "placeholder": "Ej: Producción Territorial / Fuego y Barro",
-            }),
-            "descripcion": forms.Textarea(attrs={
-                "class": INPUT_CLASS, "rows": 2,
-                "placeholder": "Población objetivo del segmento",
-            }),
-            "cupo_maximo": forms.NumberInput(attrs={
-                "class": INPUT_CLASS, "min": 0, "placeholder": "Ej: 500",
-            }),
+            "nombre": forms.TextInput(
+                attrs={
+                    "class": INPUT_CLASS,
+                    "placeholder": "Ej: Producción Territorial / Fuego y Barro",
+                }
+            ),
+            "descripcion": forms.Textarea(
+                attrs={
+                    "class": INPUT_CLASS,
+                    "rows": 2,
+                    "placeholder": "Población objetivo del segmento",
+                }
+            ),
+            "cupo_maximo": forms.NumberInput(
+                attrs={
+                    "class": INPUT_CLASS,
+                    "min": 0,
+                    "placeholder": "Ej: 500",
+                }
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["descripcion"].required = True
-        self.fields["coordinador"].queryset = User.objects.filter(
-            groups__name=ROL_COORDINADOR, is_active=True
-        ).distinct().order_by("username")
+        from programas.services.autorizacion import usuarios_coordinadores_becas
+
+        self.fields["coordinador"].queryset = usuarios_coordinadores_becas()
+        self.fields["coordinador"].label_from_instance = lambda u: u.get_full_name() or u.username
 
 
 class SubsegmentoForm(forms.ModelForm):
@@ -85,14 +93,27 @@ class SubsegmentoForm(forms.ModelForm):
 
     class Meta:
         model = Subsegmento
-        fields = ["nombre", "cupo_maximo"]
+        fields = ["nombre", "descripcion", "cupo_maximo"]
         widgets = {
-            "nombre": forms.TextInput(attrs={"class": INPUT_CLASS}),
+            "nombre": forms.TextInput(
+                attrs={
+                    "class": INPUT_CLASS,
+                    "placeholder": "Ej: Ladrillo",
+                }
+            ),
+            "descripcion": forms.Textarea(
+                attrs={
+                    "class": INPUT_CLASS,
+                    "rows": 2,
+                    "placeholder": "Opcional",
+                }
+            ),
             "cupo_maximo": forms.NumberInput(attrs={"class": INPUT_CLASS, "min": 0}),
         }
 
     def __init__(self, *args, segmento=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["descripcion"].required = False
         if segmento is not None:
             self.instance.segmento = segmento
 
@@ -198,9 +219,10 @@ class AsignacionCoordinadorForm(forms.ModelForm):
         if segmento is not None:
             self.instance.segmento = segmento
         # Solo usuarios con el rol Coordinador de Becas (#74).
-        self.fields["coordinador"].queryset = User.objects.filter(
-            groups__name=ROL_COORDINADOR, is_active=True
-        ).distinct().order_by("username")
+        from programas.services.autorizacion import usuarios_coordinadores_becas
+
+        self.fields["coordinador"].queryset = usuarios_coordinadores_becas()
+        self.fields["coordinador"].label_from_instance = lambda u: u.get_full_name() or u.username
 
     def clean(self):
         cleaned = super().clean()
@@ -253,9 +275,10 @@ class RelevamientoForm(forms.ModelForm):
 
     def __init__(self, *args, segmentos_permitidos=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["territorial"].queryset = User.objects.filter(
-            groups__name=ROL_TERRITORIAL, is_active=True
-        ).distinct().order_by("username")
+        from programas.services.autorizacion import usuarios_territoriales_becas
+
+        self.fields["territorial"].queryset = usuarios_territoriales_becas()
+        self.fields["territorial"].label_from_instance = lambda u: u.get_full_name() or u.username
         conv_qs = Convocatoria.objects.select_related("segmento").filter(activo=True)
         if segmentos_permitidos is not None:
             conv_qs = conv_qs.filter(segmento__in=segmentos_permitidos)
@@ -277,9 +300,10 @@ class ReasignarTerritorialForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["territorial"].queryset = User.objects.filter(
-            groups__name=ROL_TERRITORIAL, is_active=True
-        ).distinct().order_by("username")
+        from programas.services.autorizacion import usuarios_territoriales_becas
+
+        self.fields["territorial"].queryset = usuarios_territoriales_becas()
+        self.fields["territorial"].label_from_instance = lambda u: u.get_full_name() or u.username
 
 
 class ReprogramarForm(forms.Form):

@@ -2,13 +2,11 @@ import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import Group, User
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
 from core.rbac import (
     CATEGORIA_BACKOFFICE,
-    CATEGORIA_PROGRAMA,
     CATEGORIAS_ROL_CHOICES,
     todas_las_capacidades,
 )
@@ -31,9 +29,7 @@ class RolMeta(models.Model):
     ``group.permissions``.
     """
 
-    grupo = models.OneToOneField(
-        Group, on_delete=models.CASCADE, related_name="meta", verbose_name="Rol"
-    )
+    grupo = models.OneToOneField(Group, on_delete=models.CASCADE, related_name="meta", verbose_name="Rol")
     descripcion = models.TextField(blank=True, default="", verbose_name="Descripción")
     categoria = models.CharField(
         max_length=20,
@@ -60,18 +56,6 @@ class RolMeta(models.Model):
     def __str__(self):
         return self.grupo.name
 
-    def clean(self):
-        """RN-1: ``categoria == "Programa"`` ⇔ ``programa`` no nulo."""
-        super().clean()
-        if self.categoria == CATEGORIA_PROGRAMA and self.programa_id is None:
-            raise ValidationError(
-                {"programa": "Un rol de categoría 'Programa' requiere seleccionar un Programa."}
-            )
-        if self.categoria != CATEGORIA_PROGRAMA and self.programa_id is not None:
-            raise ValidationError(
-                {"programa": "Solo los roles de categoría 'Programa' pueden tener un Programa asociado."}
-            )
-
 
 class Capacidad(models.Model):
     """Modelo ancla de las capacidades del RBAC. **No** gestiona tabla propia.
@@ -94,27 +78,27 @@ class SolicitudCambioEmail(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='solicitudes_cambio_email',
-        verbose_name='Usuario',
+        related_name="solicitudes_cambio_email",
+        verbose_name="Usuario",
     )
-    nuevo_email = models.EmailField(verbose_name='Nuevo email')
+    nuevo_email = models.EmailField(verbose_name="Nuevo email")
     token = models.UUIDField(
         default=uuid.uuid4,
         unique=True,
         db_index=True,
         editable=False,
-        verbose_name='Token de confirmación',
+        verbose_name="Token de confirmación",
     )
     creado = models.DateTimeField(auto_now_add=True)
     confirmado = models.BooleanField(default=False)
     expirado = models.BooleanField(default=False)
 
     class Meta:
-        verbose_name = 'Solicitud de cambio de email'
-        verbose_name_plural = 'Solicitudes de cambio de email'
+        verbose_name = "Solicitud de cambio de email"
+        verbose_name_plural = "Solicitudes de cambio de email"
         indexes = [
-            models.Index(fields=['user', 'confirmado']),
-            models.Index(fields=['creado']),
+            models.Index(fields=["user", "confirmado"]),
+            models.Index(fields=["creado"]),
         ]
 
     def __str__(self):
@@ -123,8 +107,5 @@ class SolicitudCambioEmail(models.Model):
     @property
     def esta_vigente(self):
         from datetime import timedelta
-        return (
-            not self.confirmado
-            and not self.expirado
-            and (timezone.now() - self.creado) < timedelta(hours=24)
-        )
+
+        return not self.confirmado and not self.expirado and (timezone.now() - self.creado) < timedelta(hours=24)

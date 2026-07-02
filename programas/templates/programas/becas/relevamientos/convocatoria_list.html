@@ -3,7 +3,7 @@
 
 {% block main-content %}
 <style>[x-cloak]{display:none!important}</style>
-<div class="max-w-6xl mx-auto mb-8"
+<div class="mb-8"
      x-data="{ modalCrear: false }"
      @becas-saved.window="modalCrear=false">
 
@@ -22,7 +22,7 @@
     </button>
   </div>
 
-  <div id="convocatorias-table" class="bg-white rounded-xl border border-[#E5E7EB] shadow-sm overflow-hidden">
+  <div id="convocatorias-table" class="bg-white rounded-xl border border-base shadow-sm overflow-hidden">
     {% include "programas/becas/relevamientos/_convocatorias_table.html" %}
   </div>
 

@@ -3,7 +3,7 @@
 
 {% block main-content %}
 <style>[x-cloak]{display:none!important}</style>
-<div class="max-w-6xl mx-auto mb-8"
+<div class="mb-8"
      x-data="{
        modalCrear: false,
        modalEdit: false,
@@ -34,7 +34,7 @@
     </button>
   </div>
 
-  <div id="preguntas-table" class="bg-white rounded-xl border border-[#E5E7EB] shadow-sm overflow-hidden">
+  <div id="preguntas-table" class="bg-white rounded-xl border border-base shadow-sm overflow-hidden">
     {% include "programas/becas/config/_preguntas_table.html" %}
   </div>
 
