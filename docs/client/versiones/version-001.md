@@ -29,7 +29,7 @@
 
 | # | Funcionalidad | Prioridad | Estado | Hs est. | Hs reales |
 |:-:|---|:-:|:-:|:-:|:-:|
-| 1 | Programa Becas (análisis) | Alta | En análisis | — | 85h |
+| 1 | [Programa Becas (análisis)](../funcionalidades/programa-becas.md) | Alta | En análisis | — | 85h |
 | 2 | Motor RBAC base | Alta | Completado | — | 68h |
 | 3 | [Programa Dispositivos (análisis)](../funcionalidades/programa-dispositivos.md) | Alta | En análisis | — | — |
 
