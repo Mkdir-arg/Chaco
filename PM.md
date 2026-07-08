@@ -115,19 +115,24 @@ Cruza las **horas estimadas** de cada programa contra las **horas registradas**
 para ver el panorama de avance. Fuentes: los documentos de estimación
 (`docs/client/funcionalidades/estimacion-programa-*.md` — total del resumen
 ejecutivo, desglose por concepto, fecha/versión/estado de aprobación) y el
-registro de consumo (`docs/client/versiones/version-NNN-consumo-horas.md`,
-tablas mensuales con columna `Programa`, disponibles desde julio 2026).
+registro de consumo (`docs/client/versiones/version-NNN-consumo-horas.md`).
+Imputación del consumo: **junio 2026 se imputa íntegramente a Becas**
+(decisión del PM, 08/07/2026, anotada en el registro); **desde julio 2026**
+cada fila lleva columna `Programa` en las tablas mensuales.
 Secciones, en este orden:
 1. **Resumen ejecutivo** — 2-3 líneas por programa: cuánto se estimó, cuánto se
    consumió, qué % de avance implica y qué preocupa.
 2. **Panorama** — tabla por programa: Estimado (doc) | Consumido | % avance |
    Restante | Estado de la estimación (aprobada / pendiente de aprobación).
+   Si parte del consumo es previo a la fecha de la estimación (p. ej. junio
+   para Becas), el informe lo separa en una línea aparte: consumo total vs
+   consumo desde la estimación — el PM decide contra cuál medir el avance.
 3. **Detalle del estimado** — por programa, el desglose por concepto del resumen
    ejecutivo (Backend, Frontend, App, UX, QA, despliegue, capacitación).
 4. **Horas fuera de programas** — Transversal del período (gestión, reuniones,
-   soporte) y meses previos sin imputación (junio 2026: 499 h), para que el
-   total cierre contra el registro. Las estimaciones son esfuerzo técnico neto:
-   lo Transversal **no** descuenta avance de ningún programa.
+   soporte), para que el total cierre contra el registro. Las estimaciones son
+   esfuerzo técnico neto: lo Transversal **no** descuenta avance de ningún
+   programa.
 5. **Cruce con el Project** — suma de `EstimacionHoras` de las tasks de la épica
    de cada programa vs. el total del documento de estimación; discrepancias se
    marcan (no se corrigen).

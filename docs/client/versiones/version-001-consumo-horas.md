@@ -2,6 +2,9 @@
 
 ## :material-account-clock: Consumo de junio 2026 — detalle día por día
 
+!!! note "Imputación de junio"
+    Por decisión del PM (08/07/2026), el consumo de junio 2026 se imputa **íntegramente al Programa Becas**, incluyendo el trabajo de base del mes (motor de roles, design system, legajo ciudadano, análisis inicial del Programa Dispositivos y reuniones). La imputación por programa fila por fila rige desde julio 2026.
+
 | Día | Persona | Motivo | Qué hice | Consumo |
 |---|---|---|---|---:|
 | 2026-06-03 | Agostina Coppola | Reunión inicial y alineación funcional del sprint | Definición funcional inicial y coordinación del alcance | 50 min |
@@ -149,6 +152,13 @@
 | Pablo Cao | App de campo (diseño, desarrollo front e integración) | 95 h 59 min |
 | Equipo UX | Mockups del programa | 65 h 00 min |
 | **Total junio 2026** | | **499 h 12 min** |
+
+### :material-briefcase-outline: Consumo de junio por programa
+
+| Programa | Horas junio |
+|---|---:|
+| Becas | 499 h 12 min (100%) |
+| **Total junio 2026** | **499 h 12 min** |
 
 ---
 

@@ -16,10 +16,11 @@ Contexto del usuario: `$ARGUMENTS`
    `docs/client/funcionalidades/estimacion-programa-*.md`. De cada uno tomá el
    total y el desglose por concepto del "Resumen ejecutivo", más fecha, versión
    y estado de aprobación.
-2. **Levantá el consumo por programa**: tablas mensuales con columna `Programa`
-   de `docs/client/versiones/version-NNN-consumo-horas.md` (el de número más
-   alto). Sumá por programa desde julio 2026. Los meses sin columna `Programa`
-   (junio 2026) y las horas `Transversal` van aparte, no contra los programas.
+2. **Levantá el consumo por programa**: `docs/client/versiones/version-NNN-consumo-horas.md`
+   (el de número más alto). **Junio 2026 se imputa íntegramente a Becas**
+   (decisión del PM, 08/07/2026, anotada en el registro); desde julio sumá por
+   programa con la columna `Programa` de las tablas mensuales. Las horas
+   `Transversal` van aparte, no contra los programas.
 3. **Cruzá con el Project #1** de `Mkdir-arg` (GitHub MCP preferido; fallback
    `gh project item-list 1 --owner Mkdir-arg --format json`): suma de
    `EstimacionHoras` de las tasks de la épica de cada programa vs. el total del
