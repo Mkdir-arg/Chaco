@@ -60,6 +60,8 @@ awslabs-mcp/
 *.pem
 nginx-selfsigned.crt
 nginx-selfsigned.key
+# Excepción: CAs públicas que la imagen necesita confiar (sin claves privadas)
+!certs/*.crt
 
 # MkDocs
 site/

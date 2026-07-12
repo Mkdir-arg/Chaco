@@ -1,18 +1,11 @@
 from datetime import date
 
+from django.core.cache import cache
 from django.db.models import Q
 
 from programas.models import DerivacionPrograma, InscripcionPrograma, Programa
 
 from ..models import AlertaCiudadano, Ciudadano, LegajoAtencion
-from ..models.nachec import (
-    CasoNachec,
-    EvaluacionVulnerabilidad,
-    HistorialEstadoCaso,
-    PlanIntervencionNachec,
-    PrestacionNachec,
-    RelevamientoNachec,
-)
 from ..services import SolapasService
 
 
@@ -70,7 +63,7 @@ def get_ciudadanos_queryset(search=""):
     return queryset.order_by("apellido", "nombre")
 
 
-def get_ciudadanos_dashboard_metrics():
+def _build_ciudadanos_dashboard_metrics():
     total_inscripciones_activas = InscripcionPrograma.objects.filter(
         estado__in=[InscripcionPrograma.Estado.ACTIVO, InscripcionPrograma.Estado.EN_SEGUIMIENTO]
     ).count()
@@ -90,19 +83,19 @@ def get_ciudadanos_dashboard_metrics():
     }
 
 
+def get_ciudadanos_dashboard_metrics():
+    # ~6 COUNTs globales por cada página del listado: cache corto compartido.
+    return cache.get_or_set("legajos:ciudadanos_dashboard_metrics", _build_ciudadanos_dashboard_metrics, 60)
+
+
 def build_ciudadano_detail_context(ciudadano, user=None):
 
     from core.rbac import puede
 
     puede_ver_sensible = puede(user, "ciudadano.sensible")
 
-    # Generar alertas on-the-fly antes de consultar (best-effort)
-    try:
-        from ..services.alertas import AlertasService
-
-        AlertasService.generar_alertas_ciudadano(ciudadano.pk)
-    except Exception:
-        pass
+    # Las alertas se generan por señal (al guardar legajos/contactos) y por el
+    # comando periódico `generar_alertas`; la vista de detalle solo las lee.
 
     acompanamientos = (
         InscripcionPrograma.objects.filter(
@@ -201,28 +194,4 @@ def build_ciudadano_detail_context(ciudadano, user=None):
 
     linea.sort(key=lambda x: x["fecha"], reverse=True)
     context["linea_tiempo"] = linea[:50]
-
-    caso_nachec = (
-        CasoNachec.objects.filter(ciudadano_titular=ciudadano)
-        .exclude(estado__in=["CERRADO", "RECHAZADO", "SUSPENDIDO"])
-        .select_related("territorial", "coordinador", "operador_admision")
-        .order_by("-creado")
-        .first()
-    )
-    if not caso_nachec:
-        return context
-
-    context["caso_nachec"] = caso_nachec
-    context["relevamiento"] = RelevamientoNachec.objects.filter(caso=caso_nachec).order_by("-creado").first()
-    context["evaluacion"] = EvaluacionVulnerabilidad.objects.filter(caso=caso_nachec).first()
-    context["plan_vigente"] = PlanIntervencionNachec.objects.filter(
-        caso=caso_nachec,
-        vigente=True,
-    ).first()
-    context["prestaciones"] = (
-        PrestacionNachec.objects.filter(caso=caso_nachec).select_related("responsable").order_by("-creado")[:10]
-    )
-    context["historial_estados"] = (
-        HistorialEstadoCaso.objects.filter(caso=caso_nachec).select_related("usuario").order_by("-timestamp")[:10]
-    )
     return context

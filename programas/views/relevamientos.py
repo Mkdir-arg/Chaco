@@ -15,6 +15,7 @@ from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import CreateView, DetailView, ListView, UpdateView
 
 from core.rbac import CapacidadRequeridaMixin, puede, requiere
@@ -89,22 +90,30 @@ class ConvocatoriaDetailView(CapacidadRequeridaMixin, LoginRequiredMixin, Detail
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         conv = self.object
-        relevamientos = conv.relevamientos.select_related("territorial").order_by("-fecha_asignada")
+        # Materializados una vez: los counts se derivan en Python (evita 3
+        # queries COUNT extra sobre los mismos datos).
+        relevamientos = list(conv.relevamientos.select_related("territorial").order_by("-fecha_asignada"))
         ctx["relevamientos"] = relevamientos
         # Beneficiarios = formularios cargados en los relevamientos de esta convocatoria.
-        beneficiarios = (
+        beneficiarios = list(
             Formulario.objects.filter(relevamiento__convocatoria=conv)
             .select_related("ciudadano", "relevamiento")
             .order_by("-creado")
         )
         ctx["beneficiarios"] = beneficiarios
-        ctx["n_relevamientos"] = relevamientos.count()
-        ctx["n_beneficiarios"] = beneficiarios.count()
-        ctx["n_aprobados"] = beneficiarios.filter(estado=Formulario.Estado.APROBADO).count()
+        ctx["n_relevamientos"] = len(relevamientos)
+        ctx["n_beneficiarios"] = len(beneficiarios)
+        ctx["n_aprobados"] = sum(1 for f in beneficiarios if f.estado == Formulario.Estado.APROBADO)
         ctx["cupo_segmento"] = conv.segmento.cupo_maximo
         form = ConvocatoriaForm(instance=conv)
         form.fields["segmento"].queryset = segmentos_visibles(self.request.user)
         ctx["form_convocatoria"] = form
+        # Modal "Nuevo relevamiento" con esta convocatoria preseleccionada.
+        ctx["form_crear"] = RelevamientoForm(
+            initial={"convocatoria": conv},
+            segmentos_permitidos=segmentos_visibles(self.request.user),
+        )
+        ctx["siguiente_nombre"] = Relevamiento.proximo_nombre()
         return ctx
 
 
@@ -200,7 +209,11 @@ def convocatoria_export_relevamientos(request, pk):
     response.write("﻿")
     writer = csv.writer(response)
     writer.writerow(["Relevamiento", "Territorial", "Zona", "Fecha asignada", "Estado", "Formularios"])
-    relevamientos = conv.relevamientos.select_related("territorial").order_by("-fecha_asignada")
+    relevamientos = (
+        conv.relevamientos.select_related("territorial")
+        .annotate(n_formularios=Count("formularios"))
+        .order_by("-fecha_asignada")
+    )
     for r in relevamientos:
         terr = r.territorial.get_full_name() or r.territorial.username
         writer.writerow(
@@ -210,7 +223,7 @@ def convocatoria_export_relevamientos(request, pk):
                 r.zona,
                 r.fecha_asignada.strftime("%d/%m/%Y"),
                 r.get_estado_display(),
-                r.formularios.count(),
+                r.n_formularios,
             ]
         )
     return response
@@ -242,7 +255,7 @@ class RelevamientoListView(CapacidadRequeridaMixin, LoginRequiredMixin, ListView
         ctx["estado_actual"] = self.request.GET.get("estado", "")
         # Form + nombre autogenerado para el modal "Nuevo relevamiento".
         ctx["form_crear"] = RelevamientoForm(segmentos_permitidos=segmentos_visibles(self.request.user))
-        ctx["siguiente_nombre"] = f"Relevamiento {Relevamiento.objects.count() + 1:03d}"
+        ctx["siguiente_nombre"] = Relevamiento.proximo_nombre()
         return ctx
 
 
@@ -261,9 +274,19 @@ class RelevamientoCreateView(CapacidadRequeridaMixin, LoginRequiredMixin, Create
         messages.success(self.request, "Relevamiento creado y asignado.")
         return super().form_valid(form)
 
+    def get_success_url(self):
+        # "next" permite volver a la pantalla de origen (p. ej. el detalle de la
+        # convocatoria cuando se crea desde su modal).
+        next_url = self.request.POST.get("next")
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts={self.request.get_host()}):
+            return next_url
+        return str(self.success_url)
+
 
 class RelevamientoDetailView(CapacidadRequeridaMixin, LoginRequiredMixin, DetailView):
     model = Relevamiento
+    # El template y _assert_scope recorren convocatoria/segmento/territorial.
+    queryset = Relevamiento.objects.select_related("convocatoria__segmento", "convocatoria__subsegmento", "territorial")
     capacidades_requeridas = CAP_RELEVAMIENTO_VER
     template_name = "programas/becas/relevamientos/relevamiento_detail.html"
     context_object_name = "relevamiento"
@@ -276,7 +299,9 @@ class RelevamientoDetailView(CapacidadRequeridaMixin, LoginRequiredMixin, Detail
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         rel = self.object
-        ctx["form_reasignar"] = ReasignarTerritorialForm(initial={"territorial": rel.territorial})
+        ctx["form_reasignar"] = ReasignarTerritorialForm(
+            initial={"territorial": rel.territorial}, segmento=rel.convocatoria.segmento
+        )
         ctx["form_reprogramar"] = ReprogramarForm(initial={"fecha_asignada": rel.fecha_asignada})
         ctx["n_formularios"] = rel.formularios.count()
         ctx["puede_revisar"] = puede(self.request.user, "becas.revision.ver")
@@ -293,7 +318,7 @@ def relevamiento_reasignar(request, pk):
     rel = get_object_or_404(Relevamiento.objects.select_related("convocatoria__segmento"), pk=pk)
     _assert_scope(request, rel)
     if request.method == "POST":
-        form = ReasignarTerritorialForm(request.POST)
+        form = ReasignarTerritorialForm(request.POST, segmento=rel.convocatoria.segmento)
         if form.is_valid():
             rel.territorial = form.cleaned_data["territorial"]
             rel.save(update_fields=["territorial", "modificado"])

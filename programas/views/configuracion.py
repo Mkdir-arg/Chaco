@@ -224,8 +224,16 @@ class SegmentoDetailView(SegmentoScopedMixin, CapacidadRequeridaMixin, LoginRequ
         subsegmentos = list(seg.subsegmentos.all().order_by("nombre"))
         ctx["subsegmentos"] = subsegmentos
         ctx["subsegmentos_cupo_total"] = sum(s.cupo_maximo for s in subsegmentos)
+        # Cupo calculado UNA vez acá: las properties del modelo disparan un SUM
+        # por cada acceso y el template las consulta muchas veces.
+        ctx["cupo_distribuido"] = ctx["subsegmentos_cupo_total"]
+        ctx["cupo_disponible"] = seg.cupo_maximo - ctx["subsegmentos_cupo_total"]
         ctx["coordinadores"] = seg.asignaciones_coordinador.select_related("coordinador").order_by(
             "coordinador__username"
+        )
+        # Solo lectura: la asignación del territorial se gestiona desde el ABM de Usuarios.
+        ctx["territoriales"] = seg.asignaciones_territorial.select_related("territorial").order_by(
+            "territorial__first_name", "territorial__last_name", "territorial__username"
         )
         ctx["requisitos"] = seg.requisitos.filter(subsegmento__isnull=True).order_by("orden", "id")
         ctx["form_segmento"] = SegmentoForm(instance=seg)

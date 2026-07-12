@@ -112,7 +112,7 @@
               <i class="fas fa-check-circle text-sm"></i>
             </div>
           </div>
-          <p class="text-3xl font-bold text-heading">{{ segmento.cupo_distribuido }}</p>
+          <p class="text-3xl font-bold text-heading">{{ cupo_distribuido }}</p>
         </div>
         <div class="bg-white rounded-xl p-5 border border-base shadow-sm">
           <div class="flex items-center justify-between mb-3">
@@ -121,7 +121,7 @@
               <i class="fas fa-clock text-sm"></i>
             </div>
           </div>
-          <p class="text-3xl font-bold text-heading">{{ segmento.cupo_disponible }}</p>
+          <p class="text-3xl font-bold text-heading">{{ cupo_disponible }}</p>
         </div>
       </div>
 
@@ -192,21 +192,47 @@
               <button type="submit" class="btn-nodo btn-tertiary btn-base"><i class="fas fa-plus"></i> Asignar coordinador</button>
             </form>
           </div>
+
+          {# Territoriales del segmento — solo lectura (se asignan desde el ABM de Usuarios) #}
+          <div class="border-t border-light pt-5 mt-5">
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="text-sm font-bold text-heading">Territoriales del segmento</h3>
+              <span class="text-xs text-body-subtle">{{ territoriales|length }} asignado{{ territoriales|length|pluralize }}</span>
+            </div>
+            {% if territoriales %}
+            <div class="space-y-2 mb-2">
+              {% for asig in territoriales %}
+              <div class="flex items-center justify-between bg-secondary-soft rounded-lg px-3 py-2">
+                <span class="text-sm text-body flex items-center gap-2">
+                  <span class="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold" style="background: var(--gradient-brand)">
+                    {{ asig.territorial.get_full_name|default:asig.territorial.username|slice:":2"|upper }}
+                  </span>
+                  {{ asig.territorial.get_full_name|default:asig.territorial.username }}
+                </span>
+                <span class="text-xs text-body-subtle">desde {{ asig.fecha_asignacion|date:"d/m/Y" }}</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm text-body-subtle mb-2">Este segmento todavía no tiene territoriales asignados.</p>
+            {% endif %}
+            <p class="text-xs text-body-subtle">La asignación se gestiona desde Administración → Usuarios (rol territorial + segmento).</p>
+          </div>
         </div>
 
         {# Columna derecha: ocupación + resumen #}
         <div class="space-y-5">
           <div class="bg-white rounded-xl border border-base shadow-sm p-5">
             <h3 class="text-sm font-bold text-heading mb-3">Distribución del cupo</h3>
-            {% widthratio segmento.cupo_distribuido segmento.cupo_maximo 100 as pct %}
+            {% widthratio cupo_distribuido segmento.cupo_maximo 100 as pct %}
             <div class="flex justify-between text-sm mb-1">
-              <span class="text-body-subtle">{{ segmento.cupo_distribuido }} de {{ segmento.cupo_maximo }}</span>
+              <span class="text-body-subtle">{{ cupo_distribuido }} de {{ segmento.cupo_maximo }}</span>
               <span class="font-bold text-heading">{{ pct }}%</span>
             </div>
             <div class="h-2 w-full rounded-full bg-tertiary overflow-hidden">
               <div class="h-2 rounded-full" style="width: {{ pct }}%; background: var(--gradient-brand)"></div>
             </div>
-            <p class="text-xs text-body-subtle mt-2">{{ segmento.cupo_disponible }} lugares disponibles</p>
+            <p class="text-xs text-body-subtle mt-2">{{ cupo_disponible }} lugares disponibles</p>
           </div>
 
           <div class="bg-white rounded-xl border border-base shadow-sm p-5">
@@ -261,7 +287,7 @@
       </div>
 
       <div class="text-right">
-        <a href="{% url 'becas:preguntas' %}" class="text-sm text-fg-brand hover:underline">Administrar cuestionario social (preguntas globales) →</a>
+        <a href="{% url 'becas:preguntas' %}" class="text-sm text-fg-brand hover:underline">Administrar requisitos generales (preguntas globales) →</a>
       </div>
     </div>
   </div>
@@ -318,29 +344,29 @@
             <input type="number" name="cupo_maximo" min="0" required
                    class="nodo-field"
                    x-model="subCupo"
-                   placeholder="Disponible: {{ segmento.cupo_disponible }}"
-                   :class="Number(subCupo) > {{ segmento.cupo_disponible }} ? 'border-[color:var(--border-danger)] focus:ring-[color:var(--border-danger)]' : ''">
+                   placeholder="Disponible: {{ cupo_disponible }}"
+                   :class="Number(subCupo) > {{ cupo_disponible }} ? 'border-[color:var(--border-danger)] focus:ring-[color:var(--border-danger)]' : ''">
             <p class="mt-1 text-xs text-fg-danger hidden" data-error="cupo_maximo"></p>
             <p class="mt-1 text-xs text-fg-danger" x-cloak
-               x-show="Number(subCupo) > {{ segmento.cupo_disponible }}">
-              No podés asignar más de {{ segmento.cupo_disponible }} (disponible: {{ segmento.cupo_disponible }}).
+               x-show="Number(subCupo) > {{ cupo_disponible }}">
+              No podés asignar más de {{ cupo_disponible }} (disponible: {{ cupo_disponible }}).
             </p>
 
             {% comment %}Cuadro cupo disponible{% endcomment %}
             <div class="flex items-center gap-2 rounded-[10px] px-3 py-2.5 border mt-3"
-                 :class="Number(subCupo) > {{ segmento.cupo_disponible }}
+                 :class="Number(subCupo) > {{ cupo_disponible }}
                    ? 'bg-danger-soft border-[color:var(--border-danger-subtle)]'
                    : 'bg-secondary-soft border-base'">
               <i class="fas"
-                 :class="Number(subCupo) > {{ segmento.cupo_disponible }}
+                 :class="Number(subCupo) > {{ cupo_disponible }}
                    ? 'fa-triangle-exclamation text-fg-danger'
                    : 'fa-circle-check text-fg-success'"></i>
               <span class="text-[12.5px]"
-                    :class="Number(subCupo) > {{ segmento.cupo_disponible }}
+                    :class="Number(subCupo) > {{ cupo_disponible }}
                       ? 'text-fg-danger'
                       : 'text-body-subtle'">
                 Cupo disponible en el segmento:
-                <strong>{{ segmento.cupo_disponible }}</strong> de {{ segmento.cupo_maximo }}
+                <strong>{{ cupo_disponible }}</strong> de {{ segmento.cupo_maximo }}
               </span>
             </div>
           </div>

@@ -111,7 +111,7 @@ CATALOGO = [
         "tab": "becas",
         "alcance": "programa",
         "capacidades": [
-            ("becas.pregunta.ver", "Ver preguntas globales (cuestionario social)"),
+            ("becas.pregunta.ver", "Ver preguntas globales (requisitos generales)"),
             ("becas.pregunta.crear", "Crear preguntas globales"),
             ("becas.pregunta.editar", "Editar preguntas globales (incluye activar/desactivar/eliminar)"),
         ],
@@ -247,7 +247,6 @@ CATEGORIA_BACKOFFICE = "Backoffice"
 CATEGORIA_INSTITUCION = "Institución"
 CATEGORIA_PORTAL = "Portal"
 CATEGORIA_SISTEMA = "Sistema"
-CATEGORIA_NACHEC = "ÑACHEC"
 CATEGORIA_BECAS = "Becas"
 # Categoría programática: agrupa roles acotados por ``RolMeta.programa``.
 CATEGORIA_PROGRAMA = "Programa"
@@ -256,7 +255,6 @@ CATEGORIAS_ROL = [
     CATEGORIA_INSTITUCION,
     CATEGORIA_PORTAL,
     CATEGORIA_SISTEMA,
-    CATEGORIA_NACHEC,
     CATEGORIA_BECAS,
     CATEGORIA_PROGRAMA,
 ]
@@ -268,7 +266,6 @@ TABS_CAPACIDADES = [
     {"id": "institucion", "label": "Institución", "icon": "fa-building-columns"},
     {"id": "portal", "label": "Portal", "icon": "fa-globe"},
     {"id": "sistema", "label": "Sistema", "icon": "fa-gear"},
-    {"id": "nachec", "label": "ÑACHEC", "icon": "fa-seedling"},
     {"id": "becas", "label": "Becas", "icon": "fa-graduation-cap"},
 ]
 
@@ -512,10 +509,34 @@ def es_ciudadano_portal(user):
 # ---------------------------------------------------------------------------
 # Enforcement: decorador (FBV) y mixin (CBV)
 # ---------------------------------------------------------------------------
+MENSAJE_SIN_PERMISOS = "No tiene permisos para realizar esta acción."
+
+
+def _respuesta_sin_permiso(request, redirect_to):
+    """Respuesta para un usuario autenticado sin la capacidad requerida.
+
+    En una petición AJAX (modales con fetch) el redirect tradicional termina
+    devolviendo el HTML del inicio y el front lo muestra como "Ocurrió un
+    error": acá se responde JSON 403 con el motivo real para que el toast
+    distinga un problema de permisos de un error del sistema. En navegación
+    normal se mantiene el redirect con mensaje.
+    """
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        from django.http import JsonResponse
+
+        return JsonResponse({"ok": False, "message": MENSAJE_SIN_PERMISOS}, status=403)
+    from django.contrib import messages
+    from django.shortcuts import redirect
+
+    messages.error(request, "No tiene permisos para acceder a esta sección.")
+    return redirect(redirect_to)
+
+
 def requiere(*codigos, redirect_to="core:inicio"):
     """Decorador para FBV: exige al menos una de las capacidades indicadas.
 
-    No autenticado -> login. Autenticado sin capacidad -> redirect con mensaje.
+    No autenticado -> login. Autenticado sin capacidad -> redirect con mensaje
+    (o JSON 403 si la petición es AJAX).
     Reemplaza a ``core.decorators.group_required`` (por nombre de grupo).
     """
 
@@ -529,11 +550,7 @@ def requiere(*codigos, redirect_to="core:inicio"):
                 return redirect_to_login(request.get_full_path())
             if puede_alguna(user, codigos):
                 return view_func(request, *args, **kwargs)
-            from django.contrib import messages
-            from django.shortcuts import redirect
-
-            messages.error(request, "No tiene permisos para acceder a esta sección.")
-            return redirect(redirect_to)
+            return _respuesta_sin_permiso(request, redirect_to)
 
         return _wrapped
 
@@ -562,11 +579,7 @@ class CapacidadRequeridaMixin:
             return redirect_to_login(request.get_full_path())
         if puede_alguna(user, self.get_capacidades_requeridas()):
             return super().dispatch(request, *args, **kwargs)
-        from django.contrib import messages
-        from django.shortcuts import redirect
-
-        messages.error(request, "No tiene permisos para acceder a esta sección.")
-        return redirect(self.redirect_sin_permiso)
+        return _respuesta_sin_permiso(request, self.redirect_sin_permiso)
 
 
 # ---------------------------------------------------------------------------

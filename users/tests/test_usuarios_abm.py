@@ -138,7 +138,7 @@ class UsuarioAlcanceProgramaTests(TestCase):
 
     def setUp(self):
         self.becas = Programa.objects.create(codigo="BECAS", nombre="Becas")
-        self.nachec = Programa.objects.create(codigo="NACHEC", nombre="Ã‘achec")
+        self.vivienda = Programa.objects.create(codigo="VIVIENDA", nombre="Vivienda")
 
         # Admin de programa Becas (programa.configurar).
         self.rol_admin_becas = Group.objects.create(name="Admin Becas")
@@ -157,9 +157,9 @@ class UsuarioAlcanceProgramaTests(TestCase):
         RolMeta.objects.create(
             grupo=self.rol_becas, categoria=rbac.CATEGORIA_PROGRAMA, programa=self.becas, activo=True
         )
-        self.rol_nachec = Group.objects.create(name="Operador Ã‘achec")
+        self.rol_vivienda = Group.objects.create(name="Operador Vivienda")
         RolMeta.objects.create(
-            grupo=self.rol_nachec, categoria=rbac.CATEGORIA_PROGRAMA, programa=self.nachec, activo=True
+            grupo=self.rol_vivienda, categoria=rbac.CATEGORIA_PROGRAMA, programa=self.vivienda, activo=True
         )
         self.rol_global = Group.objects.create(name="Backoffice X")
         RolMeta.objects.create(grupo=self.rol_global, categoria="Backoffice", activo=True)
@@ -170,14 +170,14 @@ class UsuarioAlcanceProgramaTests(TestCase):
     def test_listado_filtrado_por_programa(self):  # TC-67-01 / TC-67-09
         u_becas = User.objects.create_user("u-becas", password="x")
         u_becas.groups.add(self.rol_becas)
-        u_nachec = User.objects.create_user("u-nachec", password="x")
-        u_nachec.groups.add(self.rol_nachec)
+        u_vivienda = User.objects.create_user("u-vivienda", password="x")
+        u_vivienda.groups.add(self.rol_vivienda)
         u_sin = User.objects.create_user("u-sin", password="x")
 
         visibles = set(usuarios_visibles_para(self.admin_becas))
         self.assertIn(u_becas, visibles)
         self.assertIn(self.admin_becas, visibles)  # tiene rol de Becas
-        self.assertNotIn(u_nachec, visibles)
+        self.assertNotIn(u_vivienda, visibles)
         self.assertNotIn(u_sin, visibles)
 
     def test_alta_selector_solo_roles_de_su_programa(self):  # TC-67-02
@@ -186,15 +186,15 @@ class UsuarioAlcanceProgramaTests(TestCase):
 
     def test_edicion_selector_oculta_roles_de_otro_programa(self):  # TC-67-03
         user = User.objects.create_user("multi", password="x")
-        user.groups.add(self.rol_becas, self.rol_nachec)
+        user.groups.add(self.rol_becas, self.rol_vivienda)
         form = CustomUserChangeForm(operador=self.admin_becas, instance=user)
         roles = set(form.fields["groups"].queryset)
         self.assertIn(self.rol_becas, roles)
-        self.assertNotIn(self.rol_nachec, roles)  # el rol de Ã‘achec no aparece
+        self.assertNotIn(self.rol_vivienda, roles)  # el rol de Vivienda no aparece
 
     def test_guardar_no_pierde_roles_fuera_de_alcance(self):  # TC-67-05 (crÃ­tico)
         user = User.objects.create_user("multi2", password="x")
-        user.groups.add(self.rol_becas, self.rol_nachec)
+        user.groups.add(self.rol_becas, self.rol_vivienda)
         form = CustomUserChangeForm(
             data={"username": "multi2", "email": "", "password": "", "groups": [], "first_name": "", "last_name": ""},
             instance=user,
@@ -203,12 +203,12 @@ class UsuarioAlcanceProgramaTests(TestCase):
         self.assertTrue(form.is_valid(), form.errors)
         UsuariosAdminService.update_user_from_form(form, alcance_group_ids=alcance_roles_ids(self.admin_becas))
         nombres = set(user.groups.values_list("name", flat=True))
-        self.assertIn("Operador Ã‘achec", nombres)  # rol fuera de alcance preservado
+        self.assertIn("Operador Vivienda", nombres)  # rol fuera de alcance preservado
         self.assertNotIn("Operador Becas", nombres)  # rol en alcance, deseleccionado
 
     def test_editar_datos_generales_afecta_la_cuenta(self):  # TC-67-04
         user = User.objects.create_user("multi3", password="x")
-        user.groups.add(self.rol_becas, self.rol_nachec)
+        user.groups.add(self.rol_becas, self.rol_vivienda)
         form = CustomUserChangeForm(
             data={
                 "username": "multi3",
@@ -225,20 +225,20 @@ class UsuarioAlcanceProgramaTests(TestCase):
         UsuariosAdminService.update_user_from_form(form, alcance_group_ids=alcance_roles_ids(self.admin_becas))
         user.refresh_from_db()
         self.assertEqual(user.email, "nuevo@x.com")
-        self.assertTrue(user.groups.filter(name="Operador Ã‘achec").exists())
+        self.assertTrue(user.groups.filter(name="Operador Vivienda").exists())
 
     def test_acceso_directo_a_usuario_fuera_de_alcance_redirige(self):  # TC-67-06
-        u_nachec = User.objects.create_user("solo-nachec", password="x")
-        u_nachec.groups.add(self.rol_nachec)
+        u_vivienda = User.objects.create_user("solo-vivienda", password="x")
+        u_vivienda.groups.add(self.rol_vivienda)
         self.client.force_login(self.admin_becas)
-        resp = self.client.get(reverse("users:usuario_editar", args=[u_nachec.pk]))
+        resp = self.client.get(reverse("users:usuario_editar", args=[u_vivienda.pk]))
         self.assertEqual(resp.status_code, 302)
 
     def test_admin_global_ve_todos(self):  # TC-67-07
-        u_nachec = User.objects.create_user("u-nachec", password="x")
-        u_nachec.groups.add(self.rol_nachec)
+        u_vivienda = User.objects.create_user("u-vivienda", password="x")
+        u_vivienda.groups.add(self.rol_vivienda)
         visibles = set(usuarios_visibles_para(self.su))
-        self.assertIn(u_nachec, visibles)
+        self.assertIn(u_vivienda, visibles)
         self.assertIn(self.admin_becas, visibles)
 
     def test_configurar_inactivo_sin_acceso(self):  # TC-67-08
@@ -262,22 +262,22 @@ class UsuarioAlcanceProgramaTests(TestCase):
     def test_filtro_por_rol_no_amplia_alcance_de_admin_programa(self):
         u_becas = User.objects.create_user("visible-becas", password="x")
         u_becas.groups.add(self.rol_becas)
-        u_nachec = User.objects.create_user("oculto-nachec", password="x")
-        u_nachec.groups.add(self.rol_nachec)
+        u_vivienda = User.objects.create_user("oculto-vivienda", password="x")
+        u_vivienda.groups.add(self.rol_vivienda)
 
         filtrados = UsuariosService.get_filtered_usuarios(
             {
                 "filters": json.dumps(
                     {
                         "logic": "AND",
-                        "items": [{"field": "rol", "op": "contains", "value": "Ñachec"}],
+                        "items": [{"field": "rol", "op": "contains", "value": "Vivienda"}],
                     }
                 )
             },
             operador=self.admin_becas,
         )
 
-        self.assertNotIn(u_nachec, set(filtrados))
+        self.assertNotIn(u_vivienda, set(filtrados))
         self.assertEqual(list(filtrados), [])
 
 
@@ -401,3 +401,98 @@ class UsuarioAutoProteccionTests(TestCase):
         UsuariosAdminService.update_user_from_form(form)  # no debe lanzar
         admin.refresh_from_db()
         self.assertEqual(admin.email, "nuevo@example.com")
+
+
+class SegmentoTerritorialABMTests(TestCase):
+    """El rol territorial de Becas exige segmento asignado (un territorial → un segmento)."""
+
+    def setUp(self):
+        from io import StringIO
+
+        from django.core.management import call_command
+
+        call_command("seed_becas", stdout=StringIO())
+        from programas.management.commands.seed_becas import ROL_TERRITORIAL
+        from programas.models import Segmento
+
+        self.rol_territorial = Group.objects.get(name=ROL_TERRITORIAL)
+        self.segmento = Segmento.objects.create(nombre="Seg ABM", cupo_maximo=10)
+        self.admin = _admin("admin1")
+        self.client.force_login(self.admin)
+
+    def _data_alta(self, **extra):
+        data = {
+            "username": "terri_abm",
+            "email": "terri@example.com",
+            "password": "x12345",
+            "first_name": "Terri",
+            "last_name": "ABM",
+            "groups": [str(self.rol_territorial.pk)],
+        }
+        data.update(extra)
+        return data
+
+    def test_rol_territorial_sin_segmento_es_invalido(self):
+        form = UserCreationForm(self._data_alta())
+        self.assertFalse(form.is_valid())
+        self.assertIn("segmento_territorial", form.errors)
+
+    def test_alta_con_segmento_persiste_asignacion(self):
+        from programas.models import AsignacionTerritorial
+
+        resp = self.client.post(
+            reverse("users:usuario_crear"), self._data_alta(segmento_territorial=str(self.segmento.pk))
+        )
+        self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username="terri_abm")
+        self.assertEqual(user.asignacion_territorial.segmento, self.segmento)
+        self.assertEqual(AsignacionTerritorial.objects.filter(territorial=user).count(), 1)
+
+    def test_rol_sin_capacidad_campo_ignora_segmento(self):
+        """Sin rol territorial, el segmento enviado se descarta y no se crea asignación."""
+        from programas.models import AsignacionTerritorial
+
+        otro_rol = Group.objects.create(name="Rol comun")
+        RolMeta.objects.create(grupo=otro_rol, categoria="Backoffice", activo=True)
+        resp = self.client.post(
+            reverse("users:usuario_crear"),
+            self._data_alta(groups=[str(otro_rol.pk)], segmento_territorial=str(self.segmento.pk)),
+        )
+        self.assertEqual(resp.status_code, 302)
+        user = User.objects.get(username="terri_abm")
+        self.assertFalse(AsignacionTerritorial.objects.filter(territorial=user).exists())
+
+    def test_quitar_rol_territorial_borra_asignacion(self):
+        from programas.models import AsignacionTerritorial
+
+        self.client.post(reverse("users:usuario_crear"), self._data_alta(segmento_territorial=str(self.segmento.pk)))
+        user = User.objects.get(username="terri_abm")
+        otro_rol = Group.objects.create(name="Rol comun")
+        RolMeta.objects.create(grupo=otro_rol, categoria="Backoffice", activo=True)
+        resp = self.client.post(
+            reverse("users:usuario_editar", args=[user.pk]),
+            {
+                "username": "terri_abm",
+                "email": "terri@example.com",
+                "password": "",
+                "first_name": "Terri",
+                "last_name": "ABM",
+                "groups": [str(otro_rol.pk)],
+            },
+        )
+        self.assertEqual(resp.status_code, 302)
+        self.assertFalse(AsignacionTerritorial.objects.filter(territorial=user).exists())
+
+    def test_editar_cambia_segmento(self):
+        from programas.models import AsignacionTerritorial, Segmento
+
+        self.client.post(reverse("users:usuario_crear"), self._data_alta(segmento_territorial=str(self.segmento.pk)))
+        user = User.objects.get(username="terri_abm")
+        otro_seg = Segmento.objects.create(nombre="Seg ABM 2", cupo_maximo=5)
+        resp = self.client.post(
+            reverse("users:usuario_editar", args=[user.pk]),
+            self._data_alta(password="", segmento_territorial=str(otro_seg.pk)),
+        )
+        self.assertEqual(resp.status_code, 302)
+        asignacion = AsignacionTerritorial.objects.get(territorial=user)
+        self.assertEqual(asignacion.segmento, otro_seg)
