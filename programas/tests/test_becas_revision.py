@@ -6,8 +6,8 @@ from io import StringIO
 from unittest.mock import patch
 
 from django.contrib.auth.models import Group, User
-from django.core.management import call_command
 from django.core.cache import cache
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
@@ -252,7 +252,10 @@ class ReportesBecasTests(_BaseRevisionTest):
 
     def test_avance_exporta_conteos_por_estado(self):
         Formulario.objects.create(
-            relevamiento=self.rel_a, celular="1", email_contacto="rechazado@example.com", estado=Formulario.Estado.RECHAZADO
+            relevamiento=self.rel_a,
+            celular="1",
+            email_contacto="rechazado@example.com",
+            estado=Formulario.Estado.RECHAZADO,
         )
         self.client.force_login(self.admin)
 

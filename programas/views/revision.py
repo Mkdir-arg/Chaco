@@ -99,9 +99,11 @@ class RenaperPendientesListView(CapacidadRequeridaMixin, LoginRequiredMixin, Lis
             .distinct()
             .order_by("relevamiento__territorial__username")
         )
-        context["segmentos"] = Segmento.objects.filter(
-            convocatorias__relevamientos__formularios__validado_renaper=False
-        ).distinct().order_by("nombre")
+        context["segmentos"] = (
+            Segmento.objects.filter(convocatorias__relevamientos__formularios__validado_renaper=False)
+            .distinct()
+            .order_by("nombre")
+        )
         context["filtros"] = self.request.GET
         return context
 

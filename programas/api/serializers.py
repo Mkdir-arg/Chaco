@@ -123,7 +123,10 @@ class FormularioSerializer(serializers.ModelSerializer):
             ]
             if faltantes:
                 raise serializers.ValidationError(
-                    {campo: "Este dato es obligatorio cuando la persona relevada es menor de edad." for campo in faltantes}
+                    {
+                        campo: "Este dato es obligatorio cuando la persona relevada es menor de edad."
+                        for campo in faltantes
+                    }
                 )
         return attrs
 

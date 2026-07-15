@@ -225,7 +225,9 @@ def convocatoria_export_relevamientos(request, pk):
     response["Content-Disposition"] = f'attachment; filename="relevamientos_convocatoria_{conv.pk}.csv"'
     response.write("﻿")
     writer = csv.writer(response)
-    writer.writerow(["Relevamiento", "Territorial", "Fecha asignada", "Zona", "Estado", "Enviados", "Aprobados", "Rechazados"])
+    writer.writerow(
+        ["Relevamiento", "Territorial", "Fecha asignada", "Zona", "Estado", "Enviados", "Aprobados", "Rechazados"]
+    )
     relevamientos = (
         conv.relevamientos.select_related("territorial")
         .annotate(
@@ -275,7 +277,9 @@ def convocatoria_export_lista_espera(request, pk):
             datos = formulario.datos_identificacion or {}
             nombre = f"{datos.get('nombre', '')} {datos.get('apellido', '')}".strip()
             dni = datos.get("dni", "")
-        writer.writerow([entrada.posicion, nombre, dni, entrada.segmento.nombre, entrada.fecha_ingreso.strftime("%d/%m/%Y")])
+        writer.writerow(
+            [entrada.posicion, nombre, dni, entrada.segmento.nombre, entrada.fecha_ingreso.strftime("%d/%m/%Y")]
+        )
     return response
 
 
