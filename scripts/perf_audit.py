@@ -31,7 +31,7 @@ def bootstrap_django():
     os.environ["PYTEST_RUNNING"] = "1"
     os.environ["DJANGO_SYNCDB_PROJECT_APPS"] = "True"
     os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings"
-    os.environ["DJANGO_SECRET_KEY"] = "perf-audit-test-key"
+    os.environ.setdefault("DJANGO_SECRET_KEY", "test-key")
     os.environ["DJANGO_DEBUG"] = "False"
     os.environ["DJANGO_ALLOWED_HOSTS"] = "testserver,localhost"
     os.environ["ENVIRONMENT"] = "dev"
@@ -84,9 +84,7 @@ def build_targets():
 
     ciudadano = Ciudadano.objects.get(dni=PERF_FIRST_DNI)
     conversacion = (
-        Conversacion.objects.filter(ciudadano_usuario__username=PERF_CITIZEN_USERNAME)
-        .order_by("fecha_inicio")
-        .first()
+        Conversacion.objects.filter(ciudadano_usuario__username=PERF_CITIZEN_USERNAME).order_by("fecha_inicio").first()
     )
     relevamiento = Relevamiento.objects.get(nombre="PERF Relevamiento 0000")
 

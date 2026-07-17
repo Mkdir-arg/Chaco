@@ -77,7 +77,8 @@ class Command(BaseCommand):
         if (
             os.environ.get("PYTEST_RUNNING") != "1"
             or connection.vendor != "sqlite"
-            or connection.settings_dict.get("NAME") not in (":memory:", "file:memorydb_default?mode=memory&cache=shared")
+            or connection.settings_dict.get("NAME")
+            not in (":memory:", "file:memorydb_default?mode=memory&cache=shared")
         ):
             raise CommandError("seed_perf solo puede ejecutarse con PYTEST_RUNNING=1 y SQLite in-memory")
 
