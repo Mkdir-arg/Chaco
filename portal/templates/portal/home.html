@@ -296,10 +296,9 @@
                     </div>
                     <div class="flex-1 min-w-0">
                         <h3 class="font-bold text-[var(--text-heading)] leading-tight">{{ programa.nombre }}</h3>
-                        <div class="inline-block mt-1 text-xs font-semibold px-2 py-0.5 rounded-full"
-                             style="background: {{ programa.color|default:'var(--bg-brand)' }}1A; color: {{ programa.color|default:'var(--bg-brand)' }};">
+                        <span class="badge badge-success badge-dot mt-1">
                             Activo
-                        </div>
+                        </span>
                     </div>
                 </div>
                 {% if programa.descripcion %}

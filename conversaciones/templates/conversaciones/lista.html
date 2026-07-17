@@ -145,8 +145,7 @@
                     <span class="text-sm font-medium text-gray-700">
                         {{ operador.get_full_name|default:operador.username }}
                     </span>
-                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                        {% if operador.conversaciones_activas > 5 %}bg-red-100 text-red-800{% elif operador.conversaciones_activas > 2 %}bg-yellow-100 text-yellow-800{% else %}bg-green-100 text-green-800{% endif %}">
+                    <span class="badge {% if operador.conversaciones_activas > 5 %}badge-danger{% elif operador.conversaciones_activas > 2 %}badge-warning{% else %}badge-success{% endif %}">
                         {{ operador.conversaciones_activas }} activas
                     </span>
                 </div>
@@ -183,8 +182,7 @@
                             #{{ conversacion.id }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                {% if conversacion.tipo == 'personal' %}bg-green-100 text-green-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                            <span class="badge {% if conversacion.tipo == 'personal' %}badge-brand{% else %}badge-gray{% endif %}">
                                 {{ conversacion.get_tipo_display }}
                             </span>
                         </td>
@@ -199,8 +197,7 @@
                             {% endif %}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                {% if conversacion.estado == 'activa' %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                            <span class="badge {% if conversacion.estado == 'activa' %}badge-success badge-dot{% elif conversacion.estado == 'pendiente' %}badge-warning{% else %}badge-gray{% endif %}">
                                 {{ conversacion.get_estado_display }}
                             </span>
                         </td>
@@ -215,11 +212,11 @@
                             {{ conversacion.fecha_inicio|date:"d/m/Y H:i" }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            <span class="badge badge-gray">
                                 {{ conversacion.total_mensajes }}
                             </span>
                             {% if conversacion.mensajes_no_leidos %}
-                                <span class="contador-mensajes ml-1 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <span class="contador-mensajes ml-1 badge badge-danger">
                                     {{ conversacion.mensajes_no_leidos }} sin leer
                                 </span>
                             {% endif %}
@@ -276,12 +273,10 @@
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-2">
                             <span class="font-medium text-gray-900">#{{ conversacion.id }}</span>
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                {% if conversacion.tipo == 'personal' %}bg-green-100 text-green-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                            <span class="badge {% if conversacion.tipo == 'personal' %}badge-brand{% else %}badge-gray{% endif %}">
                                 {{ conversacion.get_tipo_display }}
                             </span>
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
-                                {% if conversacion.estado == 'activa' %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}">
+                            <span class="badge {% if conversacion.estado == 'activa' %}badge-success badge-dot{% elif conversacion.estado == 'pendiente' %}badge-warning{% else %}badge-gray{% endif %}">
                                 {{ conversacion.get_estado_display }}
                             </span>
                         </div>
@@ -306,11 +301,11 @@
                     
                     <div class="flex flex-col items-end gap-2">
                         <div class="flex items-center gap-1">
-                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            <span class="badge badge-gray">
                                 {{ conversacion.total_mensajes }}
                             </span>
                             {% if conversacion.mensajes_no_leidos %}
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                <span class="badge badge-danger">
                                     {{ conversacion.mensajes_no_leidos }}
                                 </span>
                             {% endif %}
