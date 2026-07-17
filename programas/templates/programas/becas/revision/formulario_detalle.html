@@ -62,7 +62,7 @@
             {% if formulario.validado_renaper %}
               <span class="badge badge-success">Validado</span>
             {% else %}
-              <span class="badge badge-gray">Pendiente</span>
+              <span class="badge badge-warning">Pendiente</span>
               {% if puede_revalidar_renaper %}<form method="post" action="{% url 'becas:formulario_revalidar_renaper' formulario.pk %}" class="inline-block ml-2">
                 {% csrf_token %}
                 <button type="submit" class="btn-nodo btn-tertiary btn-sm"><i class="fas fa-rotate"></i> Revalidar</button>
