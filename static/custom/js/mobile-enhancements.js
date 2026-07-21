@@ -330,30 +330,7 @@ window.MobileEnhancements = {
     
     // Función para mostrar toast messages optimizados para móvil
     showToast: function(message, type = 'info', duration = 3000) {
-        const toast = document.createElement('div');
-        toast.className = `toast toast-${type}`;
-        toast.textContent = message;
-        toast.style.cssText = `
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: ${type === 'error' ? '#ef4444' : type === 'success' ? '#10b981' : '#3b82f6'};
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            z-index: 9999;
-            font-size: 14px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        `;
-        
-        document.body.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            toast.style.transform = 'translateX(-50%) translateY(-20px)';
-            setTimeout(() => toast.remove(), 300);
-        }, duration);
+        return window.ChacoToast?.show(message, { type, duration });
     }
 };
 

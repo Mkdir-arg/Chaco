@@ -176,11 +176,11 @@
                         this.agregarMensajeOperador(data.mensaje);
                         this.nuevoMensaje = '';
                     } else {
-                        alert('Error al enviar mensaje: ' + (data.error || 'Error desconocido'));
+                        window.ChacoToast?.error('Error al enviar mensaje: ' + (data.error || 'Error desconocido'));
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Error al enviar mensaje');
+                    window.ChacoToast?.error('Error al enviar mensaje');
                 }
             },
             

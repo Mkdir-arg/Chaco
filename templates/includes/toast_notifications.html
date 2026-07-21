@@ -1,0 +1,52 @@
+<div id="toast-viewport" class="toast-viewport" aria-live="polite" aria-relevant="additions text">
+    {% if messages %}
+        {% for message in messages %}
+            <section
+                class="toast"
+                data-toast
+                data-toast-level="{{ message.level }}"
+                data-toast-persistent="{% if message.level >= 30 %}true{% else %}false{% endif %}"
+                role="{% if message.level >= 40 %}alert{% else %}status{% endif %}"
+                aria-live="{% if message.level >= 40 %}assertive{% else %}polite{% endif %}"
+            >
+                <span class="toast__icon">
+                    <i class="fas fa-info-circle" data-toast-icon aria-hidden="true"></i>
+                </span>
+                <div class="toast__content">
+                    <p class="toast__message" data-toast-message>{{ message }}</p>
+                    {% if 'toast-action-lista-espera' in message.tags %}
+                        <a class="toast__action" href="?tab=lista_espera">Ir a lista de espera</a>
+                    {% endif %}
+                </div>
+                <button type="button" class="toast__close" data-toast-dismiss aria-label="Cerrar notificación">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </section>
+        {% endfor %}
+    {% endif %}
+
+    {% for evento in eventos_criticos_pendientes %}
+        <section
+            class="toast"
+            data-toast
+            data-toast-type="error"
+            data-toast-persistent="true"
+            data-toast-close-url="{% url 'legajos:cerrar_alerta_ajax' evento.id %}"
+            role="alert"
+            aria-live="assertive"
+        >
+            <span class="toast__icon">
+                <i class="fas fa-exclamation-triangle" data-toast-icon aria-hidden="true"></i>
+            </span>
+            <div class="toast__content">
+                <p class="toast__title" data-toast-title>Evento crítico</p>
+                <p class="toast__message" data-toast-message>
+                    {{ evento.get_tipo_display }} · Legajo: {{ evento.legajo.codigo|truncatechars:12 }} · Ciudadano: {{ evento.legajo.ciudadano.apellido }}, {{ evento.legajo.ciudadano.nombre }}
+                </p>
+            </div>
+            <button type="button" class="toast__close" data-toast-dismiss aria-label="Cerrar alerta crítica">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </section>
+    {% endfor %}
+</div>

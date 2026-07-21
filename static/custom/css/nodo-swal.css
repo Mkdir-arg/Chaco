@@ -1,8 +1,8 @@
 /* ============================================================================
    NODO Design System — theming global de SweetAlert2
    ============================================================================
-   Fuente única de estilos para TODOS los `Swal.fire(...)` del sistema (29 usos
-   en 13 templates). El objetivo es que el "chrome" de SweetAlert2 (popup,
+   Fuente única de estilos para las confirmaciones `Swal.fire(...)` del sistema.
+   El objetivo es que el "chrome" de SweetAlert2 (popup,
    título, texto, acciones, ícono) matchee el DS Modal (canon §11) sin tener
    que tocar cada call site.
 

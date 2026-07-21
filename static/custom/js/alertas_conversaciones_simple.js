@@ -155,55 +155,17 @@ class AlertasConversacionesSimple {
     }
 
     mostrarToast(cantidad) {
-        const toast = document.createElement('div');
-        toast.className = 'fixed top-4 right-4 bg-blue-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm animate-slide-in';
-        toast.innerHTML = `
-            <div class="flex items-start">
-                <i class="fas fa-comment-dots mr-2 mt-1"></i>
-                <div class="flex-1">
-                    <div class="font-medium">Nuevos mensajes</div>
-                    <div class="text-sm opacity-90">Tienes ${cantidad} mensaje(s) nuevo(s)</div>
-                </div>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        // Auto-remover después de 5 segundos
-        setTimeout(() => {
-            if (toast.parentElement) {
-                toast.remove();
-            }
-        }, 5000);
+        window.ChacoToast?.info(`Tenés ${cantidad} mensaje(s) nuevo(s).`, {
+            title: 'Nuevos mensajes',
+            duration: 5000
+        });
     }
-    
+
     mostrarToastRiesgo(mensaje) {
-        const toast = document.createElement('div');
-        toast.className = 'fixed top-4 right-4 bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg z-50 max-w-sm animate-slide-in animate-pulse';
-        toast.innerHTML = `
-            <div class="flex items-start">
-                <i class="fas fa-exclamation-triangle mr-2 mt-1"></i>
-                <div class="flex-1">
-                    <div class="font-bold">¡ALERTA DE RIESGO!</div>
-                    <div class="text-sm opacity-90">Palabras de riesgo detectadas</div>
-                </div>
-                <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        // Auto-remover después de 10 segundos (más tiempo para riesgo)
-        setTimeout(() => {
-            if (toast.parentElement) {
-                toast.remove();
-            }
-        }, 10000);
+        window.ChacoToast?.error(mensaje || 'Se detectaron palabras de riesgo en una conversación.', {
+            title: 'Alerta de riesgo',
+            persistent: true
+        });
     }
 
     reproducirSonido() {

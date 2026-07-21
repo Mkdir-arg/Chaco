@@ -254,43 +254,7 @@ class PortalEffects {
 
     // Método para crear notificaciones toast
     static showToast(message, type = 'info', duration = 3000) {
-        const toast = document.createElement('div');
-        toast.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg shadow-lg text-white transform translate-x-full transition-transform duration-300`;
-        
-        const colors = {
-            success: 'bg-green-500',
-            error: 'bg-red-500',
-            warning: 'bg-yellow-500',
-            info: 'bg-blue-500'
-        };
-        
-        toast.classList.add(colors[type] || colors.info);
-        toast.innerHTML = `
-            <div class="flex items-center">
-                <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : type === 'warning' ? 'exclamation' : 'info'}-circle mr-3"></i>
-                <span>${message}</span>
-                <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-        `;
-        
-        document.body.appendChild(toast);
-        
-        // Mostrar toast
-        setTimeout(() => {
-            toast.style.transform = 'translateX(0)';
-        }, 100);
-        
-        // Ocultar automáticamente
-        setTimeout(() => {
-            toast.style.transform = 'translateX(full)';
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast);
-                }
-            }, 300);
-        }, duration);
+        return window.ChacoToast?.show(message, { type, duration });
     }
 }
 

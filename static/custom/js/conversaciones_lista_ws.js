@@ -32,14 +32,10 @@
     }
 
     function notificar(mensaje) {
-        const prev = document.querySelectorAll('.notif-conv-lista');
-        prev.forEach(n => n.remove());
-        const n = document.createElement('div');
-        n.className = 'notif-conv-lista fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white bg-green-600';
-        n.innerHTML = `<div class="flex items-center"><span>${mensaje}</span><button class="ml-3" aria-label="Cerrar">✕</button></div>`;
-        n.querySelector('button').addEventListener('click', () => n.remove());
-        document.body.appendChild(n);
-        setTimeout(() => { if (n.parentElement) n.remove(); }, 4000);
+        window.ChacoToast?.success(mensaje, {
+            title: 'Nueva conversación',
+            duration: 4000
+        });
     }
 
     function agregarFilaDesktop(conv) {

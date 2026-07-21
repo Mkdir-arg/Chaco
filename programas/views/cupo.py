@@ -107,6 +107,7 @@ def dar_baja_beneficiario_view(request, pk):
             messages.warning(
                 request,
                 f"Se liberó 1 cupo en {segmento.nombre}. ¿Promover desde lista de espera?",
+                extra_tags="toast-action-lista-espera",
             )
         except ValidationError as e:
             messages.error(request, e.message)

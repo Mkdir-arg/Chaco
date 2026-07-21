@@ -10,13 +10,11 @@ function deleteArchivo(id) {
         success: function (data) {
             if (data.deleted) {
                 $("#tr-" + id).remove();
-                toastr.options = { "positionClass": "toast-bottom-right", }
-                toastr[data.tipo_mensaje](data.mensaje);
+                window.ChacoToast?.show(data.mensaje, { type: data.tipo_mensaje });
             }
         },
         error: (err) => {
-            toastr.options = { "positionClass": "toast-bottom-right", }
-            toastr["Error"](err);
+            window.ChacoToast?.error(err);
         }
     });
 };

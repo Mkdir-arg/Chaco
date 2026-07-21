@@ -58,41 +58,37 @@ class AlertasConversaciones {
             return;
         }
 
-        this.popupActivo = document.createElement('div');
-        this.popupActivo.className = 'fixed top-4 right-4 bg-blue-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm';
-        this.popupActivo.innerHTML = `
-            <div class="flex items-center justify-between">
-                <div>
-                    <div class="font-bold text-lg">Nuevos mensajes</div>
-                    <div class="text-sm opacity-90">Tienes ${this.mensajesNuevos} mensaje(s) nuevo(s)</div>
-                </div>
-                <button onclick="window.alertasConversaciones.cerrarPopup()" class="ml-4 text-white hover:text-gray-200 text-xl font-bold">
-                    ×
-                </button>
-            </div>
-        `;
-        
-        document.body.appendChild(this.popupActivo);
+        let popup;
+        popup = window.ChacoToast?.info(
+            `Tenés ${this.mensajesNuevos} mensaje(s) nuevo(s).`,
+            {
+                title: 'Nuevos mensajes',
+                persistent: true,
+                onDismiss: () => {
+                    if (this.popupActivo === popup) {
+                        this.popupActivo = null;
+                        this.mensajesNuevos = 0;
+                    }
+                }
+            }
+        );
+        this.popupActivo = popup || null;
     }
 
     actualizarPopup() {
-        if (this.popupActivo) {
-            const contenido = this.popupActivo.querySelector('div div:last-child');
-            if (contenido) {
-                contenido.textContent = `Tienes ${this.mensajesNuevos} mensaje(s) nuevo(s)`;
-            }
+        const contenido = this.popupActivo?.querySelector('[data-toast-message]');
+        if (contenido) {
+            contenido.textContent = `Tenés ${this.mensajesNuevos} mensaje(s) nuevo(s).`;
         }
     }
 
     cerrarPopup() {
         if (this.popupActivo) {
-            this.popupActivo.remove();
+            window.ChacoToast?.dismiss(this.popupActivo);
             this.popupActivo = null;
             this.mensajesNuevos = 0;
         }
     }
-
-
 
     reproducirSonido() {
         try {

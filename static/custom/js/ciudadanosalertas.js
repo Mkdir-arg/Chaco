@@ -70,8 +70,7 @@ $(document).ready(function () {
             success: function (data) {
                 if (data.deleted) {
                     $("#alerta-" + alertaId).remove();
-                    toastr.options = { "positionClass": "toast-bottom-right",}
-                    toastr[data.tipo_mensaje](data.mensaje);
+                    window.ChacoToast?.show(data.mensaje, { type: data.tipo_mensaje });
                 }
             }
         });

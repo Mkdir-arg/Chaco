@@ -64,31 +64,7 @@ function actualizarDatos() {
 }
 
 function mostrarNotificacion(mensaje, tipo = 'info') {
-    // Remover notificaciones anteriores
-    const notificacionesAnteriores = document.querySelectorAll('.notificacion-tiempo-real');
-    notificacionesAnteriores.forEach(n => n.remove());
-    
-    const notificacion = document.createElement('div');
-    notificacion.className = `notificacion-tiempo-real fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white ${
-        tipo === 'success' ? 'bg-green-500' : 'bg-blue-500'
-    }`;
-    notificacion.innerHTML = `
-        <div class="flex items-center">
-            <span>${mensaje}</span>
-            <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
-                ✕
-            </button>
-        </div>
-    `;
-    
-    document.body.appendChild(notificacion);
-    
-    // Auto-remover después de 4 segundos
-    setTimeout(() => {
-        if (notificacion.parentElement) {
-            notificacion.remove();
-        }
-    }, 4000);
+    window.ChacoToast?.show(mensaje, { type: tipo, duration: 4000 });
 }
 
 // Inicializar cuando se carga la página

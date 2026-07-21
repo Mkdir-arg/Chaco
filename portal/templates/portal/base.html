@@ -13,6 +13,7 @@
     <link href="{% static 'custom/css/nodo-buttons.css' %}" rel="stylesheet">
     <link href="{% static 'custom/css/nodo-badges.css' %}" rel="stylesheet">
     <link href="{% static 'custom/css/nodo-forms.css' %}" rel="stylesheet">
+    <link href="{% static 'custom/css/toast-notifications.css' %}" rel="stylesheet">
     <style>
         body { font-family: 'Manrope', sans-serif; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -52,19 +53,10 @@
     </header>
 
     <main class="container mx-auto px-4 py-12">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="mb-6 p-4 rounded-xl {% if message.tags == 'error' %}bg-red-50 text-red-700 border border-red-200{% else %}bg-green-50 text-green-700 border border-green-200{% endif %} shadow-sm">
-                    <div class="flex items-center">
-                        <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %} mr-2"></i>
-                        {{ message }}
-                    </div>
-                </div>
-            {% endfor %}
-        {% endif %}
-
         {% block content %}{% endblock %}
     </main>
+
+    {% include 'includes/toast_notifications.html' %}
 
     <footer class="text-white py-12 mt-20" style="background: var(--bg-navy);">
         <div class="container mx-auto px-4">
@@ -169,8 +161,8 @@
     </div>
 
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="{% static 'custom/js/toast-notifications.js' %}"></script>
     <script src="{% static 'custom/js/portal-effects.js' %}" defer></script>
-    <script src="{% static 'custom/js/modern-messages.js' %}" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Chat functionality

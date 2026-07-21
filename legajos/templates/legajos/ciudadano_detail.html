@@ -1156,11 +1156,9 @@ window.addEventListener('scroll', () => {
 // Copiar DNI al portapapeles
 function copiarDni(dni) {
     navigator.clipboard.writeText(dni).then(() => {
-        toastr.options = { positionClass: 'toast-bottom-right' };
-        toastr.success(`DNI ${dni} copiado`);
+        window.ChacoToast?.success(`DNI ${dni} copiado`);
     }).catch(() => {
-        toastr.options = { positionClass: 'toast-bottom-right' };
-        toastr.error('No se pudo copiar el DNI');
+        window.ChacoToast?.error('No se pudo copiar el DNI');
     });
 }
 
@@ -1420,10 +1418,10 @@ function eliminarVinculo(vinculoId) {
             if (response.ok) {
                 cargarVinculos();
             } else {
-                Swal.fire('Error', 'No se pudo eliminar el vínculo.', 'error');
+                window.ChacoToast?.error('No se pudo eliminar el vínculo.');
             }
         })
-        .catch(() => Swal.fire('Error', 'No se pudo eliminar el vínculo.', 'error'));
+        .catch(() => window.ChacoToast?.error('No se pudo eliminar el vínculo.'));
     });
 }
 
@@ -1433,10 +1431,8 @@ document.getElementById('formVinculo').addEventListener('submit', function(e) {
     const formData = new FormData(this);
     const ciudadanoId = document.getElementById('ciudadanoSeleccionado').value;
 
-    toastr.options = { positionClass: 'toast-bottom-right' };
-
     if (!ciudadanoId) {
-        toastr.warning('Debe seleccionar un ciudadano');
+        window.ChacoToast?.warning('Debe seleccionar un ciudadano');
         return;
     }
 
@@ -1460,16 +1456,16 @@ document.getElementById('formVinculo').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.id) {
-            toastr.success('Vínculo agregado exitosamente');
+            window.ChacoToast?.success('Vínculo agregado exitosamente');
             cerrarModal('modalVinculo');
             this.reset();
             document.getElementById('resultadosBusqueda').innerHTML = '';
             cargarVinculos();
         } else {
-            toastr.error('Error al crear el vínculo');
+            window.ChacoToast?.error('Error al crear el vínculo');
         }
     })
-    .catch(() => toastr.error('Error al crear el vínculo'));
+    .catch(() => window.ChacoToast?.error('Error al crear el vínculo'));
 });
 
 // ============================================================
@@ -1584,10 +1580,10 @@ function eliminarArchivo(archivoId) {
             if (data.success) {
                 cargarArchivos();
             } else {
-                Swal.fire('Error', 'No se pudo eliminar el archivo.', 'error');
+                window.ChacoToast?.error('No se pudo eliminar el archivo.');
             }
         })
-        .catch(() => Swal.fire('Error', 'No se pudo eliminar el archivo.', 'error'));
+        .catch(() => window.ChacoToast?.error('No se pudo eliminar el archivo.'));
     });
 }
 
@@ -1595,8 +1591,6 @@ document.getElementById('formArchivos').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const formData = new FormData(this);
-    toastr.options = { positionClass: 'toast-bottom-right' };
-
     fetch(`/legajos/ciudadanos/{{ ciudadano.id }}/subir-archivos/`, {
         method: 'POST',
         body: formData,
@@ -1610,12 +1604,12 @@ document.getElementById('formArchivos').addEventListener('submit', function(e) {
             cerrarModal('modalArchivos');
             this.reset();
             cargarArchivos();
-            toastr.success(data.mensaje || 'Archivos subidos exitosamente');
+            window.ChacoToast?.success(data.mensaje || 'Archivos subidos exitosamente');
         } else {
-            Swal.fire('Error', data.error || 'Error al subir archivos', 'error');
+            window.ChacoToast?.error(data.error || 'Error al subir archivos');
         }
     })
-    .catch(() => Swal.fire('Error', 'Error al subir archivos', 'error'));
+    .catch(() => window.ChacoToast?.error('Error al subir archivos'));
 });
 
 // ============================================================

@@ -95,37 +95,33 @@
                 return;
             }
 
-            const div = document.createElement('div');
-            div.className = 'fixed top-4 right-4 bg-blue-600 text-white px-6 py-4 rounded-lg shadow-lg z-50 max-w-sm';
-            div.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <div>
-                        <div class="font-bold text-lg">Nuevos mensajes</div>
-                        <div class="text-sm opacity-90">Tienes ${this.mensajesNuevos} mensaje(s) nuevo(s)</div>
-                    </div>
-                    <button class="ml-4 text-white hover:text-gray-200 text-xl font-bold" aria-label="Cerrar">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            div.querySelector('button').addEventListener('click', () => this.cerrarPopup());
-            document.body.appendChild(div);
-            this.popup = div;
+            let popup;
+            popup = window.ChacoToast?.info(
+                `Tenés ${this.mensajesNuevos} mensaje(s) nuevo(s).`,
+                {
+                    title: 'Nuevos mensajes',
+                    persistent: true,
+                    onDismiss: () => {
+                        if (this.popup === popup) {
+                            this.popup = null;
+                            this.mensajesNuevos = 0;
+                        }
+                    }
+                }
+            );
+            this.popup = popup || null;
         }
 
         actualizarPopup() {
-            if (!this.popup) return;
-            const contenido = this.popup.querySelector('div div:last-child');
+            const contenido = this.popup?.querySelector('[data-toast-message]');
             if (contenido) {
-                contenido.textContent = `Tienes ${this.mensajesNuevos} mensaje(s) nuevo(s)`;
+                contenido.textContent = `Tenés ${this.mensajesNuevos} mensaje(s) nuevo(s).`;
             }
         }
 
         cerrarPopup() {
             if (this.popup) {
-                this.popup.remove();
+                window.ChacoToast?.dismiss(this.popup);
                 this.popup = null;
                 this.mensajesNuevos = 0;
             }

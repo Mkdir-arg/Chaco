@@ -5,13 +5,12 @@
  * Como cada Swal.fire(...) existente referencia la variable global `Swal` recién
  * en el momento del click (no al parsear el script), reasignar `window.Swal` acá
  * -aunque este archivo se ejecute después del script de la página- alcanza para
- * que los 29 usos del repo (13 templates) hereden el theme sin tocar cada uno.
+ * que las confirmaciones existentes hereden el theme sin tocar cada una.
  *
  * Complementa a static/custom/css/nodo-swal.css (chrome del popup: radius,
  * shadow, tipografía, grid header/body/footer). Acá van los defaults de
  * comportamiento/clases que sólo se pueden fijar por JS:
- *   - buttonsStyling:false + customClass .btn-nodo (fallback para los
- *     Swal.fire('Error', msg, 'error') abreviados que hoy no pasan customClass).
+ *   - buttonsStyling:false + customClass .btn-nodo para todos los diálogos.
  *   - showCloseButton (× en el header, requisito del canon §11) con aria-label
  *     "Cerrar" en es-AR.
  *   - recolor del ícono default de swal2 al tono del DS (bg/color por token)

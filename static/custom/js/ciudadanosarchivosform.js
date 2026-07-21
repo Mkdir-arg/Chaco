@@ -13,13 +13,11 @@ function deleteArchivo(id) {
         success: function (data) {
             if (data.deleted) {
                 $("#archivo-" + id).remove();
-                toastr.options = { "positionClass": "toast-bottom-right", }
-                toastr[data.tipo_mensaje](data.mensaje);
+                window.ChacoToast?.show(data.mensaje, { type: data.tipo_mensaje });
             }
         },
         error: (err) => {
-            toastr.options = { "positionClass": "toast-bottom-right", }
-            toastr["Error"](err);
+            window.ChacoToast?.error(err);
         }
     });
 };
@@ -128,9 +126,7 @@ $(document).ready(function () {
                 $("#resultado").append(archivoHTML);
             }
 
-            // Mostrar un mensaje de éxito con Toastr (opcional, asegúrate de tener Toastr incluido)
-            toastr.options = { "positionClass": "toast-bottom-right" };
-            toastr["success"]("Archivos cargados exitosamente");
+            window.ChacoToast?.success("Archivos cargados exitosamente");
 
             // Recargar la página después de 1 segundo para mostrar los nuevos archivos
             setTimeout(function () {
@@ -147,9 +143,7 @@ $(document).ready(function () {
         // La carga del archivo falló
         // `response` contiene la respuesta JSON del servidor con la información del error
 
-        // Mostrar un mensaje de error con Toastr (opcional, asegúrate de tener Toastr incluido)
-        toastr.options = { "positionClass": "toast-bottom-right" };
-        toastr["error"](response.error);
+        window.ChacoToast?.error(response.error);
 
         // Recargar la página después de 1 segundo para mostrar los nuevos archivos
         

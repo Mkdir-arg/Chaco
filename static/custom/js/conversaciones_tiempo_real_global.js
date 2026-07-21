@@ -40,34 +40,11 @@ function verificarNuevasConversaciones() {
 
 function mostrarNotificacionGlobal(mensaje, tipo = 'info') {
     const listUrl = conversacionesGlobalConfig.listUrl || '#';
-    // Remover notificaciones anteriores
-    const notificacionesAnteriores = document.querySelectorAll('.notificacion-global-conversaciones');
-    notificacionesAnteriores.forEach(n => n.remove());
-    
-    const notificacion = document.createElement('div');
-    notificacion.className = `notificacion-global-conversaciones fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg text-white ${
-        tipo === 'info' ? 'bg-blue-500' : 'bg-green-500'
-    }`;
-    notificacion.innerHTML = `
-        <div class="flex items-center">
-            <span>${mensaje}</span>
-            <a href="${listUrl}" class="ml-3 bg-white text-blue-600 px-3 py-1 rounded text-sm hover:bg-gray-100">
-                Ver
-            </a>
-            <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-white hover:text-gray-200">
-                ✕
-            </button>
-        </div>
-    `;
-    
-    document.body.appendChild(notificacion);
-    
-    // Auto-remover después de 8 segundos
-    setTimeout(() => {
-        if (notificacion.parentElement) {
-            notificacion.remove();
-        }
-    }, 8000);
+    window.ChacoToast?.show(mensaje, {
+        type: tipo,
+        duration: 8000,
+        action: listUrl !== '#' ? { label: 'Ver', href: listUrl } : undefined
+    });
 }
 
 // Inicializar solo si el usuario tiene permisos
