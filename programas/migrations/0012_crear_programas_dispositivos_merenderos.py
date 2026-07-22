@@ -26,6 +26,24 @@ def crear_programas(apps, schema_editor):
     Programa = apps.get_model("programas", "Programa")
 
     for datos in PROGRAMAS:
+        esperados = {
+            "nombre": datos["nombre"],
+            "tipo": datos["tipo"],
+            "naturaleza": "PERSISTENTE",
+            "estado": "ACTIVO",
+        }
+        existente = Programa.objects.filter(codigo=datos["codigo"]).first()
+        if existente:
+            incompatibles = [
+                campo for campo, valor_esperado in esperados.items() if getattr(existente, campo) != valor_esperado
+            ]
+            if incompatibles:
+                raise RuntimeError(
+                    f'Programa(codigo="{datos["codigo"]}") ya existe con datos incompatibles: '
+                    f"{', '.join(incompatibles)}."
+                )
+            continue
+
         conflicto = Programa.objects.filter(nombre=datos["nombre"]).exclude(codigo=datos["codigo"]).first()
         if conflicto:
             raise RuntimeError(
@@ -39,7 +57,7 @@ def crear_programas(apps, schema_editor):
             "estado": "ACTIVO",
         }
         codigo = defaults.pop("codigo")
-        Programa.objects.get_or_create(codigo=codigo, defaults=defaults)
+        Programa.objects.create(codigo=codigo, **defaults)
 
 
 class Migration(migrations.Migration):

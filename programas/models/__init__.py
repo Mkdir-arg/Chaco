@@ -463,7 +463,7 @@ class Admision(TimeStamped):
     )
     cama = models.ForeignKey(
         Cama,
-        on_delete=models.SET_NULL,
+        on_delete=models.PROTECT,
         null=True,
         blank=True,
         related_name="admisiones",
@@ -494,6 +494,19 @@ class Admision(TimeStamped):
 
     def __str__(self):
         return f"{self.ciudadano.nombre_completo} · {self.dispositivo.nombre}"
+
+    def clean(self):
+        super().clean()
+        if self.cama_id and self.dispositivo_id and self.cama.dispositivo_id != self.dispositivo_id:
+            raise ValidationError({"cama": "La cama debe pertenecer al dispositivo de la admisión."})
+
+        if not self.inscripcion_programa_id:
+            return
+
+        if self.ciudadano_id and self.inscripcion_programa.ciudadano_id != self.ciudadano_id:
+            raise ValidationError({"inscripcion_programa": "La membresía debe pertenecer al ciudadano de la admisión."})
+        if self.inscripcion_programa.programa.codigo != Programa.TipoPrograma.DISPOSITIVOS:
+            raise ValidationError({"inscripcion_programa": "La membresía debe ser del programa Dispositivos."})
 
 
 # ===========================================================================
@@ -549,6 +562,8 @@ class SolicitudMerendero(TimeStamped):
     merendero = models.ForeignKey(
         Merendero,
         on_delete=models.PROTECT,
+        null=True,
+        blank=True,
         related_name="solicitudes",
         verbose_name="Merendero",
     )
@@ -572,7 +587,8 @@ class SolicitudMerendero(TimeStamped):
         indexes = [models.Index(fields=["merendero", "estado"])]
 
     def __str__(self):
-        return f"Solicitud #{self.pk} · {self.merendero.nombre}"
+        merendero = self.merendero.nombre if self.merendero_id else "Alta pendiente"
+        return f"Solicitud #{self.pk} · {merendero}"
 
 
 class EntregaMercaderia(TimeStamped):

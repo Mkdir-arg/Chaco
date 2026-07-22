@@ -162,7 +162,7 @@ class Migration(migrations.Migration):
                     models.ForeignKey(
                         blank=True,
                         null=True,
-                        on_delete=django.db.models.deletion.SET_NULL,
+                        on_delete=django.db.models.deletion.PROTECT,
                         related_name="admisiones",
                         to="programas.cama",
                         verbose_name="Cama/plaza",

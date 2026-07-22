@@ -1,6 +1,8 @@
 """Contratos del modelo base de Dispositivos y Merenderos (#173)."""
 
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
+from django.db.models.deletion import ProtectedError
 from django.test import TestCase
 from django.utils import timezone
 
@@ -82,6 +84,69 @@ class ModelosDispositivosTests(TestCase):
         self.assertNotEqual(primera.pk, segunda.pk)
         self.assertEqual(Admision.objects.filter(ciudadano=ciudadano, dispositivo=dispositivo).count(), 2)
 
+    def test_admision_rechaza_cama_de_otro_dispositivo(self):
+        from programas.models import Admision, Cama, Dispositivo, TipoDispositivo
+
+        tipo = TipoDispositivo.objects.create(codigo="AM", nombre="Adulto Mayor", maneja_camas=True)
+        dispositivo = Dispositivo.objects.create(codigo="DISP-001", nombre="Residencia", tipo=tipo)
+        otro_dispositivo = Dispositivo.objects.create(codigo="DISP-002", nombre="Otra residencia", tipo=tipo)
+        cama_ajena = Cama.objects.create(dispositivo=otro_dispositivo, codigo="C-01")
+        ciudadano = Ciudadano.objects.create(dni="30111222", nombre="Ana", apellido="Demo")
+
+        admision = Admision(
+            ciudadano=ciudadano,
+            dispositivo=dispositivo,
+            cama=cama_ajena,
+            fecha_ingreso=timezone.now(),
+        )
+
+        with self.assertRaisesMessage(ValidationError, "La cama debe pertenecer al dispositivo"):
+            admision.full_clean()
+
+    def test_admision_rechaza_membresia_de_otro_ciudadano_o_programa(self):
+        from programas.models import Admision, Dispositivo, InscripcionPrograma, TipoDispositivo
+
+        programa = Programa.objects.get(codigo="DISPOSITIVOS")
+        otro_programa = Programa.objects.get(codigo="MERENDEROS")
+        tipo = TipoDispositivo.objects.create(codigo="AM", nombre="Adulto Mayor", maneja_camas=True)
+        dispositivo = Dispositivo.objects.create(codigo="DISP-001", nombre="Residencia", tipo=tipo)
+        ciudadano = Ciudadano.objects.create(dni="30111222", nombre="Ana", apellido="Demo")
+        otro_ciudadano = Ciudadano.objects.create(dni="30111223", nombre="Beto", apellido="Demo")
+        membresia_ajena = InscripcionPrograma.objects.create(ciudadano=otro_ciudadano, programa=programa)
+        membresia_otro_programa = InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=otro_programa)
+
+        admision = Admision(
+            ciudadano=ciudadano,
+            dispositivo=dispositivo,
+            inscripcion_programa=membresia_ajena,
+            fecha_ingreso=timezone.now(),
+        )
+        with self.assertRaisesMessage(ValidationError, "La membresía debe pertenecer al ciudadano"):
+            admision.full_clean()
+
+        admision.inscripcion_programa = membresia_otro_programa
+        with self.assertRaisesMessage(ValidationError, "La membresía debe ser del programa Dispositivos"):
+            admision.full_clean()
+
+    def test_cama_con_admision_historica_no_se_puede_eliminar(self):
+        from programas.models import Admision, Cama, Dispositivo, TipoDispositivo
+
+        tipo = TipoDispositivo.objects.create(codigo="AM", nombre="Adulto Mayor", maneja_camas=True)
+        dispositivo = Dispositivo.objects.create(codigo="DISP-001", nombre="Residencia", tipo=tipo)
+        cama = Cama.objects.create(dispositivo=dispositivo, codigo="C-01")
+        ciudadano = Ciudadano.objects.create(dni="30111222", nombre="Ana", apellido="Demo")
+        Admision.objects.create(
+            ciudadano=ciudadano,
+            dispositivo=dispositivo,
+            cama=cama,
+            fecha_ingreso=timezone.now(),
+            fecha_egreso=timezone.now(),
+            estado=Admision.Estado.EGRESADO,
+        )
+
+        with self.assertRaises(ProtectedError):
+            cama.delete()
+
     def test_choices_de_estado_coinciden_con_el_analisis(self):
         from programas.models import Admision, Cama, Dispositivo
 
@@ -119,6 +184,15 @@ class ModelosDispositivosTests(TestCase):
 
 
 class ModelosMerenderosTests(TestCase):
+    def test_solicitud_puede_existir_antes_de_crear_el_legajo(self):
+        from programas.models import SolicitudMerendero
+
+        solicitud = SolicitudMerendero.objects.create(
+            documentacion="merenderos/solicitudes/respaldo.pdf",
+        )
+
+        self.assertIsNone(solicitud.merendero)
+
     def test_solicitud_entrega_y_prestacion_diaria_son_persistibles(self):
         from programas.models import (
             EntregaMercaderia,

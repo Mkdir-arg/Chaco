@@ -38,3 +38,12 @@ class ProgramasDispositivosDataMigrationTests(TestCase):
 
         self.assertEqual(Programa.objects.filter(codigo="DISPOSITIVOS").count(), 1)
         self.assertEqual(Programa.objects.filter(codigo="MERENDEROS").count(), 1)
+
+    def test_falla_si_un_codigo_objetivo_tiene_datos_incompatibles(self):
+        programa = Programa.objects.get(codigo="DISPOSITIVOS")
+        programa.tipo = Programa.TipoPrograma.BECAS
+        programa.save(update_fields=["tipo"])
+        migration = import_module(self.migration_module)
+
+        with self.assertRaisesMessage(RuntimeError, 'Programa(codigo="DISPOSITIVOS")'):
+            migration.crear_programas(apps, schema_editor=None)
