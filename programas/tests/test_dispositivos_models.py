@@ -30,10 +30,20 @@ class TipoProgramaDispositivosTests(TestCase):
 
 
 class ModelosDispositivosTests(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.programa_dispositivos, _ = Programa.objects.get_or_create(
+            codigo="DISPOSITIVOS",
+            defaults={"nombre": "Dispositivos", "tipo": Programa.TipoPrograma.DISPOSITIVOS},
+        )
+        cls.programa_merenderos, _ = Programa.objects.get_or_create(
+            codigo="MERENDEROS",
+            defaults={"nombre": "Merenderos", "tipo": Programa.TipoPrograma.MERENDEROS},
+        )
+
     def test_relaciones_base_son_persistibles_y_cama_es_opcional(self):
         from programas.models import Admision, Cama, Dispositivo, InscripcionPrograma, TipoDispositivo
 
-        programa = Programa.objects.get(codigo="DISPOSITIVOS")
         tipo = TipoDispositivo.objects.create(codigo="AM", nombre="Adulto Mayor", maneja_camas=True)
         dispositivo = Dispositivo.objects.create(
             codigo="DISP-001",
@@ -48,7 +58,7 @@ class ModelosDispositivosTests(TestCase):
         )
         cama = Cama.objects.create(dispositivo=dispositivo, codigo="C-01")
         ciudadano = Ciudadano.objects.create(dni="30111222", nombre="Ana", apellido="Demo")
-        membresia = InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=programa)
+        membresia = InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=self.programa_dispositivos)
 
         admision = Admision.objects.create(
             ciudadano=ciudadano,
@@ -106,14 +116,18 @@ class ModelosDispositivosTests(TestCase):
     def test_admision_rechaza_membresia_de_otro_ciudadano_o_programa(self):
         from programas.models import Admision, Dispositivo, InscripcionPrograma, TipoDispositivo
 
-        programa = Programa.objects.get(codigo="DISPOSITIVOS")
-        otro_programa = Programa.objects.get(codigo="MERENDEROS")
         tipo = TipoDispositivo.objects.create(codigo="AM", nombre="Adulto Mayor", maneja_camas=True)
         dispositivo = Dispositivo.objects.create(codigo="DISP-001", nombre="Residencia", tipo=tipo)
         ciudadano = Ciudadano.objects.create(dni="30111222", nombre="Ana", apellido="Demo")
         otro_ciudadano = Ciudadano.objects.create(dni="30111223", nombre="Beto", apellido="Demo")
-        membresia_ajena = InscripcionPrograma.objects.create(ciudadano=otro_ciudadano, programa=programa)
-        membresia_otro_programa = InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=otro_programa)
+        membresia_ajena = InscripcionPrograma.objects.create(
+            ciudadano=otro_ciudadano,
+            programa=self.programa_dispositivos,
+        )
+        membresia_otro_programa = InscripcionPrograma.objects.create(
+            ciudadano=ciudadano,
+            programa=self.programa_merenderos,
+        )
 
         admision = Admision(
             ciudadano=ciudadano,
@@ -175,12 +189,11 @@ class ModelosDispositivosTests(TestCase):
     def test_membresia_conserva_unicidad_por_ciudadano_y_programa(self):
         from programas.models import InscripcionPrograma
 
-        programa = Programa.objects.get(codigo="DISPOSITIVOS")
         ciudadano = Ciudadano.objects.create(dni="30111222", nombre="Ana", apellido="Demo")
-        InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=programa)
+        InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=self.programa_dispositivos)
 
         with self.assertRaises(IntegrityError), transaction.atomic():
-            InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=programa)
+            InscripcionPrograma.objects.create(ciudadano=ciudadano, programa=self.programa_dispositivos)
 
 
 class ModelosMerenderosTests(TestCase):
