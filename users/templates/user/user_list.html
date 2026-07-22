@@ -17,8 +17,6 @@
     </a>
 </div>
 
-{# Messages #}
-
 {% if filters_mode %}
 {{ filters_config|json_script:"usuarios-filters-config" }}
 <form id="filters-form" method="get" action="{{ filters_action }}" data-config-id="usuarios-filters-config"

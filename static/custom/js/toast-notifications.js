@@ -378,6 +378,23 @@
         return adapter;
     }
 
+    function createToastAdapter() {
+        const adapter = function (type, message, options) {
+            return api.show(messageText(message), Object.assign({}, options, {
+                type: normaliseType(type)
+            }));
+        };
+
+        ['success', 'info', 'warning', 'error'].forEach(function (type) {
+            adapter[type] = function (message, options) {
+                return api[type](messageText(message), options);
+            };
+        });
+        adapter.show = adapter;
+
+        return adapter;
+    }
+
     function initialise() {
         if (initialized) {
             return;
@@ -417,6 +434,7 @@
     };
 
     window.ChacoToast = api;
+    window.toast = createToastAdapter();
     window.toastr = createLegacyToastrAdapter();
     window.showSuccessAlert = api.success;
     window.showErrorAlert = api.error;
