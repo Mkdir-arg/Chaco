@@ -4,6 +4,8 @@ Estado: aprobado
 
 Fecha: 2026-07-22
 
+Última revisión operativa: 2026-07-23
+
 Project: https://github.com/users/Mkdir-arg/projects/1/views/17
 
 Usuario asignado y autorizador: juanikitro
@@ -59,16 +61,20 @@ El estado se distribuye en los Issues existentes. No se agrega una bitácora cen
 | --- | --- |
 | GitHub Project | Estado operativo de las tareas |
 | Comentario canónico | Plan completo, inmutable y versionado |
+| Cápsula operativa | Vista única, editable y legible del estado actual; nunca sustituye la evidencia de GitHub |
 | Reacciones 👍 y 👎 | Sello operativo vigente de la decisión tomada en Codex |
 | Comentarios de evento | Historial inmutable de decisiones, cambios de estado y recuperación |
 | Referencias de grupo | Enlaces desde las tareas secundarias al comentario canónico |
 | PR draft | Estado real de rama, implementación, validaciones y revisión |
-| origin/development | Base técnica y fixed point de revisión |
+| origin/development | Base técnica normal y fixed point final de revisión |
+| PR prerequisito calificado | Base temporal de una unidad apilada, con PR, rama, SHA y checks registrados |
+| Memoria de la automatización | Punteros y último snapshot leído; es una caché, nunca una autoridad para mutar |
 
 Cada ejecución standalone reconstruye el estado desde esas fuentes. No presupone
 que conserva la conversación ni el worktree de una ejecución anterior. La rama
-remota, el PR y GitHub son la continuidad durable; el estado local solo sirve durante
-la ejecución actual.
+remota, el PR y GitHub son la continuidad durable; la memoria solo acelera la
+reanudación y GitHub prevalece ante cualquier diferencia. No se crea una lease local,
+script, base de estado, workflow ni otra infraestructura para coordinar ejecuciones.
 
 ## Programación
 
@@ -90,16 +96,21 @@ interactivas.
 
 1. Ejecutar el preflight de identidad, permisos, Project, repositorio y exclusión mutua.
 2. Actualizar referencias remotas y resolver el repositorio canónico.
-3. Reconciliar reservas fallidas, decisiones incompletas y estados parciales.
-4. Leer tareas In progress, Blocked, planes, reacciones, eventos, PRs y checks.
-5. Si existe una Unidad activa, reconstruir su rama remota y continuarla.
-6. Si existe una Cola de unidades autorizadas, drenarla secuencialmente.
-7. Si solo existen planes sin autorizar, permitir una propuesta nueva.
-8. Si puede seleccionarse trabajo nuevo, formar como máximo un grupo.
-9. Si no hay trabajo elegible, emitir un Resumen de espera sin mutaciones.
+3. Obtener un snapshot GitHub-first y contrastarlo con la memoria y la Cápsula
+   operativa; una diferencia detiene las mutaciones hasta reconciliarla.
+4. Reconciliar reservas fallidas, decisiones incompletas y estados parciales.
+5. Leer tareas In progress, Blocked, planes, reacciones, eventos, PRs y checks.
+6. Si existe un plan reservado, una autorización pendiente, una Unidad activa, una
+   Espera de integración, una pausa, un Bloqueo externo o un cierre financiero,
+   continuar o informar ese estado sin seleccionar otro grupo.
+7. Solo sin estado no terminal, formar como máximo un grupo nuevo.
+8. Si no hay trabajo elegible, emitir un Resumen de espera sin mutaciones.
 
-La existencia de planes todavía no autorizados no bloquea una nueva propuesta.
-La existencia de trabajo activo o autorizado sí bloquea la creación de planes nuevos.
+Todo plan no terminal bloquea la selección de otro grupo. No hay un tope diario de
+unidades aprobadas, pero la automatización termina o reanuda la unidad existente antes
+de intentar seleccionar trabajo nuevo. Si el runtime disponible termina, la unidad
+conserva un checkpoint durable en GitHub y se reanuda en el próximo turno interactivo
+o Ciclo programado.
 No hay un tope diario de unidades aprobadas. Si el runtime disponible termina, la
 unidad conserva un checkpoint durable en GitHub y se reanuda en el próximo turno
 interactivo o Ciclo programado antes de seleccionar trabajo nuevo.
@@ -124,12 +135,35 @@ Antes de evaluar la allowlist, el preflight debe:
 - determinar la Iteration vigente por sus fechas o configuración, no por posición;
 - abortar sin escrituras ante identidad, scope, campos, opciones o iteración ambiguos.
 
+Para cada Task candidata construye además una Matriz de dependencias con: relación o
+contrato afectado, fuente de evidencia (Issue, código, commit o PR), estado
+(`integrado`, `misma unidad`, `PR padre calificado` o `no resuelto`), riesgo y
+resolución prevista. Una entrada ausente, contradictoria o `no resuelto` excluye la
+Task o el grupo antes de reservar; no se completa con una suposición.
+
 Un prerrequisito se considera disponible cuando su código está integrado y verificado
 en `origin/development`, o cuando forma parte de la misma Unidad de entrega y su orden
 interno es explícito. Un prerrequisito en `In QA` puede contarse como integrado solo
 después de verificar el commit en `development`, dejando registrado el riesgo de QA.
-Si está en Backlog, Ready, In progress, Blocked o In review sin integración, la tarea
-dependiente no se reserva como trabajo nuevo.
+
+Como excepción, una Task dependiente puede reservarse mediante una unidad apilada si
+su prerrequisito no integrado tiene un único PR abierto en `Mkdir-arg/Chaco-Back` que:
+
+- no es draft, apunta directamente a `development` y su rama/HEAD están accesibles
+  desde `origin`;
+- informa `MERGEABLE` y `CLEAN`, sin cambios solicitados vigentes;
+- tiene todos los checks aplicables del HEAD actual finalizados en verde (un skip
+  legítimo por filtros de paths debe quedar documentado).
+
+Antes de reservar, Codex registra en el plan el número, URL, rama y SHA del PR padre,
+su mergeability y la evidencia de checks. Si la evidencia es ambigua, el PR es de un
+fork, tiene su propia base no integrada o cualquiera de esos gates falla, se conserva
+la regla normal: no se reserva la dependiente hasta la integración.
+
+Una Task solo entra al grupo si su fila de la Matriz de dependencias demuestra que cada
+prerrequisito está integrado, ordenado dentro de la misma unidad o cubierto por el
+único PR padre calificado. La matriz no es una lista de riesgos genérica: debe permitir
+que otra persona explique por qué el grupo es seguro de reservar.
 
 La tarea ancla se elige en este orden:
 
@@ -193,32 +227,44 @@ Luego incluye:
 2. Objetivo y razón del agrupamiento.
 3. Tareas incluidas y orden interno.
 4. Épica, análisis de origen y `[REQUERIMIENTO]` vinculado, si existe.
-5. Evidencia relevante encontrada en el código.
-6. Alcance y fuera de alcance.
-7. Pasos de implementación.
-8. Criterios de aceptación y casos QA.
-9. Riesgos, dependencias y posibles bloqueos.
-10. Estrategia de validación proporcional.
-11. Datos y entorno local necesarios.
-12. Rama y PR previstos.
-13. Frases exactas para autorizar o rechazar.
+5. Matriz de dependencias: evidencia, estado y resolución de cada prerrequisito o
+   contrato para cada Task.
+6. Evidencia relevante encontrada en el código.
+7. Alcance y fuera de alcance.
+8. Pasos de implementación.
+9. Criterios de aceptación y casos QA.
+10. Riesgos, dependencias y posibles bloqueos.
+11. Estrategia de validación proporcional.
+12. Datos y entorno local necesarios.
+13. Rama, base técnica efectiva y PR previstos. En una unidad apilada incluye PR
+    padre, URL, rama, SHA, evidencia de checks y la declaración de dependencia.
+14. Frases exactas para autorizar o rechazar.
+15. Cierre financiero previsto, una fila por Task: persona, programa, fecha, motivo,
+    resultado a describir y recomendación basada en la estimación/alcance. No incluye
+    horas reales hasta la respuesta explícita posterior del usuario.
+16. Enlace a la Cápsula operativa y la próxima acción permitida.
 
 La tarea principal recibe el plan completo. Las demás tareas reciben una referencia
 breve con el ID y el enlace al comentario canónico.
 
 ## Reserva antes de la autorización
 
-La reserva es una operación compensable y se ejecuta bajo la lease exclusiva de la
-automatización:
+La reserva es una operación compensable coordinada por el marcador de Plan de grupo,
+los comentarios de GitHub y relecturas antes de cada mutación; no usa estado local de
+coordinación:
 
-1. Prevalidar que todas las tareas siguen siendo elegibles y resolver de forma
-   inequívoca sus `[REQUERIMIENTO]` vinculados, si existen.
-2. Publicar el comentario canónico y las referencias.
-3. Mover todas las tareas Ready → In progress.
-4. Mover cada `[REQUERIMIENTO]` vinculado Backlog → In progress cuando corresponda.
-5. Confirmar que todos los movimientos terminaron.
-6. Publicar el Evento de reserva completada con sus transiciones y ownership.
-7. Presentar el plan en la tarea de Codex.
+1. Obtener un snapshot GitHub-first y comprobar que no existe otro plan no terminal.
+2. Prevalidar que todas las tareas siguen siendo elegibles, que su Matriz de
+   dependencias sigue vigente y resolver de forma inequívoca sus `[REQUERIMIENTO]`
+   vinculados, si existen.
+3. Publicar el comentario canónico, las referencias y una única Cápsula operativa en
+   la tarea ancla con fase `Reserva esperando autorización`.
+4. Volver a leer los Status y mover todas las tareas Ready → In progress.
+5. Mover cada `[REQUERIMIENTO]` vinculado Backlog → In progress cuando corresponda.
+6. Confirmar que todos los movimientos terminaron.
+7. Publicar el Evento de reserva completada con sus transiciones y ownership, y
+   actualizar la Cápsula con la frase exacta de autorización esperada.
+8. Presentar el plan en la tarea de Codex.
 
 No se crea un `[REQUERIMIENTO]` faltante. La búsqueda se hace primero por repositorio y
 épica: cero Requerimientos para esa épica significa que no existe; más de uno es
@@ -248,6 +294,27 @@ Si un movimiento falla a mitad:
 
 Una reserva pendiente no vence. Cada ejecución revalida tareas, alcance, criterios y
 contratos relevantes. Cambios no relacionados no invalidan el plan.
+
+## Recuperación GitHub-first
+
+Antes de reanudar, liberar una reserva o crear un grupo, Codex relee Project, tareas,
+comentario canónico, Eventos, Cápsula, rama, PR, commits, decisiones, checks y cierre
+financiero. Contrasta esos hechos con la memoria, pero GitHub prevalece siempre. Si la
+memoria, una Cápsula o un snapshot anterior discrepan, no escribe hasta publicar un
+Evento de recuperación que indique evidencia observada, clasificación, acción tomada y
+próximo paso.
+
+La recuperación clasifica la reserva así:
+
+- sin rama, commit funcional ni PR: puede compensar solo transiciones propias y
+  devolver a Ready según ownership;
+- con rama, commit funcional o PR: no libera automáticamente; conserva la unidad en
+  `In progress`, actualiza la Cápsula y deja una ruta concreta de reanudación;
+- con evidencia contradictoria o duplicada: no compensa ni selecciona trabajo nuevo
+  hasta que se resuelva el conflicto con evidencia durable.
+
+El paso del tiempo nunca libera una reserva. Toda compensación vuelve a releer que no
+existe una reserva vencedora, otra unidad activa o trabajo funcional asociado.
 
 ## Autorización, observaciones y rechazo
 
@@ -316,17 +383,18 @@ autorización persiste decisión, crea o recupera rama y PR, y activa o encola. 
 antes de código persiste 👎, libera Task/Requerimiento y cierra únicamente un PR vacío;
 si ya hay código, pausa sin descartar. Una observación no invoca esta operación.
 
-Solo una unidad puede recibir cambios funcionales a la vez. La cola usa el plan más
-antiguo, salvo prioridad explícita del usuario, y se drena sin un límite de política
-diario, reanudándose en otro run cuando el runtime actual no alcance.
+Solo una unidad puede recibir cambios funcionales a la vez. Mientras exista una
+reserva, autorización pendiente, unidad activa, espera de integración, pausa, bloqueo
+o cierre financiero, no se crea ni reserva otro grupo. Cuando no exista estado no
+terminal, la siguiente unidad usa el plan más antiguo, salvo prioridad explícita del
+usuario, y se reanuda en otro run si el runtime actual no alcanza.
 
-Toda ruta mutante —reserva, decisión, activación, movimientos, push y PR— adquiere una
-lease exclusiva creada atómicamente en el directorio Git común, fuera del worktree
-efímero. La lease contiene un token de dueño y se renueva antes de cada fase mutante;
-cada comando rechaza un token ajeno o vencido. Solo se configura una tarea programada.
-Si otra ejecución conserva la lease, el segundo intento no escribe y termina informando
-que la operación quedó para el próximo turno. Una lease huérfana solo se recupera tras
-su vencimiento y después de reconciliar GitHub; GitHub sigue siendo la fuente de verdad.
+Toda ruta mutante —reserva, decisión, activación, movimientos, push y PR— relee el
+snapshot GitHub-first, busca el marcador del plan y verifica ownership antes de
+escribir. Solo se configura una tarea programada. Si otra ejecución ya persistió un
+plan, una transición o una Cápsula no terminal, el segundo intento no escribe y deja
+constancia de que la operación requiere reconciliación. No se usa lease, token ni
+archivo local como lock.
 
 Como defensa adicional ante una carrera o recuperación defectuosa:
 
@@ -336,14 +404,36 @@ Como defensa adicional ante una carrera o recuperación defectuosa:
 - cualquier otra tarea se detiene antes de editar y queda en cola;
 - una Unidad activa nunca se desaloja por una aprobación posterior.
 
-Este protocolo evita concurrencia en la máquina configurada y detecta conflictos,
-pero no pretende ser un lock distribuido entre varias máquinas. Ejecutar otra copia
-de la automatización en otro host queda fuera de alcance.
+Este protocolo detecta colisiones por evidencia durable, pero no pretende ser un lock
+distribuido entre varias máquinas. Ejecutar otra copia de la automatización en otro
+host queda fuera de alcance y debe bloquearse operativamente.
+
+## Cápsula operativa
+
+Cada Plan de grupo tiene una única Cápsula operativa, un comentario editable separado
+del comentario canónico e identificado por su marcador y versión. Vive en la tarea
+ancla durante toda la unidad; el PR solo la enlaza, no la duplica. Se actualiza en cada
+cambio material de fase y contiene como mínimo:
+
+- ID y versión del plan, Tasks y fase actual;
+- momento del último snapshot GitHub-first y enlace al PR, rama y HEAD si existen;
+- evidencia o bloqueo actual y la respuesta exacta esperada del usuario cuando aplique;
+- próximo paso permitido y una declaración visible de que no se tomará otro grupo.
+
+La Cápsula mejora la lectura humana y la reanudación, pero no autoriza acciones. Si no
+coincide con Project, Eventos, PR o checks, GitHub prevalece y se publica el Evento de
+recuperación antes de volver a actualizarla.
 
 ## Git, worktree y PR
 
 - Worktree aislado, sin modificar el checkout actual del usuario.
-- Base inicial: último origin/development.
+- Base inicial normal: último `origin/development`.
+- En una unidad apilada, base inicial: el SHA exacto registrado de
+  `origin/<rama-del-PR-padre>`; la nueva rama `codex/*` nace de ese commit, nunca
+  del checkout principal.
+- El PR hijo usa temporalmente como base la rama del PR padre. Su descripción declara
+  que es un PR apilado, identifica número, URL, rama y SHA del padre, y avisa que debe
+  verificarse o retargetearse a `development` después de la fusión del padre.
 - Rama: codex/pg-<id-sin-dos-puntos>-<slug>.
 - Commit inicial: chore(plan): iniciar PG-...
 - PR draft inmediatamente después de la autorización.
@@ -366,8 +456,13 @@ Cada paso lógico completo termina con commit, push fast-forward y checkpoint en
 La automatización no cruza una pausa deliberada o una operación larga dejando como
 única copia cambios funcionales sin commit en un worktree efímero.
 
-Antes de comenzar código se vuelve a validar la base. Un cambio material invalida el
-plan; una deriva no material se incorpora de forma segura sin ampliar el alcance.
+Antes de comenzar código se vuelve a validar la base. En una unidad apilada se
+reconfirma que el PR padre conserva el mismo SHA registrado, sigue abierto, no es
+draft, está `MERGEABLE/CLEAN` y mantiene los checks verdes. Un cambio de SHA o de
+gate es material: invalida la versión y exige una nueva autorización antes de editar.
+Si el padre ya se fusionó y su commit está en `origin/development`, la unidad pasa a
+usar `development` como base normal y deja el evento correspondiente. Una deriva no
+material se incorpora de forma segura sin ampliar el alcance.
 
 ## Rechazo, pausa y dependencias
 
@@ -389,18 +484,20 @@ Si ya existe código funcional, una instrucción de cancelación pausa la unidad
 - rama y PR draft se conservan;
 - no se cierra ni descarta nada sin una segunda instrucción explícita.
 
-Si una unidad aprobada depende de un PR todavía no integrado:
+Si una unidad autorizada descubre después de reservar una dependencia no integrada que
+no figura en su plan como PR padre calificado, no duplica código ni la apila: permanece
+In progress como Espera de integración, conserva el grupo y se retoma desde
+`development` al integrarse el prerequisito. Mientras tanto no selecciona otra unidad.
 
-- abre o conserva su PR draft;
-- no apila la rama sobre el PR prerequisito;
-- no duplica el código;
-- permanece In progress como Espera de integración;
-- cede el turno a unidades independientes;
-- se actualiza desde development y se retoma al integrarse el prerrequisito.
-
-Esta espera cubre dependencias descubiertas o modificadas después de reservar. Antes
-de una reserva nueva rige la regla más estricta de Elegibilidad y prioridad: no se
-reserva un dependiente cuyo prerrequisito aún no está integrado ni incluido en el grupo.
+La vía apilada solo aplica al prerequisito declarado y verificado antes de reservar.
+Tras la autorización, Codex vuelve a validar su HEAD y gates antes del primer cambio
+funcional; si siguen vigentes, crea la rama hija desde ese HEAD y abre el PR hijo
+contra la rama padre. El plan y la descripción del PR explican la dependencia y sus
+datos verificables. Si el padre cambia, se cierra sin merge o pierde sus gates, no se
+edita sobre una base obsoleta: se invalida la versión o se espera la integración. Si
+se fusiona, Codex verifica la presencia del commit en `origin/development`,
+retargetea o confirma el retarget del hijo a `development` y repite los gates sobre
+la nueva base antes de llevar la unidad a revisión.
 
 ## Implementación y límites de alcance
 
@@ -430,8 +527,10 @@ permanece In progress y Codex los corrige.
 
 ## Revisión independiente
 
-El fixed point es el merge-base contra origin/development. Antes de revisión humana
-se ejecutan dos revisiones en contextos frescos y paralelos:
+El fixed point normal es el merge-base contra `origin/development`. En una unidad
+apilada es el merge-base contra la rama padre registrada; cuando el hijo vuelve a
+`development`, se repiten ambas revisiones desde ese fixed point. Antes de revisión
+humana se ejecutan dos revisiones en contextos frescos y paralelos:
 
 - Standards: reglas documentadas del repositorio y baseline de olores de código.
 - Spec: Plan autorizado, Issues y criterios de aceptación.
@@ -442,8 +541,9 @@ Cada corrección obliga a repetir ambos ejes hasta quedar limpios.
 
 ## Gate de CI y entrega a revisión humana
 
-La evidencia válida pertenece al último commit del PR draft y a una base conocida de
-`origin/development`.
+La evidencia válida pertenece al último commit del PR draft y a su base técnica
+efectiva: `origin/development` en el camino normal o la rama del PR padre en una
+unidad apilada.
 
 Checks bloqueantes actuales:
 
@@ -465,18 +565,22 @@ Checks aplicables ausentes, pendientes, cancelados o fallidos mantienen el PR dr
 las tareas en In progress.
 
 Antes de marcar el PR listo, Codex vuelve a hacer `fetch`, registra head SHA y base SHA,
-y comprueba mergeability. Si `origin/development` avanzó, actualiza la rama de forma no
-destructiva, sin force-push; si la deriva es material, invalida el plan, y si no lo es,
-repite Validación proporcional, ambas revisiones y CI sobre el nuevo head. Un check
-omitido legítimamente por filtros de paths no se trata como ausente; los workflows
-informativos se inspeccionan por sus pasos y logs, aunque el job global aparezca verde.
+y comprueba mergeability. Si la base técnica efectiva avanzó, actualiza la rama de forma
+no destructiva, sin force-push; si la deriva es material, invalida el plan, y si no lo
+es, repite Validación proporcional, ambas revisiones y CI sobre el nuevo head. Para un
+PR apilado cuyo padre se fusionó, esta revalidación incluye confirmar o cambiar la base
+del hijo a `development` antes del gate final. Un check omitido legítimamente por
+filtros de paths no se trata como ausente; los workflows informativos se inspeccionan
+por sus pasos y logs, aunque el job global aparezca verde.
 
-Solo con Validación proporcional aprobada, Revisión limpia y CI válida Codex:
+Solo con Validación proporcional aprobada, Revisión limpia y CI válida Codex prepara
+el cierre técnico, pero conserva el PR draft y las Tasks en In progress hasta resolver
+la imputación financiera:
 
-1. actualiza el PR con la evidencia final;
-2. lo convierte de draft a listo;
-3. mueve todas las tareas In progress → In review;
-4. inicia la siguiente unidad aprobada.
+1. actualiza el PR con la evidencia técnica final;
+2. levanta el entorno de aceptación y publica la guía concreta de prueba;
+3. publica la consulta de cierre financiero con su recomendación por Task;
+4. espera la respuesta financiera sin iniciar otra unidad.
 
 Codex nunca aprueba ni fusiona el PR.
 
@@ -508,6 +612,23 @@ Reglas:
 - no usar datos productivos sin autorización separada;
 - no ejecutar down -v.
 
+La guía final se publica como una Ficha de aceptación reproducible enlazada desde el
+PR y la Cápsula. No crea scripts nuevos: reutiliza solo comandos, fixtures y seeds
+versionados ya aprobados. Debe incluir, sin secretos:
+
+1. prerequisitos y comando exacto de inicio;
+2. origen del fixture o seed sintético, identidades/roles de prueba y postcondición
+   que confirma que los datos quedaron cargados;
+3. URL local, señal de health y pasos de aceptación ligados a cada criterio, con su
+   resultado esperado;
+4. SHA, proyecto Compose, puertos y limitaciones conocidas;
+5. comando exacto de apagado que detiene únicamente el stack propio y conserva los
+   volúmenes.
+
+No basta con listar comandos: la Ficha registra el resultado observado de bootstrap y
+health antes de presentarse al usuario. Si no puede demostrar datos sintéticos y un
+apagado no destructivo, el entorno no se ofrece como aceptable.
+
 El override de aceptación construye y etiqueta una imagen inmutable con el head SHA de
 la unidad y elimina el bind mount del código fuente. Antes de dejar el stack activo se
 verifica con `docker compose config` que la app se ejecute desde esa imagen. De ese
@@ -517,11 +638,52 @@ SHA y unidad propietaria para poder redescubrirlos y detenerlos de forma exacta.
 
 Si quedan unidades aprobadas, Codex detiene el stack anterior sin borrar volúmenes y
 continúa. Al terminar la última, deja el entorno activo, informa URL, proyecto
-Compose, datos cargados y comando de apagado, y pregunta si debe conservarlo. Si no
-hay respuesta, permanece activo. Una futura unidad aprobada puede detenerlo. La
-automatización registra el worktree, proyecto Compose, puertos, volúmenes conservados
-y unidad propietaria. Solo detiene el stack exacto que ella creó; nunca uno ajeno por
-mera coincidencia de puerto. La limpieza posterior de volúmenes requiere autorización.
+Compose, datos cargados, guía concreta de prueba y comando de apagado. Ese mismo
+mensaje consulta si debe conservarse el entorno y abre el cierre financiero; responder
+sobre el entorno no equivale a confirmar una imputación. Si no hay respuesta, permanece
+activo. Una futura unidad aprobada puede detenerlo. La automatización registra el
+worktree, proyecto Compose, puertos, volúmenes conservados y unidad propietaria. Solo
+detiene el stack exacto que ella creó; nunca uno ajeno por mera coincidencia de puerto.
+La limpieza posterior de volúmenes requiere autorización.
+
+## Cierre financiero de la unidad
+
+Después de presentar el entorno y la guía de prueba, Codex solicita una decisión de
+imputación por cada Task del grupo. La consulta muestra la persona, el programa, la
+fecha local propuesta, el motivo y el resultado que se registrarían, junto con una
+recomendación de horas. Esa recomendación parte de `EstimacionHoras` de la Task; si
+el plan aprobado define una porción menor con esfuerzo explícito, usa esa cifra y
+explica la diferencia. Es solo una referencia: Codex nunca afirma conocer las horas
+reales ni las escribe sin confirmación.
+
+La respuesta aceptada es una de:
+
+    Registrar <ID-del-plan> #<issue>: <horas> h
+    Registrar <ID-del-plan> #<issue-1>: <horas> h; #<issue-2>: <horas> h
+    No registrar <ID-del-plan> #<issue-1>; #<issue-2>
+
+Las horas pueden ser decimales o expresarse en horas/minutos, pero deben normalizarse
+a minutos enteros positivos. La consulta incluye una fila por Task con los valores que
+respetan el documento vigente: Día, Persona, Programa cuando la sección mensual lo
+contemple, Motivo, Qué hice y Consumo. En grupos no se acepta un total sin distribución
+por Task ni un `No registrar` global sin enumerar cada Task. Una respuesta ambigua, de
+otro plan o con una cantidad inválida no modifica ningún archivo. Si no son inequívocos
+la persona, el programa, la fecha o el motivo, Codex los consulta antes de escribir.
+
+Con `No registrar`, Codex persiste el evento de cierre sin imputación, deja listo el
+PR y mueve las Tasks a In review. Con `Registrar`, reabre el worktree aislado de la
+misma rama/PR y actualiza
+`docs/client/financiero/detalle-tareas.md`: agrega una fila por Task en la sección y
+con las columnas vigentes del mes de cierre. No normaliza ni reescribe tablas
+históricas: por ejemplo, conserva la estructura previa de junio aunque la sección
+actual incluya Programa. Usa la fecha local de cierre salvo indicación contraria,
+incluye número/título y resultado real de la Task, y recalcula exactamente los totales
+mensuales por programa y el contador total afectados. El cambio se confirma y publica
+en el mismo PR; no se despliega documentación.
+
+El nuevo HEAD requiere `python -m mkdocs build --strict`, revisión focalizada del
+diff documental y los checks aplicables del PR. Solo cuando esos gates terminan,
+Codex actualiza el resumen del PR, lo deja listo y mueve las Tasks a In review.
 
 ## Bloqueos y recuperación
 
@@ -534,11 +696,11 @@ Para un check posiblemente inestable:
 2. reintentar una sola vez si parece externa;
 3. si reaparece la misma causa externa verificada, comentar evidencia;
 4. mover In progress → Blocked;
-5. continuar con otra unidad aprobada independiente.
+5. actualizar la Cápsula y esperar la recuperación o una instrucción explícita; no
+   seleccionar otro grupo mientras ese plan siga no terminal.
 
 Cada ejecución revalida primero los bloqueos. Cuando desaparece, mueve Blocked →
-In progress y reanuda antes de seleccionar trabajo nuevo, salvo que otra Unidad
-activa ya tenga el turno.
+In progress y reanuda la misma unidad antes de cualquier selección nueva.
 
 ## Resumen sin selección
 
@@ -547,6 +709,7 @@ enumera por separado:
 
 - planes pendientes de autorización;
 - unidades autorizadas en cola;
+- cierres financieros pendientes, con la recomendación y la frase exacta de respuesta;
 - Esperas de integración;
 - unidades pausadas;
 - unidades con Bloqueo externo;
@@ -592,6 +755,10 @@ Reglas concretas de idempotencia:
 - redescubrir rama y PR por el head esperado antes de crearlos;
 - registrar checkpoints reintentables para reserva, decisión, activación, entrega y
   compensación;
+- reconciliar Project, comentarios, PR, checks y cierre financiero contra la memoria
+  antes de cada reanudación; GitHub prevalece y una discrepancia bloquea escrituras;
+- actualizar una sola Cápsula por plan solo después de que la evidencia durable quede
+  concordante;
 - detenerse y reconciliar cuando haya dos sellos, eventos discordantes o más de un PR
   para el mismo head.
 
@@ -603,7 +770,9 @@ No se permiten:
 - eliminación automática de ramas;
 - down -v;
 - autoaprobación o automerge;
-- ampliación silenciosa del alcance.
+- ampliación silenciosa del alcance;
+- scripts, leases, bases de estado, workflows o infraestructura adicional para
+  coordinar la automatización.
 
 ## Puesta en marcha
 
@@ -618,7 +787,8 @@ No se permiten:
    repo exista en la ruta configurada y que red, sandbox y permisos desatendidos estén
    preautorizados para GitHub Project, git push, PR y Docker. El run no puede resolver
    una aprobación de sistema en mitad de la ejecución.
-6. Implementar y probar la lease exclusiva, marcadores y reconciliación de estado.
+6. Validar el marcador de plan, la Matriz de dependencias, la Cápsula y la
+   reconciliación GitHub-first sin introducir estado local de coordinación.
 7. Simular en modo read-only elegibilidad, prioridad y agrupación contra todo el Project.
 8. Verificar que la simulación no incluya In QA ni otros estados no permitidos.
 9. Hacer en una tarea Codex regular con worktree un smoke supervisado de
@@ -649,14 +819,26 @@ No se permiten:
   reanuda desde estado remoto si el runtime actual termina.
 - Cada unidad usa rama y PR propios y siempre se ejecuta en un worktree aislado, aunque
   el worktree local pueda recrearse entre runs.
-- No apila ramas ante prerrequisitos sin integrar.
+- Solo apila una rama sobre un PR padre único y verificable, con el SHA y gates
+  registrados en el plan y la dependencia explícita en la descripción del PR hijo.
 - El PR no queda listo ni las tareas pasan a In review sin validación, revisión limpia,
-  CI del último commit y comprobación de la base actual de development.
+  CI del último commit y comprobación de su base técnica efectiva; si el padre se
+  fusionó, esa comprobación final es contra development.
+- Al cierre, informa un entorno reproducible y una guía de prueba, pide una imputación
+  financiera explícita por Task con recomendación trazable y nunca edita el detalle de
+  horas sin esa respuesta; si se registra, recalcula totales y valida el nuevo HEAD
+  antes de llevar la entrega a In review.
 - Un error propio no se etiqueta como Blocked.
 - Un fallo externo solo bloquea después de evidencia y un reintento.
 - El entorno final contiene datos reproducibles y nunca elimina volúmenes automáticamente.
-- Dos runs del host configurado no pueden reservar ni modificar código a la vez; una
-  ambigüedad de lease o estado detiene las escrituras y fuerza reconciliación.
+- Ningún grupo nuevo se reserva mientras exista un plan no terminal, incluida una
+  autorización pendiente, Espera de integración o cierre financiero.
+- La Matriz de dependencias evidencia por qué cada Task puede reservarse; cualquier
+  relación no resuelta excluye el grupo.
+- La Cápsula permite identificar en un único comentario el grupo, fase, bloqueo y
+  próximo paso, sin sustituir la evidencia de GitHub.
+- La memoria nunca habilita una mutación por sí sola: una discrepancia con GitHub
+  detiene las escrituras y fuerza reconciliación.
 - Cuando no hay trabajo nuevo, informa claramente pendientes, esperas y bloqueos.
 
 ## Documentación derivada

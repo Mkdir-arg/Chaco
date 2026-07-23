@@ -9,8 +9,8 @@ Ejecución recurrente configurada en Codex para analizar y proponer el trabajo d
 _Avoid_: Cron, tarea cron
 
 **Ciclo programado**:
-Ejecución que prioriza continuar la Unidad activa y drenar la Cola de unidades autorizadas. Solo cuando no existe ese trabajo puede reservar como máximo un grupo nuevo; los planes aún no autorizados no impiden esa nueva propuesta. Si su tiempo operativo termina, conserva el estado durable y reanuda antes de seleccionar trabajo nuevo.
-_Avoid_: Planificación masiva, nuevo plan durante implementación
+Ejecución que prioriza continuar el único Plan de grupo no terminal. Solo cuando no existe una reserva, autorización pendiente, Unidad activa, Espera de integración, pausa, Bloqueo externo ni cierre financiero puede reservar como máximo un grupo nuevo. Si su tiempo operativo termina, conserva el estado durable y reanuda antes de seleccionar trabajo nuevo.
+_Avoid_: Planificación masiva, nuevo plan durante trabajo pendiente
 
 **Excepción automática acotada**:
 Autorización de gobernanza que permite únicamente a esta automatización reservar, liberar, bloquear, reanudar y entregar sus propias tareas mediante las transiciones acordadas, además de mantener alineado su Requerimiento vinculado. Los demás movimientos continúan bajo control del PM humano.
@@ -32,6 +32,10 @@ _Avoid_: Nombre libre, fecha sin secuencia, identificador sin versión
 Vista consolidada del contexto funcional y técnico de un Plan de grupo, suficiente para decidir su autorización sin reconstruir manualmente todos los Issues y archivos relacionados.
 _Avoid_: Checklist mínima, copia exhaustiva de los Issues
 
+**Matriz de dependencias**:
+Tabla del Brief que, por cada Task, registra prerrequisito o contrato afectado, fuente verificable, estado (`integrado`, `misma unidad`, `PR padre calificado` o `no resuelto`), riesgo y resolución. Una relación no resuelta excluye la Task o el grupo antes de reservar.
+_Avoid_: Dependencia asumida, lista genérica de riesgos, agrupación por módulo
+
 **Resumen funcional del grupo**:
 Explicación breve y en lenguaje llano, ubicada al inicio del Brief operativo, de qué pide el grupo y cuál será su resultado observable. Debe poder entenderse sin abrir los Issues ni leer detalles técnicos.
 _Avoid_: Copia de títulos, resumen técnico, contexto extenso
@@ -45,12 +49,12 @@ Intento incompleto de reservar un grupo que no llega a constituir un Plan de gru
 _Avoid_: Reserva vigente, grupo parcialmente válido
 
 **Reserva vigente**:
-Reserva de un Plan de grupo pendiente que no vence automáticamente y se revalida en cada ejecución programada. Solo un cambio material en sus tareas, alcance, criterios de aceptación o contratos relevantes la invalida; los cambios no relacionados no la afectan.
+Reserva de un Plan de grupo pendiente que no vence automáticamente y se revalida en cada ejecución programada. Bloquea la selección de otro grupo hasta resolverse. Solo un cambio material en sus tareas, alcance, criterios de aceptación o contratos relevantes la invalida; los cambios no relacionados no la afectan.
 _Avoid_: Reserva vencida automáticamente, autorización implícita
 
 **Cola de planes pendientes**:
-Conjunto de Grupos reservados que esperan autorización manual. La existencia de uno no impide preparar otro grupo con tareas todavía elegibles, pero ninguno puede implementarse sin su propia autorización.
-_Avoid_: Único grupo reservado, implementación paralela
+Estado histórico de Planes reservados que esperan autorización manual. La automatización no crea una nueva reserva mientras exista alguno; primero debe esperar, rechazar, invalidar o recuperar el plan vigente.
+_Avoid_: Planificación paralela, autorización implícita
 
 **Tarea principal del grupo**:
 Tarea que funciona como ancla del Grupo reservado y conserva el comentario con el Plan de grupo completo.
@@ -67,6 +71,14 @@ _Avoid_: Issue abierto, tarea asignada, item de Backlog
 **Referencia de grupo**:
 Comentario breve en cada tarea restante del Grupo reservado que enlaza el Plan de grupo alojado en la Tarea principal.
 _Avoid_: Copia del plan, plan duplicado
+
+**Cápsula operativa**:
+Comentario editable único en la Tarea principal que muestra ID y versión del plan, Tasks, fase, snapshot GitHub-first, PR/rama/HEAD si existen, bloqueo, respuesta pendiente y próximo paso. Es una vista de seguimiento; no autoriza ni reemplaza Project, Eventos, PR o checks.
+_Avoid_: Comentario canónico editable, dashboard paralelo, estado local
+
+**Reconciliación GitHub-first**:
+Comparación previa a reanudar, compensar o seleccionar entre Project, comentarios, Eventos, PR, ramas, checks, cierre financiero y memoria. GitHub prevalece; cualquier diferencia se documenta mediante un Evento de recuperación y bloquea mutaciones hasta resolverse.
+_Avoid_: Memoria como verdad, liberación por timeout, recuperación silenciosa
 
 **Autorización del plan**:
 Confirmación explícita del usuario, emitida en la tarea de Codex que propuso el Plan de grupo e identificándolo de forma inequívoca. Solo queda disponible para ejecuciones futuras cuando Codex consigue persistir en GitHub un Sello de decisión y un Evento de decisión concordantes.
@@ -117,7 +129,7 @@ Momento en que un Plan autorizado sale de la cola y comienza su implementación.
 _Avoid_: Autorización sin capacidad, inicio paralelo
 
 **Unidad activa**:
-Unidad de entrega autorizada cuya implementación está en curso. Es la única unidad que puede recibir cambios de código mientras no termine ni pase a Bloqueo externo.
+Unidad de entrega autorizada cuya implementación está en curso. Es la única unidad que puede recibir cambios de código y bloquea la selección de otro grupo hasta terminar, pausar, recuperarse o resolverse formalmente.
 _Avoid_: Grupo reservado, plan pendiente
 
 **Unidad pausada**:
@@ -144,6 +156,10 @@ _Avoid_: Suite completa obligatoria, pruebas mínimas fijas
 Entorno local preparado al finalizar la implementación de una Unidad de entrega, con los datos necesarios para probar de punta a punta el resultado funcional.
 _Avoid_: Entorno de producción, entorno vacío
 
+**Ficha de aceptación reproducible**:
+Guía enlazada desde el PR y la Cápsula que declara comandos existentes de inicio, fixture o seed sintético, roles, URL y health, pasos y resultados esperados por criterio, SHA/puertos y apagado exacto sin borrar volúmenes. Registra evidencia observada antes de ofrecer el entorno.
+_Avoid_: Instrucciones vagas, datos productivos, `down -v`
+
 **Decisión de entorno**:
 Elección explícita del usuario, solicitada al finalizar la última unidad de la Cola de unidades autorizadas, entre conservar su Entorno local de aceptación funcionando o apagarlo. Mientras no haya respuesta, el entorno permanece activo y una futura unidad aprobada puede detenerlo mediante la Rotación de entorno.
 _Avoid_: Consulta entre unidades aprobadas, limpieza de datos
@@ -155,6 +171,10 @@ _Avoid_: Entornos simultáneos, eliminación de volúmenes, pausa de la cola
 **Datos de aceptación**:
 Datos sintéticos y reproducibles, preparados mediante fixtures o seeds versionados para probar una Unidad de entrega. Si faltan escenarios, la unidad incorpora un seed focalizado e idempotente; los datos productivos requieren una autorización separada.
 _Avoid_: Copia de producción, carga manual irrepetible
+
+**Cierre financiero estructurado**:
+Consulta posterior a la guía de aceptación que exige una respuesta explícita por cada Task. Muestra los campos vigentes de `docs/client/financiero/detalle-tareas.md` y una recomendación de consumo; solo una distribución inequívoca por Task permite agregar filas nuevas, sin reescribir las históricas.
+_Avoid_: Total global, imputación inferida, normalización de tablas históricas
 
 **PR de trabajo**:
 Pull request en draft que hace visible la rama y concentra el contexto de una Unidad de entrega inmediatamente después de autorizar su plan, antes de la implementación funcional. No representa una solicitud de revisión y sus tareas permanecen en `In progress`.
@@ -181,16 +201,16 @@ Impedimento verificable que no puede resolverse dentro de la Unidad de entrega, 
 _Avoid_: Test fallido, bug propio, dificultad técnica
 
 **Fallo externo persistente**:
-Fallo de validación atribuible a infraestructura o a un servicio externo que reaparece después de un reintento automático. Convierte la unidad en Bloqueo externo con evidencia, libera el turno y se revalida para reanudarla cuando el servicio se recupera.
+Fallo de validación atribuible a infraestructura o a un servicio externo que reaparece después de un reintento automático. Convierte la unidad en Bloqueo externo con evidencia y conserva el grupo hasta que el servicio se recupere o exista una instrucción explícita.
 _Avoid_: Primer fallo, test roto por el cambio, reintento ilimitado
 
 **Espera de integración**:
-Estado de una unidad autorizada cuyo prerrequisito ya está implementado pero todavía no fue integrado en `development`. No apila ramas ni mueve tareas a `Blocked`; permanece en `In progress` y cede el turno a unidades independientes hasta poder reanudarse.
-_Avoid_: Bloqueo externo, rama apilada, duplicación del prerrequisito
+Estado de una unidad autorizada cuyo prerrequisito ya está implementado pero todavía no fue integrado en `development`. No apila ramas ni mueve tareas a `Blocked`; permanece en `In progress` y bloquea la selección de otro grupo hasta poder reanudarse.
+_Avoid_: Bloqueo externo, rama apilada, duplicación del prerrequisito, trabajo paralelo
 
 **Reanudación prioritaria**:
-Regla por la que una Unidad de entrega destrabada vuelve a `In progress` antes de seleccionar trabajo nuevo, siempre que no exista otra unidad activa. Mientras el Bloqueo externo persiste, no impide planificar otra unidad.
-_Avoid_: Abandono del grupo, bloqueo global del trabajo
+Regla por la que una Unidad de entrega destrabada vuelve a `In progress` y se reanuda antes de seleccionar trabajo nuevo. Mientras el Bloqueo externo persiste, la automatización informa la espera y no toma otro grupo.
+_Avoid_: Abandono del grupo, selección sobre estado pendiente
 
 **Resumen de espera**:
 Aviso emitido cuando no quedan Tareas elegibles para formar otro grupo, que enumera por separado los Planes pendientes de autorización, las unidades autorizadas en cola, las Esperas de integración, las unidades pausadas y las unidades con Bloqueo externo.

@@ -1,8 +1,10 @@
 # Implementación de la automatización diaria de Chaco
 
-Estado: autorizado para implementación y publicación en PR
+Estado: pendiente de autorización de ejecución
 
 Fecha: 2026-07-22
+
+Última revisión operativa: 2026-07-23
 
 Diseño aprobado: `docs/plans/2026-07-22-chaco-trabajo-diario-codex-design.md`
 
@@ -10,8 +12,9 @@ Diseño aprobado: `docs/plans/2026-07-22-chaco-trabajo-diario-codex-design.md`
 
 Entregar una única tarea programada de Codex, inicialmente pausada, que ejecute el
 contrato aprobado de forma segura sobre el Project #1. La selección y agrupación
-funcional siguen siendo razonamiento de Codex; identidad, elegibilidad, persistencia,
-ownership, transiciones y recuperación se delegan a un helper determinista y testeado.
+funcional, el preflight, la evidencia, la recuperación y las transiciones se ejecutan
+desde el prompt operativo y se respaldan exclusivamente en Project, Issues, PRs y la
+memoria de la automatización. No se crea un helper ni estado local de coordinación.
 
 La automatización no se habilita hasta que:
 
@@ -28,8 +31,8 @@ La automatización no se habilita hasta que:
 | Componente | Decide o ejecuta |
 | --- | --- |
 | Codex | Comprende el pedido, inspecciona el código, agrupa por concepto, redacta el Brief, implementa, prueba y revisa |
-| Helper determinista | Preflight, snapshot, lease, marcadores, fingerprint, comentarios, reacciones, ownership, transiciones, rama/PR y reconciliación |
-| GitHub | Fuente durable de planes, decisiones, Project, ramas, PR y checks |
+| GitHub | Fuente durable de planes, decisiones, Project, comentarios, ramas, PR y checks |
+| Memoria de la automatización | Punteros y snapshots; nunca habilita una mutación si GitHub no coincide |
 | Docker Compose | Entorno final de aceptación respaldado por una imagen del head SHA |
 | Usuario | Autoriza o rechaza cada versión del Plan de grupo y revisa el PR final |
 
@@ -37,8 +40,6 @@ La automatización no se habilita hasta que:
 
 | Archivo | Cambio |
 | --- | --- |
-| `scripts/codex_daily_work.py` | CLI determinista, sin dependencias nuevas |
-| `core/tests/test_codex_daily_work.py` | Tests unitarios con `SimpleTestCase` y mocks de `gh`, Git y reloj |
 | `docker-compose.yml` | Hacer que una variable opcional definida vacía permanezca vacía |
 | `docker-compose.acceptance.yml` | Stack sin bind mount, puertos seguros e imagen etiquetada por SHA |
 | `.dockerignore` | Excluir scratch de la automatización del contexto de imagen |
@@ -49,8 +50,9 @@ La automatización no se habilita hasta que:
 | `ESTADOS.md` | Gates y excepción automática acotada |
 | `AGENTS.md` | Alcance permitido para futuros agentes |
 
-No se agregan paquetes, base de datos de coordinación, Issue coordinador, workflow de
-CI adicional ni archivo mutable de estado dentro del repositorio.
+No se agregan paquetes, scripts de coordinación, leases locales, base de datos de
+coordinación, Issue coordinador, workflow de CI adicional ni archivo mutable de estado
+dentro del repositorio.
 
 ## Fase 1 — Aislar y congelar el contrato
 
@@ -61,165 +63,76 @@ CI adicional ni archivo mutable de estado dentro del repositorio.
 3. Confirmar que diseño, glosario, `ESTADOS.md` y `AGENTS.md` dicen lo mismo sobre:
    - reserva previa a autorización;
    - Sello y Evento de decisión;
-   - Task y Requerimiento;
-   - ownership y compensación;
-   - Blocked e In review;
-   - prohibiciones de merge, aprobación propia, force-push y datos productivos.
+    - Task y Requerimiento;
+    - ownership y compensación;
+    - Matriz de dependencias, Cápsula operativa y reconciliación GitHub-first;
+    - Blocked e In review;
+    - prohibiciones de merge, aprobación propia, force-push, datos productivos y
+      estado local de coordinación.
 4. Mantener la automatización deshabilitada mientras estos archivos no estén en
    `development`.
 
 Gate: diff documental coherente y sin preguntas abiertas.
 
-## Fase 2 — Construir primero el modelo puro y sus tests
+## Fase 2 — Validar el contrato operativo sin estado local
 
-Crear tests fallando antes de la integración con GitHub para:
+Antes de habilitar mutaciones, revisar mediante snapshots read-only y escenarios
+documentados que el prompt pueda demostrar:
 
-1. Preflight:
-   - identidad exacta `juanikitro` y database ID estable esperado;
-   - scopes requeridos;
-   - Project único y editable;
-   - campos/opciones resueltos por nombre;
-   - paginación completa y `count == totalCount`;
-   - una sola iteración vigente, inicio inclusivo y fin exclusivo en Buenos Aires.
-2. Elegibilidad:
-   - Issue abierto, Tipo Task, Ready, único assignee correcto, Iteration vigente;
-   - Prioridad, Modulo, EstimacionHoras, QA, épica y análisis válidos;
-   - exclusión explicada para cada item que no cumpla.
-3. Dependencias y orden:
-   - integrada en `development` o incluida en la misma unidad;
-   - In QA exige comprobar el commit y registrar riesgo;
-   - las demás dependencias sin integrar excluyen al dependiente.
-   - ranking estable por prerrequisitos, prioridad, trabajo desbloqueado y antigüedad.
-4. Task → Requerimiento:
-   - cero Requerimientos para el mismo repo y épica es válido;
-   - uno para la épica es el vínculo canónico;
-   - si ese Requerimiento no enumera el análisis de la Task, queda desactualizado y
-     bloquea para reconciliación;
-   - más de uno para la épica o un formato ambiguo bloquea antes de escribir;
-   - el rollback inspecciona todas las Tasks del alcance, no solo las asignadas.
-5. Planes y decisiones:
-   - marcador HTML versionado y fingerprint estable;
-   - secuencia de plan y colisiones;
-   - Evento de decisión monotónico;
-   - reacción aislada inválida;
-   - solo el último evento válido puede concordar con el sello vigente;
-   - autorización completa persiste, crea/recupera PR y activa o encola;
-   - rechazo antes de código libera y después de código pausa;
-   - observación produce cero mutaciones;
-   - caída entre reacción, evento, PR y compensación se reanuda idempotentemente.
-6. Lease y ownership:
-   - creación atómica en el Git common dir;
-   - rechazo de token ajeno o vencido;
-   - heartbeat y recuperación solo tras expiración y reconciliación;
-   - compensación parcial que no desarma una reserva vencedora;
-   - un Requerimiento previamente In progress nunca se reclama ni se revierte.
-7. Allowlist de transiciones:
-   - aceptar solo las transiciones documentadas;
-   - fallar cerrado ante estado inesperado;
-   - no mover Requerimientos a In QA o Done;
-   - Blocked exige dos intentos con la misma huella externa, evidencia saneada y causa
-     fuera de la unidad; un error de código/test/revisión se rechaza;
-   - resume exige una comprobación vigente de que desapareció la causa externa;
-   - deliver exige checkpoints de validación, Standards y Spec para el head actual,
-     checks aplicables válidos, base actual y mergeability; cualquier evidencia
-     ausente, vieja o discordante se rechaza.
-8. Política de siguiente acción:
-   - una Unidad activa o la Cola autorizada impiden proponer trabajo nuevo;
-   - un Plan pendiente sin autorizar no impide una única propuesta adicional;
-   - jamás se producen dos propuestas nuevas en el mismo Ciclo programado;
-   - una unidad interrumpida por runtime se reanuda antes de seleccionar otra.
+1. identidad exacta `juanikitro`, scopes requeridos, Project único, campos/opciones
+   resueltos por nombre, paginación completa e Iteration vigente;
+2. elegibilidad: Task abierta, Ready, único assignee correcto, QA, prioridad, módulo,
+   estimación, épica y análisis válidos;
+3. Matriz de dependencias completa: cada relación debe estar integrada en
+   `development`, ordenada dentro del mismo grupo o cubierta por un único PR padre
+   calificado; cualquier otra situación se excluye;
+4. vínculo Task → Requerimiento sin ambigüedad y sin reclamar movimientos ajenos;
+5. Plan, Sello, Evento, Cápsula y decisiones concordantes, con colisiones resueltas
+   por la evidencia durable y no por memoria local;
+6. recuperación: sin rama/commit/PR se puede compensar por ownership; con alguno de
+   ellos se conserva `In progress`; una contradicción detiene toda mutación;
+7. política de siguiente acción: cualquier plan no terminal bloquea un grupo nuevo;
+8. consulta financiera por Task y escritura compatible con las columnas vigentes de
+   `docs/client/financiero/detalle-tareas.md`, sin alterar filas históricas.
 
-Los fixtures son pequeños y sintéticos dentro del test. No contienen cuerpos reales
-completos, credenciales ni tokens.
+Los ejemplos de revisión son sintéticos y saneados: no incluyen cuerpos reales,
+credenciales, tokens ni datos productivos.
 
-Gate:
+Gate: una tabla de escenarios read-only demuestra resultados esperados, evidencia a
+leer y la acción prohibida para cada caso límite; no se crean scripts ni tests nuevos
+solo para coordinar.
 
-```powershell
-$env:PY_VENV = "C:\Users\Juanito\Desktop\Repositorios\I-CORE\Chaco\.venv\Scripts\python.exe"
-$env:DJANGO_SECRET_KEY = "test-key"
-& $env:PY_VENV manage.py test core.tests.test_codex_daily_work --verbosity=2
-```
+## Fase 3 — Operar con GitHub y memoria como único estado
 
-El worktree aislado no contiene `.venv`. El preflight verifica esta ruta compartida,
-Python 3.12 y las herramientas necesarias; no instala paquetes durante un run
-desatendido.
+El prompt operativo implementa el protocolo sin helper dedicado:
 
-## Fase 3 — Implementar el helper determinista
+1. Antes de reanudar, compensar, reservar o activar, relee Project, Tasks,
+   Requerimientos, comentarios, reacciones, Eventos, PRs, ramas, HEAD, checks, cierre
+   financiero y la Cápsula. Compara con memoria; GitHub prevalece.
+2. Si existe discrepancia, publica o recupera un Evento de recuperación y actualiza la
+   Cápsula después de que la evidencia sea concordante. No muta Project ni Git mientras
+   la discrepancia continúe.
+3. Para reservar, vuelve a comprobar elegibilidad y Matriz de dependencias, publica
+   comentario canónico, referencias y Cápsula, relee Status antes de cada transición y
+   conserva ownership explícito para una eventual compensación.
+4. Para una decisión, exige Sello y Evento concordantes de la versión exacta. Una
+   observación no muta; un rechazo sin código compensa solo lo propio; con código,
+   rama o PR pausa y conserva evidencia.
+5. Cada cambio material actualiza la única Cápsula de la Task ancla con fase, snapshot,
+   PR/HEAD, bloqueo, respuesta esperada y próximo paso. La Cápsula nunca es fuente de
+   autorización.
+6. Ninguna ruta crea otro grupo mientras haya un estado no terminal. Una carrera o
+   marcador duplicado detiene las escrituras y requiere reconciliación.
 
-`scripts/codex_daily_work.py` seguirá el patrón de los scripts existentes: stdlib,
-`argparse`, `main(argv=None)`, salida JSON opcional y `subprocess.run` con listas de
-argumentos y `shell=False`.
+### Lectura y escritura de GitHub
 
-### Interfaz prevista
-
-- `state --json`: preflight, snapshot, reconciliación read-only y siguiente acción
-  permitida (`continue_active`, `activate_authorized`, `plan_new`, `wait`, `conflict`).
-- `lease acquire|renew|release`: crea atómicamente la lease en el Git common dir,
-  devuelve un token opaco y exige ese mismo token para renovar o liberar. La
-  recuperación de una lease vencida requiere `reconcile` sin conflictos.
-- `reserve --input <plan.json>`: dry-run por defecto; con `--apply`, renderiza el
-  comentario canónico y referencias, resuelve ganador, mueve Tasks y sincroniza
-  Requerimientos.
-- `apply-decision --plan <PG> --decision <authorize|reject>`: lee la frase original
-  por stdin y orquesta una decisión completa. Autorizar persiste 👍 + evento, crea o
-  recupera branch/commit/PR y activa o encola; rechazar persiste 👎 + evento y, si no
-  hay código, libera Task/Requerimiento y cierra solo un PR vacío. Si ya hay código,
-  pausa sin descartar. Una observación no llama este comando.
-- `activate --plan <PG>`: recuperación idempotente de una autorización ya persistida;
-  rechaza cualquier versión sin Sello + Evento vigentes.
-- `checkpoint --plan <PG> --phase <fase>`: persiste progreso reanudable y evidencias.
-- `transition --plan <PG> --event <block|resume|deliver>`: aplica exclusivamente las
-  transiciones permitidas después de validar sus gates.
-- `reconcile --json`: informa conflictos; con `--apply`, repara únicamente operaciones
-  propias y compensables.
-
-Toda mutación exige simultáneamente `--apply`, token de lease vigente, plan/version,
-estado esperado e idempotency key. Un comando sin `--apply` no llama endpoints de
-escritura, no hace commits y no modifica el Project.
-
-Los JSON transitorios se crean en el directorio temporal del sistema, nunca dentro del
-contexto Docker ni como archivos versionables del worktree.
-
-El flujo normal adquiere la lease al comienzo del turno, la renueva antes de cada fase
-mutante y la libera en un bloque final. Una caída deja expirar la lease; ningún otro
-run la recupera sin reconciliar primero GitHub. Los tests cubren acquire → renew →
-mutaciones → release, token ajeno, expiración y caída entre decisión y activación.
-
-### Lectura de GitHub
-
-1. Usar GraphQL para Project v2 y paginar hasta `hasNextPage=false`.
-2. Resolver en vivo `Status`, `Tipo`, `Prioridad`, `Modulo`, `EstimacionHoras` e
-   `Iteration`; las constantes locales solo sirven como control de drift.
-3. Usar `content.repository.nameWithOwner` para tolerar el redirect del repo.
-4. Usar REST para comentarios y reacciones, conservando los IDs devueltos.
-5. Parsear de forma estricta `Épica padre` y `Análisis de origen`.
-6. Redactar motivos de inclusión/exclusión sin volcar cuerpos completos ni secretos.
-
-### Evidencia exigida por `transition`
-
-- `block`: dos resultados con la misma huella de causa, incluido un único reintento,
-  categoría externa permitida, timestamps, URL de run/check cuando exista y extracto
-  saneado. El helper rechaza categorías de implementación, test o revisión propia.
-- `resume`: prueba focalizada actual que demuestre que desapareció la misma huella de
-  bloqueo; no basta el paso del tiempo.
-- `deliver`: head SHA y base SHA actuales, PR mergeable, checkpoint de Validación
-  proporcional, Eventos Standards y Spec en limpio para ese head, checks aplicables
-  terminados y ausencia de una base más nueva. El helper consulta GitHub y no acepta
-  evidencia declarativa desactualizada aportada solo por Codex.
-
-Los tests incluyen casos negativos por evidencia ausente, intento único, huella
-distinta, review de otro SHA, check omitido que sí era aplicable y base avanzada.
-
-### Reserva y compensación
-
-1. Releer Tasks y Requerimientos inmediatamente antes de escribir.
-2. Crear comentario canónico y referencias.
-3. Resolver carreras por menor `comment_id`.
-4. Mover Tasks una por una, verificando después de cada mutación.
-5. Sincronizar Requerimientos solo después de reservar sus Tasks.
-6. Ante fallo, revertir únicamente transiciones propias que no necesite una reserva
-   vencedora.
-7. Hacer snapshot final antes de presentar el plan en Codex.
+1. Consultar el Project paginado y resolver los campos en vivo; no confiar en la vista
+   visible ni en IDs cacheados.
+2. Usar los mecanismos existentes de GitHub para comentarios, reacciones, Project y
+   PRs, conservando IDs y enlaces devueltos como evidencia.
+3. Redactar motivos de inclusión/exclusión sin volcar cuerpos completos ni secretos.
+4. Antes de cada escritura, releer el recurso exacto y confirmar plan, versión,
+   ownership y estado esperado. Un recurso cambiado, ausente o ambiguo falla cerrado.
 
 ### Activación Git y PR
 
@@ -231,8 +144,9 @@ distinta, review de otro SHA, check omitido que sí era aplicable y base avanzad
 6. Crear o recuperar un único PR draft por head; nunca aprobar, mergear, borrar branch
    ni usar force-push.
 
-Gate: todos los tests de la Fase 2 verdes y errores de `gh` clasificados sin exponer
-tokens ni stdout sensible.
+Gate: una simulación read-only y la revisión del prompt demuestran que ninguna acción
+de coordinación depende de un helper, lease, token o archivo local, y que los errores
+de GitHub se clasifican sin exponer secretos ni stdout sensible.
 
 ## Fase 4 — Entorno de aceptación seguro
 
@@ -257,11 +171,15 @@ tokens ni stdout sensible.
    Comprobar también que no haya scratch ignorado inesperado dentro del contexto y
    excluir `.tmp_*` en `.dockerignore`. Después del build registrar y verificar image
    ID o digest.
-5. El Brief de cada unidad declara comandos de seed, orden y postcondiciones.
+5. El Brief y la Ficha de aceptación reproducible declaran comandos existentes de
+   bootstrap/seed, orden, origen sintético, identidades o roles de prueba,
+   postcondiciones, URL, pasos por criterio y resultado esperado.
 6. `up --wait` o polling acotado debe terminar con `/health/` válido y datos esperados
-   comprobados.
-7. Registrar Project de Compose, labels, imagen, head SHA, puertos y volúmenes en el
-   checkpoint del plan. La rotación localiza por labels y detiene solo el stack propio.
+   comprobados; la Ficha registra esa evidencia antes de presentarse al usuario.
+7. La Ficha declara SHA, Project de Compose, labels, puertos, limitaciones conocidas y
+   un comando de apagado que detiene solo el stack propio y conserva los volúmenes.
+8. Registrar esos datos en la Cápsula y Eventos del plan. La rotación localiza por
+   labels y detiene solo el stack propio.
 
 Validación estática, sin usar secretos reales:
 
@@ -290,9 +208,12 @@ Crear `docs/plans/2026-07-22-chaco-trabajo-diario-codex-prompt.md` con dos capas
 1. Contrato innegociable breve, embebido luego en la tarea programada:
    - el run es standalone: no conserva chat, worktree ni estado local anterior;
    - identidad, allowlist y prioridad de continuidad;
-   - lease, estado esperado, relectura e idempotency key en toda mutación;
+   - snapshot GitHub-first, estado esperado, relectura e idempotency key en toda
+     mutación, sin lease ni archivo local;
    - cero escrituras ante ambigüedad, scope faltante o conflicto;
-   - máximo un plan nuevo por ejecución;
+   - máximo un plan nuevo por ejecución y ninguno mientras exista un plan no terminal;
+   - Matriz de dependencias completa y excluyente antes de reservar;
+   - una Cápsula operativa por plan y reconciliación GitHub-first antes de reanudar;
    - código solo con Sello + Evento vigentes;
    - observación no decide; rechazo libera antes de código y pausa después de código;
    - autorización aplica decisión, abre PR y activa o encola inmediatamente;
@@ -300,7 +221,10 @@ Crear `docs/plans/2026-07-22-chaco-trabajo-diario-codex-prompt.md` con dos capas
    - una unidad funcional activa a la vez;
    - bootstrap limpio y detached desde la rama remota correcta;
    - entrega solo con validación, Standards, Spec y CI del head/base actuales;
-   - prohibiciones de secretos, producción, force-push, merge y `down -v`.
+   - cierre financiero estructurado por Task, sin inferir consumo ni reescribir filas
+     históricas;
+   - prohibiciones de secretos, producción, force-push, merge, `down -v` y estado
+     local de coordinación.
 2. Procedimiento que obliga a leer, en orden:
    - verificar remoto, worktree limpio y capacidades sin pedir aprobación;
    - hacer `fetch` y posicionarse en detached HEAD de `origin/development`;
@@ -308,11 +232,12 @@ Crear `docs/plans/2026-07-22-chaco-trabajo-diario-codex-prompt.md` con dos capas
    - `ESTADOS.md`;
    - diseño, prompt y `CONTEXT.md`;
    - `QA.md` cuando corresponda;
-   - estado vivo devuelto por el helper;
+    - snapshot vivo GitHub-first, Cápsula y memoria reconciliada;
    - si hay una Unidad activa, cambiar después a detached HEAD de su branch remota;
    - código focalizado, empezando por modelos según el método del repo.
 
-El prompt ordena usar el helper para todas las escrituras de coordinación. Codex
+El prompt ordena usar únicamente las interfaces existentes de GitHub para las
+escrituras de coordinación y registrar la evidencia en Project, Issues y PRs. Codex
 conserva la responsabilidad semántica de agrupar, implementar, validar y ejecutar las
 dos revisiones frescas. Las preferencias de notificación se configuran en Codex y no
 se incluyen dentro del prompt.
@@ -321,48 +246,38 @@ Cada paso lógico de implementación termina con commit, push fast-forward y che
 en el PR. Antes de una validación larga o de devolver el turno, no puede quedar como
 única copia trabajo funcional sin commit dentro del worktree efímero.
 
-Una respuesta exacta del usuario en la misma tarea ejecuta `apply-decision` dentro de
-ese turno. Si autoriza y no hay otra Unidad activa, Codex continúa la implementación;
-si debe encolar, lo informa. Si rechaza, confirma la compensación o la pausa. Una
-ejecución programada posterior solo consume el estado ya persistido en GitHub.
+Una respuesta exacta del usuario en la misma tarea persiste Sello y Evento concordantes
+para esa versión. Si autoriza y no hay otra Unidad activa, Codex continúa la
+implementación; si rechaza, confirma la compensación o la pausa. Una ejecución
+programada posterior solo consume el estado ya persistido en GitHub.
 
-## Fase 6 — Validación local focalizada
+## Fase 6 — Validación focalizada
 
-Sin Docker ni mutaciones GitHub:
+Sin Docker ni mutaciones GitHub, revisar el diff documental con `git diff --check` y,
+si hay cambios de documentación pública, ejecutar `python -m mkdocs build --strict`.
+La validación estática de Compose se mantiene en la Fase 4; no se instala ninguna
+herramienta de forma silenciosa.
 
-```powershell
-$env:PY_VENV = "C:\Users\Juanito\Desktop\Repositorios\I-CORE\Chaco\.venv\Scripts\python.exe"
-$env:DJANGO_SECRET_KEY = "test-key"
-& $env:PY_VENV manage.py test core.tests.test_codex_daily_work --verbosity=2
-& $env:PY_VENV -m compileall -q scripts\codex_daily_work.py
-& $env:PY_VENV -m ruff check scripts\codex_daily_work.py core\tests\test_codex_daily_work.py
-& $env:PY_VENV -m ruff format --check scripts\codex_daily_work.py core\tests\test_codex_daily_work.py
-git diff --check
-```
+La integración read-only verifica:
 
-Antes de usarlo se comprueba que el venv compartido exista, sea Python 3.12 y tenga
-Ruff disponible. Si falta una herramienta no se instala silenciosamente durante el
-run: se detiene la puesta en marcha o se deja esa comprobación explícitamente a CI.
+1. que scopes insuficientes llevan a cero escrituras;
+2. identidad, Project, campos, opciones, iteración, paginación y motivos de
+   elegibilidad desde un snapshot vivo;
+3. Matriz Task → dependencia → evidencia y vínculos Task → Requerimiento con datos
+   actuales, sin congelar ejemplos históricos como verdad;
+4. que la memoria se contradiga de forma controlada con el snapshot y produzca
+   reconciliación, no una mutación;
+5. que un plan no terminal produzca `wait` y no una propuesta nueva;
+6. que la plantilla financiera use el formato vigente sin modificar filas históricas.
 
-Integración read-only, primero con los scopes actuales y luego de ampliarlos:
-
-1. Confirmar que scopes faltantes producen `preflight_failed` y cero escrituras.
-2. Tras `gh auth refresh -s read:project,project`, ejecutar `state --json`.
-3. Verificar identidad, Project, campos, opciones, iteración, paginación y motivos de
-   elegibilidad.
-4. Comprobar vínculos Task → Requerimiento con datos vivos; si los ejemplos observados
-   cambiaron, verificar el algoritmo, no congelar números históricos como verdad.
-5. Ejecutar un `reserve` dry-run y revisar el ledger sin publicar comentarios ni mover
-   items.
-
-No se corre la suite completa localmente; el PR contra `development` ejecutará los
-checks existentes. Cualquier validación adicional se decide por el diff real.
+No se corre una suite nueva solo para coordinación; la validación adicional se decide
+por el diff real y los checks existentes del PR.
 
 ## Fase 7 — Publicación y revisión de la implementación
 
 Con autorización explícita para Git:
 
-1. Crear commits Conventional Commits, agrupados por documentación, helper y entorno.
+1. Crear commits Conventional Commits, agrupados por documentación, prompt y entorno.
 2. Stagear solo los archivos nombrados; no usar `git add -A`.
 3. Push de `codex/chaco-daily-automation` y PR draft a `development`.
 4. Ejecutar dos revisiones frescas e independientes:
@@ -373,22 +288,23 @@ Con autorización explícita para Git:
    verificar base/mergeability.
 7. Convertir el PR en listo; no aprobarlo ni fusionarlo.
 
-La automatización no se crea todavía: un worktree standalone debe poder leer el helper
+La automatización no se crea todavía: un worktree standalone debe poder leer el prompt
 y las reglas desde `development`.
 
 ## Fase 8 — Crear la tarea programada después del merge
 
 1. Verificar que el PR anterior fue fusionado y que `origin/development` contiene los
-   archivos y tests esperados.
-2. Completar manualmente el refresh de scopes de `gh` y repetir `state --json`.
+   documentos, prompt y configuración esperados.
+2. Completar manualmente el refresh de scopes de `gh` y repetir el snapshot
+   GitHub-first read-only.
 3. Preparar el venv compartido y la ruta externa de `.env.local`; comprobar existencia,
    permisos y valores seguros sin imprimirlos.
 4. En una tarea Codex regular con worktree, ejecutar el smoke completo antes del modo
    desatendido:
    - bootstrap detached desde `origin/development`;
-   - lease completa y recuperación inyectada;
+   - reconciliación GitHub-first y recuperación inyectada sin estado local;
    - reserva y compensación sobre un item reversible expresamente autorizado;
-   - `apply-decision`, PR y reconstrucción desde la rama remota;
+   - Sello + Evento de decisión, PR y reconstrucción desde la rama remota;
    - transición negativa para Blocked/deliver;
    - build, health y parada exacta del stack sin borrar volúmenes.
 5. Verificar que `fetch`, escrituras GitHub, push, PR, Python y Docker funcionan con la
@@ -417,19 +333,19 @@ y las reglas desde `development`.
 
 - Antes del primer run: pausar o eliminar la automatización; no hay estado GitHub que
   revertir.
-- Reserva parcial: usar `reconcile --apply` con ownership; nunca hacer cambios manuales
-  masivos.
+- Reserva parcial: reconciliar por ownership con evidencia de GitHub; nunca hacer
+  cambios manuales masivos.
 - Rechazo sin código: Tasks a Ready, Requerimiento propio a Backlog si cumple el gate,
   PR vacío cerrado y branch conservada.
-- Problema del helper: pausar la automatización, mantener Project/PR como evidencia y
-  corregir mediante un PR normal.
+- Problema del protocolo: pausar la automatización, mantener Project/PR como evidencia
+  y corregir el prompt o las reglas mediante un PR normal.
 - Entorno local: detener solo el Project Compose identificado, sin `down -v`; borrar
   volúmenes requiere otra autorización.
 
 ## Definición de terminado
 
-- Reglas y helper integrados en `development`.
-- Tests focalizados y CI del PR verdes.
+- Reglas, prompt y configuración integrada en `development`.
+- Validación focalizada y CI del PR verdes.
 - Scopes, identidad, Project e iteración verificados en vivo.
 - Dry-run sin escrituras revisado.
 - Automatización única visible en Codex con horario correcto.
