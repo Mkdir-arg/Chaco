@@ -90,7 +90,13 @@ class CampoTipoDispositivoFormTests(TestCase):
 class ConfiguracionDispositivosViewsTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.programa = Programa.objects.get(codigo="DISPOSITIVOS")
+        cls.programa, _ = Programa.objects.get_or_create(
+            codigo="DISPOSITIVOS",
+            defaults={
+                "nombre": "Dispositivos",
+                "tipo": Programa.TipoPrograma.DISPOSITIVOS,
+            },
+        )
         cls.otro_programa = Programa.objects.create(codigo="BECAS-TEST", nombre="Becas test")
         cls.rol = rol_configuracion("Admin Dispositivos test", cls.programa)
         cls.rol_otro = rol_configuracion("Admin Becas test", cls.otro_programa)
