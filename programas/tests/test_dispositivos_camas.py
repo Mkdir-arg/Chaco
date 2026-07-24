@@ -8,9 +8,14 @@ from django.utils import timezone
 
 from django.contrib.auth.models import User
 from legajos.models import Ciudadano
-from programas.forms import TipoDispositivoForm
+from programas.forms import DispositivoForm, TipoDispositivoForm
 from programas.models import Admision, Cama, Dispositivo, Programa, TipoDispositivo
-from programas.services.camas import cambiar_estado_cama, crear_camas, resumen_ocupacion
+from programas.services.camas import (
+    asignar_cama_a_admision,
+    cambiar_estado_cama,
+    crear_camas,
+    resumen_ocupacion,
+)
 
 
 class ResumenOcupacionTests(TestCase):
@@ -23,6 +28,9 @@ class ResumenOcupacionTests(TestCase):
         )
 
         self.assertTrue(form.is_valid(), form.errors)
+
+    def test_formulario_de_dispositivo_no_permite_editar_capacidad_manual(self):
+        self.assertNotIn("camas_totales", DispositivoForm.base_fields)
 
     def test_deriva_ocupadas_libres_y_semaforo_de_estadias_activas(self):
         tipo = TipoDispositivo.objects.create(codigo="AM", nombre="Adulto Mayor", maneja_camas=True)
@@ -94,6 +102,25 @@ class ResumenOcupacionTests(TestCase):
         self.assertEqual(resumen["porcentaje"], 56)
         self.assertEqual(resumen["semaforo"], "AMARILLO")
 
+    def test_semaforo_compara_el_porcentaje_exacto_antes_de_redondear(self):
+        tipo = TipoDispositivo.objects.create(codigo="BORDE", nombre="Borde", maneja_camas=True)
+        dispositivo = Dispositivo.objects.create(codigo="BORDE-001", nombre="Borde", tipo=tipo)
+        camas = [Cama.objects.create(dispositivo=dispositivo, codigo=f"C-{numero:03d}") for numero in range(1, 102)]
+        for numero, cama in enumerate(camas[:50], start=1):
+            ciudadano = Ciudadano.objects.create(dni=f"3300{numero:04d}", nombre="Persona", apellido=str(numero))
+            Admision.objects.create(
+                ciudadano=ciudadano,
+                dispositivo=dispositivo,
+                cama=cama,
+                fecha_ingreso=timezone.now(),
+                estado=Admision.Estado.ALOJADO,
+            )
+
+        resumen = resumen_ocupacion(dispositivo)
+
+        self.assertEqual(resumen["porcentaje"], 50)
+        self.assertEqual(resumen["semaforo"], "VERDE")
+
 
 class IntegridadCamasTests(TestCase):
     def test_crea_camas_disponibles_y_sincroniza_el_total_del_dispositivo(self):
@@ -159,6 +186,36 @@ class IntegridadCamasTests(TestCase):
 
         cama.refresh_from_db()
         self.assertEqual(cama.estado, Cama.Estado.DISPONIBLE)
+
+    def test_asignacion_rechaza_cama_fuera_de_servicio_y_ocupa_cama_disponible(self):
+        tipo = TipoDispositivo.objects.create(codigo="ASIG", nombre="Asignación", maneja_camas=True)
+        dispositivo = Dispositivo.objects.create(codigo="HOGAR-006", nombre="Hogar Centro", tipo=tipo)
+        fuera_servicio = Cama.objects.create(
+            dispositivo=dispositivo,
+            codigo="C-01",
+            estado=Cama.Estado.FUERA_SERVICIO,
+        )
+        disponible = Cama.objects.create(dispositivo=dispositivo, codigo="C-02")
+        ciudadano = Ciudadano.objects.create(dni="32000004", nombre="Dani", apellido="Cuatro")
+        admision = Admision(ciudadano=ciudadano, dispositivo=dispositivo, fecha_ingreso=timezone.now())
+
+        with self.assertRaisesMessage(ValidationError, "no está disponible"):
+            asignar_cama_a_admision(admision, fuera_servicio)
+
+        asignar_cama_a_admision(admision, disponible)
+
+        disponible.refresh_from_db()
+        self.assertEqual(admision.estado, Admision.Estado.ALOJADO)
+        self.assertEqual(admision.cama, disponible)
+        self.assertEqual(disponible.estado, Cama.Estado.OCUPADA)
+
+    def test_rechaza_transiciones_de_estado_fuera_de_la_maquina(self):
+        tipo = TipoDispositivo.objects.create(codigo="EST", nombre="Estados", maneja_camas=True)
+        dispositivo = Dispositivo.objects.create(codigo="HOGAR-007", nombre="Hogar Estado", tipo=tipo)
+        cama = Cama.objects.create(dispositivo=dispositivo, codigo="C-01", estado=Cama.Estado.FUERA_SERVICIO)
+
+        with self.assertRaisesMessage(ValidationError, "transición"):
+            cambiar_estado_cama(cama, Cama.Estado.RESERVADA)
 
 
 class CamasViewsTests(TestCase):

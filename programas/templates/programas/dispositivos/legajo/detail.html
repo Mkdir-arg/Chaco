@@ -45,7 +45,7 @@
       <div><dt class="text-xs font-semibold uppercase text-body-subtle">Domicilio</dt><dd class="mt-1 text-body">{{ dispositivo.domicilio|default:'—' }}</dd></div>
       <div><dt class="text-xs font-semibold uppercase text-body-subtle">Responsable</dt><dd class="mt-1 text-body">{{ dispositivo.responsable_nombre|default:'—' }}</dd></div>
       <div><dt class="text-xs font-semibold uppercase text-body-subtle">Contacto</dt><dd class="mt-1 text-body">{{ dispositivo.contacto_telefono|default:'—' }}</dd></div>
-      <div><dt class="text-xs font-semibold uppercase text-body-subtle">Camas/plazas</dt><dd class="mt-1 text-body">{{ dispositivo.camas_totales }}</dd></div>
+      <div><dt class="text-xs font-semibold uppercase text-body-subtle">Camas/plazas</dt><dd class="mt-1 text-body">{{ resumen_camas.totales }}</dd></div>
     </dl>
   </section>
   <section id="camas" class="mt-6 rounded-xl border border-base p-6" style="background:var(--bg-primary)">

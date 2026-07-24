@@ -13,7 +13,7 @@ from django.views.generic import CreateView, DetailView, FormView, ListView, Upd
 
 from programas.forms import CamaForm, CantidadCamasForm, DispositivoForm
 from programas.models import Cama, Dispositivo, TipoDispositivo
-from programas.services.camas import cambiar_estado_cama, crear_camas, resumen_ocupacion
+from programas.services.camas import actualizar_cama, crear_camas, resumen_ocupacion
 from programas.services.dispositivos import (
     buscar_posibles_duplicados,
     cerrar_dispositivo,
@@ -155,10 +155,14 @@ class DispositivoDetailView(DispositivoObjectPermissionMixin, DetailView):
         context["trazas"] = self.object.trazas.select_related("usuario")
         context["camas"] = self.object.camas.all()
         context["resumen_camas"] = resumen_ocupacion(self.object)
-        context["puede_gestionar_camas"] = puede_operar_dispositivo(
-            self.request.user,
-            self.object,
-            "dispositivo.editar",
+        context["puede_gestionar_camas"] = (
+            self.object.tipo.maneja_camas
+            and self.object.estado != Dispositivo.Estado.CERRADO
+            and puede_operar_dispositivo(
+                self.request.user,
+                self.object,
+                "dispositivo.editar",
+            )
         )
         return context
 
@@ -326,12 +330,17 @@ class CamaUpdateView(DispositivoProgramaPermissionMixin, UpdateView):
     def form_valid(self, form):
         cama = self.get_object()
         try:
-            cama = cambiar_estado_cama(cama, form.cleaned_data["estado"])
+            cama = actualizar_cama(
+                cama,
+                codigo=form.cleaned_data["codigo"],
+                nuevo_estado=form.cleaned_data["estado"],
+            )
         except ValidationError as error:
             form.add_error("estado", error)
             return self.form_invalid(form)
-        cama.codigo = form.cleaned_data["codigo"]
-        cama.save(update_fields=["codigo", "modificado"])
+        except IntegrityError:
+            form.add_error("codigo", "Ya existe una cama con este código en el dispositivo.")
+            return self.form_invalid(form)
         self.object = cama
         messages.success(self.request, "Cama actualizada.")
         return redirect(self.get_success_url())

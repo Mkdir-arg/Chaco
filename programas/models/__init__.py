@@ -654,6 +654,8 @@ class Admision(TimeStamped):
         super().clean()
         if self.cama_id and self.dispositivo_id and self.cama.dispositivo_id != self.dispositivo_id:
             raise ValidationError({"cama": "La cama debe pertenecer al dispositivo de la admisión."})
+        if self.cama_id and self.estado == self.Estado.ALOJADO and self.cama.estado == Cama.Estado.FUERA_SERVICIO:
+            raise ValidationError({"cama": "No se puede asignar una cama fuera de servicio."})
 
         if not self.inscripcion_programa_id:
             return

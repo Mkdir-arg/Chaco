@@ -222,7 +222,6 @@ class DispositivoForm(forms.ModelForm):
             "contacto_telefono",
             "contacto_email",
             "horarios",
-            "camas_totales",
         ]
         widgets = {
             "tipo": forms.Select(attrs={"class": INPUT_CLASS}),
@@ -237,7 +236,6 @@ class DispositivoForm(forms.ModelForm):
             "contacto_telefono": forms.TextInput(attrs={"class": INPUT_CLASS}),
             "contacto_email": forms.EmailInput(attrs={"class": INPUT_CLASS}),
             "horarios": _text_widget(rows=3),
-            "camas_totales": forms.NumberInput(attrs={"class": INPUT_CLASS, "min": 0}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -248,7 +246,6 @@ class DispositivoForm(forms.ModelForm):
         else:
             tipos = tipos.filter(activo=True)
         self.fields["tipo"].queryset = tipos.order_by("nombre")
-        self.fields["camas_totales"].required = False
 
     def clean_codigo(self):
         codigo = " ".join(self.cleaned_data["codigo"].split()).upper()
@@ -258,10 +255,6 @@ class DispositivoForm(forms.ModelForm):
         if duplicado.exists():
             raise forms.ValidationError("Ya existe un dispositivo con este código institucional.")
         return codigo
-
-    def clean_camas_totales(self):
-        return self.cleaned_data.get("camas_totales") or 0
-
 
 class CantidadCamasForm(forms.Form):
     cantidad = forms.IntegerField(

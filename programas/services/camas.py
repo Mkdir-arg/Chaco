@@ -24,10 +24,17 @@ def resumen_ocupacion(dispositivo):
         .count()
     )
     libres = max(operativas - ocupadas, 0)
-    porcentaje = round((ocupadas * 100) / operativas) if operativas else 0
+    porcentaje_exacto = (ocupadas * 100) / operativas if operativas else 0
+    porcentaje = round(porcentaje_exacto)
     umbral_amarillo = getattr(dispositivo.tipo, "umbral_ocupacion_amarillo", 50)
     umbral_rojo = getattr(dispositivo.tipo, "umbral_ocupacion_rojo", 80)
-    semaforo = "ROJO" if porcentaje >= umbral_rojo else "AMARILLO" if porcentaje >= umbral_amarillo else "VERDE"
+    semaforo = (
+        "ROJO"
+        if porcentaje_exacto >= umbral_rojo
+        else "AMARILLO"
+        if porcentaje_exacto >= umbral_amarillo
+        else "VERDE"
+    )
 
     return {
         "totales": totales,
@@ -40,8 +47,16 @@ def resumen_ocupacion(dispositivo):
     }
 
 
-def cambiar_estado_cama(cama, nuevo_estado):
-    """Cambia el estado de una cama sin perder la seguridad de una estadía activa."""
+TRANSICIONES_PERMITIDAS = {
+    Cama.Estado.DISPONIBLE: {Cama.Estado.RESERVADA, Cama.Estado.OCUPADA, Cama.Estado.FUERA_SERVICIO},
+    Cama.Estado.RESERVADA: {Cama.Estado.DISPONIBLE, Cama.Estado.OCUPADA, Cama.Estado.FUERA_SERVICIO},
+    Cama.Estado.OCUPADA: {Cama.Estado.DISPONIBLE},
+    Cama.Estado.FUERA_SERVICIO: {Cama.Estado.DISPONIBLE},
+}
+
+
+def actualizar_cama(cama, *, codigo, nuevo_estado):
+    """Actualiza una cama en una sola transacción y respeta sus invariantes."""
 
     with transaction.atomic():
         cama = Cama.objects.select_for_update().get(pk=cama.pk)
@@ -53,9 +68,38 @@ def cambiar_estado_cama(cama, nuevo_estado):
             raise ValidationError("La cama tiene una persona alojada: exige reasignación previa.")
         if nuevo_estado == Cama.Estado.OCUPADA and not tiene_persona_alojada:
             raise ValidationError("La ocupación se deriva de una estadía activa, no se carga manualmente.")
+        if nuevo_estado != cama.estado and nuevo_estado not in TRANSICIONES_PERMITIDAS[cama.estado]:
+            raise ValidationError("La transición de estado de la cama no está permitida.")
+        cama.codigo = codigo
         cama.estado = nuevo_estado
-        cama.save(update_fields=["estado", "modificado"])
+        cama.save(update_fields=["codigo", "estado", "modificado"])
         return cama
+
+
+def cambiar_estado_cama(cama, nuevo_estado):
+    """Compatibilidad para cambios de estado que preservan el código existente."""
+
+    return actualizar_cama(cama, codigo=cama.codigo, nuevo_estado=nuevo_estado)
+
+
+def asignar_cama_a_admision(admision, cama):
+    """Asigna una cama utilizable a una estadía y la marca ocupada de forma atómica."""
+
+    with transaction.atomic():
+        cama = Cama.objects.select_for_update().get(pk=cama.pk)
+        if cama.estado not in {Cama.Estado.DISPONIBLE, Cama.Estado.RESERVADA}:
+            raise ValidationError({"cama": "La cama no está disponible para una nueva asignación."})
+        if Admision.objects.filter(cama=cama, estado=Admision.Estado.ALOJADO).exists():
+            raise ValidationError({"cama": "La cama ya tiene una persona alojada."})
+
+        admision.cama = cama
+        admision.estado = Admision.Estado.ALOJADO
+        admision.full_clean()
+        admision.save()
+
+        cama.estado = Cama.Estado.OCUPADA
+        cama.save(update_fields=["estado", "modificado"])
+        return admision
 
 
 def crear_camas(dispositivo, cantidad):
